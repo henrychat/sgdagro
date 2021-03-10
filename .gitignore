@@ -1,0 +1,10 @@
+target
+logs
+*.settings
+*.data
+/.metadata/
+RemoteSystemsTempFiles
+.classpath
+.factorypath
+.project
+.svn

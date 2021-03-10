@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TDR15" pageWidth="183" pageHeight="183" whenNoDataType="AllSectionsNoDetail" columnWidth="167" leftMargin="9" rightMargin="7" topMargin="7" bottomMargin="7" isFloatColumnFooter="true">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="26"/>
+	<parameter name="CO_USER" class="java.lang.String"/>
+	<parameter name="NU_ANN" class="java.lang.String"/>
+	<parameter name="NU_EMI" class="java.lang.String"/>
+	<parameter name="P_LOGO_DIR" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nuExpediente" class="java.lang.String"/>
+	<field name="deDependencia" class="java.lang.String"/>
+	<field name="deInstitucion" class="java.lang.String"/>
+	<field name="anexoMesaPartes" class="java.lang.String"/>
+	<field name="fonoInstitucion" class="java.lang.String"/>
+	<field name="pagWeb" class="java.lang.String"/>
+	<field name="feExp" class="java.sql.Timestamp"/>
+	<field name="nuCorrExp" class="java.lang.String"/>
+	<field name="deMesaPartes" class="java.lang.String"/>
+	<field name="deSlogan" class="java.lang.String"/>
+	<field name="cclave" class="java.lang.String"/>
+	<field name="codUser" class="java.lang.String"/>
+	<pageHeader>
+		<band height="156">
+			<image hAlign="Center">
+				<reportElement x="0" y="10" width="167" height="25"/>
+				<imageExpression><![CDATA[$P{P_LOGO_DIR}]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy - HH:mm" isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="54" width="167" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{feExp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="44" width="167" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="4" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deMesaPartes}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="73" width="34" height="11"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Registro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="37" y="68" width="73" height="17"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nuExpediente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="84" width="167" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="5" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nota: La recepción NO da conformidad al contenido.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="99" width="167" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Consultas: "+$F{pagWeb}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="111" width="167" height="13"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Teléfonos: "+$F{fonoInstitucion}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="19" y="132" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="150" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="34" width="167" height="11"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deInstitucion}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="19" y="134" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="136" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="138" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="146" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="140" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="142" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="144" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="19" y="148" width="135" height="3"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="5">
+					<jr:codeExpression><![CDATA[$F{nuCorrExp}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="132" y="68" width="32" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cclave}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="95" y="1" width="71" height="8"/>
+				<textElement markup="none">
+					<font fontName="SansSerif" size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Usuario: "+$F{codUser}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="110" y="73" width="19" height="11"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Clave:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+</jasperReport>
