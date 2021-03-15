@@ -2639,6 +2639,30 @@ private SimpleJdbcCall spInsMesaVirtual;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+	@Override
+	public boolean esDocoumentoSalidaExterna(String numEmi, String anio) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean esMensajeriaSedeCentral(String coDependencia) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean esDirectoroResponsableOficina(String coDependencia, String codCargo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codCargo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
     
     

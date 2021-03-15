@@ -8,6 +8,7 @@ import pe.gob.onpe.tramitedoc.bean.CiudadanoBean;
 import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioOtroOrigenBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.EmpleadoBean;
@@ -78,4 +79,9 @@ public interface EmiDocumentoAdmService {
     /*interoperabilidad*/
     String getLstDestExternoAgregaGrupo(String pcoGrupo,String ptiDes);
    String  changeToEnvioNotificacion(DocumentoEmiBean documentoEmiBean, Usuario usuario) throws Exception;
+   
+    boolean esDocumentoSalidaExterna(DocumentoDatoBean docDatoBean);
+   
+  	 
+  	public boolean tienePermisoSalidaExterna(DocumentoDatoBean docDatoBean, String codUsu) throws Exception;
 }

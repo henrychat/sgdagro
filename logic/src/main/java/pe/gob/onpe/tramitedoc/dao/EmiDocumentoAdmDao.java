@@ -104,4 +104,10 @@ public interface EmiDocumentoAdmDao {
     List<DestinatarioDocumentoEmiBean> getLstDestExternoGrupo(String pcoGrupo,String pTiDes);
     /*segdi mvaldera*/
     
+     boolean esDocoumentoSalidaExterna(String numEmi,String anio);
+     boolean esMensajeriaSedeCentral(String coDependencia);
+     boolean esDirectoroResponsableOficina(String coDependencia,String codCargo);
+     boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codCargo);
+     
+    
 }

@@ -3094,4 +3094,28 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return list;
     }
+
+	@Override
+	public boolean esDocoumentoSalidaExterna(String numEmi, String anio) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean esMensajeriaSedeCentral(String coDependencia) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean esDirectoroResponsableOficina(String coDependencia, String codCargo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codCargo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

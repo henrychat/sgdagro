@@ -34,6 +34,7 @@ import pe.gob.onpe.tramitedoc.service.DocumentoVoBoService;
 import pe.gob.onpe.tramitedoc.service.DocumentoXmlService;
 import pe.gob.onpe.tramitedoc.service.EmiDocumentoAdmService;
 import pe.gob.onpe.tramitedoc.service.EmiDocumentoPersonalService;
+import pe.gob.onpe.tramitedoc.service.PermisoService;
 import pe.gob.onpe.tramitedoc.util.ArchivoTemporal;
 import pe.gob.onpe.tramitedoc.util.LsAleatorioViewDoc;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
@@ -70,6 +71,9 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
   
   @Autowired
   private CommonQryService commonQryService;
+  
+  @Autowired
+  private PermisoService permisoService;
 
   
   public DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi) {
@@ -1544,13 +1548,19 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     } 
     
     if (docDatoBean != null) {
+    	
     	  if (!docDatoBean.getCoEmpEmi().equals(usuarioConfig.getCempCodemp()))  {
     		  
     		  docVerBean.setDeMensaje("NO_OK");
     		  docVerBean.setDetalleMensaje("El Documento solo puede ser  firmado por el usuario indicado en el campo  <strong>Firmado Por</strong>");
     		  return docVerBean;
-        //    throw new validarDatoException("El Documento solo puede ser emitido por: <strong>Firmado Por</strong>");
-          }
+    	  }
+    	  if(emiDocumentoAdmService.esDocumentoSalidaExterna(docDatoBean) && !emiDocumentoAdmService.tienePermisoSalidaExterna(docDatoBean, usuarioConfig.getCoUsuario())){
+    		  docVerBean.setDeMensaje("NO_OK");
+    		  docVerBean.setDetalleMensaje("Usuario no esta habilitado para derivar documentos externamente ");
+    		  return docVerBean;
+    	  }
+    	  
       if ((docDatoBean.getTiEmi().equals("01") && docDatoBean.getEsDocEmi().equals("7") && ptiOpe.equals("5")) || 
     		  (docDatoBean.getTiEmi().equals("05") && docDatoBean.getEsDocEmi().equals("5") && ptiOpe.equals("5"))) {
         
@@ -1727,7 +1737,9 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
   }
 
   
-  private boolean hasParam(String string1, String string2) { return (string1 != null && string2 != null && string1.trim().length() > 0 && string2.trim().length() > 0); }
+  private boolean hasParam(String string1, String string2) {
+	  return (string1 != null && string2 != null && string1.trim().length() > 0 && string2.trim().length() > 0);
+	  }
 
 
   

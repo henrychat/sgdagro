@@ -51,9 +51,7 @@ import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
 @Repository("emiDocumentoAdmDao")
-public class EmiDocumentoAdmDaoImp
-  extends SimpleJdbcDaoBase
-  implements EmiDocumentoAdmDao
+public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDocumentoAdmDao
 {
   private SimpleJdbcCall spActualizaEstado;
   private SimpleJdbcCall spInsMesaVirtual;
@@ -1845,7 +1843,92 @@ public class EmiDocumentoAdmDaoImp
     return vReturn;
   }
 
-
+  public boolean esDocoumentoSalidaExterna(String numEmi,String anio) {
+	    String vReturn = "NO_OK";
+	    StringBuffer sqlQry = new StringBuffer();
+	    sqlQry.append("  SELECT '1' AS EXISTE   FROM IDOSGD.Tdtv_Remitos r  WHERE  ");
+	    sqlQry.append(" r.CO_GRU = '1'  and r.TI_EMI ='01'   AND NOT EXISTS(select D.NU_EMI  ");
+	    sqlQry.append(" from IDOSGD.TDTV_DESTINOS D  WHERE d.TI_DES ='01'  AND  D.NU_EMI=r.NU_EMI ");
+	    sqlQry.append(" AND D.NU_ANN=r.NU_ANN   and   d.ES_ELI='0')  AND r.Es_Eli = '0' ");
+	    sqlQry.append("  and r.NU_EMI=? AND r.NU_ANN=? ");
+	    
+	    
+	    try {
+	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] { numEmi,anio });
+	    return vReturn==null? false:vReturn.equals("1")?true:false;
+	    }
+	    catch(EmptyResultDataAccessException e) {
+	    	return false;
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	      vReturn = e.getMessage();
+	    } 
+	    
+	    return false;
+	  }
+  public boolean esMensajeriaSedeCentral(String coDependencia) {
+	    String vReturn = "NO_OK";
+	    StringBuffer sqlQry = new StringBuffer();
+	    sqlQry.append(" select '1' as existe from IDOSGD.RHTM_DEPENDENCIA where CO_DEPENDENCIA=? ");
+	    sqlQry.append(" and in_baja='0'  ");
+	    
+	    
+	    try {
+	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] { coDependencia });
+	      return vReturn==null? false:vReturn.equals("1")?true:false;
+	    }
+	    catch(EmptyResultDataAccessException e) {
+	    	return false;
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	      vReturn = e.getMessage();
+	    } 
+	    
+	    return false;
+}
+  public boolean esDirectoroResponsableOficina(String coDependencia,String codEmp) {
+	    String vReturn = "NO_OK";
+	    StringBuffer sqlQry = new StringBuffer();
+	    sqlQry.append(" select '1' as existe from IDOSGD.RHTM_DEPENDENCIA where CO_DEPENDENCIA=? ");
+	    sqlQry.append(" and in_baja='0' and CO_EMPLEADO=? ");
+	    
+	    
+	    try {
+	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] { coDependencia,codEmp });
+	    return vReturn==null? false:vReturn.equals("1")?true:false;
+	    }
+	    catch(EmptyResultDataAccessException e) {
+	    	return false;
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	      vReturn = e.getMessage();
+	    } 
+	    
+	    return false;
+  }
+  public boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codEmp) {
+	    String vReturn = "NO_OK";
+	    StringBuffer sqlQry = new StringBuffer();
+	    sqlQry.append(" SELECT '1' AS EXISTE FROM IDOSGD.RHTM_CARGOS c ");
+	    sqlQry.append(" inner join IDOSGD.RHTM_PER_EMPLEADOS e on (e.CEMP_CO_CARGO=c.CCAR_CO_CARGO) ");
+	    sqlQry.append(" WHERE e.CEMP_CODEMP=? AND c.CCAR_HAB_ENVDOCS='1' ");
+	    try {
+	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] {codEmp });
+	    return vReturn==null? false:vReturn.equals("1")?true:false;
+	    }
+	    catch(EmptyResultDataAccessException e) {
+	    	return false;
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	      vReturn = e.getMessage();
+	    } 
+	    
+	    return false;
+	  }
   
   public String getNroCorrelativoDocumentoDel(DocumentoEmiBean documentoEmiBean) {
     String vReturn = "NO_OK";

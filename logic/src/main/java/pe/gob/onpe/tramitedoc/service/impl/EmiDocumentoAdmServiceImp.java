@@ -22,6 +22,7 @@ import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioOtroOrigenBean;
 import pe.gob.onpe.tramitedoc.bean.DestinoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.EmpleadoBean;
@@ -29,6 +30,8 @@ import pe.gob.onpe.tramitedoc.bean.EmpleadoVoBoBean;
 import pe.gob.onpe.tramitedoc.bean.ExpedienteBean;
 import pe.gob.onpe.tramitedoc.bean.MotivoBean;
 import pe.gob.onpe.tramitedoc.bean.OtroOrigenBean;
+
+import pe.gob.onpe.tramitedoc.bean.PermisoUsuarioBean;
 import pe.gob.onpe.tramitedoc.bean.ProveedorBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaEmiDocBean;
@@ -47,6 +50,7 @@ import pe.gob.onpe.tramitedoc.dao.OtroOrigenDao;
 import pe.gob.onpe.tramitedoc.service.ActualizaResumenService;
 import pe.gob.onpe.tramitedoc.service.AuditoriaMovimientoDocService;
 import pe.gob.onpe.tramitedoc.service.EmiDocumentoAdmService;
+import pe.gob.onpe.tramitedoc.service.PermisoService;
 import pe.gob.onpe.tramitedoc.service.TipoDocumentoService;
 import pe.gob.onpe.tramitedoc.service.ValidarFirmaService;
 import pe.gob.onpe.tramitedoc.util.ArchivoTemporal;
@@ -101,6 +105,9 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
   
   @Autowired
   private OtroOrigenDao otroOrigenDao;
+  
+  @Autowired
+  private PermisoService permisoService;
 
   
   public List<DocumentoEmiBean> getDocumentosBuscaEmiAdm(BuscarDocumentoEmiBean buscarDocumentoEmiBean) {
@@ -1128,6 +1135,23 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
     return vReturn;
   }
 
+  private boolean pasoEnvioMensajeria(DocumentoEmiBean documentoEmiBean, Usuario usuario) throws Exception {
+	 
+	  if(usuario.getCoLocal().equals(Constantes.COD_LOCAL_CENTRAL) && !documentoEmiBean.getCoDepEmi().equals(Constantes.COD_MENSAJERIA_CENTRAL) ) {
+		  PermisoUsuarioBean permiso =new PermisoUsuarioBean(); 
+		  
+	    	permiso.setCodAplica(Constantes.COD_SISTEMA_SGD);
+	    	permiso.setCodOpc(Constantes.COD_PERMISO_DER_MENSAJ_EXT_SGD);
+	    	permiso.setCempCodEmp(usuario.getCempCodemp());
+		  if(permisoService.obtenerPermiso(permiso)) {
+			  
+			   return true;
+		  }
+		  return false; 
+	  }
+	   return true;
+	  
+  }
   private String validaDestinatario(DocumentoEmiBean documentoEmiBean) throws Exception {
 	  String mensaje="";
 	 List<DestinatarioDocumentoEmiBean> listTemp =  emiDocumentoAdmDao.getLstDestintariotlbEmi(documentoEmiBean.getNuAnn(), documentoEmiBean.getNuEmi());
@@ -1220,12 +1244,15 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
   
   
       documentoEmiBean.setEsDocEmi("0");
-      if(documentoEmiBean.getTiEnvMsj().equals(Constantes.COD_NOTIFICACION_ELECTRONICA)) {
-    	     String mensaje=	validaDestinatario( documentoEmiBean); 
-    	     if(!mensaje.equals("")) {
-    	    	 throw new validarDatoException(mensaje);// mensaje;	 
-    	     }
-    }
+//      if(documentoEmiBean.getTiEnvMsj().equals(Constantes.COD_NOTIFICACION_ELECTRONICA)) {
+//    	     String mensaje=	validaDestinatario( documentoEmiBean); 
+//    	     if(!mensaje.equals("")) {
+//    	    	 throw new validarDatoException(mensaje);// mensaje;	 
+//    	     }
+//    }
+      if(!pasoEnvioMensajeria( documentoEmiBean,  usuario)) {
+    	  throw new validarDatoException(" Usuario de Sede Central no puede derivar documentos a mensajeria diferente a la Oficina de Trámite Documentario. ");
+      }
     	   
       int cCant = this.emiDocumentoAdmDao.getCantidadAnexo(documentoEmiBean);
       
@@ -1322,12 +1349,12 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
             if (documentoEmiBean != null && !documentoEmiBean.getCoTipDocAdm().equals(documentoEmiBeanBD.getCoTipDocAdm())) {
               vReturn = getInNumeraDocAdm(documentoEmiBean.getCoTipDocAdm());
               if ("NO_OK".equals(vReturn)) {
-                throw new validarDatoException("Error al Obtener Indicador de Numeracion");
+                throw new validarDatoException("Error al Obtener Indicador de Numeración");
               }
               if (vReturn.equals("1")) {
                 vReturn = getNumeroDocSiguienteAdm(documentoEmiBean.getNuAnn(), documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm());
                 if ("NO_OK".equals(vReturn)) {
-                  throw new validarDatoException("Error al Obtener Numero de Documento.");
+                  throw new validarDatoException("Error al Obtener Número de Documento.");
                 }
                 documentoEmiBean.setNuDocEmi(vReturn);
                 trxDocumentoEmiBean.setNuDocEmi(vReturn);
@@ -1611,7 +1638,28 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
     
     return vReturn;
   }
-
+  public boolean tienePermisoSalidaExterna(DocumentoDatoBean docDatoBean, String codUsu) throws Exception {
+	 
+	  if(emiDocumentoAdmDao.esDirectoroResponsableOficina(docDatoBean.getCoDepEmi(),docDatoBean.getCoEmpEmi())) {
+		  return true;
+	  }
+	  if(emiDocumentoAdmDao.tieneCargoHabilitadoparaEnvioDocsExterno(docDatoBean.getCoEmpEmi())) {
+		  return true;
+	  }
+	  PermisoUsuarioBean permiso= new PermisoUsuarioBean();
+	  permiso.setCodAplica(Constantes.COD_SISTEMA_SGD);
+	  permiso.setCodOpc(Constantes.COD_PERMISO_ENVIAR_EXTERN_DOCUMENTOS);
+	  permiso.setCempCodEmp(docDatoBean.getCoEmpEmi());
+	  if(permisoService.obtenerPermiso(permiso)){
+		  return true;
+	  }
+  
+	   return false;
+  }
+  public boolean esDocumentoSalidaExterna(DocumentoDatoBean docDatoBean) {
+	 return  emiDocumentoAdmDao.esDocoumentoSalidaExterna(docDatoBean.getNuEmi(), docDatoBean.getNuAnn());
+	   
+ }
   
   public String getVerificaPdfDoc(String pnuAnn, String pnuEmi, String ptiCap) {
     String vReturn = "NO_OK";

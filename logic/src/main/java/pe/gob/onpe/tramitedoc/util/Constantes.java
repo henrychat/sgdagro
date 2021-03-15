@@ -58,6 +58,16 @@ public interface Constantes {
     public static final String COD_PERMISO_DOC_EMITIDOS = "M0501";
     public static final String COD_PERMISO_DOC_MP_OFICINA = "M0502";
     public static final String COD_PERMISO_REVERTIR_DOCUMENTO = "M0504";
+    public static final String COD_PERMISO_ENVIAR_EXTERN_DOCUMENTOS = "M0505";
+    public static final String COD_PERMISO_DER_MENSAJ_EXT_SGD = "M0506";
+    public static final String COD_PERMISO_ADM_UUOO = "M0119";
+    
+    public static final String  COD_LOCAL_CENTRAL="001";
+    public static final String COD_MENSAJERIA_CENTRAL="10602";
+    
+    
+    
+    
     
     public static final String COD_SISTEMA_SGD = "9";
     public static final String COD_NOTIFICACION_ELECTRONICA = "3";

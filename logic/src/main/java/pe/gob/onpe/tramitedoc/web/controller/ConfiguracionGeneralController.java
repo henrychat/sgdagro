@@ -38,6 +38,7 @@ import pe.gob.onpe.tramitedoc.bean.MotivoBean;
 import pe.gob.onpe.tramitedoc.bean.MotivoDocumentoDependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.OtroOrigenBean;
 import pe.gob.onpe.tramitedoc.bean.PermisoBean;
+import pe.gob.onpe.tramitedoc.bean.PermisoUsuarioBean;
 import pe.gob.onpe.tramitedoc.bean.ProveedorBean;
 import pe.gob.onpe.tramitedoc.bean.RequisitoBean;
 import pe.gob.onpe.tramitedoc.bean.SiElementoBean;
@@ -56,11 +57,13 @@ import pe.gob.onpe.tramitedoc.service.DocDependenciaService;
 import pe.gob.onpe.tramitedoc.service.GrupoDestinoService;
 import pe.gob.onpe.tramitedoc.service.ImagenPortadaService;
 import pe.gob.onpe.tramitedoc.service.OtroOrigenService;
+import pe.gob.onpe.tramitedoc.service.PermisoService;
 import pe.gob.onpe.tramitedoc.service.ProveedorService;
 import pe.gob.onpe.tramitedoc.service.ReferencedData;
 import pe.gob.onpe.tramitedoc.service.RequisitoService;
 import pe.gob.onpe.tramitedoc.service.TupaService;
 import pe.gob.onpe.tramitedoc.service.UsuarioConfigService;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 import pe.gob.onpe.tramitedoc.util.ProcessResult;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
@@ -102,6 +105,8 @@ public class ConfiguracionGeneralController
   private ImagenPortadaService imagenPortadaService;
   @Autowired
   private RequisitoService requisitoService;
+  @Autowired
+  private PermisoService permisoService;
   
   @RequestMapping(method = {RequestMethod.GET}, params = {"accion=goDocsDependencia"})
   public String goDocsDependencia(HttpServletRequest request, Model model) {
@@ -1052,7 +1057,21 @@ public class ConfiguracionGeneralController
     if ("1".equals(usuarioConfigBean.getInEsAdmin())) {
       model.addAttribute("dependenciaList", this.dependenciaService.getDependenciaHijo("1000"));
     } else {
-      url = "";
+    	PermisoUsuarioBean permiso= new PermisoUsuarioBean();
+    	permiso.setCodAplica(Constantes.COD_SISTEMA_SGD);
+    	permiso.setCodOpc(Constantes.COD_PERMISO_ADM_UUOO);
+    	permiso.setCempCodEmp(usuarioConfigBean.getCempCodemp());
+    	//COD_PERMISO_ADM_UUOO
+    	try {
+			if(permisoService.obtenerPermiso(permiso)) {
+				return url;	
+			} else {
+				 return "";
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return "";
+		}
     } 
     
     return url;
