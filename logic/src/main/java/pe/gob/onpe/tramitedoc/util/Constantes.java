@@ -65,6 +65,9 @@ public interface Constantes {
     public static final String  COD_LOCAL_CENTRAL="001";
     public static final String COD_MENSAJERIA_CENTRAL="10602";
     
+    public static final String CO_TIPO_ENVIO_MENSAJERIA    = "0";
+    public static final String CO_TIPO_ENVIO_ENTREGA_DIRECTA    = "1";
+    
     
     
     

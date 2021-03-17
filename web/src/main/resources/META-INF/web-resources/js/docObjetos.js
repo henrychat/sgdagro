@@ -367,6 +367,9 @@ function fn_grabarEnvioNotificacionObj(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tip
         	if(nCodAccion==="3"){
         		alert_Sucess("MENSAJE", "Se envió el documento a notificación electrónica");	
         	}
+        	if(nCodAccion==="1"){
+        		alert_Sucess("MENSAJE", "Se registro documento para entrega directa satisfactoriamente");	
+        	}
             
             if(tipoBandeja==="EDIT"){
                 editarDocumentoEmiClick(pnuAnn, pnuEmi,pexisteDoc,pexisteAnexo);           
@@ -381,10 +384,8 @@ function fn_grabarEnvioNotificacionObj(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tip
            
            }
             removeDomId('windowConsultaAnexo');
-
-
-
         } 
+        else
         if (data.substring(0,1) === "2"){
         	 alert_Danger("Validación:", data.substring(1,data.length));
         } 

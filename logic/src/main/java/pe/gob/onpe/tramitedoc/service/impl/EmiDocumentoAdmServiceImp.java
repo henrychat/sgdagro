@@ -1137,9 +1137,12 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
 
   private boolean pasoEnvioMensajeria(DocumentoEmiBean documentoEmiBean, Usuario usuario) throws Exception {
 	 
+	 if(!documentoEmiBean.getTiEnvMsj().equals(Constantes.CO_TIPO_ENVIO_MENSAJERIA)) {
+		  return true;
+	  }
 	  if(usuario.getCoLocal().equals(Constantes.COD_LOCAL_CENTRAL) && !documentoEmiBean.getCoDepEmi().equals(Constantes.COD_MENSAJERIA_CENTRAL) ) {
 		  PermisoUsuarioBean permiso =new PermisoUsuarioBean(); 
-		  
+		  // documentoEmiBean.getTiEnvMsj().equals("0")
 	    	permiso.setCodAplica(Constantes.COD_SISTEMA_SGD);
 	    	permiso.setCodOpc(Constantes.COD_PERMISO_DER_MENSAJ_EXT_SGD);
 	    	permiso.setCempCodEmp(usuario.getCempCodemp());

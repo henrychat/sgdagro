@@ -9,20 +9,6 @@ import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.dao.EmiDocumentoAdmDao;
 import pe.gob.onpe.tramitedoc.service.EmiDocumentoAltaService;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @Service("emiDocumentoAltaService")
 public class EmiDocumentoAltaServiceImp
   implements EmiDocumentoAltaService
