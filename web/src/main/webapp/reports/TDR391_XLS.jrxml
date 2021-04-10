@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TDR391_XLS" printOrder="Horizontal" pageWidth="1615" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1575" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c82441b-1dc7-44dd-9279-7ba0678158be">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TDR391_XLS" printOrder="Horizontal" pageWidth="2100" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="2060" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2c82441b-1dc7-44dd-9279-7ba0678158be">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="2101"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.wrap.text" value="false"/>
@@ -30,6 +30,12 @@
 	<field name="feArcDocCorta" class="java.lang.String"/>
 	<field name="feAteDocCorta" class="java.lang.String"/>
 	<field name="dePrioridad" class="java.lang.String"/>
+        <field name="correoRemite" class="java.lang.String"/>
+        <field name="obsRemite" class="java.lang.String"/>
+        <field name="telefonoRemite" class="java.lang.String"/>
+        <field name="obsRecep" class="java.lang.String"/>
+       
+
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -362,6 +368,62 @@
 				</textElement>
 				<text><![CDATA[PRIORIDAD]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1575" y="83" width="141" height="14" forecolor="#000066" backcolor="#CCCCCC" uuid="02e2a503-9ec5-4337-8ac1-c4960aae6766"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[OBS REMITE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1716" y="83" width="141" height="14" forecolor="#000066" backcolor="#CCCCCC" uuid="b432cf9e-9dc8-4a68-b6de-bda3565a7d9d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[OBS RECEPCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1857" y="83" width="70" height="14" forecolor="#000066" backcolor="#CCCCCC" uuid="854ef3db-cf39-430f-ae00-f967ec07ce76"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[TELÉFONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1927" y="83" width="100" height="14" forecolor="#000066" backcolor="#CCCCCC" uuid="85beda00-4775-43f7-8422-788ac5ad7fb8"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isUnderline="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[CORREO REMI]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>
@@ -445,22 +507,6 @@
 					<font size="9" isStrikeThrough="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{deEmpDes}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="593" y="0" width="141" height="14" isPrintWhenDetailOverflows="true" uuid="f34db6b4-4632-48f7-b100-57698c7a9a30">
-					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
-				</reportElement>
-				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Justified">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{deAsu}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1208" y="0" width="70" height="14" isPrintWhenDetailOverflows="true" uuid="a6cb7b6b-e666-40b8-8072-73d651da72f2">
@@ -690,6 +736,86 @@ $F{coEstVen}.equals("1") ? "PROXIMO A VENCER":
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dePrioridad}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="593" y="0" width="141" height="14" isPrintWhenDetailOverflows="true" uuid="f34db6b4-4632-48f7-b100-57698c7a9a30">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deAsu}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1575" y="0" width="141" height="14" isPrintWhenDetailOverflows="true" uuid="d8bcd61c-e70e-496e-a581-14e77b06da49">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{obsRemite}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1716" y="0" width="141" height="14" isPrintWhenDetailOverflows="true" uuid="67398dc2-84cd-41fb-be33-06b82a60a8ab">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{obsRecep}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1857" y="0" width="70" height="14" isPrintWhenDetailOverflows="true" uuid="4d66603a-e226-4b79-9403-e5311a9e77f9">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefonoRemite}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1927" y="0" width="100" height="14" isPrintWhenDetailOverflows="true" uuid="bcbe6702-1e06-4afb-b7b9-b9555317bc51">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{correoRemite}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

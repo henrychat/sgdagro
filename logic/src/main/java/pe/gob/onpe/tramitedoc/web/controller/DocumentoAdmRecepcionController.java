@@ -38,18 +38,9 @@ import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 import pe.gob.onpe.tramitedoc.util.ProcessResult;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
-
-
-
-
-
-
-
-
 @Controller
 @RequestMapping({"/{version}/srDocumentoAdmRecepcion.do"})
-public class DocumentoAdmRecepcionController
-{
+public class DocumentoAdmRecepcionController {
   @Autowired
   private RecepDocumentoAdmService recepDocumentoAdmService;
   @Autowired
@@ -223,8 +214,6 @@ public class DocumentoAdmRecepcionController
     Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
     String fechaHoraActual = Utility.getInstancia().dateToFormatString3(new Date());
 
-
-    
     try {
       DocumentoBean documentoBean = this.recepDocumentoAdmService.getDocumentoRecepAdm(snuAnn, snuEmi, snuDes);
       ExpedienteBean expedienteBean = this.recepDocumentoAdmService.getExpDocumentoRecepAdm(documentoBean.getNuAnnExp(), documentoBean.getNuSecExp());

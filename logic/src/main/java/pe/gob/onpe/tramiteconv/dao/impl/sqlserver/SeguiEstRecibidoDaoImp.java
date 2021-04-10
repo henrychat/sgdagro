@@ -724,88 +724,42 @@ public class SeguiEstRecibidoDaoImp
     String sqlContains = "";
     List<DocumentoSeguiEstRecibidoBean> list = new ArrayList<DocumentoSeguiEstRecibidoBean>();
     
-    sql.append("SELECT B.NU_COR_DES,\n\t\t CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_TI_EMI_EMP](A.NU_ANN, A.NU_EMI) DE_ORI_EMI,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n\t\t C.NU_DOC,\n\t\t CASE B.TI_DES\n\t\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.CO_EMP_DES)\n\t\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.NU_RUC_DES)\n\t\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](B.NU_DNI_DES)\n\t\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](B.CO_OTR_ORI_DES)\n\t\t END DE_EMP_DES,\n\t\t A.DE_ASU,C.NU_EXPEDIENTE,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS](B.ES_DOC_REC, 'TDTV_DESTINOS') DE_ES_DOC_DES,\n\t\t CONVERT(VARCHAR(10), B.FE_REC_DOC, 103) FE_REC_CORTA,\n\t\t (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM\n\t\t FROM IDOSGD.RHTM_PER_EMPLEADOS\n\t\t WHERE CEMP_CODEMP = A.CO_EMP_RES) DE_EMP_RES,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_MOTIVO](B.CO_MOT) DE_MOTIVO,\n\t\t (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_PRIORIDAD](B.CO_PRI)) DE_PRIORIDAD,\n\t\t (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM\n\t\t FROM IDOSGD.RHTM_PER_EMPLEADOS\n\t\t WHERE CEMP_CODEMP = B.CO_EMP_REC) DE_EMP_REC,\n\t\t A.NU_DIA_ATE,\n\t\t CONVERT(VARCHAR(10), (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, A.FE_EMI), A.NU_DIA_ATE)), CONVERT(DATE, A.FE_EMI))), 103) F_LIMITE_CORTA,\n\t\t CASE\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\t(DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) <= 2\n\t\t\t\tAND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 0\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '1'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '2'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) = CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '3'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\t(DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 2\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '4'\n\t\t\tWHEN b.fe_ate_doc IS NOT NULL OR b.fe_arc_doc IS NOT NULL\n\t\t\tTHEN '5'\n\t\t\tWHEN a.nu_dia_ate = 0 OR D.in_dia = 0\n\t\t\tTHEN '0'\n\t\t END co_est_ven,\n\t\t CASE\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](fe_finaliza, CONVERT(DATETIME, GETDATE())))\n\t\t\tELSE 0\n\t\t END nu_dia_exc,\n\t\t CONVERT(VARCHAR(10), b.fe_arc_doc, 103) fe_arc_doc_CORTA,\n\t\t CONVERT(VARCHAR(10), b.fe_ate_doc, 103) fe_ate_doc_CORTA\nFROM IDOSGD.TDTV_REMITOS A \nINNER JOIN\t IDOSGD.TDTV_DESTINOS B  ON  B.NU_ANN = A.NU_ANN AND B.NU_EMI = A.NU_EMI \nINNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C ON C.NU_ANN = B.NU_ANN AND C.NU_EMI = B.NU_EMI \nINNER JOIN\t IDOSGD.TDTR_MOTIVO D ON b.co_mot = d.co_mot \nINNER JOIN\t (SELECT y.nu_ann,\n\t\t\t y.nu_emi,\n\t\t\t y.fe_finaliza,\n\t\t\t (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](CONVERT(DATETIME, GETDATE()), y.fe_finaliza)) nu_dia_fal\n\t  FROM (SELECT x.nu_ann,\n\t\t\t\t   x.nu_emi,\n\t\t\t\t   (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, x.fe_emi), nu_dia_ate)), CONVERT(DATE, x.fe_emi))) AS fe_finaliza\n\t\t\tFROM IDOSGD.tdtv_remitos x) y) E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi \nWHERE 1=1 ");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   // sql.append("SELECT B.NU_COR_DES,\n\t\t CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_TI_EMI_EMP](A.NU_ANN, A.NU_EMI) DE_ORI_EMI,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n\t\t C.NU_DOC,\n\t\t CASE B.TI_DES\n\t\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.CO_EMP_DES)\n\t\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.NU_RUC_DES)\n\t\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](B.NU_DNI_DES)\n\t\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](B.CO_OTR_ORI_DES)\n\t\t END DE_EMP_DES,\n\t\t A.DE_ASU,C.NU_EXPEDIENTE,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS](B.ES_DOC_REC, 'TDTV_DESTINOS') DE_ES_DOC_DES,\n\t\t CONVERT(VARCHAR(10), B.FE_REC_DOC, 103) FE_REC_CORTA,\n\t\t (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM\n\t\t FROM IDOSGD.RHTM_PER_EMPLEADOS\n\t\t WHERE CEMP_CODEMP = A.CO_EMP_RES) DE_EMP_RES,\n\t\t [IDOSGD].[PK_SGD_DESCRIPCION_MOTIVO](B.CO_MOT) DE_MOTIVO,\n\t\t (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_PRIORIDAD](B.CO_PRI)) DE_PRIORIDAD,\n\t\t (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM\n\t\t FROM IDOSGD.RHTM_PER_EMPLEADOS\n\t\t WHERE CEMP_CODEMP = B.CO_EMP_REC) DE_EMP_REC,\n\t\t A.NU_DIA_ATE,\n\t\t CONVERT(VARCHAR(10), (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, A.FE_EMI), A.NU_DIA_ATE)), CONVERT(DATE, A.FE_EMI))), 103) F_LIMITE_CORTA,\n\t\t CASE\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\t(DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) <= 2\n\t\t\t\tAND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 0\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '1'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '2'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) = CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '3'\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\t(DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 2\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN '4'\n\t\t\tWHEN b.fe_ate_doc IS NOT NULL OR b.fe_arc_doc IS NOT NULL\n\t\t\tTHEN '5'\n\t\t\tWHEN a.nu_dia_ate = 0 OR D.in_dia = 0\n\t\t\tTHEN '0'\n\t\t END co_est_ven,\n\t\t CASE\n\t\t\tWHEN a.nu_dia_ate > 0\n\t\t\t\tAND\tCONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)\n\t\t\t\tAND b.fe_ate_doc IS NULL\n\t\t\t\tAND b.fe_arc_doc IS NULL\n\t\t\t\tAND d.in_dia = 0\n\t\t\tTHEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](fe_finaliza, CONVERT(DATETIME, GETDATE())))\n\t\t\tELSE 0\n\t\t END nu_dia_exc,\n\t\t CONVERT(VARCHAR(10), b.fe_arc_doc, 103) fe_arc_doc_CORTA,\n\t\t CONVERT(VARCHAR(10), b.fe_ate_doc, 103) fe_ate_doc_CORTA\nFROM IDOSGD.TDTV_REMITOS A \nINNER JOIN\t IDOSGD.TDTV_DESTINOS B  ON  B.NU_ANN = A.NU_ANN AND B.NU_EMI = A.NU_EMI \nINNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C ON C.NU_ANN = B.NU_ANN AND C.NU_EMI = B.NU_EMI \nINNER JOIN\t IDOSGD.TDTR_MOTIVO D ON b.co_mot = d.co_mot \nINNER JOIN\t (SELECT y.nu_ann,\n\t\t\t y.nu_emi,\n\t\t\t y.fe_finaliza,\n\t\t\t (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](CONVERT(DATETIME, GETDATE()), y.fe_finaliza)) nu_dia_fal\n\t  FROM (SELECT x.nu_ann,\n\t\t\t\t   x.nu_emi,\n\t\t\t\t   (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, x.fe_emi), nu_dia_ate)), CONVERT(DATE, x.fe_emi))) AS fe_finaliza\n\t\t\tFROM IDOSGD.tdtv_remitos x) y) E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi \nWHERE 1=1 ");
+   
+    sql.append(" SELECT B.NU_COR_DES,  CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA,  [IDOSGD].[PK_SGD_DESCRIPCION_TI_EMI_EMP](A.NU_ANN, A.NU_EMI) DE_ORI_EMI, ");
+    sql.append(" ISNULL(A.CEXP_CORREOE,'')  as correoRemite,ISNULL(A.CTELEFONO,'') as telefonoRemite, ");
+    sql.append(" case when CO_GRU='3' then ISNULL(A.COBS_DOCUMENTO,'')  else ISNULL(A.OBS_DOC,'') end as obsRemite,  a.OBS_DOC as obsRecep, ");
+    sql.append("  [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,  C.NU_DOC,  CASE B.TI_DES  WHEN '01' ");
+     sql.append("  THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.CO_EMP_DES)  WHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](B.NU_RUC_DES)  ");
+     sql.append("  WHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](B.NU_DNI_DES)  WHEN '04' ");
+     sql.append(" THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](B.CO_OTR_ORI_DES)  END DE_EMP_DES,  A.DE_ASU,C.NU_EXPEDIENTE, ");
+     sql.append("  [IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS](B.ES_DOC_REC, 'TDTV_DESTINOS') DE_ES_DOC_DES,  CONVERT(VARCHAR(10), B.FE_REC_DOC, 103) FE_REC_CORTA, ");
+     sql.append("  (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM  FROM IDOSGD.RHTM_PER_EMPLEADOS  WHERE CEMP_CODEMP = A.CO_EMP_RES) DE_EMP_RES, ");
+     sql.append("  [IDOSGD].[PK_SGD_DESCRIPCION_MOTIVO](B.CO_MOT) DE_MOTIVO,  (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_PRIORIDAD](B.CO_PRI)) DE_PRIORIDAD,  ");
+     sql.append(" (SELECT CEMP_APEPAT + ' ' + CEMP_APEMAT + ' ' + CEMP_DENOM  FROM IDOSGD.RHTM_PER_EMPLEADOS  WHERE CEMP_CODEMP = B.CO_EMP_REC) DE_EMP_REC, ");
+     sql.append("  A.NU_DIA_ATE,  CONVERT(VARCHAR(10), (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, A.FE_EMI), A.NU_DIA_ATE)),");
+     sql.append("  CONVERT(DATE, A.FE_EMI))), 103) F_LIMITE_CORTA,  CASE  WHEN a.nu_dia_ate > 0   AND (DATEDIFF(DAY, CONVERT(DATE, ");
+     sql.append("  E.fe_finaliza), CONVERT(DATE, GETDATE()))) <= 2   AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 0  ");
+     sql.append("  AND b.fe_ate_doc IS NULL   AND b.fe_arc_doc IS NULL   AND d.in_dia = 0  THEN '1'  WHEN a.nu_dia_ate > 0   ");
+     sql.append("  AND CONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)   AND b.fe_ate_doc IS NULL   AND b.fe_arc_doc IS NULL  ");
+     sql.append("  AND d.in_dia = 0  THEN '2'  WHEN a.nu_dia_ate > 0   AND CONVERT(DATE, GETDATE()) = CONVERT(DATE, E.fe_finaliza)  ");
+     sql.append("  AND b.fe_ate_doc IS NULL   AND b.fe_arc_doc IS NULL   AND d.in_dia = 0  THEN '3'  WHEN a.nu_dia_ate > 0  ");
+     sql.append("  AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 2   AND b.fe_ate_doc IS NULL   AND b.fe_arc_doc IS NULL ");
+     sql.append("   AND d.in_dia = 0  THEN '4'  WHEN b.fe_ate_doc IS NOT NULL OR b.fe_arc_doc IS NOT NULL  THEN '5'  WHEN a.nu_dia_ate = 0 OR D.in_dia = 0 ");
+     sql.append("   THEN '0'  END co_est_ven,  CASE  WHEN a.nu_dia_ate > 0   AND CONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza)  ");
+     sql.append("  AND b.fe_ate_doc IS NULL   AND b.fe_arc_doc IS NULL   AND d.in_dia = 0  ");
+     sql.append(" THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](fe_finaliza, CONVERT(DATETIME, GETDATE())))  ELSE 0  END nu_dia_exc, ");
+     sql.append("   CONVERT(VARCHAR(10), b.fe_arc_doc, 103) fe_arc_doc_CORTA,  CONVERT(VARCHAR(10), b.fe_ate_doc, 103) fe_ate_doc_CORTA ");
+     sql.append("  FROM IDOSGD.TDTV_REMITOS A WITH(NOLOCK) INNER JOIN  IDOSGD.TDTV_DESTINOS B WITH(NOLOCK)  ON  B.NU_ANN = A.NU_ANN AND B.NU_EMI = A.NU_EMI  INNER JOIN ");
+     sql.append("  IDOSGD.TDTX_REMITOS_RESUMEN C WITH(NOLOCK) ON C.NU_ANN = B.NU_ANN AND C.NU_EMI = B.NU_EMI  INNER JOIN  IDOSGD.TDTR_MOTIVO D ON b.co_mot = d.co_mot ");
+     sql.append("  INNER JOIN  (SELECT y.nu_ann,   y.nu_emi,   y.fe_finaliza, ");
+     sql.append("   (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](CONVERT(DATETIME, GETDATE()), ");
+     sql.append("  y.fe_finaliza)) nu_dia_fal    FROM (SELECT x.nu_ann,      x.nu_emi,  ");
+     sql.append("     (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, x.fe_emi), nu_dia_ate)), ");
+     sql.append("  CONVERT(DATE, x.fe_emi))) AS fe_finaliza  FROM IDOSGD.tdtv_remitos x WITH(NOLOCK) ) y) E  ");
+     sql.append(" ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi  WHERE 1=1 ");
+     
+     
     
     try {
       String pNUAnn = buscarDocumentoSeguiEstRecBean.getCoAnnio();
@@ -916,11 +870,6 @@ public class SeguiEstRecibidoDaoImp
         }
 
 
-
-
-
-
-        
         if (buscarDocumentoSeguiEstRecBean.getEsFiltroFecha() != null && (buscarDocumentoSeguiEstRecBean
           .getEsFiltroFecha().equals("1") || buscarDocumentoSeguiEstRecBean.getEsFiltroFecha().equals("3"))) {
           String vFeEmiIni = buscarDocumentoSeguiEstRecBean.getFeEmiIni();
@@ -965,10 +914,6 @@ public class SeguiEstRecibidoDaoImp
       sql.append(" ORDER BY A.FE_EMI DESC ");
 
 
-
-
-
-      
       list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(DocumentoSeguiEstRecibidoBean.class));
     } catch (EmptyResultDataAccessException e) {
       list = null;

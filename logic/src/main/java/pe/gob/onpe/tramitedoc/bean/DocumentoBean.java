@@ -139,8 +139,35 @@ public class DocumentoBean extends ReporteBean {
     private String nuCopias;
     private String deUsuario;
     private String confidencial;
+    private String correoRemite;
+    private String obsRemite;
+    private String telefonoRemite;
 
-    public String getConfidencial() {
+    public String getCorreoRemite() {
+		return correoRemite;
+	}
+
+	public void setCorreoRemite(String correoRemite) {
+		this.correoRemite = correoRemite;
+	}
+
+	public String getObsRemite() {
+		return obsRemite;
+	}
+
+	public void setObsRemite(String obsRemite) {
+		this.obsRemite = obsRemite;
+	}
+
+	public String getTelefonoRemite() {
+		return telefonoRemite;
+	}
+
+	public void setTelefonoRemite(String telefonoRemite) {
+		this.telefonoRemite = telefonoRemite;
+	}
+
+	public String getConfidencial() {
         return confidencial;
     }
 

@@ -177,7 +177,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     sql.append("        CAST(c.nu_des AS VARCHAR) nu_des ");
     sql.append(" FROM IDOSGD.tdtv_remitos b  ");
     sql.append(" INNER JOIN  IDOSGD.tdtv_destinos c ON b.nu_ann = c.nu_ann and b.nu_emi = c.nu_emi  ");
-    sql.append(" WHERE  b.es_eli = '0' ");
+    sql.append(" WHERE  b.es_eli = '0'  and c.es_eli='0' ");
     sql.append(" and b.es_doc_emi <> '9' ");
     sql.append(" and b.nu_ann = ? ");
     sql.append(" and b.nu_emi = ? ");

@@ -56,9 +56,46 @@ public class DocumentoSeguiEstRecibidoBean {
     private String feAteDoc;
     private String feArcDocCorta;
     private String feAteDocCorta;
+    private String correoRemite;
+    private String obsRemite;
+    private String telefonoRemite;
+    private String obsRecep;
+    public String getObsRecep() {
+		return obsRecep;
+	}
+
+	public void setObsRecep(String obsRecep) {
+		this.obsRecep = obsRecep;
+	}
+
+	
   
     
-    public DocumentoSeguiEstRecibidoBean() {
+    public String getCorreoRemite() {
+		return correoRemite;
+	}
+
+	public void setCorreoRemite(String correoRemite) {
+		this.correoRemite = correoRemite;
+	}
+
+	public String getObsRemite() {
+		return obsRemite;
+	}
+
+	public void setObsRemite(String obsRemite) {
+		this.obsRemite = obsRemite;
+	}
+
+	public String getTelefonoRemite() {
+		return telefonoRemite;
+	}
+
+	public void setTelefonoRemite(String telefonoRemite) {
+		this.telefonoRemite = telefonoRemite;
+	}
+
+	public DocumentoSeguiEstRecibidoBean() {
     }
 
     public String getMsjResult() {

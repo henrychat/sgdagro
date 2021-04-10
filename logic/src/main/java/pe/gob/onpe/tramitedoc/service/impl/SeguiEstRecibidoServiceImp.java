@@ -141,7 +141,8 @@ public class SeguiEstRecibidoServiceImp   implements SeguiEstRecibidoService
     String coReporte = "";
 
     
-    try { String extensionArch;
+    try { 
+      String extensionArch;
       int tipoArchivo = 0;
 
       
@@ -158,7 +159,7 @@ public class SeguiEstRecibidoServiceImp   implements SeguiEstRecibidoService
       } 
       if (lista.size() == 0) {
         coRespuesta = "1";
-        deRespuesta = "No existe información para generar reporte.";
+        deRespuesta = "No existe informaciï¿½n para generar reporte.";
         throw new Exception(deRespuesta);
       } 
       if (buscarDocumentoSeguiEstRecBean.getFormatoReporte().equalsIgnoreCase("PDF")) {
@@ -195,34 +196,30 @@ public class SeguiEstRecibidoServiceImp   implements SeguiEstRecibidoService
       fos.close();
       String rutaUrl = "reporte?coReporte=";
       prutaReporte = rutaUrl + prutaReporte;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      return objReporte;
       
-      return objReporte; } catch (JRException ex) { Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, (Throwable)ex); eserror = "1"; return objReporte; } catch (FileNotFoundException ex) { Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, ex); eserror = "1"; return objReporte; } catch (IOException ex) { Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, ex); eserror = "1"; return objReporte; }
+    } catch (JRException ex) {
+    	Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, (Throwable)ex); 
+    	eserror = "1"; 
+    	return objReporte; 
+    } 
+    catch (FileNotFoundException ex) { 
+    	Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, ex); 
+    	eserror = "1";
+    	return objReporte; 
+    } catch (IOException ex) { 
+    	Logger.getLogger(SeguiEstRecibidoServiceImp.class.getName()).log(Level.SEVERE, null, ex);
+    	eserror = "1";
+    	return objReporte;
+    }
     finally
     { Exception exception = null; objReporte.setcoRespuesta(coRespuesta); objReporte.setdeRespuesta(deRespuesta);
       objReporte.setnoUrl(prutaReporte);
-      objReporte.setnoDoc(deNoDoc); }
-     } public List<DocumentoSeguiEstRecibidoBean> getListaReporte(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) { return this.seguiEstRecibidoDao.getListaReporteBusqueda(buscarDocumentoSeguiEstRecBean); }
+      objReporte.setnoDoc(deNoDoc);
+      }
+  }
+  
+  public List<DocumentoSeguiEstRecibidoBean> getListaReporte(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) { 
+    	 return this.seguiEstRecibidoDao.getListaReporteBusqueda(buscarDocumentoSeguiEstRecBean); 
+  }
 }
