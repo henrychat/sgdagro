@@ -107,6 +107,30 @@ public class MaestrosDaoImp   extends SimpleJdbcDaoBase  implements MaestrosDao 
     
     return list;
   }
+  
+  public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla) {
+	    StringBuffer sql = new StringBuffer();
+	    sql.append("SELECT DE_EST, CO_EST ");
+	    sql.append("FROM IDOSGD.TDTR_ESTADOS ");
+	    sql.append("WHERE DE_TAB = ?  and CO_EST not in('5','7','9') ");
+	    sql.append("UNION ");
+	    sql.append("SELECT '.:TODOS.:', NULL ");
+	    sql.append("ORDER BY CO_EST ");
+	    
+	    List<EstadoDocumentoBean> list = new ArrayList<EstadoDocumentoBean>();
+	    
+	    try {
+	      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)ParameterizedBeanPropertyRowMapper.newInstance(EstadoDocumentoBean.class), new Object[] { nomTabla });
+	    }
+	    catch (EmptyResultDataAccessException e) {
+	      list = null;
+	    } catch (Exception e) {
+	      list = null;
+	      e.printStackTrace();
+	    } 
+	    
+	    return list;
+	  }
 
   
   public List<EstadoDocumentoBean> listEstMensajeria(String nomTabla) {

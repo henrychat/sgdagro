@@ -164,6 +164,7 @@
             loadJs("${resourceURL}/js/consulDocEmiPers.js");
             loadJs("${resourceURL}/js/seguiEstadosRecep.js");
             loadJs("${resourceURL}/js/seguiEstadosEmi.js"); 
+            loadJs("${resourceURL}/js/seguiTrazabilidad.js"); 
             loadJs("${resourceURL}/js/documVobo.js"); 
             loadJs("${resourceURL}/js/consulDocVobo.js"); 
             loadJs("${resourceURL}/js/consulDocSalida.js");

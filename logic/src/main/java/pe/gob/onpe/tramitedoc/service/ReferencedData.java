@@ -153,6 +153,13 @@ public class ReferencedData {
         return grpEstadoDocumentoEmiList;
     }  
     
+    public List<EstadoDocumentoBean> getLstEstadosSoloDocumentoEmi(String nomTabla) {
+        if(this.grpEstadoDocumentoEmiList == null){
+            this.grpEstadoDocumentoEmiList = maestrosDao.listEstadosDocumentoEmitidos(nomTabla);
+        }
+        return grpEstadoDocumentoEmiList;
+    } 
+    
     public List<EstadoDocumentoBean> getLstEstadosDocumentoRec(String nomTabla) {
         if(this.grpEstadoDocumentoRecepList == null){
             this.grpEstadoDocumentoRecepList = maestrosDao.listEstadosDocumento(nomTabla);

@@ -29,14 +29,6 @@ import pe.gob.onpe.tramitedoc.web.util.BusquedaTextual;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
-
-
-
-
-
-
-
-
 @Repository("mesaPartesDao")
 public class MesaPartesDaoImp
   extends SimpleJdbcDaoBase
@@ -51,8 +43,6 @@ public class MesaPartesDaoImp
     sql.append("SELECT TOP 300  X.*, "); // por lo mientras
     sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_TI_DESTINO](X.TI_EMI) DE_TI_EMI, ");
 
-
-    
     sql.append("    [IDOSGD].PK_SGD_DESCRIPCION_TI_EMI_EMP(X.NU_ANN, X.NU_EMI) DE_ORI_EMI_MP,");
     sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
     sql.append("        CASE X.TI_EMI ");

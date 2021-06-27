@@ -297,6 +297,7 @@ jQuery.fn.showDatePicker = function(options)
         var hace30Dias = moment().subtract('days', 30).format("DD/MM/YYYY");
         var anioPasado = moment().subtract('year', 1).format("DD/MM/YYYY");
         var mesAnterior9 = moment().subtract('month', 9).format("DD/MM/YYYY");
+        var hace1dias = moment().subtract('days', 1).format("DD/MM/YYYY");
         switch (opcion) {
             case 1:
                 textoFinal = darFormatoFechaACadena(hoy, hoy, 1);//hoy
@@ -337,6 +338,10 @@ jQuery.fn.showDatePicker = function(options)
             case 9:
             	inicializa8(mesAnterior9,hoy);
             	 textoFinal = darFormatoFechaACadena(mesAnterior9, hoy, 1);
+            	break;
+            case 10:
+            	 inicializa8(hace1dias,hoy);
+            	 textoFinal = darFormatoFechaACadena(hace1dias, hoy, 1);
             	break;
             default:
                 textoFinal = darFormatoFechaACadena(hoy, hoy, 1);

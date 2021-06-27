@@ -251,6 +251,9 @@
                                  <c:if test="${opm:verificaOpcion(sessionScope.usuario,'M030111')}">
                                     <li ><a href="#" class="menu_lista" onclick="window.open('https://consultasgd.pcm.gob.pe' , '_blank');;"><span>Consulta Avanzada</span></a></li>
                                 </c:if>
+                                 <c:if test="${opm:verificaOpcion(sessionScope.usuario,'M030112')}">
+                                <li><a href="#"  class="menu_lista" onclick="ejecutaOpcion(this, '/srConsultaTrazabilidad.do?accion=goInicio&amp;coDep=${usuario.coDep}');"><span>Consulta Trazabilidad de Docs</span></a></li>
+                                </c:if>  
                                 
                         </ul></div>        	
                 </li>	

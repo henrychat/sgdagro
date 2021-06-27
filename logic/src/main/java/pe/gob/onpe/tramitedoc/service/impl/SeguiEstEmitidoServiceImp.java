@@ -24,19 +24,8 @@ import pe.gob.onpe.tramitedoc.service.SeguiEstEmitidoService;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
-
-
-
-
-
-
-
-
-
 @Service("consultaEstEmitidoService")
-public class SeguiEstEmitidoServiceImp
-  implements SeguiEstEmitidoService
-{
+public class SeguiEstEmitidoServiceImp   implements SeguiEstEmitidoService {
   @Autowired
   ApplicationProperties applicationProperties;
   @Autowired
@@ -154,7 +143,7 @@ public class SeguiEstEmitidoServiceImp
       } 
       if (lista.size() == 0) {
         coRespuesta = "1";
-        deRespuesta = "No existe informaci�n para generar reporte.";
+        deRespuesta = "No existe información para generar reporte.";
         throw new Exception(deRespuesta);
       } 
       if (buscarDocumentoSeguiEstEmiBean.getFormatoReporte().equalsIgnoreCase("PDF")) {

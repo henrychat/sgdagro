@@ -1373,5 +1373,11 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 		return null;
 	}
 
+	@Override
+	public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
         
 }

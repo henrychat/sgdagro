@@ -340,10 +340,8 @@ public class SeguiEstEmitidoController {
     }
     
     
-    @RequestMapping(method = RequestMethod.POST, params = "accion=goExportarArchivoLista")
-    public @ResponseBody String goExportarArchivoLista(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean,HttpServletRequest request,
-            BindingResult result, Model model) throws IOException
-    {
+    @RequestMapping(method = RequestMethod.POST, params = "accion=goExportarArchivoLista") 
+    public @ResponseBody String goExportarArchivoLista(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean,HttpServletRequest request,  BindingResult result, Model model) throws IOException  {
     	StringBuilder retval=null;
         ServletContext sc = request.getSession().getServletContext();
         

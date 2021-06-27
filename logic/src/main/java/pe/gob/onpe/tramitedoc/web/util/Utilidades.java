@@ -361,6 +361,32 @@ public class Utilidades {
 	  return false;
 	  
   }
+  public static boolean esNumero(String cadena){
+	 if( cadena!=null) {
+		 cadena=cadena.trim(); 
+	 }
+		try {
+			Integer.parseInt(cadena);
+			return true;
+		} catch (NumberFormatException nfe){
+			return false;
+		}
+ }
+  public static boolean esCero(String cadena){
+	
+		 if( cadena!=null) {
+			 cadena=cadena.trim(); 
+		 }
+			try {
+			Integer numero=	Integer.parseInt(cadena);
+			if(numero==0) {
+				return true;
+			}
+			return false;
+			} catch (NumberFormatException nfe){
+				return false;
+			}
+	 }
   
 
   

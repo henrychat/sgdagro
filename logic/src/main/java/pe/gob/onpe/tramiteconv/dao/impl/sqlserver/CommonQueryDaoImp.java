@@ -24,16 +24,6 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
-
-
-
-
-
-
-
-
-
-
 @Repository("commonQueryDao")
 public class CommonQueryDaoImp
   extends SimpleJdbcDaoBase

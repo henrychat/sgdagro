@@ -89,6 +89,7 @@ public interface MaestrosDao {
 	public List<TipoDocumentoBean> listTipDocXDependencia();
 	
 	public List<TipoDocumentoBean> listTipoDocumentoEmiMesaPartes();
+	public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla);
    
     
 }

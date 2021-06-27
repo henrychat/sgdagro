@@ -19,8 +19,7 @@ import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
 @Controller("mainPanelController")
-public class MainPanelController
-{
+public class MainPanelController {
   @Autowired
   private AvisoBandejaEntradaService avisoBandejaEntradaService;
   @Autowired
