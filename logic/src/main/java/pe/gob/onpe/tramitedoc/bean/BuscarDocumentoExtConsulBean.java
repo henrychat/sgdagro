@@ -51,8 +51,27 @@ public class BuscarDocumentoExtConsulBean extends ReporteBean {
     private String busCoGrupoExt;
     private String coTipoExp;
     private String coOriDoc;
+    private String descripcionTupa;
+    private String deDependencia;
+    
+    
+    public String getDeDependencia() {
+		return deDependencia;
+	}
 
-    public String getInMesaPartes() {
+	public void setDeDependencia(String deDependencia) {
+		this.deDependencia = deDependencia;
+	}
+
+	public String getDescripcionTupa() {
+		return descripcionTupa;
+	}
+
+	public void setDescripcionTupa(String descripcionTupa) {
+		this.descripcionTupa = descripcionTupa;
+	}
+
+	public String getInMesaPartes() {
         return inMesaPartes;
     }
 

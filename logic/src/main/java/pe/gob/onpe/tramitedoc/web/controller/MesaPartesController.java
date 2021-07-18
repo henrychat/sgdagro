@@ -1114,7 +1114,9 @@ public class MesaPartesController {
 	        //setter
 	        buscarDocumentoExtRecepBean.setCoDependencia(codDependencia);        
 	        buscarDocumentoExtRecepBean.setInMesaPartes(usuarioConfigBean.getInMesaPartes());     
-	        buscarDocumentoExtRecepBean.setTiAcceso(usuarioConfigBean.getTiConsultaMp());
+	        buscarDocumentoExtRecepBean.setTiAcceso(usuarioConfigBean.getTiAccesoMp());
+	      
+	      
 	        buscarDocumentoExtRecepBean.setCoEmpleado(usuario.getCempCodemp());
 	        //buscarDocumentoExtRecepBean.setCoDependencia(usuario.getCoDep());
 	        buscarDocumentoExtRecepBean.setCoDepEmi(usuarioConfigBean.getCoDepMp());

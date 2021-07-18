@@ -38,9 +38,28 @@ public class DocumentoExtConsulBean {
     private String coProcesoExp;
     private String nuFolios;
     private String deOriEmiMp;
+    private String tupa;
+    private String descripcionTupa;
+    
     
 
-    public DocumentoExtConsulBean() {
+    public String getTupa() {
+		return tupa;
+	}
+
+	public void setTupa(String tupa) {
+		this.tupa = tupa;
+	}
+
+	public String getDescripcionTupa() {
+		return descripcionTupa;
+	}
+
+	public void setDescripcionTupa(String descripcionTupa) {
+		this.descripcionTupa = descripcionTupa;
+	}
+
+	public DocumentoExtConsulBean() {
     }
 
     public String getDeDependencia() {

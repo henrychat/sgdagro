@@ -47,7 +47,8 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
                 + "ELSE\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP_V (X.NU_ANN, X.NU_EMI)\n"
                 + "END AS DE_EMP_DES,");
-        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS (X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");
+        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS_MP (X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");
+        
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_REC,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(X.CO_LOC_EMI) DE_LOC_EMI,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(X.CO_DEP) DE_DEPENDENCIA");
@@ -60,7 +61,8 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
         sql.append(" A.NU_DIA_ATE,B.NU_EXPEDIENTE,B.IN_EXISTE_DOC EXISTE_DOC,B.IN_EXISTE_ANEXO EXISTE_ANEXO,");
         sql.append(" TO_CHAR(C.FE_VENCE,'DD/MM/YYYY') FE_EXP_VENCE_CORTA, A.CO_LOC_EMI,");
         sql.append(" A.CO_DEP");
-        sql.append(" FROM IDOSGD.TDTV_REMITOS A,IDOSGD.TDTX_REMITOS_RESUMEN B,IDOSGD.TDTC_EXPEDIENTE C");
+        sql.append(" FROM IDOSGD.TDTV_REMITOS A With (readuncommitted),IDOSGD.TDTX_REMITOS_RESUMEN B With (readuncommitted),");
+        sql.append(" IDOSGD.TDTC_EXPEDIENTE C With (readuncommitted) ");
         sql.append(" WHERE");
         sql.append(" A.NU_ANN=B.NU_ANN");
         sql.append(" AND A.NU_EMI=B.NU_EMI");

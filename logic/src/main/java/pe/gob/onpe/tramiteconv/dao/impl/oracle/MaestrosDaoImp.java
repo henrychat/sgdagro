@@ -1379,5 +1379,17 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 		return null;
 	}
 
+	@Override
+	public List<EmpleadoBean> listEmpleado() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
         
 }

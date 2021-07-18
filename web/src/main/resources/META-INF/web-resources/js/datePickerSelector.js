@@ -340,8 +340,8 @@ jQuery.fn.showDatePicker = function(options)
             	 textoFinal = darFormatoFechaACadena(mesAnterior9, hoy, 1);
             	break;
             case 10:
-            	 inicializa8(hace1dias,hoy);
-            	 textoFinal = darFormatoFechaACadena(hace1dias, hoy, 1);
+            	 inicializa8(hoy,hoy);
+            	 textoFinal = darFormatoFechaACadena(hoy, hoy, 1);
             	break;
             default:
                 textoFinal = darFormatoFechaACadena(hoy, hoy, 1);

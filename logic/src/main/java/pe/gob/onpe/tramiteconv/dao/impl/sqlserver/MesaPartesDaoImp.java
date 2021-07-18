@@ -116,11 +116,13 @@ public class MesaPartesDaoImp
         objectParam.put("pcodepOfi", buscarDocumentoExtRecepBean.getCoDependencia());
         
     	}
-    else if (buscarDocumentoExtRecepBean.getInMesaPartes().equals("0")) {
-      bBusqDep = true;
-      sql.append(" AND A.CO_DEP = :pCoDep");
-      objectParam.put("pCoDep", buscarDocumentoExtRecepBean.getCoDependencia());
-    } 
+    // si tipo de permiso es cero tiene acceso total TI_ACCESO_MP=0,
+    //el permiso trazabilidad prevalece sobre el permiso de acceso total si lo tuviera
+//    else if (buscarDocumentoExtRecepBean.getInMesaPartes().equals("1")) {
+//      bBusqDep = true;
+//      sql.append(" AND A.CO_DEP = :pCoDep");
+//      objectParam.put("pCoDep", buscarDocumentoExtRecepBean.getCoDependencia());
+//    } 
 
     
     if (buscarDocumentoExtRecepBean.getCoTipoDoc() != null && buscarDocumentoExtRecepBean.getCoTipoDoc().trim().length() > 0) {
@@ -1278,9 +1280,10 @@ public class MesaPartesDaoImp
     prutaReporte.append("\t     \tELSE (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP_V(A.NU_ANN, A.NU_EMI)) ");
     prutaReporte.append("\t     END deEmpPro, ");
     prutaReporte.append("\t     A.DE_ASU, ");
-    prutaReporte.append("\t     (SELECT DE_EST ");
-    prutaReporte.append("\t     FROM IDOSGD.TDTR_ESTADOS ");
-    prutaReporte.append("\t     WHERE CO_EST + DE_TAB = A.ES_DOC_EMI + 'TDTV_REMITOS') DE_ES_DOC_EMI, ");
+    prutaReporte.append(" [IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS_MP](A.ES_DOC_EMI, 'TDTV_REMITOS') DE_ES_DOC_EMI, ");
+   // prutaReporte.append("\t     (SELECT DE_EST ");
+   // prutaReporte.append("\t     FROM IDOSGD.TDTR_ESTADOS ");
+   // prutaReporte.append("\t     WHERE CO_EST + DE_TAB = A.ES_DOC_EMI + 'TDTV_REMITOS') DE_ES_DOC_EMI, ");
     prutaReporte.append("\t     A.NU_DIA_ATE, ");
     prutaReporte.append("\t     B.NU_EXPEDIENTE, ");
     prutaReporte.append("\t     CONVERT(VARCHAR(20),A.FE_EMI,103)    FE_EXP_VENCE_CORTA, ");
@@ -1345,7 +1348,19 @@ public class MesaPartesDaoImp
       }
       
       if (buscarDocumentoExtRecepBean.getCoProceso() != null && buscarDocumentoExtRecepBean.getCoProceso().trim().length() > 0) {
-        prutaReporte.append(" AND B.CO_PROCESO_EXP = '").append(buscarDocumentoExtRecepBean.getCoProceso()).append("'");
+       // prutaReporte.append(" AND B.CO_PROCESO_EXP = '").append(buscarDocumentoExtRecepBean.getCoProceso()).append("'");
+    	  if(buscarDocumentoExtRecepBean.getCoProceso().equals("CON_TUPA")) {
+    		  prutaReporte.append(" AND B.CO_PROCESO_EXP != '0000' ");
+    	       
+    	  }
+    	  else  if(buscarDocumentoExtRecepBean.getCoProceso().equals("SIN_TUPA")) {
+    		  prutaReporte.append(" AND B.CO_PROCESO_EXP ='0000' ");  
+    	  } else {
+    		  prutaReporte.append(" AND B.CO_PROCESO_EXP  = '").append(buscarDocumentoExtRecepBean.getCoProceso()).append("'");
+    	      
+    		  
+    	  }
+    	  
       }
       if (buscarDocumentoExtRecepBean.getCoDepDestino() != null && buscarDocumentoExtRecepBean.getCoDepDestino().trim().length() > 0) {
         prutaReporte.append(" AND INSTR(B.TI_EMI_DES, '").append(buscarDocumentoExtRecepBean.getCoDepDestino()).append("') > 0 ");

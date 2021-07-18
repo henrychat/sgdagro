@@ -12,7 +12,7 @@
                 fn_construyeTablaVencimientoDetalleSegui();
                 fn_construyeTablaVencimientoDetalleCuadradosSegui();
                 
-             //   fnVerLeyendaVencimientoEmi();
+          
              
             });
         
@@ -131,7 +131,10 @@
                                         <td colspan="2">
                                             <form:input path="busAsunto" style="width: 350px;" onkeypress="return fu_onKeyPressFiltrarTecladoCadena(event, false, public_letras)" maxlength="100"/>
                                         </td>
-                                        <td align="right" colspan="2">
+                                        <td>
+                                        <form:checkbox path="esDocOrigen" value="0"/><strong>Solo Doc.Origen</strong>
+                                        </td>
+                                        <td align="right" colspan="1">
                                             <button title ="Filtrar documentos" class="btn btn-default btn-sm" onclick="changeTipoBusqTrazabilidad('1');" type="button">
                                                 <span class="glyphicon glyphicon-filter"><jsp:text/></span> Buscar</button>
                                             <button title ="Limpiar datos de Filtro" class="btn btn-default btn-sm" onclick="fu_cleanSeguiTrazabilidad();" type="button">
@@ -152,24 +155,13 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="txtRefOrigen" name="txtRefOrigen" size="50" readonly="true" value="[TODOS]" />
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-default btn-xs-bus" type="button" onclick="fn_buscaReferenciaOrigenConsulEmiSegui();"><span class="glyphicon glyphicon-search"><jsp:text/></span></button>
+                                                        <button class="btn btn-default btn-xs-bus" type="button" onclick="fn_buscaReferenciaOrigenTraza('buscarDocumentoSeguiEstEmiBean','coRefOrigen','txtRefOrigen');"><span class="glyphicon glyphicon-search"><jsp:text/></span></button>
                                                     </span>
                                                 </div>                                            
                                                 <form:input path="coRefOrigen" type="hidden"/>
                                             </td>                                         
                                         </tr>
-                                        <tr>
-                                            <td width="100px">Remitente</td>
-                                            <form:input path="coDepOrigen" type="hidden"/>
-                                            <td>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="txtDepOrigen" name="txtDepOrigen" size="50" readonly="true" value="${deDepenciaActual}" />
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-default btn-xs-bus" type="button" onclick="fn_buscaDependenciaOrigenConsulEmiSeguiEst();"><span class="glyphicon glyphicon-search"><jsp:text/></span></button>
-                                                    </span>
-                                                </div>                                            
-                                            </td>
-                                        </tr>
+
 
                                         <tr>                                    
                                             <td>Elaborado por:</td>
@@ -178,7 +170,7 @@
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="txtElaboradoPor" name="txtElaboradoPor" size="50" readonly="true" value="[TODOS]" />
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-default btn-xs-bus" type="button" onclick="fn_buscaElaboradoPorConsulSeguiEstEmi();"><span class="glyphicon glyphicon-search"><jsp:text/></span></button>
+                                                        <button class="btn btn-default btn-xs-bus" type="button" onclick="fn_buscaEmplpeado('coEmpElaboro','txtElaboradoPor');"><span class="glyphicon glyphicon-search"><jsp:text/></span></button>
                                                     </span>
                                                 </div>                                            
                                             </td>

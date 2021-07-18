@@ -483,11 +483,15 @@ function fu_generarReporteDocExtConsul(pformatoReporte){
             if (data!==null) {
                 if(data.coRespuesta==="0"){
                     if(!!data.noUrl&&!!data.noDoc){
-                        fn_generaDocApplet(data.noUrl,data.noDoc,function(data){
+//                        fn_generaDocApplet(data.noUrl,data.noDoc,function(data){
+//                            var result = data;
+//                            if (result!=="OK"){
+//                               bootbox.alert(result);
+//                            }
+//                        });
+                    	var param={urlDoc:data.noUrl,rutaDoc:data.noDoc};
+                        runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data){
                             var result = data;
-                            if (result!=="OK"){
-                               bootbox.alert(result);
-                            }
                         });
                     }
                 }else{

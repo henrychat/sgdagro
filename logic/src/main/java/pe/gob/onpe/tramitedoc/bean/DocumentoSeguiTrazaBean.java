@@ -30,7 +30,14 @@ public class DocumentoSeguiTrazaBean {
 	   private String correoRemite;
 	   private String telefonoRemite; //DE_DEPENDENCIA_MP
 	   private String deDependenciaMP;
+	   private String esDocOrigen;
 	
+	public String getEsDocOrigen() {
+		return esDocOrigen;
+	}
+	public void setEsDocOrigen(String esDocOrigen) {
+		this.esDocOrigen = esDocOrigen;
+	}
 	public String getDeDependenciaMP() {
 		return deDependenciaMP;
 	}

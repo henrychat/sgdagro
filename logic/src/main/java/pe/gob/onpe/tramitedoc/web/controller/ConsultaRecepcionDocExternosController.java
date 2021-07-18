@@ -65,6 +65,7 @@ public class ConsultaRecepcionDocExternosController {
         BuscarDocumentoExtConsulBean DocExt = new BuscarDocumentoExtConsulBean();
         String sCoAnnio = Utility.getInstancia().dateToFormatStringYYYY(new Date());
         DocExt.setCoAnnio(sCoAnnio);
+        UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
         
         model.addAttribute(DocExt);
         model.addAttribute("deEstadosList",referencedData.getLstEstadosDocumentoEmi("TDTV_REMITOS"));
@@ -82,7 +83,11 @@ public class ConsultaRecepcionDocExternosController {
             model.addAttribute("lTipoDestinatarioEmi", grupoDestinoList);
         
         model.addAttribute("fechaActual", Utility.getInstancia().dateToFormatString(new Date()));
-        model.addAttribute("annioActual", Utility.getInstancia().dateToFormatStringYYYY(new Date()));        
+        model.addAttribute("annioActual", Utility.getInstancia().dateToFormatStringYYYY(new Date()));  
+        if(usuarioConfigBean.getCoDepMp()==null) {
+      	  model.addAttribute("pMensaje", "Oficina no es de mesa de partes");
+            return "respuesta";	
+      }
         return "/mpConsultaRegistroDocExt/consultaRegDocExt";
     }
     
@@ -93,6 +98,7 @@ public class ConsultaRecepcionDocExternosController {
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
         buscarDocExt.setCoDependencia(usuario.getCoDep());
+        
         buscarDocExt.setCoLocal(usuarioConfigBean.getCoLocal());
         buscarDocExt.setTiAcceso(usuarioConfigBean.getTiConsultaMp());
         buscarDocExt.setCoEmpleado(usuario.getCempCodemp());
@@ -100,6 +106,10 @@ public class ConsultaRecepcionDocExternosController {
         buscarDocExt.setInMesaPartes(usuarioConfigBean.getInMesaPartes());        
         
         List list = null;
+        if(usuarioConfigBean.getCoDepMp()==null) {
+        	  model.addAttribute("pMensaje", "Oficina no es de mesa de partes");
+              return "respuesta";	
+        }
 
         try{
                 list = docExtEmiService.getDocumentosExtConsulBean(buscarDocExt);
@@ -248,8 +258,7 @@ public class ConsultaRecepcionDocExternosController {
     }        
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goExportarArchivoLista")
-    public @ResponseBody String goExportarArchivoLista(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean, HttpServletRequest request,  BindingResult result, Model model) throws Exception 
-    {           
+    public @ResponseBody String goExportarArchivoLista(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean, HttpServletRequest request,  BindingResult result, Model model) throws Exception   {           
         ServletContext sc = request.getSession().getServletContext();
         
         String coReporte = ServletUtility.getInstancia().loadRequestParameter(request, "pformatRepor");

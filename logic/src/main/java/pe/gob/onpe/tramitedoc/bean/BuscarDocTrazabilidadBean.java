@@ -61,7 +61,16 @@ public class BuscarDocTrazabilidadBean extends ReporteBean {
     private String formatoReporte;
     private String rutaReporteJasper;
     private String   busCodDepEmiRef;
+    private String esDocOrigen;
   
+
+	public String getEsDocOrigen() {
+		return esDocOrigen;
+	}
+
+	public void setEsDocOrigen(String esDocOrigen) {
+		this.esDocOrigen = esDocOrigen;
+	}
 
 	public String getFormatoReporte() {
 		return formatoReporte;

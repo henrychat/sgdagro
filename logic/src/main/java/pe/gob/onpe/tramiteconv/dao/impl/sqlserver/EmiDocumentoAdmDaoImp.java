@@ -737,6 +737,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
   public List<DocumentoBean> getLstDocRecepcionadoRef(String pcoDepen, String pannio, String ptiDoc, String pnuDoc) {
     StringBuffer sql = new StringBuffer();
     List<DocumentoBean> list = new ArrayList<DocumentoBean>();
+    String nuDocT= pnuDoc;
     
     sql.append("SELECT A.* ");
     sql.append("FROM ( ");
@@ -780,7 +781,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
       pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
       sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("') ");
     } 
-    
+   
     sql.append("UNION \n");
     sql.append("select ");
     sql.append("d.FE_REC_DOC, ");
@@ -808,25 +809,50 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     sql.append("and d.es_doc_rec <> '0' ");
     sql.append("and (R.nu_ann+R.nu_emi) in (  ");
     
-    sql.append("select  (REF.nu_ann_ref+REF.nu_emi_ref) as nurem from IDOSGD.TDTR_REFERENCIA REF where (REF.nu_ann+REF.nu_emi) in \n(select (R.nu_ann+R.nu_emi) as nurem \nfrom IDOSGD.TDTV_REMITOS R  \nINNER JOIN IDOSGD.TDTV_DESTINOS D ON d.nu_ann = r.nu_ann AND d.nu_emi = r.nu_emi \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN RR ON rr.nu_ann=r.nu_ann AND rr.nu_emi = r.nu_emi \nwhere\nr.es_eli = '0'\nAND d.es_eli = '0'\nAND r.nu_ann = ?\nAND r.es_doc_emi NOT IN ('5', '9', '7')\nand d.es_doc_rec <> '0'  \nand d.co_dep_des = ? \n");
+    sql.append("select  (REF.nu_ann_ref+REF.nu_emi_ref) as nurem from IDOSGD.TDTR_REFERENCIA REF where (REF.nu_ann+REF.nu_emi) in \n(select (R.nu_ann+R.nu_emi) as nurem \nfrom IDOSGD.TDTV_REMITOS R  \nINNER JOIN IDOSGD.TDTV_DESTINOS D ON d.nu_ann = r.nu_ann AND d.nu_emi = r.nu_emi \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN RR ON rr.nu_ann=r.nu_ann AND rr.nu_emi = r.nu_emi \nwhere\nr.es_eli = '0'\nAND d.es_eli = '0'\nAND r.nu_ann = ?\n ");
+    sql.append(" AND r.es_doc_emi NOT IN ('5', '9', '7') and d.es_doc_rec <> '0'  and d.co_dep_des = ?  ");
 
 
-
-
-
-
-
-
-
-
-
-    
     if (pnuDoc != null && pnuDoc.trim().length() > 0) {
       pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
       sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("%')\n");
     } 
+    sql.append("))  ");
+   
+    if (nuDocT != null && nuDocT.trim().length() >= 3) {
+    	
+    	 sql.append("UNION \n");
+    	    sql.append("select ");
+    	    sql.append("d.FE_REC_DOC, ");
+    	    sql.append("SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](r.co_tip_doc_adm), 1, 100) de_tip_doc_adm, ");
+    	    sql.append("SUBSTRING(rr.nu_doc,1,50) NU_DOC, ");
+    	    sql.append("CONVERT(VARCHAR(10), r.FE_EMI, 3) FE_EMI_CORTA, ");
+    	    sql.append("CONVERT(VARCHAR(10), d.FE_REC_DOC, 3) FE_REC_DOC_CORTA, ");
+    	    sql.append("r.nu_ann, ");
+    	    sql.append("r.nu_emi, ");
+    	    sql.append("d.nu_des, ");
+    	    sql.append("REPLACE(LTRIM(RTRIM(r.DE_ASU)), CHAR(10),' ') DE_ASU, ");
+    	    sql.append("r.co_tip_doc_adm, ");
+    	    sql.append("SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](d.co_dep_des), 1, 200) de_dep_des, ");
+    	    sql.append("SUBSTRING(rr.nu_expediente,1,20) NU_EXPEDIENTE, ");
+    	    sql.append("r.NU_ANN_EXP, ");
+    	    sql.append("r.NU_SEC_EXP ");
+    	    sql.append("from IDOSGD.TDTV_REMITOS R   ");
+    	    sql.append("INNER JOIN\t IDOSGD.TDTV_DESTINOS D ON d.nu_ann = r.nu_ann AND d.nu_emi = r.nu_emi ");
+    	    sql.append("INNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN RR ON rr.nu_ann=r.nu_ann AND rr.nu_emi = r.nu_emi ");
+    	    sql.append("where ");
+    	    sql.append("r.es_eli = '0' ");
+    	    sql.append("AND d.es_eli = '0' ");
+    	    sql.append("AND r.nu_ann = '").append(pannio).append("'");
+    	    sql.append("AND r.es_doc_emi NOT IN ('5', '9', '7') ");
+    	    sql.append("and d.es_doc_rec <> '0'  and  d.co_dep_des = '").append(pcoDepen).append("'");
+    	 
+    	      sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("%'");
+    	      sql.append(" or r.DE_DOC_SIG like '%").append(nuDocT).append("%' )");
+    	
+    }
     
-    sql.append(")) ) E ");
+    sql.append(" ) E ");
     
     sql.append(") A ");
     sql.append("WHERE ROWNUM < 202 ");

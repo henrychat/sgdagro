@@ -562,6 +562,58 @@ public class MaestrosDaoImp   extends SimpleJdbcDaoBase  implements MaestrosDao 
     return list;
   }
   // EJHM
+  
+public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio) {
+	  
+	  Integer annio2= annio-1;
+	    StringBuffer sql = new StringBuffer();
+	    sql.append("select  distinct ");
+	    sql.append("        b.DE_DEPENDENCIA descrip, ");
+	    sql.append("        b.CO_DEPENDENCIA cod_dep, ");
+	    sql.append("        b.DE_CORTA_DEPEN ");
+	    sql.append(" from IDOSGD.tdtx_resumen_dep a, ");
+	    sql.append(" IDOSGD.RHTM_DEPENDENCIA b ");
+	    sql.append("where a.nu_ann  in( ?,?) ");
+	  //  sql.append("and a.co_dep = ? ");
+	    sql.append(" and a.ti_tab='R' ");
+	    sql.append(" and a.ti_emi = '01' ");
+	//    sql.append("and a.co_emp_res = (CASE ? WHEN 0 THEN a.co_emp_res ELSE ? END) ");
+	    sql.append(" and a.CO_DEP_REF = b.CO_DEPENDENCIA ");
+	    sql.append(" UNION ALL ");
+	    sql.append(" select  distinct ");
+	    sql.append("        CASE a.ti_emi ");
+	    sql.append("            WHEN '02' THEN ' [PROVEEDORES]' ");
+	    sql.append("            WHEN '03' THEN ' [CIUDADANOS]' ");
+	    sql.append(" WHEN '04' THEN ' [OTROS]' ");
+	    sql.append("            WHEN '05' THEN ' [PERSONALES]' ");
+	    sql.append("        END descrip, ");
+	    sql.append("        a.co_dep_ref cod_dep, ");
+	    sql.append("        NULL ");
+	    sql.append(" from IDOSGD.tdtx_resumen_dep a ");
+	    sql.append(" where a.nu_ann in (?,?) ");
+	   // sql.append("and a.co_dep = ? ");
+	    sql.append(" and a.ti_tab='R' ");
+	    sql.append(" and a.ti_emi <> '01' ");
+	  //  sql.append("and a.co_emp_res = (CASE ? WHEN 0 THEN a.co_emp_res ELSE ? END) ");
+	    sql.append(" UNION ");
+	    sql.append(" SELECT ' [TODOS]', ");
+	    sql.append("   NULL, ");
+	    sql.append("  NULL ");
+	    sql.append(" ORDER BY 1 ");
+	    
+	    List<RemitenteBean> list = new ArrayList<RemitenteBean>();
+	    
+	    try {
+	      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[] { annio,annio2,
+	    		   annio,annio2 });
+	    } catch (EmptyResultDataAccessException e) {
+	      list = null;
+	    } catch (Exception e) {
+	      list = null;
+	      e.printStackTrace();
+	    } 
+	    return list;
+  }
   public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
 	  
 	  Integer annio2= annio-1;
@@ -612,7 +664,7 @@ public class MaestrosDaoImp   extends SimpleJdbcDaoBase  implements MaestrosDao 
 	      e.printStackTrace();
 	    } 
 	    return list;
-	  }
+  }
 
   
   public List<DependenciaBean> listDestinatarioEmi(String annio, UsuarioConfigBean usuarioConfigBean) {
@@ -800,7 +852,37 @@ public class MaestrosDaoImp   extends SimpleJdbcDaoBase  implements MaestrosDao 
     } 
     return list;
   }
+  public List<EmpleadoBean> listEmpleado() {
+	    StringBuffer sql = new StringBuffer();
+	   
+	      sql.append("SELECT\te.cemp_apepat + ' ' + e.cemp_apemat + ' ' + e.cemp_denom nombre, ");
+	      sql.append("        e.CEMP_CODEMP ");
+	      sql.append("FROM IDOSGD.RHTM_PER_EMPLEADOS e ");
+	      sql.append("where e.CEMP_EST_EMP = '1' ");
+	      
+	      sql.append("UNION ");
+	      sql.append("SELECT  ' [TODOS]', ");
+	      sql.append("\tNULL ");
+	      sql.append("ORDER BY 1 ");
+	    
 
+	    
+	    List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
+	    
+	    try {
+	     
+	        
+	        list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[] { });
+	      
+	    
+	    } catch (EmptyResultDataAccessException e) {
+	      list = null;
+	    } catch (Exception e) {
+	      list = null;
+	      e.printStackTrace();
+	    } 
+	    return list;
+	  }
   
   public List<EmpleadoBean> listEmpleadoDestino(String pcodDependencia, String ptiAcceso, String pcoEmpleado) {
     StringBuffer sql = new StringBuffer();

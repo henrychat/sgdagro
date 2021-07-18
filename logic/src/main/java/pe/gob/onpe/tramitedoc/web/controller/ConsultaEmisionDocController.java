@@ -172,7 +172,7 @@ public class ConsultaEmisionDocController
     String pnuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "pnuAnn");
     UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
     model.addAttribute("iniFuncionParm", "1");
-    model.addAttribute("listaReferenOrig", this.referencedData.getListReferenciaOrigen(pnuAnn, usuarioConfigBean));
+    model.addAttribute("listaReferenOrig", referencedData.getListReferenciaOrigen(pnuAnn, usuarioConfigBean));
     return "/modalGeneral/consultaReferenciaOrigenConsul";
   }
   

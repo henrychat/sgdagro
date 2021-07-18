@@ -573,7 +573,7 @@ function fu_generarReporteDocExtConsul(pformatoReporte){
     var noForm='#buscarDocumentoExtConsulBean';
     var validaFiltro = fu_validaFiltroRecepDocExtConsul("0",noForm);
     if (validaFiltro === "1") {
-        // ajaxCall("/srConsultaRecDocExterno.do?accion=goRutaReporte&pformatRepor="+pformatoReporte, $(noForm).serialize(), function(data) {
+       
         ajaxCall("/srConsultaRecDocExterno.do?accion=goExportarArchivoLista&pformatRepor="+pformatoReporte, $(noForm).serialize(), function(data) {    
             if (data!==null) {
                 if(data.coRespuesta==="0"){
@@ -585,6 +585,10 @@ function fu_generarReporteDocExtConsul(pformatoReporte){
                                bootbox.alert(result);
                             }
                         });
+//                    	var param={urlDoc:data.noUrl,rutaDoc:data.noDoc};
+//                        runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data){
+//                            var result = data;
+//                        });
                     }
                 }else{
                    bootbox.alert(data.deRespuesta);

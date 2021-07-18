@@ -3,6 +3,7 @@ package pe.gob.onpe.tramitedoc.web.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -389,6 +390,30 @@ public class SeguiDocTrazabilidadController {
             ex.printStackTrace();
         }        
         return vResult;        
+    }
+    @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goBuscaElaboradoPor"})
+    public String goBuscaElaboradoPor(HttpServletRequest request, Model model) {
+      UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
+    //  String pcoDep = ServletUtility.getInstancia().loadRequestParameter(request, "pcoDep");
+      String campo1 = ServletUtility.getInstancia().loadRequestParameter(request, "campo1");
+      String campo2 = ServletUtility.getInstancia().loadRequestParameter(request, "campo2");
+      model.addAttribute("campo1", campo1);
+      model.addAttribute("campo2", campo2);
+      model.addAttribute("listaEmpleado", referencedData.getListEmpleado());
+      return "/modalGeneral/consultaEmpleadoUlt";
+    }
+    
+    @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goBuscaReferenciaOrigen"})
+    public String goBuscaReferenciaOrigen(HttpServletRequest request, Model model) {
+      
+      Calendar cal= Calendar.getInstance();
+      int year= cal.get(Calendar.YEAR);
+      String campo1 = ServletUtility.getInstancia().loadRequestParameter(request, "campo1");
+      String campo2 = ServletUtility.getInstancia().loadRequestParameter(request, "campo2");
+      model.addAttribute("campo1", campo1);
+      model.addAttribute("campo2", campo2);
+      model.addAttribute("listaReferenOrig", referencedData.getListReferenciaOrigen(year));
+      return "/modalGeneral/consultaReferenciaOrigenConsulUlt";
     }
 
 

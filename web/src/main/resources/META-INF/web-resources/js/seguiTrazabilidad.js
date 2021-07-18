@@ -600,53 +600,37 @@ function mostrarOcultarDivBusTrazabilidad() {
  
   removeDomId('windowConsultaDestinoEmi');
 }
-    
-//    function fu_FiltrarTecladoCadenaFunParamGeneral(evt, autoSubmit, pvalidKeys, callbackFunction, campo1,campo2) {
-//        eventEvaluate(evt);
-//        var key = window.event ? oEvent.keyCode : oEvent.which;
-//        if (!(key === 37)) {
-//            var tk = new KeyboardClass(oEvent, pvalidKeys);
-//            if (tk.isIntro()) {
-//                callbackFunction(campo1,campo2);
-//            }
-//            return (((autoSubmit) ? autoSubmit : false) === true) ? tk.isValidKey : (tk.isValidKey && tk.k !== 13);
-//        }
-//        return false;
-//    }
-//    
-//    function fn_buscaDestinoTraza2() {
-//        var p = new Array();
-//        p[0] = "accion=goBuscaDependenciaEmite";
-//        p[1] = jQuery('#buscarDocumentoRecepConsulBean').find('#txtDepEmiteBus').val() === ' [TODOS]' ? "pdeDepEmite=" : "pdeDepEmite=" + fu_getValorUpperCase(jQuery('#buscarDocumentoRecepConsulBean').find('#txtDepEmiteBus').val());
-//        ajaxCall("/srConsultaRecepcionDoc.do", p.join("&"), function(data) {
-//        	fn_rptaBuscaDependenciaTraza(data);
-//        },
-//        'text', false, false, "POST");
-//    }
-//    
-//    function fu_setDatoDependencia2(cod, desc,campo2,campo1) {
-//        jQuery('#buscarDocumentoSeguiEstEmiBean').find('#'+campo2).val(desc);
-//        jQuery('#buscarDocumentoSeguiEstEmiBean').find('#'+campo1).val(cod);
-//       
-//        removeDomId('windowConsultaDestinoEmi');
-//    }
-
-//    function fn_rptaBuscaDependenciaRecepConsul(XML_AJAX) {
-//        if (XML_AJAX !== null) {
-//            var obj = null;
-//            try{obj = jQuery.parseJSON(XML_AJAX);}catch(e){}
-//            if(obj){
-//                if(obj.coRespuesta==="1"){
-//                    jQuery('#buscarDocumentoRecepConsulBean').find('#busCodDepEmiRef').val(obj.coDependencia);
-//                    jQuery('#buscarDocumentoRecepConsulBean').find('#txtDepEmiteBus').val(obj.deDependencia);
-//                    jQuery('#buscarDocumentoRecepConsulBean').find('#busCodTipoDocRef').focus();
-//                }else{
-//                   bootbox.alert(obj.deRespuesta);
-//                }
-//            }else{
-//                $("body").append(XML_AJAX);
-//            }        
-//        }      
-//    }
-
+  function fn_buscaEmplpeado(campo1,campo2) {
+	  var p = new Array();
+      p[0] = "accion=goBuscaElaboradoPor";
+      p[1] = "campo1="+campo1;
+      p[2] = "campo2="+campo2;
+	    ajaxCall("/srConsultaTrazabilidad.do", p.join("&"), function(data) {
+	    	if (data !== null) {
+	            $("body").append(data);
+	        }
+	    },
+	            'text', false, false, "POST");
+	}
+  function fu_setDatos(cod, desc,campo1,campo2,ventana){
+	  jQuery('#'+campo1).val(cod);
+	   jQuery('#'+campo2).val(desc);
+	   removeDomId(ventana);
+	  
+  }
+  
+  function fn_buscaReferenciaOrigenTraza(bean,campo1,campo2) {
+	    var p = new Array();
+	    p[0] = "accion=goBuscaReferenciaOrigen";
+	    p[1] = "pnuAnn=" + jQuery('#'+bean).find('#coAnnio').val();
+	    p[2] = "campo1="+campo1;
+	    p[3] = "campo2="+campo2;
+	    ajaxCall("/srConsultaTrazabilidad.do", p.join("&"), function(data) {
+	    	 if (data !== null) {
+	 	        $("body").append(data);
+	 	    }
+	    },
+	            'text', false, false, "POST");
+	}
+	
 

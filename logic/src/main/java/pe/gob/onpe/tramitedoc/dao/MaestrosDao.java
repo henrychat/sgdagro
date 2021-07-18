@@ -90,6 +90,8 @@ public interface MaestrosDao {
 	
 	public List<TipoDocumentoBean> listTipoDocumentoEmiMesaPartes();
 	public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla);
+	public List<EmpleadoBean> listEmpleado();
+	public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio);
    
     
 }

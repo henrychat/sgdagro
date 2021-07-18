@@ -275,6 +275,20 @@ public class ReferencedData {
         return list;
     }
     
+    public List<RemitenteBean> getListReferenciaOrigen(Integer annio){
+        List<RemitenteBean> list = null;
+        try{
+        
+       		 	
+       		 	list = maestrosDao.listReferenciaOrigenAnio(annio);	
+          
+        		
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return list;
+    }
+    
     public List<DependenciaBean> getListDestinatarioEmi(String annio, UsuarioConfigBean usuarioConfigBean){
         List<DependenciaBean> list = null;
         try{
@@ -310,7 +324,16 @@ public class ReferencedData {
             ex.printStackTrace();
         }
         return list;
-    }    
+    } 
+    public List<EmpleadoBean> getListEmpleado(){
+        List<EmpleadoBean> list = null;
+        try{
+            list = maestrosDao.listEmpleado();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return list;
+    } 
     
     public List<DependenciaBean> getListDependenciaDestinatarioEmi(String coDepen, String deDepen){
         List<DependenciaBean> list = null;

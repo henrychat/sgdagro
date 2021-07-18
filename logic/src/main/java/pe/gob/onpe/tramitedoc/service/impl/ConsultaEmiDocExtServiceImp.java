@@ -16,12 +16,15 @@ import pe.gob.onpe.libreria.util.Utility;
 import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoExtConsulBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiConsulBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoExtConsulBean;
+import pe.gob.onpe.tramitedoc.bean.PermisoUsuarioBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaDocExtRecepBean;
 import pe.gob.onpe.tramitedoc.bean.RemitenteBean;
 import pe.gob.onpe.tramitedoc.bean.ReporteBean;
 import pe.gob.onpe.tramitedoc.dao.ConsultaEmiDocExtDao;
 import pe.gob.onpe.tramitedoc.dao.MesaPartesDao;
 import pe.gob.onpe.tramitedoc.service.ConsultaEmiDocExtService;
+import pe.gob.onpe.tramitedoc.service.PermisoService;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
@@ -45,6 +48,8 @@ public class ConsultaEmiDocExtServiceImp   implements ConsultaEmiDocExtService
   @Autowired
   private MesaPartesDao mesaPartesDao;
   @Autowired
+  private PermisoService permisoService;
+  @Autowired
   private ApplicationProperties applicationProperties;
   
   public List<DocumentoExtConsulBean> getDocumentosExtConsulBean(BuscarDocumentoExtConsulBean buscarDocExt) {
@@ -52,6 +57,13 @@ public class ConsultaEmiDocExtServiceImp   implements ConsultaEmiDocExtService
 
     
     try {
+    	 PermisoUsuarioBean permisoUsuario= new PermisoUsuarioBean();
+   	  permisoUsuario.setCodOpc(Constantes.COD_PERMISO_DOC_MP_OFICINA);
+   	  permisoUsuario.setCempCodEmp(buscarDocExt.getCoEmpleado()); // EL CODIGO DE SESION
+   	  permisoUsuario.setCodAplica(Constantes.COD_SISTEMA_SGD);
+   	  if(permisoService.obtenerPermiso(permisoUsuario)) {
+   		buscarDocExt.setTiAcceso("2");//toda la bandeja de oficina
+   	  }
       list = this.consultaEmiDocExtRecDao.getDocumentosExternos(buscarDocExt);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -114,14 +126,29 @@ public class ConsultaEmiDocExtServiceImp   implements ConsultaEmiDocExtService
 
 
   
-  public List<DocumentoExtConsulBean> getListaReporte(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean) { return this.consultaEmiDocExtRecDao.getListaReporteBusqueda(buscarDocumentoExtConsulBean); }
+  public List<DocumentoExtConsulBean> getListaReporte(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean) { 
+
+	  try {
+		  PermisoUsuarioBean permisoUsuario= new PermisoUsuarioBean();
+		  permisoUsuario.setCodOpc(Constantes.COD_PERMISO_DOC_MP_OFICINA);
+		  permisoUsuario.setCempCodEmp(buscarDocumentoExtConsulBean.getCoEmpleado()); // EL CODIGO DE SESION
+		  permisoUsuario.setCodAplica(Constantes.COD_SISTEMA_SGD);
+		if(permisoService.obtenerPermiso(permisoUsuario)) {
+			  buscarDocumentoExtConsulBean.setTiAcceso("2");//toda la bandeja de oficina
+		  }
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return this.consultaEmiDocExtRecDao.getListaReporteBusqueda(buscarDocumentoExtConsulBean); 
+	  }
 
 
   
   public ReporteBean getGenerarReporte(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean, Map parametros)  throws Exception,IOException {
     ReporteBean objReporte = new ReporteBean();
     String eserror = "1";
-    String coRespuesta = "";
+    String coRespuesta = "0";
     String deRespuesta = "";
     String prutaReporte = "";
     String deNoDoc = "";
@@ -145,15 +172,15 @@ public class ConsultaEmiDocExtServiceImp   implements ConsultaEmiDocExtService
       } 
       if (lista.size() == 0) {
         coRespuesta = "1";
-        deRespuesta = "No existe información para generar reporte.";
-        throw new Exception(deRespuesta);
+        deRespuesta = "No existe informaciÃ³n para generar reporte.";
+      //  throw new Exception(deRespuesta);
       } 
       if (buscarDocumentoExtConsulBean.getFormatoReporte().equalsIgnoreCase("PDF")) {
         coReporte = "TDR33";
         extensionArch = ".pdf";
         tipoArchivo = 2;
       } else {
-        coReporte = "TDR33_XLS";
+        coReporte = "TDR34_XLS";
         extensionArch = ".xls";
         tipoArchivo = 1;
       } 

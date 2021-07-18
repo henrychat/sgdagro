@@ -43,7 +43,7 @@ public class ConsultaEmiDocExtDaoImp
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");
     sql.append(" (CASE WHEN X.NU_CANDES=1 THEN (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP (X.NU_ANN, X.NU_EMI))");
     sql.append(" ELSE (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP_V (X.NU_ANN, X.NU_EMI)) END)DE_EMP_DES,");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS (X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS_MP (X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_REC,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(X.CO_LOC_EMI) DE_LOC_EMI,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(X.CO_DEP) DE_DEPENDENCIA");
@@ -54,9 +54,12 @@ public class ConsultaEmiDocExtDaoImp
     sql.append(" A.DE_ASU,A.NU_CANDES,A.ES_DOC_EMI,A.CO_EMP_RES,");
     sql.append(" A.NU_DIA_ATE,B.NU_EXPEDIENTE,B.IN_EXISTE_DOC EXISTE_DOC,B.IN_EXISTE_ANEXO EXISTE_ANEXO,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(C.FE_VENCE,'DD/MM/YYYY') FE_EXP_VENCE_CORTA, A.CO_LOC_EMI,");
-    sql.append(" A.CO_DEP");
+    sql.append(" A.CO_DEP,  case when  B.CO_PROCESO_EXP='0000' then 'SIN TUPA' ELSE P.DE_NOMBRE END AS TUPA,"); 
+    sql.append(" case when  B.CO_PROCESO_EXP='0000' then ' ' ELSE P.DE_DESCRIPCION END AS DESCRIPCION_TUPA ");
     sql.append(" FROM IDOSGD.TDTV_REMITOS A ");
     sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
+    sql.append(" left join IDOSGD.TDTR_PROCESOS_EXP p on p.CO_PROCESO =B.CO_PROCESO_EXP and TI_PROCESO='1'");
+    //left join IDOSGD.TDTR_PROCESOS_EXP p on (p.CO_PROCESO =B.CO_PROCESO_EXP and TI_PROCESO='1'
     sql.append(" INNER JOIN IDOSGD.TDTC_EXPEDIENTE C ON C.NU_ANN_EXP=A.NU_ANN_EXP AND C.NU_SEC_EXP=A.NU_SEC_EXP ");
     sql.append(" WHERE 1=1 ");
     String pnuAnn = buscarDocExt.getCoAnnio();
@@ -67,10 +70,9 @@ public class ConsultaEmiDocExtDaoImp
     } 
     sql.append(" AND A.CO_GRU='3'");
     sql.append(" AND A.ES_ELI = '0'");
-    sql.append(" AND A.CO_DEP_EMI = :pCoDepEmi");
-
     
-    objectParam.put("pCoDepEmi", buscarDocExt.getCoDepEmi());
+
+   
     
     String pTipoBusqueda = buscarDocExt.getTipoBusqueda();
     if (pTipoBusqueda.equals("1") && buscarDocExt.isEsIncluyeFiltro()) {
@@ -83,22 +85,17 @@ public class ConsultaEmiDocExtDaoImp
       sql.append(" AND A.CO_EMP_RES = :pcoEmpRes ");
       objectParam.put("pcoEmpRes", buscarDocExt.getCoEmpleado());
     }
-    else if (buscarDocExt.getInMesaPartes().equals("0")) {
+    if (tiAcceso.equals("2")) {
       bBusqDep = true;
       sql.append(" AND A.CO_DEP = :pCoDep");
       objectParam.put("pCoDep", buscarDocExt.getCoDependencia());
     } 
-
-
-
-
-
-
-
+    // si tipo de permiso es cero tiene acceso total TI_ACCESO_MP=0,
+    //el permiso trazabilidad prevalece sobre el permiso de acceso total si lo tuviera
 
 
     
-    if (pTipoBusqueda.equals("0") || bBusqFiltro) {
+   // if (pTipoBusqueda.equals("0") || bBusqFiltro) {
       if (buscarDocExt.getTipoDoc() != null && buscarDocExt.getTipoDoc().trim().length() > 0) {
         sql.append(" AND A.CO_TIP_DOC_ADM = :pCoDocEmi ");
         objectParam.put("pCoDocEmi", buscarDocExt.getTipoDoc());
@@ -128,15 +125,24 @@ public class ConsultaEmiDocExtDaoImp
 
       
       if (buscarDocExt.getCoProceso() != null && buscarDocExt.getCoProceso().trim().length() > 0) {
-        sql.append(" AND B.CO_PROCESO_EXP = :pcoProceso ");
-        objectParam.put("pcoProceso", buscarDocExt.getCoProceso());
+    	  if(buscarDocExt.getCoProceso().equals("CON_TUPA")) {
+    		  sql.append(" AND B.CO_PROCESO_EXP != '0000' ");
+    	       
+    	  }
+    	  else  if(buscarDocExt.getCoProceso().equals("SIN_TUPA")) {
+    		  sql.append(" AND B.CO_PROCESO_EXP ='0000' ");  
+    	  } else {
+    		  sql.append(" AND B.CO_PROCESO_EXP = :pcoProceso ");
+    	        objectParam.put("pcoProceso", buscarDocExt.getCoProceso());  
+    		  
+    	  }
+        
       } 
       if (buscarDocExt.getCoDepDestino() != null && buscarDocExt.getCoDepDestino().trim().length() > 0) {
         sql.append(" AND CHARINDEX(:pTiEmiDes,B.TI_EMI_DES) > 0 ");
         objectParam.put("pTiEmiDes", buscarDocExt.getCoDepDestino());
       } 
-      if (buscarDocExt.getEsFiltroFecha() != null && (buscarDocExt
-        .getEsFiltroFecha().equals("1") || buscarDocExt.getEsFiltroFecha().equals("3"))) {
+      if (buscarDocExt.getEsFiltroFecha() != null && (buscarDocExt.getEsFiltroFecha().equals("1") || buscarDocExt.getEsFiltroFecha().equals("3"))) {
         String vFeEmiIni = buscarDocExt.getFeEmiIni();
         String vFeEmiFin = buscarDocExt.getFeEmiFin();
         if (vFeEmiIni != null && vFeEmiIni.trim().length() > 0 && vFeEmiFin != null && vFeEmiFin
@@ -146,7 +152,7 @@ public class ConsultaEmiDocExtDaoImp
           objectParam.put("pFeEmiFin", vFeEmiFin);
         } 
       } 
-    } 
+   // } 
 
   
     if (buscarDocExt.getBusNumEmision() != null && buscarDocExt.getBusNumEmision().trim().length() > 0) {
@@ -362,36 +368,40 @@ public class ConsultaEmiDocExtDaoImp
     String sqlContains = "";
     
     prutaReporte.append("SELECT  A.NU_COR_EMI, ");
-    prutaReporte.append("\t     CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA, ");
-    prutaReporte.append("\t     (SELECT CDOC_DESDOC ");
-    prutaReporte.append("\t     FROM IDOSGD.SI_MAE_TIPO_DOC ");
-    prutaReporte.append("\t     WHERE CDOC_TIPDOC = A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,B.NU_DOC, ");
-    prutaReporte.append("\t     (select CELE_DESELE ");
-    prutaReporte.append("\t     from IDOSGD.SI_ELEMENTO ");
-    prutaReporte.append("\t     WHERE CTAB_CODTAB='TIP_DESTINO' ");
-    prutaReporte.append("\t     AND CELE_CODELE=A.TI_EMI) tiRemitente , ");
-    prutaReporte.append("\t     [IDOSGD].[PK_SGD_DESCRIPCION_TI_EMI_EMP](A.NU_ANN, A.NU_EMI) deRemitente, ");
-    prutaReporte.append("\t     CASE A.NU_CANDES ");
-    prutaReporte.append("\t     \tWHEN 1 THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP](A.NU_ANN, A.NU_EMI)) ");
-    prutaReporte.append("\t     \tELSE (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP_V](A.NU_ANN, A.NU_EMI)) ");
-    prutaReporte.append("\t     END deEmpPro, ");
-    prutaReporte.append("\t     A.DE_ASU, ");
-    prutaReporte.append("\t     (SELECT DE_EST ");
-    prutaReporte.append("\t     FROM IDOSGD.TDTR_ESTADOS ");
-    prutaReporte.append("\t     WHERE CO_EST + DE_TAB = A.ES_DOC_EMI + 'TDTV_REMITOS') DE_ES_DOC_EMI, ");
-    prutaReporte.append("\t     A.NU_DIA_ATE, ");
-    prutaReporte.append("\t     B.NU_EXPEDIENTE, ");
-    prutaReporte.append("\t     CONVERT(VARCHAR(10), C.FE_VENCE, 103) FE_EXP_VENCE_CORTA, ");
-    prutaReporte.append("\t     (SELECT DE_NOMBRE ");
-    prutaReporte.append("\t     FROM IDOSGD.TDTR_PROCESOS_EXP ");
-    prutaReporte.append("\t     WHERE CO_PROCESO = B.CO_PROCESO_EXP ");
-    prutaReporte.append("\t     AND ES_ESTADO='1') DE_PROCESO_EXP, ");
-    prutaReporte.append("\t     B.CO_PROCESO_EXP AS coProcesoExp, ");
-    prutaReporte.append("\t     A.NU_FOLIOS AS nuFolios, ");
-    prutaReporte.append("\t     [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](A.CO_EMP_RES) DE_EMP_REC ");
-    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    prutaReporte.append("INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
-    prutaReporte.append("INNER JOIN IDOSGD.TDTC_EXPEDIENTE C ON  C.NU_ANN_EXP=A.NU_ANN_EXP AND C.NU_SEC_EXP=A.NU_SEC_EXP ");
+    prutaReporte.append("     CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA, ");
+    prutaReporte.append("     (SELECT CDOC_DESDOC ");
+    prutaReporte.append("     FROM IDOSGD.SI_MAE_TIPO_DOC ");
+    prutaReporte.append("    WHERE CDOC_TIPDOC = A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,B.NU_DOC, ");
+    prutaReporte.append("     (select CELE_DESELE ");
+    prutaReporte.append("     from IDOSGD.SI_ELEMENTO ");
+    prutaReporte.append("     WHERE CTAB_CODTAB='TIP_DESTINO' ");
+    prutaReporte.append("     AND CELE_CODELE=A.TI_EMI) tiRemitente , ");
+    prutaReporte.append("     [IDOSGD].[PK_SGD_DESCRIPCION_TI_EMI_EMP](A.NU_ANN, A.NU_EMI) deRemitente, ");
+    prutaReporte.append("     CASE A.NU_CANDES ");
+    prutaReporte.append("     WHEN 1 THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP](A.NU_ANN, A.NU_EMI)) ");
+    prutaReporte.append("     ELSE (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP_V](A.NU_ANN, A.NU_EMI)) ");
+    prutaReporte.append("     END deEmpPro, ");
+    prutaReporte.append("     A.DE_ASU, ");
+   // prutaReporte.append("     (SELECT DE_EST ");
+   // prutaReporte.append("     FROM IDOSGD.TDTR_ESTADOS ");
+    prutaReporte.append("     IDOSGD.PK_SGD_DESCRIPCION_ESTADOS_MP (A.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI, ");
+    prutaReporte.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(A.CO_DEP) DE_DEPENDENCIA, ");
+    prutaReporte.append("     A.NU_DIA_ATE, ");
+    prutaReporte.append("     B.NU_EXPEDIENTE, ");
+    prutaReporte.append("     CONVERT(VARCHAR(10), C.FE_VENCE, 103) FE_EXP_VENCE_CORTA, ");
+//    prutaReporte.append("     (SELECT DE_NOMBRE ");
+//    prutaReporte.append("     FROM IDOSGD.TDTR_PROCESOS_EXP ");
+//    prutaReporte.append("     WHERE CO_PROCESO = B.CO_PROCESO_EXP ");
+//    prutaReporte.append("     AND ES_ESTADO='1') DE_PROCESO_EXP, ");
+    prutaReporte.append("   case when  B.CO_PROCESO_EXP='0000' then 'SIN TUPA' ELSE P.DE_NOMBRE END AS DE_PROCESO_EXP,"); 
+    prutaReporte.append(" case when  B.CO_PROCESO_EXP='0000' then ' ' ELSE P.DE_DESCRIPCION END AS DESCRIPCION_TUPA, ");
+    prutaReporte.append("     B.CO_PROCESO_EXP AS coProcesoExp, ");
+    prutaReporte.append("     A.NU_FOLIOS AS nuFolios, ");
+    prutaReporte.append("     [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](A.CO_EMP_RES) DE_EMP_REC ");
+    prutaReporte.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) ");
+    prutaReporte.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B With (readuncommitted) ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
+    prutaReporte.append(" left join IDOSGD.TDTR_PROCESOS_EXP p With (readuncommitted) on p.CO_PROCESO =B.CO_PROCESO_EXP and TI_PROCESO='1'");
+    prutaReporte.append( "INNER JOIN IDOSGD.TDTC_EXPEDIENTE C With (readuncommitted) ON  C.NU_ANN_EXP=A.NU_ANN_EXP AND C.NU_SEC_EXP=A.NU_SEC_EXP ");
     prutaReporte.append("WHERE 1=1 ");
     
     try {
@@ -403,7 +413,11 @@ public class ConsultaEmiDocExtDaoImp
       prutaReporte.append(" AND A.CO_GRU='3'");
       prutaReporte.append(" AND A.ES_ELI = '0'");
       
-      prutaReporte.append(" AND A.CO_DEP_EMI = '").append(buscarDocumentoExtConsulBean.getCoDependencia()).append("'");
+    //  prutaReporte.append(" AND A.CO_DEP_EMI = '").append(buscarDocumentoExtConsulBean.getCoDependencia()).append("'");
+//         if(prutaReporte.getCoDepEmi() != null) {
+//	 sql.append(" AND A.CO_DEP_EMI = :pCoDepEmi");
+//      objectParam.put("pCoDepEmi", buscarDocExt.getCoDepEmi());	
+//// }
       
       String auxTipoAcceso = buscarDocumentoExtConsulBean.getTiAcceso();
       String tiAcceso = (auxTipoAcceso != null && (auxTipoAcceso.equals("0") || auxTipoAcceso.equals("1"))) ? auxTipoAcceso : "1";
@@ -422,7 +436,7 @@ public class ConsultaEmiDocExtDaoImp
       }
 
       
-      if (pTipoBusqueda.equals("0") || bBusqFiltro) {
+     // if (pTipoBusqueda.equals("0") || bBusqFiltro) {
         if (buscarDocumentoExtConsulBean.getTipoDoc() != null && buscarDocumentoExtConsulBean.getTipoDoc().trim().length() > 0) {
           prutaReporte.append(" AND A.CO_TIP_DOC_ADM = '").append(buscarDocumentoExtConsulBean.getTipoDoc()).append("'");
         }
@@ -437,7 +451,19 @@ public class ConsultaEmiDocExtDaoImp
         }
         
         if (buscarDocumentoExtConsulBean.getCoProceso() != null && buscarDocumentoExtConsulBean.getCoProceso().trim().length() > 0) {
-          prutaReporte.append(" AND B.CO_PROCESO_EXP = '").append(buscarDocumentoExtConsulBean.getCoProceso()).append("'");
+      //    prutaReporte.append(" AND B.CO_PROCESO_EXP = '").append(buscarDocumentoExtConsulBean.getCoProceso()).append("'");
+          
+          if(buscarDocumentoExtConsulBean.getCoProceso().equals("CON_TUPA")) {
+        	  prutaReporte.append(" AND B.CO_PROCESO_EXP != '0000' ");
+    	       
+    	  }
+    	  else  if(buscarDocumentoExtConsulBean.getCoProceso().equals("SIN_TUPA")) {
+    		  prutaReporte.append(" AND B.CO_PROCESO_EXP ='0000' ");  
+    	  } else {
+    		  prutaReporte.append(" AND B.CO_PROCESO_EXP ='").append(buscarDocumentoExtConsulBean.getCoProceso()).append("'");
+    	     		  
+    	  }
+          
         }
         if (buscarDocumentoExtConsulBean.getCoDepDestino() != null && buscarDocumentoExtConsulBean.getCoDepDestino().trim().length() > 0) {
           prutaReporte.append(" AND CHARINDEX('").append(buscarDocumentoExtConsulBean.getCoDepDestino()).append("',B.TI_EMI_DES) > 0 ");
@@ -451,7 +477,7 @@ public class ConsultaEmiDocExtDaoImp
               .append("' AS DATE) ");
           }
         } 
-      } 
+     // } 
 
 
       
