@@ -103,7 +103,7 @@ public class SeguiDocTrazabilidadController {
         String mensaje = "NO_OK";
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
-        String codDependencia = usuario.getCoDep();
+       String codDependencia = usuario.getCoDep();
         String codEmpleado = usuario.getCempCodemp();
         String tipAcceso = usuarioConfigBean.getTiConsulta();
         buscarDocumentoSeguiEstEmiBean.setCoDependencia(codDependencia);
@@ -174,9 +174,12 @@ public class SeguiDocTrazabilidadController {
 		 nuExpVacio=true;   
 	 }
     if(busqueda.getIncluyeFiltroFecha()!=null && busqueda.getIncluyeFiltroFecha().equals("0") || dias>=365) {
-    	  if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
-    			  return null;
-    	  }
+    	 if(!Utilidades.esVacio(busqueda.getBusCodDepEmiRef())&& !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>9) {
+			  return null;
+		  }
+	     if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
+			  return null;
+	      }
     	  if(nuDocVacio && nuExpVacio ) {
     		  return  "Número de Documento debe contener como mínio 3 caracteres distintos de cero  o Número de expediente debe contener como mínio 4 caracteres caracteres distintos cero ";
     		  
@@ -197,9 +200,12 @@ public class SeguiDocTrazabilidadController {
     	  }
     	}
     	  else {
-    	   if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
+    		  if(!Utilidades.esVacio(busqueda.getBusCodDepEmiRef())&& !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>9) {
     			  return null;
-    	  }
+    		  }
+    	     if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
+    			  return null;
+    	      }
     		
     	
     		// int dias=(int) ((fechaFin.getTime()-fechaInicio.getTime())/86400000)+1;
@@ -210,9 +216,18 @@ public class SeguiDocTrazabilidadController {
     			 return "fecha de fin no puede ser vacío"; 
     		 }
     		 //estadoDoc
-    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc()) &&  (dias)>8) {
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) && Utilidades.esVacio(busqueda.getCoEmpElaboro()) &&  (dias)>8) {
     			  return  "Rango de Fechas debe ser menor a 8 dias "; 
     		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>31) {
+   			  return  "Rango de Fechas debe ser menor a 31 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>91) {
+      			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+       		 }
     		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && !Utilidades.esVacio(busqueda.getEstadoDoc()) &&  (dias)>31) {
    			  return  "Rango de Fechas debe ser menor a 31 dias "; 
    		 }

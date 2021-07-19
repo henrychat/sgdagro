@@ -163,7 +163,7 @@ public class DocumentoMensajeriaServiceImp   implements DocumentoMensajeriaServi
       } 
       if (lista.size() == 0) {
         coRespuesta = "1";
-        deRespuesta = "No existe información para generar reporte.";
+        deRespuesta = "No existe informaciÃ³n para generar reporte.";
         throw new Exception(deRespuesta);
       } 
       

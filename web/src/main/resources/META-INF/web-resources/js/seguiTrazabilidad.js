@@ -18,12 +18,23 @@ function fn_inicializaTrazabilidad(sCoAnnio, fechaActual) {
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#busCoAnnio').find('option[value=""]').remove();
     pnumFilaSelect = 0;
     changeTipoBusqTrazabilidad("0");
+    clickCheckTrazabilidad();
 }
 
 function changeTipoBusqTrazabilidad(tipo) {
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#tipoBusqueda').val(tipo);
     submitAjaxFormEmiDocAdmSegui2(tipo);
    // mostrarOcultarDivBusqFiltro2SeguiEmi2();
+}
+function clickCheckTrazabilidad(){
+	
+	 jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esDocOrigen1').click(function() {
+		   if(jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esDocOrigen1').is(':checked')){
+		     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esDocOrigen1').val("1");
+		   } else {
+		   jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esDocOrigen1').val("0");
+		   }
+		});
 }
 
 function fn_buscaDestinatarioTrazabilidad() {
@@ -189,6 +200,7 @@ function fu_eventoTablaTrazabilidadSegui() {
              {"bSortable": false},
              {"bSortable": false},
              {"bSortable": true},
+             {"bSortable": false},
              {"bSortable": false},
              {"bSortable": true},
              {"bSortable": true},

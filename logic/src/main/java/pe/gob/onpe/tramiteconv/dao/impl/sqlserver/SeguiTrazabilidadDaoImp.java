@@ -37,6 +37,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append(" select ROW_NUMBER() OVER(ORDER BY a.fe_emi  ASC) as nro , a.NU_EMI, a.NU_ANN , a.CO_GRU,R.IN_EXISTE_DOC existeDoc, ");
     sql.append(" case when CO_GRU='3' then ISNULL(A.COBS_DOCUMENTO,'') else ISNULL(A.OBS_DOC,'') end as obsRemite, ");
     sql.append(" ISNULL(A.CEXP_CORREOE,'') as correoRemite,ISNULL(A.CTELEFONO,'') as telefonoRemite, ");
+    sql.append(" case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as siglaOri,");
     sql.append(" CASE WHEN a.CO_GRU='3' THEN 'MESA PARTES'  WHEN a.CO_GRU='1' THEN 'ADMINISTRATIVO'   ELSE 'PROFESIONAL' END AS BANDEJA,  ");
     sql.append(" CONVERT (VARCHAR,FE_EMI,113) fecEmision,   [IDOSGD].[PK_SGD_DESCRIPCION_TI_DESTINO](A.TI_EMI) DE_TI_EMI,  ");
     sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](A.CO_DEP) deDependenciaMP, a.CO_TIP_DOC_ADM, ");
@@ -46,7 +47,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 	sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](A.CO_DEP_EMI) as DEPENDENCIA_ORIGEN, IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (a.NU_ANN, a.NU_EMI) REMITENTE,   ");
     sql.append(" DE_ASU ASUNTO,CASE A.NU_CANDES     WHEN 1 THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP](A.NU_ANN, A.NU_EMI))  ");
     sql.append(" ELSE (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP_V](A.NU_ANN, A.NU_EMI))     END as destinos ");
-    sql.append(" FROM IDOSGD.TDTV_REMITOS A INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+    sql.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
     sql.append("AND A.ES_ELI = '0' 		AND A.ES_DOC_EMI NOT IN ('5', '9', '7') AND A.IN_OFICIO = '0' AND A.CO_GRU IN ('1','2','3')  ");
     sql.append("Where 1=1");
 
@@ -73,7 +74,9 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 //      sql.append(" AND (A.CO_EMP_RES = :pcoEmpRes OR A.CO_EMP_EMI = :pcoEmpRes) ");
 //      objectParam.put("pcoEmpRes", buscarDocumentoSeguiEstEmiBean.getCoEmpleado());
 //    } 
-
+   if(buscarDocumentoSeguiEstEmiBean.getEsDocOrigen()!=null && buscarDocumentoSeguiEstEmiBean.getEsDocOrigen().equals("1")) {
+	   sql.append(" AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");  
+   }
     
     if (pTipoBusqueda.equals("0") || bBusqFiltro) {
       if (buscarDocumentoSeguiEstEmiBean.getEstadoDoc() != null && buscarDocumentoSeguiEstEmiBean.getEstadoDoc().trim().length() > 0) {

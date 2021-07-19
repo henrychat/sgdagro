@@ -31,7 +31,14 @@ public class DocumentoSeguiTrazaBean {
 	   private String telefonoRemite; //DE_DEPENDENCIA_MP
 	   private String deDependenciaMP;
 	   private String esDocOrigen;
+	   private String siglaOri;
 	
+	public String getSiglaOri() {
+		return siglaOri;
+	}
+	public void setSiglaOri(String siglaOri) {
+		this.siglaOri = siglaOri;
+	}
 	public String getEsDocOrigen() {
 		return esDocOrigen;
 	}

@@ -132,7 +132,7 @@
                                             <form:input path="busAsunto" style="width: 350px;" onkeypress="return fu_onKeyPressFiltrarTecladoCadena(event, false, public_letras)" maxlength="100"/>
                                         </td>
                                         <td>
-                                        <form:checkbox path="esDocOrigen" value="0"/><strong>Solo Doc.Origen</strong>
+                                        <form:checkbox path="esDocOrigen" value="0"/><strong>Solo Doc Exp.Origen</strong>
                                         </td>
                                         <td align="right" colspan="1">
                                             <button title ="Filtrar documentos" class="btn btn-default btn-sm" onclick="changeTipoBusqTrazabilidad('1');" type="button">
