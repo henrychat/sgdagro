@@ -88,6 +88,27 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     } 
     return docDatoBean;
   }
+  public DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi,String codEmp) {
+	    DocumentoDatoBean docDatoBean = null;
+	    try {
+	      docDatoBean = this.documentoObjDao.getDatosDoc(pnuAnn, pnuEmi);
+	      if (docDatoBean != null) {
+	    	 
+	    	  if(codEmp!=null &&  !codEmp.trim().equals("")) {
+	    		  String randonA=Utilidades.generateRandomNumber(8);
+	    		  String codigoSec=(randonA+codEmp.trim()).substring(5, 13);
+	    		  docDatoBean.setNuSecFirma(codigoSec);
+	    	  } else {
+	    		  docDatoBean.setNuSecFirma(Utilidades.generateRandomNumber(8));  
+	    	  }
+	    	  
+	        
+	      }
+	    } catch (Exception e) {
+	      docDatoBean = null;
+	    } 
+	    return docDatoBean;
+	  }
 
 
   
@@ -840,7 +861,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         docVerBean.setNoPrefijo("[R]");
         bswFirmaOnpe = false;
       } else {
-        docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
+        //docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
+        docDatoBean = getDatosDoc(pnuAnn, pnuEmi,usuarioConfig.getCempCodemp());
       } 
     } 
     if (bswFirmaOnpe) {
@@ -1311,7 +1333,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     DocumentoObjBean docObjBean = null;
     
     docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
-    if (docDatoBean != null) {
+   if (docDatoBean != null) {
       docVerBean.setNuSecFirma(docDatoBean.getNuSecFirma());
       docVerBean.setNumeroDoc(docDatoBean.getNumeroDoc());
       docVerBean.setFeFirma(docDatoBean.getFechaActual());
@@ -1544,7 +1566,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
       if (usuarioConfig.getSwFirma().equals("R")) {
         docVerBean.setNoPrefijo("[R]");
       }
-      docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
+     // docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
+      docDatoBean = getDatosDoc(pnuAnn, pnuEmi,usuarioConfig.getCempCodemp());
     } 
     
     if (docDatoBean != null) {
