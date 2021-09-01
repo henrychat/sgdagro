@@ -190,8 +190,8 @@ public class SeguiDocTrazabilidadController {
 //    	  }
 
     	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
-    			  &&  nuDocVacio  && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
-    		  return  "  Seleccione unidad organica";
+    			 && Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) &&  Utilidades.esVacio(busqueda.getCoTipoDocAdm())) {
+    		  return  "  Seleccione unidad organica o tipo de documento";
     	  }
     	  
     	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
@@ -217,17 +217,46 @@ public class SeguiDocTrazabilidadController {
     		 }
     		 //estadoDoc
     		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
-    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) && Utilidades.esVacio(busqueda.getCoEmpElaboro()) &&  (dias)>8) {
+    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) && Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen()) &&  (dias)>8) {
     			  return  "Rango de Fechas debe ser menor a 8 dias "; 
     		 }
     		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
-   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>32) {
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen()) && (dias)>31) {
    			  return  "Rango de Fechas debe ser menor a 31 dias "; 
     		 }
     		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
-      				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>32) {
+      				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())  && (dias)>31) {
       			  return  "Rango de Fechas debe ser menor a 31 dias "; 
        		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>31) {
+      			  return  "Rango de Fechas debe ser menor a 31 dias "; 
+       		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+     				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>31) {
+     			  return  "Rango de Fechas debe ser menor a 31 dias "; 
+      		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>31) {
+    			  return  "Rango de Fechas debe ser menor a 31 dias "; 
+     		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+   			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+    			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+     		 }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+   			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+    		 }
+    		 
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+     				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro())   && (dias)>61) {
+     			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+      		 }
     		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
       				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>91) {
       			  return  "Rango de Fechas debe ser menor a 91 dias "; 

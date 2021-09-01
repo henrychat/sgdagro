@@ -13,7 +13,7 @@ function fn_inicializaTrazabilidad(sCoAnnio, fechaActual) {
         $(this).val(replicate($(this).val(), 6));
     });
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#busNumDoc').change(function() {
-        $(this).val(replicate($(this).val(), 6));
+      //  $(this).val(replicate($(this).val(), 6));
     });
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#busCoAnnio').find('option[value=""]').remove();
     pnumFilaSelect = 0;

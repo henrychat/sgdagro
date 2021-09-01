@@ -87,10 +87,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
         sql.append(" AND A.CO_TIP_DOC_ADM = :pCoDocEmi ");
         objectParam.put("pCoDocEmi", buscarDocumentoSeguiEstEmiBean.getCoTipoDocAdm());
       } 
-      if (buscarDocumentoSeguiEstEmiBean.getCoRefOrigen() != null && buscarDocumentoSeguiEstEmiBean.getCoRefOrigen().trim().length() > 0) {
-        sql.append(" AND CHARINDEX(:pTiEmiRef, C.TI_EMI_REF) > 0 ");
-        objectParam.put("pTiEmiRef", buscarDocumentoSeguiEstEmiBean.getCoRefOrigen());
-      } 
+    
     //  busqueda.getBusCodDepEmiRef()
       if (buscarDocumentoSeguiEstEmiBean.getBusCodDepEmiRef()!= null && buscarDocumentoSeguiEstEmiBean.getBusCodDepEmiRef().trim().length() > 0) {
         sql.append(" AND A.CO_DEP_EMI = :pCoDepOrigenEmi ");
@@ -106,7 +103,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
       } 
    
       if (buscarDocumentoSeguiEstEmiBean.getCoRefOrigen()!= null && buscarDocumentoSeguiEstEmiBean.getCoRefOrigen().trim().length() > 0) {
-          sql.append(" AND CHARINDEX(:pTiEmiRef,r.TI_EMI_REF) > 0 ");
+          sql.append(" AND CHARINDEX(:pTiEmiRef,r.CO_DEP_EMI_REF) > 0 ");
           objectParam.put("pTiEmiRef", buscarDocumentoSeguiEstEmiBean.getCoRefOrigen());
         } 
       if (buscarDocumentoSeguiEstEmiBean.getCoDepDestino()!= null && buscarDocumentoSeguiEstEmiBean.getCoDepDestino().trim().length() > 0) {
@@ -144,7 +141,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 //      } 
       
       if (buscarDocumentoSeguiEstEmiBean.getBusNumDoc() != null && buscarDocumentoSeguiEstEmiBean.getBusNumDoc().trim().length() > 1) {
-        sql.append(" AND A.NU_DOC_EMI LIKE '%'+:pnuDocEmi+'%' ");
+        sql.append(" AND R.NU_DOC LIKE '%'+:pnuDocEmi+'%' ");
         objectParam.put("pnuDocEmi", buscarDocumentoSeguiEstEmiBean.getBusNumDoc());
       } 
       

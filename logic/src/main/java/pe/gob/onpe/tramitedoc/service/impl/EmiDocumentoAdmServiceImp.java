@@ -1398,7 +1398,7 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
             String sAccionBD = dest.getAccionBD();
             dest.setCoUseCre(pcoUserMod);
             if ("INS".equals(sAccionBD)) {
-              vReturn = this.emiDocumentoAdmDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
+              vReturn = emiDocumentoAdmDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
               if ("NO_OK".equals(vReturn))
                 throw new validarDatoException("Error Agregando Destinatario");  continue;
             } 

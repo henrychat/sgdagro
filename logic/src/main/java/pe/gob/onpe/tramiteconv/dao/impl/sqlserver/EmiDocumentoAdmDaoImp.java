@@ -1391,7 +1391,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     String vReturn = "NO_OK";
     StringBuffer sqlQry1 = new StringBuffer();
     sqlQry1.append("select RIGHT(REPLICATE('0', 7) + rtrim(ltrim(CAST((ISNULL(max(NU_CORR_EXP), 0) + 1) AS varchar))), 7) nuCorrExp, ");
-    sqlQry1.append("SUBSTRING((SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_SIGLA_CORTA(?)), 1, 6) deSiglaCorta ");
+    sqlQry1.append("SUBSTRING((SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_SIGLA_CORTA_EXP(?)), 1, 6) deSiglaCorta ");
     sqlQry1.append("from IDOSGD.tdtc_expediente ");
     sqlQry1.append("where nu_ann_exp = ? ");
     sqlQry1.append("and co_dep_exp = ? ");
