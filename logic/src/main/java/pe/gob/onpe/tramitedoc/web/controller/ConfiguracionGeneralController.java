@@ -350,12 +350,6 @@ public class ConfiguracionGeneralController
     model.addAttribute("deDep", sDeDependencia);
 
 
-
-
-
-
-
-    
     return "/configGeneral/grupoDestino";
   }
   

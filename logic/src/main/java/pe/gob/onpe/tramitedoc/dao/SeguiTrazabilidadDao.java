@@ -8,6 +8,7 @@ import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiEstEmitidoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaConsulBean;
 
 
@@ -29,11 +30,12 @@ public interface SeguiTrazabilidadDao {
     public String getRutaReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstRecBean);
     
     public List<ReferenciaConsulBean> getDocumentosRefRecepAdm(String snuAnn, String snuEmi);
+    public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
+    public List<DocumentosTrazaBean>  listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+    
 
     
     
-    //public List<DocumentoSeguiEstRecibidoBean> getDocumentosReferenciadoBusq(DocumentoSeguiEstRecibidoBean documentoSeguiEstEmitidoBean, String tiAcceso);
-    
-    
+  
     
 }

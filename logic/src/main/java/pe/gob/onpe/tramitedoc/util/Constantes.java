@@ -61,6 +61,8 @@ public interface Constantes {
     public static final String COD_PERMISO_ENVIAR_EXTERN_DOCUMENTOS = "M0505";
     public static final String COD_PERMISO_DER_MENSAJ_EXT_SGD = "M0506";
     public static final String COD_PERMISO_ADM_UUOO = "M0119";
+    public static final String COD_PERMISO_TRAZ_AVZ = "M030113";
+    
     
     public static final String  COD_LOCAL_CENTRAL="001";
     public static final String COD_MENSAJERIA_CENTRAL="10602";

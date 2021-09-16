@@ -29,12 +29,16 @@ import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoSeguiEstEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.PermisoUsuarioBean;
 import pe.gob.onpe.tramitedoc.bean.ReporteBean;
 import pe.gob.onpe.tramitedoc.bean.UsuarioConfigBean;
 import pe.gob.onpe.tramitedoc.service.CommonQryService;
+import pe.gob.onpe.tramitedoc.service.PermisoService;
 import pe.gob.onpe.tramitedoc.service.ReferencedData;
 import pe.gob.onpe.tramitedoc.service.SeguiEstEmitidoService;
 import pe.gob.onpe.tramitedoc.service.SeguiTrazabilidadService;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.SerforDateUtils;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
@@ -61,9 +65,12 @@ public class SeguiDocTrazabilidadController {
 	 
 	 @Autowired
 	 private  SeguiEstEmitidoService seguiEstEmitidoService;
+	 
+	 @Autowired
+	 private PermisoService permisoService;
 	    
-	  @Autowired
-	  private ApplicationProperties applicationProperties;
+	 @Autowired
+	 private ApplicationProperties applicationProperties;
 	
 	
     @RequestMapping(method = RequestMethod.GET, params = "accion=goInicio")
@@ -101,9 +108,10 @@ public class SeguiDocTrazabilidadController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=goInicio")
     public String goInicio(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean, HttpServletRequest request, BindingResult result, Model model) {
         String mensaje = "NO_OK";
+        String mensaje2="";
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
-       String codDependencia = usuario.getCoDep();
+        String codDependencia = usuario.getCoDep();
         String codEmpleado = usuario.getCempCodemp();
         String tipAcceso = usuarioConfigBean.getTiConsulta();
         buscarDocumentoSeguiEstEmiBean.setCoDependencia(codDependencia);
@@ -113,7 +121,19 @@ public class SeguiDocTrazabilidadController {
         List<DocumentoSeguiTrazaBean> list = new ArrayList<DocumentoSeguiTrazaBean>();
 
         try {
-        	String mensaje2=validacionesBasicas( buscarDocumentoSeguiEstEmiBean);
+        	 // mensaje2=validacionesBasicas( buscarDocumentoSeguiEstEmiBean);
+        	  PermisoUsuarioBean permisoUsuario= new PermisoUsuarioBean();
+           	  permisoUsuario.setCodOpc(Constantes.COD_PERMISO_TRAZ_AVZ);
+           	  permisoUsuario.setCempCodEmp(usuario.getCempCodemp()); // EL CODIGO DE SESION
+           	  permisoUsuario.setCodAplica(Constantes.COD_SISTEMA_SGD);
+           	  if(permisoService.obtenerPermiso(permisoUsuario)) {
+           		 mensaje2=validacionesPermisosAvanz( buscarDocumentoSeguiEstEmiBean);
+           	  } else {
+           		 mensaje2=validacionesPermisoBasico( buscarDocumentoSeguiEstEmiBean); 
+           	
+           		 //busqueda
+           	  }
+        	
         	if( mensaje2 !=null) {
         		  model.addAttribute("pMensaje", mensaje2);
         		  model.addAttribute("docTrabazabList", null);
@@ -147,7 +167,7 @@ public class SeguiDocTrazabilidadController {
         }
     }
    
-    public String validacionesBasicas(BuscarDocTrazabilidadBean busqueda) {
+    public String validacionesPermisosAvanz(BuscarDocTrazabilidadBean busqueda) {
     	 Date fechaInicio=  SerforDateUtils.getDateFromUnknownFormat( busqueda.getFeEmiIni());
 		 Date fechaFin=SerforDateUtils.getDateFromUnknownFormat( busqueda.getFeEmiFin());
 		 
@@ -304,6 +324,41 @@ public class SeguiDocTrazabilidadController {
     
     	
     	 return null;
+    }
+    
+    public String validacionesPermisoBasico(BuscarDocTrazabilidadBean busqueda) throws Exception {
+    	String mensaje="";
+    	
+    	 if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
+   			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+   		  	 return  "Ingrese número de Expediente";
+   	  	}
+    	if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
+      			  &&   Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+      		  return  "Seleccione Código de Oficina";
+      	}
+    	if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && Utilidades.esVacio(busqueda.getBusNumDoc()) 
+    			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+    		  return  "Ingrese número de documento";
+    	}
+    	if( Utilidades.esVacio(busqueda.getBusNumDoc()) 
+  			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+    		busqueda.setBusPersonal("1");
+    	}
+    	
+    	if(seguiTrazabilidadService.existeDocumentoTraza(busqueda)) {
+    		List<DocumentosTrazaBean> lista=	seguiTrazabilidadService.listaExpedienteOrigen(busqueda);
+    		if(lista!=null && lista.size()>1 ) {
+    			String cadena="";
+    			for(DocumentosTrazaBean str : lista)
+    			{
+    				cadena.concat(str.getSigla()).concat(";");
+    			}
+    			mensaje="Numero de expediente origen repetidos (Seleccione Oficina/Dependencia): "+cadena;
+    		}
+    		
+    	}
+    	 return mensaje;
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "accion=goDetalleDocumento")

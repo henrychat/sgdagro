@@ -242,6 +242,8 @@ public class DocumentoObjetoController
         } else {
           
           docVerBean = this.documentoObjService.getNombreDocAnexo(pNuAnn, pNuEmi, pNuAne);
+          
+         
           retRespuesta.setNoDoc(docVerBean.getNoDocumento());
           retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
         } 
@@ -249,6 +251,14 @@ public class DocumentoObjetoController
         retRespuesta.setNuAnn(docVerBean.getNuAnn());
         retRespuesta.setNuEmi(docVerBean.getNuEmi());
         retRespuesta.setNuAne(docVerBean.getNuAne());
+        if(docVerBean.isInDoc()==false) {
+        	 Writer strWriter = new StringWriter();
+             retRespuesta.setRetval("Archivo Vacío");
+             ObjectMapper mapper = new ObjectMapper();
+             mapper.writeValue(strWriter, retRespuesta);
+             retval = strWriter.toString();
+      	  return retval;
+        }
       }
       catch (Exception e) {
         retRespuesta.setRetval("Error en Obtener nombre del Anexo");

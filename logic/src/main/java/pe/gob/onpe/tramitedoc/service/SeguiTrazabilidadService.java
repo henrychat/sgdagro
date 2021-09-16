@@ -15,6 +15,7 @@ import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoSeguiEstEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiEstEmitidoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaConsulBean;
 import pe.gob.onpe.tramitedoc.bean.ReporteBean;
 
@@ -36,6 +37,13 @@ public interface SeguiTrazabilidadService {
 
     public HashMap getDocumentosEnReferencia(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean);
    
-    //public List<DocumentoSeguiEstEmitidoBean> getListaReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean);
+ 
     public ReporteBean getGenerarReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean, Map parametros)  throws Exception;
+    
+
+     boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
+    
+     List<DocumentosTrazaBean> listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+    
+      
 }

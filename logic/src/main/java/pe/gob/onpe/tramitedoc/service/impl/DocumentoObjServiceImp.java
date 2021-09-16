@@ -106,6 +106,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 	      }
 	    } catch (Exception e) {
 	      docDatoBean = null;
+	      e.printStackTrace();
 	    } 
 	    return docDatoBean;
 	  }
@@ -1648,7 +1649,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     } else {
       //docVerBean.setDeMensaje("Error en datos del documento");
       docVerBean.setDeMensaje("NO_OK");
-	  docVerBean.setDetalleMensaje("Error en datos del documento");
+	  docVerBean.setDetalleMensaje("Error en datos del documento al firmar");
     } 
    if (docVerBean.isInDoc()) {
 

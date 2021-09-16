@@ -19,10 +19,12 @@ import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoSeguiEstEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiEstEmitidoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaConsulBean;
 import pe.gob.onpe.tramitedoc.bean.ReporteBean;
 
 import pe.gob.onpe.tramitedoc.dao.SeguiTrazabilidadDao;
+
 import pe.gob.onpe.tramitedoc.service.SeguiTrazabilidadService;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
@@ -68,7 +70,7 @@ public class SeguiTrazabilidadServiceImp   implements SeguiTrazabilidadService {
   public List<DocumentoSeguiTrazaBean> getListDocSegui(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean) {
     List<DocumentoSeguiTrazaBean> list = null;
     try {
-      list = this.seguiTrazabilidadDao.getListDocSeguiTrazab(buscarDocumentoSeguiEstEmiBean);
+      list = seguiTrazabilidadDao.getListDocSeguiTrazab(buscarDocumentoSeguiEstEmiBean);
     } catch (Exception ex) {
       ex.printStackTrace();
     } 
@@ -207,9 +209,23 @@ public class SeguiTrazabilidadServiceImp   implements SeguiTrazabilidadService {
     	}
      } 
   	public List<DocumentoSeguiTrazaBean> getListaReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean)  { 
-        return this.seguiTrazabilidadDao.getListDocSeguiTrazab(buscarDocumentoSeguiEstEmiBean);
+        return seguiTrazabilidadDao.getListDocSeguiTrazab(buscarDocumentoSeguiEstEmiBean);
     	// return this.seguiTrazabilidadDao.getListaReporteBusqueda(buscarDocumentoSeguiEstEmiBean);
      }
+
+
+	@Override
+	public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
+		// TODO Auto-generated method stub
+		return seguiTrazabilidadDao.existeDocumentoTraza(bean);
+	}
+
+
+	@Override
+	public List<DocumentosTrazaBean> listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception {
+		// TODO Auto-generated method stub
+		return seguiTrazabilidadDao.listaExpedienteOrigen( bean);
+	}
 
 
 

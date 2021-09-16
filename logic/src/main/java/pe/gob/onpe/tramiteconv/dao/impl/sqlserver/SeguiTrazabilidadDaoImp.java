@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +17,8 @@ import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiEstEmitidoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
+import pe.gob.onpe.tramitedoc.bean.ProveedorBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaConsulBean;
 
 import pe.gob.onpe.tramitedoc.dao.SeguiTrazabilidadDao;
@@ -52,9 +55,10 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("Where 1=1");
 
     
+    
+    
     String pNUAnn = buscarDocumentoSeguiEstEmiBean.getCoAnnio();
-   
-  
+ 
     String pTipoBusqueda = buscarDocumentoSeguiEstEmiBean.getTipoBusqueda();
     if (pTipoBusqueda.equals("1") ) {
       bBusqFiltro = true;
@@ -760,12 +764,6 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
           } 
         } 
 
-
-
-
-
-
-        
         if (buscarDocumentoSeguiEstEmiBean.getEsFiltroFecha() != null && (buscarDocumentoSeguiEstEmiBean
           .getEsFiltroFecha().equals("1") || buscarDocumentoSeguiEstEmiBean.getEsFiltroFecha().equals("3"))) {
           String vFeEmiIni = buscarDocumentoSeguiEstEmiBean.getFeEmiIni();
@@ -811,11 +809,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 
       
       sql.append("ORDER BY A.FE_EMI DESC ");
-
-
-
-
-      
+ 
       list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(DocumentoSeguiEstEmitidoBean.class));
     } catch (EmptyResultDataAccessException e) {
       list = null;
@@ -826,6 +820,100 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     } 
     
     return list;
+  }
+
+  
+  public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
+	  boolean existe =false;
+	    StringBuffer sql = new StringBuffer();
+	    Map<String, Object> objectParam = new HashMap<String, Object>();
+	  
+	    try {
+	    
+	    	sql.append("   select   1 as existe   FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R "); 
+		     sql.append("  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+		    
+		     sql.append("  (and a.co_emp_emi= :COD_EMP_EMI or A.CO_EMP_RES=:COD_EMP_RES) ");
+		     objectParam.put("COD_EMP_EMI", bean.getCoEmpleado());
+		     objectParam.put("COD_EMP_RES", bean.getCoEmpleado());
+		   
+		     if(bean.getBusNumExpediente()!=null) {
+			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
+			      objectParam.put("expediente", bean.getBusNumExpediente());
+			  }
+		     if(bean.getBusNumDoc()!=null) {
+		         sql.append(" AND R.NU_DOC= :nuDocumento  "); 
+		         objectParam.put("nuDocumento", bean.getBusNumDoc());
+		     }
+		     if(bean.getCoTipoDocAdm()!=null) {
+		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
+		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
+		     }
+
+		     sql.append("  union all  ");
+		     sql.append("  select     1 as existe    FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ON ");
+		     sql.append("   R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI    inner join IDOSGD.TDTV_DESTINOS D With (readuncommitted)  ");
+		     sql.append("  on D.NU_ANN = A.NU_ANN AND D.NU_EMI = A.NU_EMI and ");
+		    
+		     
+		     if(bean.getBusNumExpediente()!=null) {
+			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
+			      objectParam.put("expediente", bean.getBusNumExpediente());
+			  }
+		     if(bean.getBusNumDoc()!=null) {
+		         sql.append(" AND R.NU_DOC= :nuDocumento  "); 
+		         objectParam.put("nuDocumento", bean.getBusNumDoc());
+		     }
+		     if(bean.getCoTipoDocAdm()!=null) {
+		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
+		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
+		     }
+		     sql.append(" d.d.CO_EMP_DES= :COD_EMP_DES ");
+		     objectParam.put("COD_EMP_DES", bean.getCoEmpleado());
+		   
+		    
+		     String dato = (String)this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(String.class), objectParam); 
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	    } 
+	    return existe;
+	  }
+  
+  public List<DocumentosTrazaBean>  listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception {
+	  
+	  List<DocumentosTrazaBean>  list=null;
+	  Map<String, Object> objectParam = new HashMap<String, Object>();
+	  StringBuffer sql = new StringBuffer();
+	  try {
+		  	 sql.append(" select  case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
+		  	 sql.append("then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as SIGLA, R.NU_EXPEDIENTE ");
+		  	 sql.append("      FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted)  "); 
+		     sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
+		  	 sql.append("  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+		    
+		   
+		     if(bean.getBusNumExpediente()!=null) {
+			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
+			      objectParam.put("expediente", bean.getBusNumExpediente());
+			  }
+		     if(bean.getEsDocOrigen()!=null && bean.getEsDocOrigen().equals("1")) {
+		    	   sql.append(" AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");  
+		     }
+		     if (bean.getBusCodDepEmiRef()!= null && bean.getBusCodDepEmiRef().trim().length() > 0) {
+		         sql.append(" AND A.CO_DEP_EMI = :pCoDepOrigenEmi ");
+		         objectParam.put("pCoDepOrigenEmi", bean.getBusCodDepEmiRef());
+		       } 
+		  
+		  list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(DocumentosTrazaBean.class));
+	    } catch (EmptyResultDataAccessException e) {
+	      list = null;
+	    } catch (Exception ex) {
+	      
+	      list = null;
+	      ex.printStackTrace();
+	    }
+	  return list;
   }
 
 

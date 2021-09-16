@@ -723,11 +723,14 @@ function fn_verDocAnexo(pnuAnn, pnuEmi, pnuAne) {
             var result;
             eval("var docs=" + data);
             if (typeof (docs) != "undefined" && typeof (docs.nuAnn) != 'undefined' && docs.nuAnn != "") {
-                //result = fn_abrirDocApplet(docs.noUrl,docs.noDoc);
+              
                 var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
-                /*runApplet(appletsTramiteDoc.abrirDocumento, param, function(data) {
-                    result = data;
-                });*/
+                //EJHM
+                if(docs.noUrl==null || typeof (docs.noUrl) == "undefined"){
+                	//alert(docs.retval);
+                	 alert_Danger("Error en Anexo: ", docs.retval);
+                	return false;
+                }
                 runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data) {
                     result = data;
                 });

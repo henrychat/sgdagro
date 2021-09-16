@@ -35,6 +35,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import pe.gob.onpe.autentica.model.Usuario;
@@ -315,7 +317,8 @@ public class Utilidades {
     try {
       double multi = Math.pow(10.0D, length);
       int randomValue = (int)(Math.random() * multi);
-      randomString = String.valueOf(randomValue);
+     // randomString = String.valueOf(randomValue);
+      randomString= StringUtils.leftPad(String.valueOf(randomValue), length, "0");
     } catch (Exception e) {
       randomString = "0";
     } 
