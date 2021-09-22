@@ -40,7 +40,7 @@ public class MesaPartesDaoImp
     String sqlContains = "";
     StringBuffer sql = new StringBuffer();
     Map<String, Object> objectParam = new HashMap<String, Object>();
-    sql.append("SELECT TOP 300  X.*, "); // por lo mientras
+    sql.append(" SELECT TOP 300  X.*, "); // por lo mientras
     sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_TI_DESTINO](X.TI_EMI) DE_TI_EMI, ");
 
     sql.append("    [IDOSGD].PK_SGD_DESCRIPCION_TI_EMI_EMP(X.NU_ANN, X.NU_EMI) DE_ORI_EMI_MP,");
@@ -61,7 +61,9 @@ public class MesaPartesDaoImp
     sql.append("SELECT  A.NU_ANN, ");
     sql.append("        A.NU_EMI, ");
     sql.append("        B.NU_EXPEDIENTE, ");
-    sql.append("        CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA, ");
+  //  sql.append("        CONVERT(VARCHAR(10), A.FE_EMI, 103)  FE_EMI_CORTA, ");
+    
+    sql.append(" CONVERT(VARCHAR(10), A.FE_EMI, 103)+' '+CONVERT(varchar(5),A.FE_EMI,114)  FE_EMI_CORTA, ");
     sql.append("        A.DE_ASU, ");
     sql.append("        A.CO_DEP_EMI, ");
     sql.append("        A.CO_EMP_EMI, ");
@@ -1265,8 +1267,10 @@ public class MesaPartesDaoImp
     boolean bBusqFiltro = false;
     boolean bBusqDep = false;
     
-    prutaReporte.append("SELECT  A.NU_COR_EMI, ");
-    prutaReporte.append("\t     CONVERT(VARCHAR(20),A.FE_EMI,103)  FE_EMI_CORTA, ");
+    prutaReporte.append("   SELECT  A.NU_COR_EMI, ");
+   // prutaReporte.append("\t     CONVERT (VARCHAR,A.FE_EMI,113)   FE_EMI_CORTA, ");
+   
+    prutaReporte.append(" CONVERT(VARCHAR(10), A.FE_EMI, 103)+' '+CONVERT(varchar(5),A.FE_EMI,114)  FE_EMI_CORTA, ");
     prutaReporte.append("\t     (SELECT CDOC_DESDOC ");
     prutaReporte.append("\t     FROM IDOSGD.SI_MAE_TIPO_DOC ");
     prutaReporte.append("\t     WHERE CDOC_TIPDOC = A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,B.NU_DOC, ");

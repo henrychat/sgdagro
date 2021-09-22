@@ -193,7 +193,11 @@ public class ReferencedData {
             //this.grpTipDocumentoList = maestrosDao.listTipoDocumentoEmi(CodDependencia);
         //}
         return maestrosDao.listTipoDocumentoEmi(CodDependencia);
-    }  
+    } 
+    public List<TipoDocumentoBean> getTipoDocumentoList() {
+        
+        return maestrosDao.listTipoDocumento();
+    }
     //MP
     public List<TipoDocumentoBean> getTipoDocumentoEmiList() {
         

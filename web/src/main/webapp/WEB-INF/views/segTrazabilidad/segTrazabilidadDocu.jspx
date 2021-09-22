@@ -8,7 +8,7 @@
         <script languaje="javascript">
         
         jQuery(document).ready(function() {
-        		fn_inicializaTrazabilidad('${buscarDocumentoEmiConsulBean.coAnnio}', '${fechaActual}');
+        		fn_inicializaTrazabilidad('${buscarDocumentoEmiConsulBean.coAnnio}', '${fechaActual}', '${opcion}');
                 fn_construyeTablaVencimientoDetalleSegui();
                 fn_construyeTablaVencimientoDetalleCuadradosSegui();
                 
@@ -21,7 +21,16 @@
 
     <div class="ui-panel ui-corner-all" id="divEmiDocumentoAdminConsul" style="min-width: 1350px">
         <div class="ui-panel-titlebar ui-widget-header ui-corner-all">
-            <span>SEGUIMIENTO DE DOCUMENTOS TRAZABILIDAD</span>
+            <span>SEGUIMIENTO DE DOCUMENTOS TRAZABILIDAD
+            								 <c:choose>
+				                                <c:when test='${opcion eq "3"}'>
+				                                 -RESTRINGIDO
+				                                </c:when>
+				                                <c:when test='${opcion eq "1"}'>
+				                                 -ACCESO TOTAL
+				                                </c:when>
+                            				</c:choose>	
+                            			</span>
         </div>
         <div class="ui-panel-body">
             <input id="txtFechaActual" name="txtFechaActual" type="hidden" value="${fechaActual}"/>
@@ -85,6 +94,12 @@
                                     <td> Nro Expediente:</td>
                                     <td colspan="2">
                                             <form:input path="busNumExpediente" style="width: 200px;" maxlength="20"/>
+                                             <c:choose>
+				                                <c:when test='${opcion eq "3"}'>
+				                                   <form:checkbox path="forzarc" value="0"/><strong>Forzar coincidencias expediente</strong>
+				                                </c:when>
+                            				</c:choose>	
+                                            
                                     </td>
                                 </tr>
                                     <tr>
@@ -137,7 +152,7 @@
                                         <td align="right" colspan="1">
                                             <button title ="Filtrar documentos" class="btn btn-default btn-sm" onclick="changeTipoBusqTrazabilidad('1');" type="button">
                                                 <span class="glyphicon glyphicon-filter"><jsp:text/></span> Buscar</button>
-                                            <button title ="Limpiar datos de Filtro" class="btn btn-default btn-sm" onclick="fu_cleanSeguiTrazabilidad();" type="button">
+                                            <button title ="Limpiar datos de Filtro" class="btn btn-default btn-sm" onclick="fu_cleanSeguiTrazabilidad('${opcion}');" type="button">
                                                 <span class="glyphicon glyphicon-remove"><jsp:text/></span></button>
                                         </td> 
                                          <td align="right" colspan="1">

@@ -79,29 +79,41 @@ public class SeguiDocTrazabilidadController {
         String annio = Utility.getInstancia().dateToFormatStringYYYY(new Date());
         String pEstado = ServletUtility.getInstancia().loadRequestParameter(request, "estadoDoc");
         BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean = new BuscarDocTrazabilidadBean();
-        
+        Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         buscarDocumentoSeguiEstEmiBean.setCoAnnio(annio);
         buscarDocumentoSeguiEstEmiBean.setBusCoAnnio(annio);
         buscarDocumentoSeguiEstEmiBean.setCoDependencia(codDependencia);
         
         buscarDocumentoSeguiEstEmiBean.setCoDepOrigen(codDependencia);
-        //buscarDocumentoSeguiEstEmiBean.setCoVencimiento("3");
+       
 
         model.addAttribute("buscarDocumentoSeguiEstEmiBean",buscarDocumentoSeguiEstEmiBean);
         model.addAttribute("deAnnioList", referencedData.getAnnioList());
-        
-     //   model.addAttribute("deEstadosList", referencedData.getLstEstadosDocumentoEmiSegui("TDTV_DESTINOS"));
-        
         model.addAttribute("deEstadosList",referencedData.getLstEstadosSoloDocumentoEmi("TDTV_REMITOS"));
         model.addAttribute("dePrioridadesList", referencedData.getPrioridadesDocumentoList());
-        model.addAttribute("deTipoDocumentoList", referencedData.getTipoDocumentoEmiList(codDependencia));
+        model.addAttribute("deTipoDocumentoList", referencedData.getTipoDocumentoList());
        
         model.addAttribute("deEtiquetasList", referencedData.getEtiquetasList());
-      //  model.addAttribute("deVencimientoList", referencedData.getVencimientoList());
+      
         model.addAttribute("deDepenciaActual", commonQryService.getDependenciaxCoDependencia(codDependencia).getDeDependencia());
 
         model.addAttribute("fechaActual", Utility.getInstancia().dateToFormatString(new Date()));
         model.addAttribute("annioActual", Utility.getInstancia().dateToFormatStringYYYY(new Date()));
+        
+         PermisoUsuarioBean permisoUsuario= new PermisoUsuarioBean();
+     	  permisoUsuario.setCodOpc(Constantes.COD_PERMISO_TRAZ_AVZ);
+     	  permisoUsuario.setCempCodEmp(usuario.getCempCodemp()); // EL CODIGO DE SESION
+     	  permisoUsuario.setCodAplica(Constantes.COD_SISTEMA_SGD);
+     	  model.addAttribute("opcion", "3");
+     	  try {
+			if(permisoService.obtenerPermiso(permisoUsuario)) {
+				 model.addAttribute("opcion", "1");  
+			  }
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     		  
         return "/segTrazabilidad/segTrazabilidadDocu";
     }
     
@@ -211,7 +223,7 @@ public class SeguiDocTrazabilidadController {
 
     	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
     			 && Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) &&  Utilidades.esVacio(busqueda.getCoTipoDocAdm())) {
-    		  return  "  Seleccione unidad organica o tipo de documento";
+    		  return  "  Seleccione unidad organica (Oficina) o tipo de documento";
     	  }
     	  
     	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
@@ -329,36 +341,202 @@ public class SeguiDocTrazabilidadController {
     public String validacionesPermisoBasico(BuscarDocTrazabilidadBean busqueda) throws Exception {
     	String mensaje="";
     	
-    	 if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
-   			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
-   		  	 return  "Ingrese número de Expediente";
-   	  	}
-    	if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
-      			  &&   Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
-      		  return  "Seleccione Código de Oficina";
-      	}
-    	if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && Utilidades.esVacio(busqueda.getBusNumDoc()) 
-    			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
-    		  return  "Ingrese número de documento";
-    	}
-    	if( Utilidades.esVacio(busqueda.getBusNumDoc()) 
-  			  &&   !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
-    		busqueda.setBusPersonal("1");
-    	}
     	
-    	if(seguiTrazabilidadService.existeDocumentoTraza(busqueda)) {
-    		List<DocumentosTrazaBean> lista=	seguiTrazabilidadService.listaExpedienteOrigen(busqueda);
-    		if(lista!=null && lista.size()>1 ) {
-    			String cadena="";
-    			for(DocumentosTrazaBean str : lista)
-    			{
-    				cadena.concat(str.getSigla()).concat(";");
-    			}
-    			mensaje="Numero de expediente origen repetidos (Seleccione Oficina/Dependencia): "+cadena;
+    	if(!Utilidades.esVacio(busqueda.getBusNumExpediente()) && Utilidades.esVacio(busqueda.getBusNumDoc() ) &&
+    			 Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) )  {
+    		if( busqueda.getForzarc()!=null && busqueda.getForzarc().equals("1")) {
+    		 	 busqueda.setBusPersonal("1");	
+    			
+    		} else {
+    			List<DocumentosTrazaBean> lista1=seguiTrazabilidadService.existeDocumentoTraza(busqueda);
+    			if(lista1!=null && !lista1.isEmpty()) {
+    	    		List<DocumentosTrazaBean> lista=	seguiTrazabilidadService.listaExpedienteOrigen(busqueda);
+    	    		if(lista!=null && lista.size()>1 ) {
+    	    			String cadena="";
+    	    			for(DocumentosTrazaBean str : lista1)
+    	    			{
+    	    				if(str.getSigla()!=null && !str.getSigla().trim().equals("")) {
+    	    					cadena=cadena.concat(str.getSigla()).concat(";");
+    	    				}
+    	    				
+    	    			}
+    	    			return "Numero de expediente origen repetidos (Seleccione Oficina/Dependencia): "+cadena;
+    	    		}
+    	    		
+    	    	}
+    	    	else {
+    	    		 return "No hay coincidencias en Número de expediente,no ingreso dato completo(expediente) o no tiene acceso al mismo ";
+    	    	}	
+    			
+    			
     		}
     		
+    	    	
+    	
+    	
+    	} else {
+    		
+    		
+        	if(!Utilidades.esVacio(busqueda.getBusNumExpediente())  ||  !Utilidades.esVacio(busqueda.getBusNumDoc() ) || !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+           	 	mensaje=	validacionesAdicionales( busqueda);
+           	 	if( mensaje !=null) {
+       		
+           		return mensaje;
+           	}
+           	 busqueda.setBusPersonal("1");
+           }
     	}
-    	 return mensaje;
+    	if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && Utilidades.esVacio(busqueda.getBusNumDoc()) 
+	   			  &&   Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+	   		  	 return  "Ingrese número de Expediente, ´numero de Documento  o unid. Orgánica (Oficina) ";
+	   	  	}
+    		
+    	
+    
+      
+    	 return null;
+    }
+    public String validacionesAdicionales(BuscarDocTrazabilidadBean busqueda) throws Exception {
+    	
+    	 Date fechaInicio=  SerforDateUtils.getDateFromUnknownFormat( busqueda.getFeEmiIni());
+		 Date fechaFin=SerforDateUtils.getDateFromUnknownFormat( busqueda.getFeEmiFin());
+		 
+    	 int dias=(int) ((fechaFin.getTime()-fechaInicio.getTime())/86400000)+1;
+    	
+    	boolean nuDocVacio=false;
+		boolean nuExpVacio=false;
+	
+	  if(Utilidades.esVacio(busqueda.getBusNumDoc()) || 
+			 busqueda.getBusNumDoc().trim().length()<3  )	{
+		  nuDocVacio=true;  
+	  }  else 
+		  if(Utilidades.esCero(busqueda.getBusNumDoc() )) {
+			  nuDocVacio=true;   
+		  }
+	  if (Utilidades.esVacio(busqueda.getBusNumExpediente()) || 
+			  busqueda.getBusNumExpediente().length()<4 ){
+   		  
+		  nuExpVacio=true;
+		 
+	   }
+	  else 
+	 if(Utilidades.esCero(busqueda.getBusNumExpediente()) ){
+		 nuExpVacio=true;   
+	 }
+    if(busqueda.getIncluyeFiltroFecha()!=null && busqueda.getIncluyeFiltroFecha().equals("0") || dias>=365) {
+    	 if(!Utilidades.esVacio(busqueda.getBusCodDepEmiRef())&& !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>9) {
+			  return null;
+		  }
+	     if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
+			  return null;
+	      }
+    	  if(nuDocVacio && nuExpVacio ) {
+    		  return  "Número de Documento debe contener como mínio 3 caracteres distintos de cero  o Número de expediente debe contener como mínio 4 caracteres caracteres distintos cero ";
+    		  
+    	  }
+//    	  if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) &&  Utilidades.esVacio(busqueda.getEstadoDoc())) {
+//    		  return  "Número de Documento debe contener como mínio 3 caracteres distintos de cero  o Número de expediente debe contener como mínio 4 caracteres caracteres distintos cero ";
+//    		  
+//    	  }
+
+    	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
+    			 && Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) &&  Utilidades.esVacio(busqueda.getCoTipoDocAdm())) {
+    		  return  "  Seleccione unidad organica o tipo de documento";
+    	  }
+    	  
+    	  if(Utilidades.esVacio(busqueda.getBusNumExpediente()) && !Utilidades.esVacio(busqueda.getBusNumDoc()) 
+    			  &&  nuDocVacio  &&  !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())) {
+    		  return  "  Número de documento debe contener como mínimo 3 caracteres diferentes de cero";
+    	  }
+    	}
+    	  else {
+    		  if(!Utilidades.esVacio(busqueda.getBusCodDepEmiRef())&& !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>9) {
+    			  return null;
+    		  }
+    	     if( !Utilidades.esVacio(busqueda.getBusAsunto()) && busqueda.getBusAsunto().length()>15) {
+    			  return null;
+    	      }
+    		if(fechaInicio==null) {
+    			 return "fecha de inicio no puede ser vacío"; 
+    		 }
+    		 if(fechaInicio==null) {
+    			 return "fecha de fin no puede ser vacío"; 
+    		 }
+    		 //estadoDoc
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) && Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen()) &&  (dias)>45) {
+    			  return  "Rango de Fechas debe ser menor a 45 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen()) && (dias)>61) {
+   			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())  && (dias)>61) {
+      			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+       		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+      			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+       		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+     				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+     			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+      		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>61) {
+    			  return  "Rango de Fechas debe ser menor a 61 dias "; 
+     		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>91) {
+   			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+    				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>91) {
+    			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+     		 }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) && !Utilidades.esVacio(busqueda.getCoRefOrigen())   && (dias)>91) {
+   			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+    		 }
+    		 
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+     				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro())   && (dias)>91) {
+     			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+      		 }
+    		 if(nuDocVacio && nuExpVacio && Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) && (dias)>91) {
+      			  return  "Rango de Fechas debe ser menor a 91 dias "; 
+       		 }
+    		 if(nuDocVacio && nuExpVacio && (Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) 
+      				 && !Utilidades.esVacio(busqueda.getCoDepDestino())) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) 
+      				  && Utilidades.esVacio(busqueda.getEstadoDoc()) &&  (dias)>121) {
+   			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+   		     }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) 
+      				 && Utilidades.esVacio(busqueda.getCoDepDestino()) &&   !Utilidades.esVacio(busqueda.getCoEmpElaboro()) 
+      				  && Utilidades.esVacio(busqueda.getEstadoDoc()) &&  (dias)>121) {
+   			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+   		     }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef()) 
+      				 && !Utilidades.esVacio(busqueda.getCoDepDestino()) &&   Utilidades.esVacio(busqueda.getCoEmpElaboro()) 
+      				  && Utilidades.esVacio(busqueda.getEstadoDoc()) &&  (dias)>121) {
+   			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+   		     }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && Utilidades.esVacio(busqueda.getEstadoDoc())
+   				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) && !Utilidades.esVacio(busqueda.getCoEmpElaboro()) &&  (dias)>121) {
+   			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+    		 }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && !Utilidades.esVacio(busqueda.getEstadoDoc())
+      				  && Utilidades.esVacio(busqueda.getCoDepDestino()) && !Utilidades.esVacio(busqueda.getCoEmpElaboro()) &&  (dias)>121) {
+      			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+       		 }
+    		 if(nuDocVacio && nuExpVacio && !Utilidades.esVacio(busqueda.getBusCodDepEmiRef())  && !Utilidades.esVacio(busqueda.getEstadoDoc())
+     				  && !Utilidades.esVacio(busqueda.getCoDepDestino()) && Utilidades.esVacio(busqueda.getCoEmpElaboro()) &&  (dias)>121 ){
+     			  return  "Rango de Fechas debe ser menor a 121 dias "; 
+      		 }
+    	  }
+    	 return  null;
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "accion=goDetalleDocumento")

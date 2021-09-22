@@ -215,9 +215,10 @@ public class SeguiTrazabilidadServiceImp   implements SeguiTrazabilidadService {
 
 
 	@Override
-	public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
-		// TODO Auto-generated method stub
+	public List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
+		
 		return seguiTrazabilidadDao.existeDocumentoTraza(bean);
+		
 	}
 
 

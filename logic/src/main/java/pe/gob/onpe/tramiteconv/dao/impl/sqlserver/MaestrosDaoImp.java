@@ -205,6 +205,28 @@ public class MaestrosDaoImp   extends SimpleJdbcDaoBase  implements MaestrosDao 
     
     return list;
   }
+  public List<TipoDocumentoBean> listTipoDocumento() {
+	    StringBuffer sql = new StringBuffer();
+	    
+	    sql.append("SELECT  CASE  WHEN IN_USOABREVIA IS NOT NULL THEN UPPER(CDOC_DESDONOMREAL)  ELSE UPPER(CDOC_DESDOC) END   DE_TIP_DOC,   ");
+	    sql.append(" CDOC_TIPDOC  CO_TIP_DOC from IDOSGD.SI_MAE_TIPO_DOC  where CDOC_INDBAJ='0' ");
+	    
+	    sql.append("UNION ");
+	    sql.append("SELECT '.:TODOS:.' DESCRI, NULL CODIGO ORDER BY 1 ");
+	    
+	    List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
+	    
+	    try {
+	      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[] { });
+	    } catch (EmptyResultDataAccessException e) {
+	      list = null;
+	    } catch (Exception e) {
+	      list = null;
+	      e.printStackTrace();
+	    } 
+	    
+	    return list;
+	 }
 
   //EJHM
   public List<TipoDocumentoBean> listTipoDocumentoEmi(String coDependencia) {

@@ -41,9 +41,11 @@ public interface SeguiTrazabilidadService {
     public ReporteBean getGenerarReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean, Map parametros)  throws Exception;
     
 
-     boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
+    List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
     
      List<DocumentosTrazaBean> listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+     
+     
     
       
 }

@@ -30,8 +30,9 @@ public interface SeguiTrazabilidadDao {
     public String getRutaReporte(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstRecBean);
     
     public List<ReferenciaConsulBean> getDocumentosRefRecepAdm(String snuAnn, String snuEmi);
-    public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
+   // public String existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
     public List<DocumentosTrazaBean>  listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+    public List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
     
 
     

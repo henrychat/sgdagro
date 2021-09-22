@@ -13,6 +13,7 @@ package pe.gob.onpe.tramitedoc.bean;
 public class BuscarDocTrazabilidadBean extends ReporteBean {
 	public BuscarDocTrazabilidadBean() {
 		setIncluyeFiltroFecha("1");
+		setForzarc("0");
 		
 	}
    
@@ -23,9 +24,6 @@ public class BuscarDocTrazabilidadBean extends ReporteBean {
     private String coDepDestino;    
     private String coEmpleado;
     private String tiAcceso;
-    //private boolean esIncluyeFiltro;
-    
-    
     private String incluyeFiltroFecha;
     
    
@@ -52,8 +50,6 @@ public class BuscarDocTrazabilidadBean extends ReporteBean {
    
     private String busNumExpediente;
     private String busCoAnnio;
-    
-    //
     private String coRefOrigen;
     private String coDepOrigen;
     private String coEmpElaboro;
@@ -63,7 +59,16 @@ public class BuscarDocTrazabilidadBean extends ReporteBean {
     private String   busCodDepEmiRef;
     private String esDocOrigen;
     private String busPersonal;
+    private String forzarc;
   
+
+	public String getForzarc() {
+		return forzarc;
+	}
+
+	public void setForzarc(String forzarc) {
+		this.forzarc = forzarc;
+	}
 
 	public String getBusPersonal() {
 		return busPersonal;

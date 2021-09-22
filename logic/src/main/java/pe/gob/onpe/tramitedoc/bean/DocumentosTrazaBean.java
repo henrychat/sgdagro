@@ -5,6 +5,13 @@ public class DocumentosTrazaBean {
 private String nuExpediente;
 private String sigla;
 private String dependencia;
+private String existeRegistro;
+public String getExisteRegistro() {
+	return existeRegistro;
+}
+public void setExisteRegistro(String existeRegistro) {
+	this.existeRegistro = existeRegistro;
+}
 public String getDependencia() {
 	return dependencia;
 }

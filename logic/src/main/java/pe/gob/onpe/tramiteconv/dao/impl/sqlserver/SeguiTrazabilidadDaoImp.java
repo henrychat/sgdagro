@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import pe.gob.onpe.tramitedoc.bean.BuscarDocTrazabilidadBean;
 import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoSeguiEstEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
+import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiSeguiBean;
 
 import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiEstEmitidoBean;
@@ -20,9 +21,10 @@ import pe.gob.onpe.tramitedoc.bean.DocumentoSeguiTrazaBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentosTrazaBean;
 import pe.gob.onpe.tramitedoc.bean.ProveedorBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaConsulBean;
-
+import pe.gob.onpe.tramitedoc.bean.RemitenteBean;
 import pe.gob.onpe.tramitedoc.dao.SeguiTrazabilidadDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
+import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
 @Repository("seguiTrazabilidadDao")
@@ -62,6 +64,23 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     String pTipoBusqueda = buscarDocumentoSeguiEstEmiBean.getTipoBusqueda();
     if (pTipoBusqueda.equals("1") ) {
       bBusqFiltro = true;
+    }
+    if(buscarDocumentoSeguiEstEmiBean.getBusPersonal()!=null  && buscarDocumentoSeguiEstEmiBean.getBusPersonal().equals("1")) {
+    	
+    	sql.append(" and  ( a.co_emp_emi= :COD_EMP_EMI_ or A.CO_EMP_RES=:COD_EMP_RES_ ");
+    	sql.append(" or exists (");
+    	
+        sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD With (readuncommitted)  ");
+ 		     sql.append("  where DD.NU_ANN = A.NU_ANN AND DD.NU_EMI = A.NU_EMI and ");
+ 		     sql.append(" (dd.CO_EMP_DES= :COD_EMP_DES_ or dd.CO_EMP_REC=:CO_EMP_REC_) ");
+ 		    
+ 		     sql.append(") )");
+		
+		  objectParam.put("COD_EMP_EMI_", buscarDocumentoSeguiEstEmiBean.getCoEmpleado());
+		  objectParam.put("COD_EMP_RES_", buscarDocumentoSeguiEstEmiBean.getCoEmpleado());
+		  objectParam.put("COD_EMP_DES_", buscarDocumentoSeguiEstEmiBean.getCoEmpleado());
+		  objectParam.put("CO_EMP_REC_", buscarDocumentoSeguiEstEmiBean.getCoEmpleado());
+			 
     }
 
     
@@ -823,61 +842,78 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
   }
 
   
-  public boolean existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
+  public List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception {
 	  boolean existe =false;
 	    StringBuffer sql = new StringBuffer();
 	    Map<String, Object> objectParam = new HashMap<String, Object>();
+	   	    
+	    List<DocumentosTrazaBean> list= new  ArrayList<DocumentosTrazaBean>();
 	  
 	    try {
-	    
-	    	sql.append("   select   1 as existe   FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R "); 
-		     sql.append("  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
-		    
-		     sql.append("  (and a.co_emp_emi= :COD_EMP_EMI or A.CO_EMP_RES=:COD_EMP_RES) ");
-		     objectParam.put("COD_EMP_EMI", bean.getCoEmpleado());
-		     objectParam.put("COD_EMP_RES", bean.getCoEmpleado());
+	    	
+	        sql.append(" select  case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
+	    	sql.append("   then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as SIGLA, R.NU_EXPEDIENTE    "); 
+	    	sql.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
+		     sql.append(" with (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+		     sql.append(" and ( a.co_emp_emi= :COD_EMP_EMI_ or A.CO_EMP_RES= :COD_EMP_RES_  ");
+		 	sql.append(" or exists (");
+	    	
+	        sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD With (readuncommitted)  ");
+	 		     sql.append("  where DD.NU_ANN = A.NU_ANN AND DD.NU_EMI = A.NU_EMI and ");
+	 		     sql.append(" (dd.CO_EMP_DES= :COD_EMP_DES_ or dd.CO_EMP_REC=:CO_EMP_REC_) ");
+	 		    
+	 		     sql.append(") ) ");
+	 		     
+		     objectParam.put("COD_EMP_EMI_", bean.getCoEmpleado());
+		     objectParam.put("COD_EMP_RES_", bean.getCoEmpleado());
+		     objectParam.put("COD_EMP_DES_", bean.getCoEmpleado());
+		     objectParam.put("CO_EMP_REC_", bean.getCoEmpleado());
 		   
-		     if(bean.getBusNumExpediente()!=null) {
+		     if( !Utilidades.esVacio(bean.getBusNumExpediente())) {
 			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
 			      objectParam.put("expediente", bean.getBusNumExpediente());
 			  }
-		     if(bean.getBusNumDoc()!=null) {
+		     if( !Utilidades.esVacio(bean.getCoAnnio())) {
+			      sql.append(" and A.NU_ANN = :anio ");
+			      objectParam.put("anio", bean.getCoAnnio());
+			  }
+		     if( !Utilidades.esVacio(bean.getBusNumDoc())) {
 		         sql.append(" AND R.NU_DOC= :nuDocumento  "); 
 		         objectParam.put("nuDocumento", bean.getBusNumDoc());
 		     }
-		     if(bean.getCoTipoDocAdm()!=null) {
+		     if( !Utilidades.esVacio(bean.getCoTipoDocAdm())) {
 		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
 		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
 		     }
 
-		     sql.append("  union all  ");
-		     sql.append("  select     1 as existe    FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ON ");
-		     sql.append("   R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI    inner join IDOSGD.TDTV_DESTINOS D With (readuncommitted)  ");
-		     sql.append("  on D.NU_ANN = A.NU_ANN AND D.NU_EMI = A.NU_EMI and ");
-		    
-		     
-		     if(bean.getBusNumExpediente()!=null) {
-			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
-			      objectParam.put("expediente", bean.getBusNumExpediente());
-			  }
-		     if(bean.getBusNumDoc()!=null) {
-		         sql.append(" AND R.NU_DOC= :nuDocumento  "); 
-		         objectParam.put("nuDocumento", bean.getBusNumDoc());
-		     }
-		     if(bean.getCoTipoDocAdm()!=null) {
-		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
-		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
-		     }
-		     sql.append(" d.d.CO_EMP_DES= :COD_EMP_DES ");
-		     objectParam.put("COD_EMP_DES", bean.getCoEmpleado());
-		   
-		    
-		     String dato = (String)this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(String.class), objectParam); 
+//		     sql.append("  union all  ");
+//		     sql.append("  select     1 as existe    FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ON ");
+//		     sql.append("   R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI    inner join IDOSGD.TDTV_DESTINOS D With (readuncommitted)  ");
+//		     sql.append("  on D.NU_ANN = A.NU_ANN AND D.NU_EMI = A.NU_EMI and ");
+//		    
+//		     
+//		     if(bean.getBusNumExpediente()!=null) {
+//			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
+//			      objectParam.put("expediente", bean.getBusNumExpediente());
+//			  }
+//		     if(bean.getBusNumDoc()!=null) {
+//		         sql.append(" AND R.NU_DOC= :nuDocumento  "); 
+//		         objectParam.put("nuDocumento", bean.getBusNumDoc());
+//		     }
+//		     if(bean.getCoTipoDocAdm()!=null) {
+//		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
+//		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
+//		     }
+//		     sql.append(" d.d.CO_EMP_DES= :COD_EMP_DES ");
+//		     objectParam.put("COD_EMP_DES", bean.getCoEmpleado());
+
+		     list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(DocumentosTrazaBean.class));
+		    	
 	    }
 	    catch (Exception e) {
 	      e.printStackTrace();
 	    } 
-	    return existe;
+	    return list;
 	  }
   
   public List<DocumentosTrazaBean>  listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception {
@@ -891,19 +927,28 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 		  	 sql.append("      FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted)  "); 
 		     sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
 		  	 sql.append("  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+		  	 sql.append("  where 1=1  AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
 		    
 		   
 		     if(bean.getBusNumExpediente()!=null) {
-			      sql.append("where R.NU_EXPEDIENTE = :expediente ");
+			      sql.append(" and  R.NU_EXPEDIENTE = :expediente ");
 			      objectParam.put("expediente", bean.getBusNumExpediente());
 			  }
-		     if(bean.getEsDocOrigen()!=null && bean.getEsDocOrigen().equals("1")) {
-		    	   sql.append(" AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");  
-		     }
+		     if( !Utilidades.esVacio(bean.getCoAnnio())) {
+			      sql.append(" and A.NU_ANN = :anio ");
+			      objectParam.put("anio", bean.getCoAnnio());
+			  }
+//		     if(bean.getEsDocOrigen()!=null && bean.getEsDocOrigen().equals("1")) {
+//		    	   sql.append(" AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");  
+//		     }
 		     if (bean.getBusCodDepEmiRef()!= null && bean.getBusCodDepEmiRef().trim().length() > 0) {
 		         sql.append(" AND A.CO_DEP_EMI = :pCoDepOrigenEmi ");
 		         objectParam.put("pCoDepOrigenEmi", bean.getBusCodDepEmiRef());
 		       } 
+		     if( !Utilidades.esVacio(bean.getCoTipoDocAdm())) {
+		         sql.append("  AND A.CO_TIP_DOC_ADM= :tipoDocumento "); 
+		         objectParam.put("tipoDocumento", bean.getCoTipoDocAdm());
+		     }
 		  
 		  list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(DocumentosTrazaBean.class));
 	    } catch (EmptyResultDataAccessException e) {

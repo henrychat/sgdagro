@@ -1,13 +1,14 @@
 
-
-function fn_inicializaTrazabilidad(sCoAnnio, fechaActual) {
+// opcion
+function fn_inicializaTrazabilidad(sCoAnnio, fechaActual,opcion) {
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esFiltroFecha').val("1");//rango fecha
-    jQuery('#buscarDocumentoSeguiEstEmiBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 10});
+    jQuery('#buscarDocumentoSeguiEstEmiBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: Number(opcion)});
     
     jQuery('#fechaFiltro').removeClass("glyphicon-collapse-down");
     jQuery('#spanDivBusquedaF').addClass("glyphicon-collapse-up");
     jQuery("#txtDepOrigen").val("[TODOS]");
     jQuery("#coDepOrigen").val("");
+    jQuery('#buscarDocumentoSeguiEstEmiBean').find("#forzarc1").attr('checked',false);
     
     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#busNumDocRef').change(function() {
         $(this).val(replicate($(this).val(), 6));
@@ -35,7 +36,17 @@ function clickCheckTrazabilidad(){
 		   jQuery('#buscarDocumentoSeguiEstEmiBean').find('#esDocOrigen1').val("0");
 		   }
 		});
+	 
+	 jQuery('#buscarDocumentoSeguiEstEmiBean').find('#forzarc1').click(function() {
+		   if(jQuery('#buscarDocumentoSeguiEstEmiBean').find('#forzarc1').is(':checked')){
+		     jQuery('#buscarDocumentoSeguiEstEmiBean').find('#forzarc1').val("1");
+		   } else {
+		   jQuery('#buscarDocumentoSeguiEstEmiBean').find('#forzarc1').val("0");
+		   }
+		});
 }
+
+
 
 function fn_buscaDestinatarioTrazabilidad() {
     var p = new Array();
@@ -496,7 +507,7 @@ function fu_validaFiltroFecha(vFechaActual) {
 }
 
 
-function fu_cleanSeguiTrazabilidad() {
+function fu_cleanSeguiTrazabilidad(opcion) {
     
     jQuery("#busNumExpediente").val("");
     jQuery("#busAsunto").val("");
@@ -535,7 +546,7 @@ function fu_cleanSeguiTrazabilidad() {
     jQuery("#coAnnio").val(jQuery("#txtAnnioActual").val());
     //jQuery('#buscarDocumentoEmiConsulBean').find('#coAnnio').parent('td').find('#fechaFiltro').attr('fini',fechaActual);
     //jQuery('#buscarDocumentoEmiConsulBean').find('#coAnnio').parent('td').find('#fechaFiltro').attr('ffin',fechaActual);
-    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});
+    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: Number(opcion)});
 
 }
 function mostrarOcultarDivBusTrazabilidad() {
