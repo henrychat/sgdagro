@@ -138,6 +138,13 @@ public class SeguiDocTrazabilidadController {
            	  permisoUsuario.setCodOpc(Constantes.COD_PERMISO_TRAZ_AVZ);
            	  permisoUsuario.setCempCodEmp(usuario.getCempCodemp()); // EL CODIGO DE SESION
            	  permisoUsuario.setCodAplica(Constantes.COD_SISTEMA_SGD);
+           	  if(buscarDocumentoSeguiEstEmiBean.getBusNumExpediente()!=null) {
+           		buscarDocumentoSeguiEstEmiBean.setBusNumExpediente(buscarDocumentoSeguiEstEmiBean.getBusNumExpediente().trim());  
+           	  }
+           	 if(buscarDocumentoSeguiEstEmiBean.getBusNumDoc()!=null) {
+           		buscarDocumentoSeguiEstEmiBean.setBusNumDoc(buscarDocumentoSeguiEstEmiBean.getBusNumDoc().trim());  
+           	  }
+           	  
            	  if(permisoService.obtenerPermiso(permisoUsuario)) {
            		 mensaje2=validacionesPermisosAvanz( buscarDocumentoSeguiEstEmiBean);
            	  } else {
