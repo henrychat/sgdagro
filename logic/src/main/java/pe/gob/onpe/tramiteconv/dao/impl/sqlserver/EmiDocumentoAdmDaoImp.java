@@ -745,7 +745,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     sql.append("select E.*, ROW_NUMBER() OVER (ORDER BY E.FE_REC_DOC) AS ROWNUM ");
     sql.append("from( ");
     sql.append("select ");
-    sql.append("d.FE_REC_DOC, ");
+    sql.append("r.FE_EMI, d.FE_REC_DOC, ");
     sql.append("SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](r.co_tip_doc_adm), 1, 100) de_tip_doc_adm, ");
     sql.append("SUBSTRING(rr.nu_doc,1,50) NU_DOC, ");
     sql.append("CONVERT(VARCHAR(10), r.FE_EMI, 3) FE_EMI_CORTA, ");
@@ -784,7 +784,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
    
     sql.append("UNION \n");
     sql.append("select ");
-    sql.append("d.FE_REC_DOC, ");
+    sql.append("r.FE_EMI, d.FE_REC_DOC, ");
     sql.append("SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](r.co_tip_doc_adm), 1, 100) de_tip_doc_adm, ");
     sql.append("SUBSTRING(rr.nu_doc,1,50) NU_DOC, ");
     sql.append("CONVERT(VARCHAR(10), r.FE_EMI, 3) FE_EMI_CORTA, ");
@@ -823,7 +823,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     	
     	 sql.append("UNION \n");
     	    sql.append("select ");
-    	    sql.append("d.FE_REC_DOC, ");
+    	    sql.append(" r.FE_EMI, d.FE_REC_DOC, ");
     	    sql.append("SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](r.co_tip_doc_adm), 1, 100) de_tip_doc_adm, ");
     	    sql.append("SUBSTRING(rr.nu_doc,1,50) NU_DOC, ");
     	    sql.append("CONVERT(VARCHAR(10), r.FE_EMI, 3) FE_EMI_CORTA, ");
@@ -856,7 +856,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     
     sql.append(") A ");
     sql.append("WHERE ROWNUM < 202 ");
-    sql.append("order by FE_REC_DOC desc ");
+    sql.append("order by FE_EMI,FE_REC_DOC desc ");
     
     try {
       list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(DocumentoBean.class), new Object[] { pannio, pcoDepen, pcoDepen, ptiDoc, pannio, pannio, pcoDepen });
