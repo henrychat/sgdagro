@@ -125,7 +125,8 @@ public class SeguiDocTrazabilidadController {
         UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
         String codDependencia = usuario.getCoDep();
         String codEmpleado = usuario.getCempCodemp();
-        String tipAcceso = usuarioConfigBean.getTiConsulta();
+        String tipAcceso = usuarioConfigBean.getTiAcceso();
+       
         buscarDocumentoSeguiEstEmiBean.setCoDependencia(codDependencia);
         buscarDocumentoSeguiEstEmiBean.setCoEmpleado(codEmpleado);
         buscarDocumentoSeguiEstEmiBean.setTiAcceso(tipAcceso);
@@ -148,7 +149,7 @@ public class SeguiDocTrazabilidadController {
            	  if(permisoService.obtenerPermiso(permisoUsuario)) {
            		 mensaje2=validacionesPermisosAvanz( buscarDocumentoSeguiEstEmiBean);
            	  } else {
-           		 mensaje2=validacionesPermisoBasico( buscarDocumentoSeguiEstEmiBean); 
+           		 mensaje2=validacionesPermisoBasico( buscarDocumentoSeguiEstEmiBean,usuarioConfigBean); 
            	
            		 //busqueda
            	  }
@@ -345,7 +346,7 @@ public class SeguiDocTrazabilidadController {
     	 return null;
     }
     
-    public String validacionesPermisoBasico(BuscarDocTrazabilidadBean busqueda) throws Exception {
+    public String validacionesPermisoBasico(BuscarDocTrazabilidadBean busqueda,UsuarioConfigBean usuarioConfigBean) throws Exception {
     	String mensaje="";
     	
     	
@@ -372,7 +373,18 @@ public class SeguiDocTrazabilidadController {
     	    		
     	    	}
     	    	else {
-    	    		 return "No hay coincidencias en Número de expediente,no ingreso dato completo(expediente) o no tiene acceso al mismo ";
+    	            String tipAcceso = usuarioConfigBean.getTiAcceso();
+    	            String tipoConsulta=usuarioConfigBean.getTiConsulta();
+    	           String codDep= usuarioConfigBean.getCoDep();
+    	           if(tipAcceso.equals("0") || tipoConsulta.equals("0")) {
+    	        	   List<DocumentosTrazaBean> lista3=seguiTrazabilidadService.existeDocumentoAccesoTotal(busqueda, codDep); 
+    	        	   if(lista3!=null && lista3.size()>=1) {
+    	        		    return null;
+    	        	   }
+    	           }
+    	           
+    	    		
+    	    	  return "No hay coincidencias en Número de expediente,no ingreso dato completo(expediente) o no tiene acceso al mismo ";
     	    	}	
     			
     			

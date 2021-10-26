@@ -33,6 +33,8 @@ public interface SeguiTrazabilidadDao {
    // public String existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
     public List<DocumentosTrazaBean>  listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
     public List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
+
+    List<DocumentosTrazaBean> existeDocumentoAcceso(BuscarDocTrazabilidadBean bean,String coDep) throws Exception;
     
 
     

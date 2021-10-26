@@ -220,6 +220,12 @@ public class SeguiTrazabilidadServiceImp   implements SeguiTrazabilidadService {
 		return seguiTrazabilidadDao.existeDocumentoTraza(bean);
 		
 	}
+	@Override
+	public List<DocumentosTrazaBean> existeDocumentoAccesoTotal(BuscarDocTrazabilidadBean bean,String coDep) throws Exception {
+		
+		return seguiTrazabilidadDao.existeDocumentoAcceso(bean, coDep);
+		
+	}
 
 
 	@Override

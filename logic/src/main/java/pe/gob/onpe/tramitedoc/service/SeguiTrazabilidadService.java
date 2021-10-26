@@ -43,7 +43,10 @@ public interface SeguiTrazabilidadService {
 
     List<DocumentosTrazaBean> existeDocumentoTraza(BuscarDocTrazabilidadBean bean) throws Exception;
     
-     List<DocumentosTrazaBean> listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+    List<DocumentosTrazaBean> listaExpedienteOrigen(BuscarDocTrazabilidadBean bean) throws Exception;
+    
+  
+    List<DocumentosTrazaBean> existeDocumentoAccesoTotal(BuscarDocTrazabilidadBean bean,String coDep) throws Exception;
      
      
     
