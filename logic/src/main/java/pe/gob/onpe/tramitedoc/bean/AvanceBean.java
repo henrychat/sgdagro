@@ -19,6 +19,7 @@ public class AvanceBean {
     private String tiAvance;
     private String esEli;
     private String coUser; 
+ 
     
     public String getNuDes() {
         return nuDes;

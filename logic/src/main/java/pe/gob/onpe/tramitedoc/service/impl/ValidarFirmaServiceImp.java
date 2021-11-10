@@ -42,27 +42,12 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService
             });
         Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { PdfPKCS7 pk = iterator.next();
           String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-          if (dn.contains(pNuDni))
-          {
+         if (dn.contains(pNuDni)) {
             if (dn.contains(pNuRucInstitucion)) {
               vret = "OK";
             }
-          } }
+          } 
+         }
 
       
       }

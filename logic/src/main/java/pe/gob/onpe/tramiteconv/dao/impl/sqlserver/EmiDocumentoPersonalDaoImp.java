@@ -72,8 +72,8 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("\t\tELSE 1 ");
     sql.append("\tEND EXISTE_ANEXO, ");
     sql.append("\tROW_NUMBER() OVER (ORDER BY A.NU_COR_EMI) AS ROWNUM ");
-    sql.append("\tFROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("\tINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
+    sql.append("\tFROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) ");
+    sql.append("\tINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B With (readuncommitted) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
     sql.append("\tWHERE 1=1 ");
     sql.append(" AND A.CO_DEP_EMI = :pCoDepEmi");
 
@@ -160,7 +160,7 @@ public class EmiDocumentoPersonalDaoImp
     } 
     
     sql.append(") X ");
-    sql.append("WHERE ROWNUM < 51 ");
+    sql.append("WHERE ROWNUM < 271 ");
     sql.append("ORDER BY X.NU_COR_EMI DESC ");
     
     List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();
