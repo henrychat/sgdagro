@@ -10,23 +10,49 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.stereotype.Service;
 import pe.gob.onpe.tramitedoc.service.ValidarFirmaService;
+
 
 
 @Service("validarFirmaService")
 public class ValidarFirmaServiceImp implements ValidarFirmaService
 {
-  public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuRucInstitucion) {
+  @SuppressWarnings("unchecked")
+public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuRucInstitucion) {
     setBouncyCastleProvider();
     String vret = "NO_OK";
-    PdfReader reader = null;
+    // EJHM
+	  PdfReader reader = null;
+	  AcroFields af=null;
+	  List<String> names=null;
+	  boolean primerError=false;
+	  try {
+	    	reader = new PdfReader(filePdf);
+	         af = reader.getAcroFields();
+	        names = af.getSignatureNames();
+	    	
+	    
+	  } catch (Exception e) {
+	      e.printStackTrace();
+	      primerError=true;
+	      Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.SEVERE, "FileName:"+filePdf, e);
+	    } finally {
+	      if (reader != null && primerError) {
+	        reader.close();
+	      }
+	    } 
+	   if(primerError) {
+	    	return "NO_OK_ARCHIVO";
+	   }
+    
+    
     try {
-      reader = new PdfReader(filePdf);
-      AcroFields af = reader.getAcroFields();
       
-      List<String> names = af.getSignatureNames();
-      if (!names.isEmpty()) {
+      if (names!=null && !names.isEmpty()) {
         ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
         for (String name : names)
         {
@@ -40,12 +66,16 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService
                 return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
               }
             });
-        Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { PdfPKCS7 pk = iterator.next();
+        Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { 
+          PdfPKCS7 pk = iterator.next();
           String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
-         if (dn.contains(pNuDni)) {
+          if (dn.contains(pNuDni)) {
             if (dn.contains(pNuRucInstitucion)) {
+            	
               vret = "OK";
-            }
+            } else {
+            	 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
+            }	
           } 
          }
 
@@ -67,15 +97,39 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService
 
 
   
-  public String getValidaCertificadoEmp(String filePdf, String pNuDni) {
+  @SuppressWarnings("unchecked")
+public String getValidaCertificadoEmp(String filePdf, String pNuDni) {
     setBouncyCastleProvider();
     String vret = "NO_OK";
     PdfReader reader = null;
+    
+  
+	  AcroFields af=null;
+	  List<String> names=null;
+	  boolean primerError=false;
+	  try {
+	    	reader = new PdfReader(filePdf);
+	        af = reader.getAcroFields();
+	        names = af.getSignatureNames();
+	  } catch (Exception e) {
+	      e.printStackTrace();
+	      primerError=true;
+	      Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.SEVERE, "FileName"+filePdf, e);
+	    } finally {
+	      if (reader != null  && primerError) {
+	        reader.close();
+	      }
+	    } 
+	   if(primerError) {
+	    	return "NO_OK_ARCHIVO";
+	   }
+	   
+	   
     try {
       reader = new PdfReader(filePdf);
-      AcroFields af = reader.getAcroFields();
-      List<String> names = af.getSignatureNames();
-      if (!names.isEmpty()) {
+     // AcroFields af = reader.getAcroFields();
+     // List<String> names = af.getSignatureNames();
+      if (names!=null && !names.isEmpty()) {
         ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
         for (String name : names)
         {
@@ -89,20 +143,18 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService
                 return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
               }
             });
-        Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { PdfPKCS7 pk = iterator.next();
-          String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+        Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { 
+        	PdfPKCS7 pk = iterator.next();
+            String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
 
-
-
-
-
-
-
-
-          
           if (dn.contains(pNuDni)) {
             vret = "OK";
-          } }
+          } 
+          else {
+         	 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
+         }	
+         
+        }
       
       } else {
         

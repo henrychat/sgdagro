@@ -385,6 +385,9 @@ public class EmiDocumentoPersonalServiceImp
         
         String esOblFirma = this.commonQueryDao.getInFirmaDoc(documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm());
         vReturn = this.validarFirmaService.getValidaCertificadoEmp(docObjBean.getNumeroSecuencia(), usuario.getNuDni());
+        if(vReturn.equals("NO_OK_ARCHIVO")) {
+        	throw new validarDatoException("Error al cargar documento para firma"); 
+        }
         if (vReturn.equals("NO_OK"))
           throw new validarDatoException("Firma Personal no pertenece a Usuario"); 
         if (vReturn.equals("") && esOblFirma.equals("F")) {

@@ -41,6 +41,10 @@ public class DocumentoAnexoServiceImp
         docObjBean.setCoUseMod(coUsuario);
         docObjBean.setNumeroSecuencia(pnuSecFirma);
         vReturn = this.validarFirmaService.getValidaCertificadoEmp(docObjBean.getNumeroSecuencia(), dniUsu, nroRucInstitucion);
+        if(vReturn.equals("NO_OK_ARCHIVO")) {
+        	throw new validarDatoException("Error al cargar Documento para firma"); 
+        }
+        
         if (vReturn.equals("NO_OK")) {
           vReturn = "Firma no pertenece a Usuario";
         } else {

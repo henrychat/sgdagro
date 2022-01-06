@@ -150,6 +150,9 @@ public class DocumentoVoBoServiceImp
               docObjBean.setCoUseMod(docVobo.getCoEmpUsu());
               
               vReturn = this.validarFirmaService.getValidaCertificadoEmp(docObjBean.getNumeroSecuencia(), nuDni, nroRucInstitucion);
+              if(vReturn.equals("NO_OK_ARCHIVO")) {
+              	throw new validarDatoException("Error al cargar documento para firma"); 
+              }
               if (!vReturn.equals("OK")) {
                 throw new validarDatoException("Visto Bueno no pertenece a Usuario");
               }
