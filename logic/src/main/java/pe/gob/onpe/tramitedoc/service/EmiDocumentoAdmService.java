@@ -78,10 +78,12 @@ public interface EmiDocumentoAdmService {
     String changeToEnvioMesaVirtual(DatosInterBean datosInter,Usuario usuario);
     /*interoperabilidad*/
     String getLstDestExternoAgregaGrupo(String pcoGrupo,String ptiDes);
-   String  changeToEnvioNotificacion(DocumentoEmiBean documentoEmiBean, Usuario usuario) throws Exception;
-   
+    String  changeToEnvioNotificacion(DocumentoEmiBean documentoEmiBean, Usuario usuario) throws Exception;
     boolean esDocumentoSalidaExterna(DocumentoDatoBean docDatoBean);
    
-  	 
-  	public boolean tienePermisoSalidaExterna(DocumentoDatoBean docDatoBean, String codUsu) throws Exception;
+  	boolean tienePermisoSalidaExterna(DocumentoDatoBean docDatoBean, String codUsu) throws Exception;
+  	boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean docDatoBean);
+    boolean tienePermisoEnviarDocumentoOtrasOficinas(DocumentoDatoBean docDatoBean, String codUsu) throws Exception;
+  	
+  	
 }

@@ -36,42 +36,42 @@ public class SeguiEstRecibidoDaoImp
     List<DocumentoSeguiEstRecibidoBean> list = new ArrayList<DocumentoSeguiEstRecibidoBean>();
     sql.append("SET LANGUAGE Español ");
     sql.append("SELECT TOP 300 X.*,");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (X.NU_ANN, X.NU_EMI) DE_ORI_EMI,\n");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n");
-    sql.append(" (CASE WHEN X.TI_DES='01' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.CO_EMP_DES) \n");
-    sql.append(" WHEN X.TI_DES='02' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.NU_RUC_DES) \n");
-    sql.append(" WHEN X.TI_DES='03' THEN IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL (X.NU_DNI_DES) \n");
-    sql.append(" WHEN X.TI_DES='04' THEN IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN (X.CO_OTR_ORI_DES)\n");
-    sql.append(" END)AS DE_EMP_DES, \n");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS (X.ES_DOC_REC,'TDTV_DESTINOS') DE_ES_DOC_DES,\n");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,\n");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_MOTIVO(X.CO_MOT) DE_MOTIVO,\n");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_REC) DE_EMP_REC,\n");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (X.NU_ANN, X.NU_EMI) DE_ORI_EMI,");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
+    sql.append(" (CASE WHEN X.TI_DES='01' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.CO_EMP_DES) ");
+    sql.append(" WHEN X.TI_DES='02' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.NU_RUC_DES) ");
+    sql.append(" WHEN X.TI_DES='03' THEN IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL (X.NU_DNI_DES) ");
+    sql.append(" WHEN X.TI_DES='04' THEN IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN (X.CO_OTR_ORI_DES) ");
+    sql.append(" END)AS DE_EMP_DES, ");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS (X.ES_DOC_REC,'TDTV_DESTINOS') DE_ES_DOC_DES,");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_MOTIVO(X.CO_MOT) DE_MOTIVO,");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_REC) DE_EMP_REC,");
     
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(DATEADD(DAY, (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MAS(CONVERT(DATETIME, X.FE_EMI), X.NU_DIA_ATE)), CONVERT(DATE, X.FE_EMI)),'DD/MM/YYYY') F_LIMITE,");
     
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(DATEADD(DAY, (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MAS(CONVERT(DATETIME, X.FE_EMI), X.NU_DIA_ATE)), CONVERT(DATE, X.FE_EMI)),'DD/MM/YYYY') F_LIMITE_CORTA \n");
-    sql.append(" FROM ( \n");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(DATEADD(DAY, (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MAS(CONVERT(DATETIME, X.FE_EMI), X.NU_DIA_ATE)), CONVERT(DATE, X.FE_EMI)),'DD/MM/YYYY') F_LIMITE_CORTA ");
+    sql.append(" FROM ( ");
     sql.append(" SELECT A.NU_ANN,A.NU_EMI,B.NU_DES,B.NU_COR_DES,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(A.FE_EMI,'DD/MM/YYYY') FE_EMI_CORTA,A.FE_EMI,");
-    sql.append(" A.CO_TIP_DOC_ADM,C.NU_DOC,B.TI_DES,B.CO_EMP_DES,B.NU_RUC_DES,B.NU_DNI_DES,B.CO_OTR_ORI_DES,\n");
+    sql.append(" A.CO_TIP_DOC_ADM,C.NU_DOC,B.TI_DES,B.CO_EMP_DES,B.NU_RUC_DES,B.NU_DNI_DES,B.CO_OTR_ORI_DES,");
     sql.append(" UPPER (A.DE_ASU) DE_ASU_M,C.NU_EXPEDIENTE,B.CO_MOT,");
-    sql.append(" C.IN_EXISTE_DOC EXISTE_DOC,\n");
+    sql.append(" C.IN_EXISTE_DOC EXISTE_DOC,");
     sql.append(" (CASE WHEN COALESCE(C.TI_EMI_REF,'0')+COALESCE(C.IN_EXISTE_ANEXO,'2')='00' THEN 0 WHEN COALESCE(C.TI_EMI_REF,'0')+COALESCE(C.IN_EXISTE_ANEXO,'2')='02' THEN 0 ELSE 1 END) EXISTE_ANEXO,");
 
     
-    sql.append(" COALESCE(B.CO_PRI,'1') CO_PRI,B.ES_DOC_REC,\n");
-    sql.append(" B.FE_REC_DOC,IDOSGD.PK_SGD_DESCRIPCION_FORMAT(B.FE_REC_DOC,'DD/MM/YYYY') FE_REC_CORTA,A.CO_EMP_RES,\n");
-    sql.append(" B.CO_ETIQUETA_REC,B.CO_EMP_REC,A.NU_DIA_ATE,\n");
+    sql.append(" COALESCE(B.CO_PRI,'1') CO_PRI,B.ES_DOC_REC,");
+    sql.append(" B.FE_REC_DOC,IDOSGD.PK_SGD_DESCRIPCION_FORMAT(B.FE_REC_DOC,'DD/MM/YYYY') FE_REC_CORTA,A.CO_EMP_RES,");
+    sql.append(" B.CO_ETIQUETA_REC,B.CO_EMP_REC,A.NU_DIA_ATE,");
     sql.append(" CASE");
-    sql.append(" WHEN a.nu_dia_ate > 0\n");
+    sql.append(" WHEN a.nu_dia_ate > 0");
 
     
-    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) <= 2 \n");
-    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 0 \n");
+    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) <= 2 ");
+    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.fe_finaliza), CONVERT(DATE, GETDATE()))) > 0 ");
     
-    sql.append(" AND b.fe_ate_doc IS NULL\n");
-    sql.append(" AND b.fe_arc_doc IS NULL\n");
+    sql.append(" AND b.fe_ate_doc IS NULL");
+    sql.append(" AND b.fe_arc_doc IS NULL");
     sql.append(" AND d.in_dia = 0");
     sql.append("    THEN '1'");
     sql.append(" WHEN a.nu_dia_ate > 0");
@@ -81,19 +81,19 @@ public class SeguiEstRecibidoDaoImp
     sql.append(" AND b.fe_arc_doc IS NULL");
     sql.append(" AND d.in_dia = 0");
     sql.append(" THEN '2'");
-    sql.append(" WHEN a.nu_dia_ate > 0\n");
+    sql.append(" WHEN a.nu_dia_ate > 0");
     
-    sql.append(" AND CONVERT(DATE, GETDATE()) = CONVERT(DATE, E.FE_FINALIZA)\n");
-    sql.append(" AND b.fe_ate_doc IS NULL\n");
-    sql.append(" AND b.fe_arc_doc IS NULL\n");
+    sql.append(" AND CONVERT(DATE, GETDATE()) = CONVERT(DATE, E.FE_FINALIZA)");
+    sql.append(" AND b.fe_ate_doc IS NULL");
+    sql.append(" AND b.fe_arc_doc IS NULL");
     sql.append(" AND d.in_dia = 0");
     sql.append(" THEN '3'");
-    sql.append(" WHEN a.nu_dia_ate > 0\n");
+    sql.append(" WHEN a.nu_dia_ate > 0");
     
-    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.FE_FINALIZA), CONVERT(DATE, GETDATE()))) > 2\n");
-    sql.append(" AND b.fe_ate_doc IS NULL\n");
-    sql.append(" AND b.fe_arc_doc IS NULL\n");
-    sql.append(" AND d.in_dia = 0\n");
+    sql.append(" AND (DATEDIFF(DAY, CONVERT(DATE, E.FE_FINALIZA), CONVERT(DATE, GETDATE()))) > 2");
+    sql.append(" AND b.fe_ate_doc IS NULL");
+    sql.append(" AND b.fe_arc_doc IS NULL");
+    sql.append(" AND d.in_dia = 0 ");
     sql.append(" THEN '4'");
     sql.append(" WHEN b.fe_ate_doc IS NOT NULL OR b.fe_arc_doc IS NOT NULL");
     sql.append(" THEN '5'");
@@ -101,29 +101,29 @@ public class SeguiEstRecibidoDaoImp
     sql.append(" THEN '0'");
     sql.append(" END co_est_ven,");
     sql.append(" CASE");
-    sql.append(" WHEN a.nu_dia_ate > 0\n");
+    sql.append(" WHEN a.nu_dia_ate > 0 ");
     
-    sql.append(" AND CONVERT(DATE, GETDATE()) > CONVERT(DATE, E.FE_FINALIZA)\n");
+    sql.append(" AND CONVERT(DATE, GETDATE()) > CONVERT(DATE, E.FE_FINALIZA) ");
     sql.append(" AND b.fe_ate_doc IS NULL");
-    sql.append(" AND b.fe_arc_doc IS NULL\n");
+    sql.append(" AND b.fe_arc_doc IS NULL ");
     sql.append(" AND d.in_dia = 0");
     
-    sql.append(" THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](E.FE_FINALIZA, CONVERT(DATETIME, GETDATE())))\n");
+    sql.append(" THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](E.FE_FINALIZA, CONVERT(DATETIME, GETDATE()))) ");
     sql.append(" ELSE 0");
     sql.append(" END nu_dia_exc,b.fe_arc_doc,b.fe_ate_doc,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(b.fe_arc_doc,'dd/mm/yyyy') fe_arc_doc_CORTA,");
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc_CORTA\n");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc_CORTA ");
     
-    sql.append(" FROM IDOSGD.TDTV_REMITOS A ");
-    sql.append(" INNER JOIN IDOSGD.TDTV_DESTINOS B ON B.NU_ANN = A.NU_ANN AND B.NU_EMI = A.NU_EMI ");
-    sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C  ON C.NU_ANN = B.NU_ANN AND C.NU_EMI = B.NU_EMI ");
-    sql.append(" INNER JOIN IDOSGD.TDTR_MOTIVO D ON b.co_mot = d.co_mot ");
+    sql.append(" FROM IDOSGD.TDTV_REMITOS A With (readuncommitted)  ");
+    sql.append(" INNER JOIN IDOSGD.TDTV_DESTINOS B With (readuncommitted)  ON B.NU_ANN = A.NU_ANN AND B.NU_EMI = A.NU_EMI ");
+    sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C With (readuncommitted)   ON C.NU_ANN = B.NU_ANN AND C.NU_EMI = B.NU_EMI ");
+    sql.append(" INNER JOIN IDOSGD.TDTR_MOTIVO D  With (readuncommitted)  ON b.co_mot = d.co_mot ");
     sql.append(" INNER JOIN (SELECT y.nu_ann, y.nu_emi, y.fe_finaliza,");
-    sql.append(" (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_fu_dia_tra (CONVERT(DATETIME, GETDATE()),y.fe_finaliza)) nu_dia_fal\n");
-    sql.append(" FROM (SELECT x.nu_ann, x.nu_emi,\n");
+    sql.append(" (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_fu_dia_tra (CONVERT(DATETIME, GETDATE()),y.fe_finaliza)) nu_dia_fal ");
+    sql.append(" FROM (SELECT x.nu_ann, x.nu_emi, ");
     
-    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(DATEADD(DAY, (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MAS(CONVERT(DATETIME, X.FE_EMI), X.NU_DIA_ATE)), CONVERT(DATE, X.FE_EMI)),'DD/MM/YYYY') fe_finaliza \n");
-    sql.append(" FROM IDOSGD.tdtv_remitos AS x) AS y) AS E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi \n");
+    sql.append(" IDOSGD.PK_SGD_DESCRIPCION_FORMAT(DATEADD(DAY, (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MAS(CONVERT(DATETIME, X.FE_EMI), X.NU_DIA_ATE)), CONVERT(DATE, X.FE_EMI)),'DD/MM/YYYY') fe_finaliza ");
+    sql.append(" FROM IDOSGD.tdtv_remitos  AS x With (readuncommitted)  ) AS y) AS E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi ");
     sql.append(" WHERE 1=1 ");
     
     String pNUAnn = buscarDocumentoSeguiEstRecBean.getCoAnnio();
@@ -133,10 +133,10 @@ public class SeguiEstRecibidoDaoImp
     } 
     sql.append(" AND A.ES_ELI = '0'");
     sql.append(" AND B.ES_ELI = '0'");
-    sql.append(" AND A.ES_DOC_EMI NOT IN ('5', '9', '7')\n");
+    sql.append(" AND A.ES_DOC_EMI NOT IN ('5', '9', '7') ");
     
     sql.append(" AND A.IN_OFICIO = '0'");
-    sql.append(" AND A.CO_GRU IN ('1','2','3')\n");
+    sql.append(" AND A.CO_GRU IN ('1','2','3') ");
 
     
     String pTipoBusqueda = buscarDocumentoSeguiEstRecBean.getTipoBusqueda();

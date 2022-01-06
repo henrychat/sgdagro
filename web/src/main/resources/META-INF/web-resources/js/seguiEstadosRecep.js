@@ -9,8 +9,11 @@ function fn_inicializaSeguiRecepDoc(sCoAnnio, fechaActual) {
     });
     jQuery('#buscarDocumentoSeguiEstRecBean').find('#busCoAnnio').find('option[value=""]').remove();
     pnumFilaSelect = 0;
-    changeTipoBusqRecepDocuAdmSegui("0");
+    jQuery('#buscarDocumentoSeguiEstRecBean').find('#tipoBusqueda').val("0");
+    //changeTipoBusqRecepDocuAdmSegui("0");
+    mostrarOcultarDivBusqFiltro2();
 }
+
 function changeTipoBusqRecepDocuAdmSegui(tipo) {
     jQuery('#buscarDocumentoSeguiEstRecBean').find('#tipoBusqueda').val(tipo);
     submitAjaxFormRecepDocAdmSegui(tipo);

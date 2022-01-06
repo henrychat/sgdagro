@@ -27,6 +27,7 @@ import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoAnexoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoVerBean;
@@ -1967,6 +1968,60 @@ public class DocumentoAdmEmisionController {
             retval.append("\",\"deRespuesta\":\"");
             retval.append(vRespuesta);                            
             retval.append("\"}");
+       }
+       return retval.toString();
+    }
+    @RequestMapping(method = RequestMethod.POST, params = "accion=realizarValidacionesPrevias")
+    public @ResponseBody String realizarValidacionesPrevias(HttpServletRequest request, Model model){
+       String mensaje;
+       StringBuilder retval = new StringBuilder();
+       String coRespuesta;
+       String vRespuesta;
+       Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
+       String pnuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "pnuAnn");
+       String pnuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "pnuEmi");
+       
+       try{
+          mensaje = documentoVoBoService.existeVistoBuenoPendienteDocAdm(pnuAnn, pnuEmi);
+      
+       
+       vRespuesta = mensaje;
+       if (mensaje.equals("OK")) {
+    	   DocumentoDatoBean docDatoBean = new DocumentoDatoBean();
+    	   docDatoBean.setNuEmi(pnuEmi);
+    	   docDatoBean.setNuAnn(pnuAnn);
+    	   docDatoBean.setCoEmpEmi(usuario.getCempCodemp());
+    	   docDatoBean.setCoDepEmi(usuario.getCoDep());
+    	  
+			if(emiDocumentoAdmService.esDocumentoEnviadoInternamenteOtraOficina(docDatoBean) && !emiDocumentoAdmService.tienePermisoEnviarDocumentoOtrasOficinas(docDatoBean, usuario.getCoUsuario())){
+				   coRespuesta = "0";
+				   vRespuesta="Usuario no esta habilitado para derivar documentos a otras oficinas/bandejas ";
+			       retval.append("{\"coRespuesta\":\"");
+			       retval.append(coRespuesta);
+			       retval.append("\",\"deRespuesta\":\"");
+			       retval.append(vRespuesta);                            
+			       retval.append("\"}");
+			        return retval.toString();
+			  }
+		
+            coRespuesta = "1";
+            retval.append("{\"coRespuesta\":\"");
+            retval.append(coRespuesta);
+            retval.append("\"}");
+      
+       
+       
+       
+       } else {
+            coRespuesta = "0";
+            retval.append("{\"coRespuesta\":\"");
+            retval.append(coRespuesta);
+            retval.append("\",\"deRespuesta\":\"");
+            retval.append(vRespuesta);                            
+            retval.append("\"}");
+       }
+       }catch(Exception e){
+           mensaje = e.getMessage();
        }
        return retval.toString();
     }

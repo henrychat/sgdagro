@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCallback;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
@@ -484,12 +486,21 @@ public class EmiDocumentoPersonalDaoImp
   public String insDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
     String vReturn = "NO_OK";
     StringBuffer sqlUpd = new StringBuffer();
-    sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(\nNU_ANN,\nNU_EMI,\nNU_DES,\nCO_LOC_DES,\nCO_DEP_DES,\nTI_DES,\nCO_EMP_DES,\nCO_PRI,\nDE_PRO,\nCO_MOT, \nCO_OTR_ORI_DES, \nNU_DNI_DES, \nNU_RUC_DES, \nES_ELI,\nFE_USE_CRE,\nFE_USE_MOD,\nCO_USE_MOD,\nCO_USE_CRE,\nES_DOC_REC,\nES_ENV_POR_TRA)\nVALUES(?,?,(select ISNULL(MAX(a.nu_des) + 1, 1) FROM IDOSGD.tdtv_destinos a where \nA.NU_ANN=? and\nA.NU_EMI=?),?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0','0')");
-
+    
+    SimpleJdbcCall simpleJdbcCall = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[PK_SGD_OBTENER_SECUENCIA]").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[] { "nu_emi", "nu_ann" }).declareParameters(new SqlParameter[] { new SqlParameter("nu_emi", 12), new SqlParameter("nu_ann", 4), (SqlParameter)new SqlOutParameter("valor", 4) });
+    MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("nu_emi", nuEmi).addValue("nu_ann", nuAnn);
+    Map out = simpleJdbcCall.execute((SqlParameterSource)mapSqlParameterSource);
+    int secuencia = ((Integer)out.get("valor")).intValue();
+    
+    //sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(\nNU_ANN,\nNU_EMI,\nNU_DES,\nCO_LOC_DES,\nCO_DEP_DES,\nTI_DES,\nCO_EMP_DES,\nCO_PRI,\nDE_PRO,\nCO_MOT, \nCO_OTR_ORI_DES, \nNU_DNI_DES, \nNU_RUC_DES, \nES_ELI,\nFE_USE_CRE,\nFE_USE_MOD,\nCO_USE_MOD,\nCO_USE_CRE,\nES_DOC_REC,\nES_ENV_POR_TRA)\nVALUES(?,?,(select ISNULL(MAX(a.nu_des) + 1, 1) FROM IDOSGD.tdtv_destinos a where \nA.NU_ANN=? and\nA.NU_EMI=?),?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0','0')");
+    sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(NU_ANN,NU_EMI,NU_DES,CO_LOC_DES,CO_DEP_DES,TI_DES,CO_EMP_DES,CO_PRI,DE_PRO,CO_MOT, ");
+    sqlUpd.append("CO_OTR_ORI_DES, NU_DNI_DES, NU_RUC_DES, ES_ELI,FE_USE_CRE,FE_USE_MOD,CO_USE_MOD,CO_USE_CRE,ES_DOC_REC,ES_ENV_POR_TRA) ");
+    sqlUpd.append(" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0','0') ");
+    
 
     
     try {
-      this.jdbcTemplate.update(sqlUpd.toString(), new Object[] { nuAnn, nuEmi, nuAnn, nuEmi, destinatarioDocumentoEmiBean.getCoLocal(), destinatarioDocumentoEmiBean.getCoDependencia(), destinatarioDocumentoEmiBean.getCoTipoDestino(), destinatarioDocumentoEmiBean
+      this.jdbcTemplate.update(sqlUpd.toString(), new Object[] { nuAnn, nuEmi, secuencia, destinatarioDocumentoEmiBean.getCoLocal(), destinatarioDocumentoEmiBean.getCoDependencia(), destinatarioDocumentoEmiBean.getCoTipoDestino(), destinatarioDocumentoEmiBean
             .getCoEmpleado(), destinatarioDocumentoEmiBean.getCoPrioridad(), destinatarioDocumentoEmiBean.getDeIndicaciones(), destinatarioDocumentoEmiBean.getCoTramite(), destinatarioDocumentoEmiBean
             .getCoOtroOrigen(), destinatarioDocumentoEmiBean.getNuDni(), destinatarioDocumentoEmiBean.getNuRuc(), destinatarioDocumentoEmiBean
             .getCoUseCre(), destinatarioDocumentoEmiBean.getCoUseCre() });

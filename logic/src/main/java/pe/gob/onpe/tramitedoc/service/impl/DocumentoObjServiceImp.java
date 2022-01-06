@@ -567,6 +567,12 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
           docVerBean.setDeMensaje(vformatoDoc);
           docVerBean.setInDoc(false);
         } 
+        // agregando el cargo
+        if (ptiOpe.equals("5")) {
+
+            docVerBean.setCargoEmpleado(getCargoEmpleado(docDatoBean.getCoDepEmi(), docDatoBean.getCoEmpEmi()));
+           }
+        
       } 
     } else {
       docVerBean.setDeMensaje("Error en datos del documento");
@@ -1579,11 +1585,20 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     		  docVerBean.setDetalleMensaje("El Documento solo puede ser  firmado por el usuario indicado en el campo  <strong>Firmado Por</strong>");
     		  return docVerBean;
     	  }
-    	  if(emiDocumentoAdmService.esDocumentoSalidaExterna(docDatoBean) && !emiDocumentoAdmService.tienePermisoSalidaExterna(docDatoBean, usuarioConfig.getCoUsuario())){
+    	  
+    	  boolean esDocumentoSalidaExterna=emiDocumentoAdmService.esDocumentoSalidaExterna(docDatoBean);
+    	  if(esDocumentoSalidaExterna && !emiDocumentoAdmService.tienePermisoSalidaExterna(docDatoBean, usuarioConfig.getCoUsuario())){
     		  docVerBean.setDeMensaje("NO_OK");
     		  docVerBean.setDetalleMensaje("Usuario no esta habilitado para derivar documentos externamente ");
     		  return docVerBean;
     	  }
+    	  if(!esDocumentoSalidaExterna && emiDocumentoAdmService.esDocumentoEnviadoInternamenteOtraOficina(docDatoBean) && !emiDocumentoAdmService.tienePermisoEnviarDocumentoOtrasOficinas(docDatoBean, usuarioConfig.getCoUsuario())){
+    		  docVerBean.setDeMensaje("NO_OK");
+    		  docVerBean.setDetalleMensaje("Usuario no esta habilitado para derivar documentos a otras oficinas/bandejas  ");
+    		  return docVerBean;
+    	  }
+    	 
+    	  
     	  
       if ((docDatoBean.getTiEmi().equals("01") && docDatoBean.getEsDocEmi().equals("7") && ptiOpe.equals("5")) || 
     		  (docDatoBean.getTiEmi().equals("05") && docDatoBean.getEsDocEmi().equals("5") && ptiOpe.equals("5"))) {

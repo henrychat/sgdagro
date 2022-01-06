@@ -1534,7 +1534,7 @@ function fn_firmarDocumentoEmiPersonal(){
         if (pnuAnn) {
             
             var param={pnuAnn:pnuAnn,pnuEmi:pnuEmi};
-            ajaxCall("/srDocumentoAdmEmision.do?accion=goVerificarVistoBuenoPendiente", param, function(data) {
+            ajaxCall("/srDocumentoAdmEmision.do?accion=realizarValidacionesPrevias", param, function(data) {
                 if(data.coRespuesta==="1"){ 
                     var p = new Array();
                     p[0] = "accion=goRutaFirmaDoc";	
@@ -1555,7 +1555,15 @@ function fn_firmarDocumentoEmiPersonal(){
                                     jQuery("#inFirmaEmi").val("N");
                                     showBtnEnviarDocPersonal();
                                     //result = fn_firmarDocApplet(docs.noUrl,docs.noDoc);
-                                    var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1"};
+                                    
+                                    //EJHM cambio de entrega de cargo
+                                    var inTSA = "0"
+    								var cargoEmp = docs.desCargo;
+                                    var cargoEmpInTSA = "$"+inTSA+"$"+cargoEmp;
+                                   
+                                   
+                                    
+                                    var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1"+ cargoEmpInTSA};
                                     //runApplet(appletsTramiteDoc.ejecutaFirma,param,function(data){
                                     runOnDesktop(accionOnDesktopTramiteDoc.ejecutaFirma, param, function(data){
                                         result=data;

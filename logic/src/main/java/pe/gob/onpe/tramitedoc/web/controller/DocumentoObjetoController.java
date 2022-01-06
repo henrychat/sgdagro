@@ -1378,6 +1378,10 @@ public class DocumentoObjetoController
         retval.append(docSession.getFeFirma());
         retval.append("\",\"noDoc\":\"");
         retval.append(docSession.getNoDocumento());
+        // Se agrega el cargo
+        retval.append("\",\"desCargo\":\"");
+        retval.append(docSession.getCargoEmpleado());
+        
         retval.append("\",\"noUrl\":\"");
         retval.append(docSession.getUrlDocumento());
         retval.append("\"}");

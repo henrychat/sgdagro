@@ -191,15 +191,17 @@ public class DocumentoSrvlt extends HttpServlet {
         ServletOutputStream ouputStream = null;
         ouputStream = response.getOutputStream();
         ouputStream.write(docObjBean.getDocumento(), 0, (docObjBean.getDocumento()).length);
-        ouputStream.close();
         ouputStream.flush();
+        ouputStream.close();
+        
       } else {
         response.setContentType("application/std");
         response.setHeader("Cache-Control", "no-cache");
         PrintWriter out = response.getWriter();
         out.println("Documento no se encuentra");
-        out.close();
         out.flush();
+        out.close();
+        
       } 
     } 
   }

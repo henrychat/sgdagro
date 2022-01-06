@@ -27,6 +27,7 @@ import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DestinoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.EmpleadoBean;
@@ -2662,6 +2663,14 @@ private SimpleJdbcCall spInsMesaVirtual;
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean doc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
 
 
     

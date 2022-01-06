@@ -313,114 +313,6 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
     return ciudadanoBean;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   
   public CiudadanoBean getCiudadano(String pnuDoc) {
     CiudadanoBean ciudadanoBean = null;
@@ -1659,10 +1551,34 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
   
 	   return false;
   }
+  public boolean tienePermisoEnviarDocumentoOtrasOficinas(DocumentoDatoBean docDatoBean, String codUsu) throws Exception {
+	  return true;
+//	  if(emiDocumentoAdmDao.esDirectoroResponsableOficina(docDatoBean.getCoDepEmi(),docDatoBean.getCoEmpEmi())) {
+//		  return true;
+//	  }
+//	  
+//	  if(emiDocumentoAdmDao.tieneCargoHabilitadoparaEnvioDocsExterno(docDatoBean.getCoEmpEmi())) {
+//		  return true;
+//	  }
+//		
+//	  PermisoUsuarioBean permiso= new PermisoUsuarioBean();
+//	  permiso.setCodAplica(Constantes.COD_SISTEMA_SGD);
+//	  permiso.setCodOpc(Constantes.COD_PERMISO_ENVIAR_DOC_OTR_OFICINAS);
+//	  permiso.setCempCodEmp(docDatoBean.getCoEmpEmi());
+//	  if(permisoService.obtenerPermiso(permiso)){
+//		  return true;
+//	  }
+//  
+//	   return false;
+  }
   public boolean esDocumentoSalidaExterna(DocumentoDatoBean docDatoBean) {
 	 return  emiDocumentoAdmDao.esDocoumentoSalidaExterna(docDatoBean.getNuEmi(), docDatoBean.getNuAnn());
 	   
  }
+  public  boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean docDatoBean) {
+  return emiDocumentoAdmDao.esDocumentoEnviadoInternamenteOtraOficina(docDatoBean); 
+	  
+  }
   
   public String getVerificaPdfDoc(String pnuAnn, String pnuEmi, String ptiCap) {
     String vReturn = "NO_OK";
@@ -1918,4 +1834,6 @@ public class EmiDocumentoAdmServiceImp  implements EmiDocumentoAdmService
     
     return retval.toString();
   }
+
+
 }

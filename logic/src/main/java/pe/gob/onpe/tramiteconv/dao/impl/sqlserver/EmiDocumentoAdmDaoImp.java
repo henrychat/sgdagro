@@ -29,6 +29,7 @@ import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
 import pe.gob.onpe.tramitedoc.bean.DestinatarioDocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DestinoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoBean;
+import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoEmiBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.EmpleadoBean;
@@ -1117,7 +1118,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     sqlQry.append("AND co_dep_emi = ? ");
     sqlQry.append("AND ti_emi = '01' ");
     
-    sqlUpd.append("INSERT INTO IDOSGD.tdtv_remitos(\nNU_ANN,\nNU_EMI,\nNU_COR_EMI,\nCO_LOC_EMI,\nCO_DEP_EMI,\nCO_EMP_EMI,\nCO_EMP_RES, \nTI_EMI,\nFE_EMI,\nCO_GRU,\nDE_ASU, \nES_DOC_EMI, \nNU_DIA_ATE, \nTI_CAP, \nCO_TIP_DOC_ADM, \nNU_COR_DOC, \nDE_DOC_SIG, \nNU_ANN_EXP, \nNU_SEC_EXP, \nNU_DET_EXP, \nES_ELI,\nNU_DOC_EMI,\nCO_USE_CRE,\nFE_USE_CRE,\nCO_USE_MOD,\nFE_USE_MOD,OBS_DOC,COD_VER_EXT)\nVALUES(?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,'1',?,?,?,'03',?,\n?,?,?,?,1,\n'0',?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,?,?)");
+     sqlUpd.append("INSERT INTO IDOSGD.tdtv_remitos(\nNU_ANN,\nNU_EMI,\nNU_COR_EMI,\nCO_LOC_EMI,\nCO_DEP_EMI,\nCO_EMP_EMI,\nCO_EMP_RES, \nTI_EMI,\nFE_EMI,\nCO_GRU,\nDE_ASU, \nES_DOC_EMI, \nNU_DIA_ATE, \nTI_CAP, \nCO_TIP_DOC_ADM, \nNU_COR_DOC, \nDE_DOC_SIG, \nNU_ANN_EXP, \nNU_SEC_EXP, \nNU_DET_EXP, \nES_ELI,\nNU_DOC_EMI,\nCO_USE_CRE,\nFE_USE_CRE,\nCO_USE_MOD,\nFE_USE_MOD,OBS_DOC,COD_VER_EXT)\nVALUES(?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,'1',?,?,?,'03',?,\n?,?,?,?,1,\n'0',?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,?,?)");
 
 
     
@@ -1162,8 +1163,19 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
     StringBuffer sqlQry1 = new StringBuffer();
     StringBuffer sqlUpdUbigeo = new StringBuffer();
     sqlQry1.append("SELECT CELE_CODELE FROM IDOSGD.SI_ELEMENTO WHERE CTAB_CODTAB='UPD_PARAMT_UBIGEO'");
-    sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(\nNU_ANN,\nNU_EMI,\nNU_DES,\nCO_LOC_DES,\nCO_DEP_DES,\nTI_DES,\nCO_EMP_DES,\nCO_PRI,\nDE_PRO,\nCO_MOT, \nCO_OTR_ORI_DES, \nNU_DNI_DES, \nNU_RUC_DES, \nES_ELI,\nFE_USE_CRE,\nFE_USE_MOD,\nCO_USE_MOD,\nCO_USE_CRE,\nES_DOC_REC,\nES_ENV_POR_TRA,CDIR_REMITE,CEXP_CORREOE,CTELEFONO,CCOD_DPTO,CCOD_PROV,CCOD_DIST,REMI_TI_EMI,REMI_NU_DNI_EMI,REMI_CO_OTR_ORI_EMI,DE_CARGO)\nVALUES(?,?,(select ISNULL(MAX(a.nu_des) + 1, 1) FROM IDOSGD.tdtv_destinos a where \nA.NU_ANN=? and\nA.NU_EMI=?),?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0',?,?,?,?,?,?,?,?,?,?,?)");
-
+  //  sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(\nNU_ANN,\nNU_EMI,\nNU_DES,\nCO_LOC_DES,\nCO_DEP_DES,\nTI_DES,\nCO_EMP_DES,\nCO_PRI,\nDE_PRO,\nCO_MOT, \nCO_OTR_ORI_DES, \nNU_DNI_DES, \nNU_RUC_DES, \nES_ELI,\nFE_USE_CRE,\nFE_USE_MOD,\nCO_USE_MOD,\nCO_USE_CRE,\nES_DOC_REC,\nES_ENV_POR_TRA,CDIR_REMITE,CEXP_CORREOE,CTELEFONO,CCOD_DPTO,CCOD_PROV,CCOD_DIST,REMI_TI_EMI,REMI_NU_DNI_EMI,REMI_CO_OTR_ORI_EMI,DE_CARGO)\nVALUES(?,?,(select ISNULL(MAX(a.nu_des) + 1, 1) FROM IDOSGD.tdtv_destinos a where \nA.NU_ANN=? and\nA.NU_EMI=?),?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0',?,?,?,?,?,?,?,?,?,?,?)");
+   
+    sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(NU_ANN,NU_EMI,NU_DES,CO_LOC_DES,CO_DEP_DES, TI_DES,CO_EMP_DES,CO_PRI,DE_PRO,CO_MOT, ");
+	sqlUpd.append(" CO_OTR_ORI_DES, NU_DNI_DES, NU_RUC_DES, ES_ELI,FE_USE_CRE,FE_USE_MOD,CO_USE_MOD,CO_USE_CRE, ");
+	sqlUpd.append(" ES_DOC_REC,ES_ENV_POR_TRA,CDIR_REMITE,CEXP_CORREOE,CTELEFONO,CCOD_DPTO, ");
+	sqlUpd.append(" CCOD_PROV,CCOD_DIST,REMI_TI_EMI,REMI_NU_DNI_EMI,REMI_CO_OTR_ORI_EMI,DE_CARGO)");
+	sqlUpd.append(" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,'0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,?,'0',?,?,?,?,?,?,?,?,?,?,?) ");
+    
+    SimpleJdbcCall simpleJdbcCall = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[PK_SGD_OBTENER_SECUENCIA]").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[] { "nu_emi", "nu_ann" }).declareParameters(new SqlParameter[] { new SqlParameter("nu_emi", 12), new SqlParameter("nu_ann", 4), (SqlParameter)new SqlOutParameter("valor", 4) });
+    MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("nu_emi", nuEmi).addValue("nu_ann", nuAnn);
+    Map out = simpleJdbcCall.execute((SqlParameterSource)mapSqlParameterSource);
+    int secuencia = ((Integer)out.get("valor")).intValue();
+    
  
     try {
       String[] ubigeo = null;
@@ -1183,7 +1195,7 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
         destinatarioDocumentoEmiBean.setRemiCoOtrOriEmi(destinatarioDocumentoEmiBean.getRemiNuDniEmi());
         destinatarioDocumentoEmiBean.setRemiNuDniEmi("");
       } 
-      this.jdbcTemplate.update(sqlUpd.toString(), new Object[] { nuAnn, nuEmi, nuAnn, nuEmi, destinatarioDocumentoEmiBean.getCoLocal(), destinatarioDocumentoEmiBean.getCoDependencia(), destinatarioDocumentoEmiBean.getCoTipoDestino(), destinatarioDocumentoEmiBean
+      this.jdbcTemplate.update(sqlUpd.toString(), new Object[] { nuAnn,nuEmi, secuencia, destinatarioDocumentoEmiBean.getCoLocal(), destinatarioDocumentoEmiBean.getCoDependencia(), destinatarioDocumentoEmiBean.getCoTipoDestino(), destinatarioDocumentoEmiBean
             .getCoEmpleado(), destinatarioDocumentoEmiBean.getCoPrioridad(), destinatarioDocumentoEmiBean.getDeIndicaciones(), destinatarioDocumentoEmiBean.getCoTramite(), destinatarioDocumentoEmiBean
             .getCoOtroOrigen(), destinatarioDocumentoEmiBean.getNuDni(), destinatarioDocumentoEmiBean.getNuRuc(), destinatarioDocumentoEmiBean
             .getCoUseCre(), destinatarioDocumentoEmiBean.getCoUseCre(), destinatarioDocumentoEmiBean.getEnvMesaPartes(), destinatarioDocumentoEmiBean
@@ -1881,6 +1893,32 @@ public class EmiDocumentoAdmDaoImp   extends SimpleJdbcDaoBase  implements EmiDo
 	    
 	    try {
 	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] { numEmi,anio });
+	    return vReturn==null? false:vReturn.equals("1")?true:false;
+	    }
+	    catch(EmptyResultDataAccessException e) {
+	    	return false;
+	    }
+	    catch (Exception e) {
+	      e.printStackTrace();
+	      vReturn = e.getMessage();
+	    } 
+	    
+	    return false;
+	  }
+  
+  public boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean doc ) {
+	    String vReturn = "NO_OK";
+	    StringBuffer sqlQry = new StringBuffer();
+	    
+	    sqlQry.append(" SELECT '1' AS EXISTE   FROM IDOSGD.Tdtv_Remitos r  WHERE  ");
+	    sqlQry.append("  1=1  AND  EXISTS(select D.NU_EMI ");
+	    sqlQry.append(" from IDOSGD.TDTV_DESTINOS D  ");
+	    sqlQry.append("  WHERE D.TI_DES ='01'  AND  D.NU_EMI=r.NU_EMI and D.CO_DEP_DES!=?  ");
+	    sqlQry.append("AND D.NU_ANN=r.NU_ANN   and   d.ES_ELI='0')  AND r.Es_Eli = '0'  and r.NU_EMI=? AND r.NU_ANN=? ");
+
+	   
+	    try {
+	      vReturn = (String)this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[] {doc.getCoDepEmi(),doc.getNuEmi(),doc.getNuAnn() });
 	    return vReturn==null? false:vReturn.equals("1")?true:false;
 	    }
 	    catch(EmptyResultDataAccessException e) {
