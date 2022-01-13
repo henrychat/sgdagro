@@ -51,7 +51,7 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuR
     
     
     try {
-      
+    	String dn=null;
       if (names!=null && !names.isEmpty()) {
         ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
         for (String name : names)
@@ -68,15 +68,14 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuR
             });
         Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { 
           PdfPKCS7 pk = iterator.next();
-          String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+          dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
           if (dn.contains(pNuDni)) {
             if (dn.contains(pNuRucInstitucion)) {
             	
               vret = "OK";
-            } else {
-            	 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
-            }	
-          } 
+            } 	
+          }
+          
          }
 
       
@@ -85,6 +84,10 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuR
         
         vret = "";
       } 
+      if(!vret.equals("OK")) {
+    	Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
+      }
+    
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -126,9 +129,9 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni) {
 	   
 	   
     try {
+    	String dn=null;
       reader = new PdfReader(filePdf);
-     // AcroFields af = reader.getAcroFields();
-     // List<String> names = af.getSignatureNames();
+    
       if (names!=null && !names.isEmpty()) {
         ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
         for (String name : names)
@@ -145,14 +148,11 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni) {
             });
         Iterator<PdfPKCS7> iterator = LsSignature.iterator(); if (iterator.hasNext()) { 
         	PdfPKCS7 pk = iterator.next();
-            String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+            dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
 
           if (dn.contains(pNuDni)) {
             vret = "OK";
           } 
-          else {
-         	 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
-         }	
          
         }
       
@@ -160,6 +160,11 @@ public String getValidaCertificadoEmp(String filePdf, String pNuDni) {
         
         vret = "";
       } 
+      
+      if(!vret.equals("OK")) {
+      	Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:"+filePdf+"contenidopk:"+dn);
+       }
+      
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
