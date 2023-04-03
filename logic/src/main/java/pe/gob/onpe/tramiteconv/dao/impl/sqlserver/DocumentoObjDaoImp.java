@@ -46,7 +46,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select \n nu_ann,\n nu_emi,\n co_dep_emi,\n co_emp_emi,\n CAST(nu_cor_emi AS VARCHAR) nu_cor_emi, \n ti_emi,\n ti_cap,\n es_doc_emi,\n co_tip_doc_adm co_doc,\n IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(co_tip_doc_adm) tipo_Doc,\n COALESCE(nu_doc_emi,'') numero_Doc,\n de_doc_sig siglas_Doc,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(fe_emi,'DD-MM-YYYY') fecha_Doc,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'DD/MM/YYYY') fecha_actual,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYY-MM-DD') fecha_firma,\n IDOSGD.PK_SGD_DESCRIPCION_INITCAP((SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_DISTRITO_LOCAL(co_loc_emi))) de_Lugar\n from IDOSGD.tdtv_remitos \nwhere nu_ann = ?\nand nu_emi = ?");
+    sql.append("select \n nu_ann,\n nu_emi,\n co_dep_emi,\n co_emp_emi,\n CAST(nu_cor_emi AS VARCHAR) nu_cor_emi, \n ti_emi,\n ti_cap,\n es_doc_emi,\n co_tip_doc_adm co_doc,\n IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(co_tip_doc_adm) tipo_Doc,\n COALESCE(nu_doc_emi,'') numero_Doc,\n de_doc_sig siglas_Doc,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(fe_emi,'DD-MM-YYYY') fecha_Doc,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'DD/MM/YYYY') fecha_actual,\n IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYY-MM-DD') fecha_firma,\n IDOSGD.PK_SGD_DESCRIPCION_INITCAP((SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_DISTRITO_LOCAL(co_loc_emi))) de_Lugar\n from IDOSGD.tdtv_remitos WITH (NOLOCK) \n where nu_ann = ?\nand nu_emi = ?");
 
 
     
@@ -65,7 +65,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean getDatosDoc(String pnuAnn, String pnuEmi, String ptiCap) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select \n nu_ann, \n nu_emi, \n de_ruta_origen nombre_Archivo,\n COALESCE(len(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_archivo_doc \n where nu_ann = ?\nand nu_emi = ?");
+    sql.append("select \n nu_ann, \n nu_emi, \n de_ruta_origen nombre_Archivo,\n COALESCE(len(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n where nu_ann = ?\nand nu_emi = ?");
 
     DocumentoObjBean docObjBean = new DocumentoObjBean();
     
@@ -83,7 +83,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean getNombreArchivo(String pnuAnn, String pnuEmi, String ptiCap) {
     StringBuffer sql = new StringBuffer();
-    sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen nombre_Archivo,\n COALESCE(len(bl_doc),0) nu_Tamano,\nw_de_ruta_origen w_Nombre_Archivo,\nCOALESCE(len(w_bl_doc),0) w_Nu_Tamano \n from IDOSGD.tdtv_archivo_doc \nwhere nu_ann = ?\nand nu_emi = ?");
+    sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen nombre_Archivo,\n COALESCE(len(bl_doc),0) nu_Tamano,\nw_de_ruta_origen w_Nombre_Archivo,\nCOALESCE(len(w_bl_doc),0) w_Nu_Tamano \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n where nu_ann = ?\nand nu_emi = ?");
 
 
 
@@ -113,7 +113,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto) {
     StringBuffer sql = new StringBuffer();
     String result = null;
-    sql.append("insert into IDOSGD.TDTV_ANEXOS \n (NU_ANN,NU_EMI,NU_ANE,DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC)\n SELECT '" + pNuAnnDocProyecto + "','" + pnuEmiDocProyecto + "',(SELECT COUNT(T.NU_ANE)+1 FROM IDOSGD.TDTV_ANEXOS T where nu_emi='" + pnuEmiDocProyecto + "' and nu_ann='" + pNuAnnDocProyecto + "'),DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n  FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC\n  FROM IDOSGD.TDTV_ANEXOS\n  where nu_emi='" + pnuEmi + "' and nu_ann='" + pnuAnn + "' and nu_ane='" + pnuAnexo + "'");
+    sql.append("insert into IDOSGD.TDTV_ANEXOS \n (NU_ANN,NU_EMI,NU_ANE,DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC)\n SELECT '" + pNuAnnDocProyecto + "','" + pnuEmiDocProyecto + "',(SELECT COUNT(T.NU_ANE)+1 FROM IDOSGD.TDTV_ANEXOS T WITH (NOLOCK) where nu_emi='" + pnuEmiDocProyecto + "' and nu_ann='" + pNuAnnDocProyecto + "'),DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n  FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC\n  FROM IDOSGD.TDTV_ANEXOS WITH (NOLOCK) \n  where nu_emi='" + pnuEmi + "' and nu_ann='" + pnuAnn + "' and nu_ane='" + pnuAnexo + "'");
 
 
     
@@ -134,10 +134,10 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 	    String vReturn = "NO_OK";
 	    
 	    StringBuffer sqlQry1 = new StringBuffer();
-	    sqlQry1.append(" SELECT '" + pNuAnnDocProyecto + "' nuAnn,'" + pnuEmiDocProyecto + "' nuEmi,(SELECT max(T.NU_ANE)+1 FROM IDOSGD.TDTV_ANEXOS T   ");
+	    sqlQry1.append(" SELECT '" + pNuAnnDocProyecto + "' nuAnn,'" + pnuEmiDocProyecto + "' nuEmi,(SELECT max(T.NU_ANE)+1 FROM IDOSGD.TDTV_ANEXOS T WITH (NOLOCK)  ");
 	    sqlQry1.append(" where nu_emi='" + pnuEmiDocProyecto + "' and nu_ann='"+ pNuAnnDocProyecto + "') nuAne, ");
 	    sqlQry1.append(" DE_DET,BL_DOC blDoc ,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,FE_USE_CRE,CO_USE_MOD, FEULA,REQ_FIRMA, ");
-	    sqlQry1.append(" NU_DES,TI_PUBLIC  FROM IDOSGD.TDTV_ANEXOS where nu_emi='" + pnuEmi + "' and nu_ann='" + pnuAnn + "' and nu_ane='" + pnuAnexo + "'");
+	    sqlQry1.append(" NU_DES,TI_PUBLIC  FROM IDOSGD.TDTV_ANEXOS WITH (NOLOCK) where nu_emi='" + pnuEmi + "' and nu_ann='" + pnuAnn + "' and nu_ane='" + pnuAnexo + "'");
 	    
 	    final	 DocumentoAnexo docAnexo;
 	    
@@ -190,7 +190,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) {
     StringBuffer sql = new StringBuffer();
-    sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen ,\n bl_doc \n from IDOSGD.tdtv_archivo_doc \nwhere nu_ann = ?\nand nu_emi = ?");
+    sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen ,\n bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
 
 
     
@@ -213,7 +213,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select nu_ann,nu_emi,nu_ane,de_rut_ori nombre_Archivo,bl_doc documento from IDOSGD.tdtv_anexos where nu_ann = ? and nu_emi = ? ");
+    sql.append("select nu_ann,nu_emi,nu_ane,de_rut_ori nombre_Archivo,bl_doc documento from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ? and nu_emi = ? ");
 
 
     
@@ -237,7 +237,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select \nnu_ann, \nnu_emi, \nw_de_ruta_origen de_ruta_origen ,\nw_bl_doc bl_doc \nfrom IDOSGD.tdtv_archivo_doc \nwhere nu_ann = ?\nand nu_emi = ?");
+    sql.append("select \nnu_ann, \nnu_emi, \nw_de_ruta_origen de_ruta_origen ,\nw_bl_doc bl_doc \nfrom IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
   
     DocumentoObjBean docObjBean = new DocumentoObjBean();
     
@@ -312,7 +312,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean getNombreArchivoAnexo(String pnuAnn, String pnuEmi, String pnuAnexo) {
     StringBuffer sql = new StringBuffer();
-    sql.append("\tselect \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori nombre_Archivo,\n COALESCE(LEN(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_anexos \nwhere nu_ann = ?\nand nu_emi = ?\nand nu_ane = ?");
+    sql.append("\tselect \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori nombre_Archivo,\n COALESCE(LEN(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?\nand nu_ane = ?");
 
  
     DocumentoObjBean docObjBean = new DocumentoObjBean();
@@ -330,7 +330,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean getNombreArchivoAnexoArchivado(String pnuAnn, String pnuEmi, String pnuAnexo) {
     StringBuffer sql = new StringBuffer();
-    sql.append("\tselect \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori nombre_Archivo,\n COALESCE(LEN(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_anexos \nwhere nu_ann = ?\nand nu_emi = ?\nand nu_ane = ?");
+    sql.append("\tselect \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori nombre_Archivo,\n COALESCE(LEN(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?\nand nu_ane = ?");
 
 
     
@@ -350,7 +350,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) {
     StringBuffer sql = new StringBuffer();
-    sql.append(" select \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori de_ruta_origen,\n bl_doc\n from IDOSGD.tdtv_anexos \n where nu_ann = ?\n and nu_emi = ?\n and nu_ane = ?");
+    sql.append(" select \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori de_ruta_origen,\n bl_doc\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \n where nu_ann = ?\n and nu_emi = ?\n and nu_ane = ?");
 
 
     DocumentoObjBean docObjBean = new DocumentoObjBean();
@@ -459,7 +459,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public DocumentoDatoBean CargarCabeceraReporte(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("SELECT\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](a.co_dep_emi) de_dep_emi,\n\ta.co_dep_emi,\n\ta.co_tip_doc_adm,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](a.co_tip_doc_adm) de_tip_doc_adm ,\n\tA.NU_ANN,A.DE_DOC_SIG,\n\ta.nu_dia_ate,\n\tLTRIM(RTRIM(SUBSTRING(a.de_asu, 1, 400))) de_asu,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE](A.NU_ANN_EXP, A.NU_SEC_EXP) NU_EXPEDIENTE,\n\tCONVERT(VARCHAR(10), FE_EMI, 103) FECHA,\n\tCAST(ISNULL(NU_DOC, 0) AS VARCHAR) NU_DOC,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](a.co_emp_emi) de_emp_emi,\n\t(SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_CARGO_DOCUMENTO](a.co_dep_emi,a.co_emp_emi)) cargo_emp_emi,\nCOALESCE((SELECT DE_PAR FROM IDOSGD.TDTR_PARAMETROS WHERE CO_PAR = 'SIGLA_INSTITUCION'),' ') sigla_Institucion\nFROM IDOSGD.tdtv_remitos a\nWHERE a.es_eli='0'\nAND a.nu_ann = ?\nAND a.nu_emi = ?");
+    sql.append("SELECT\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](a.co_dep_emi) de_dep_emi,\n\ta.co_dep_emi,\n\ta.co_tip_doc_adm,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](a.co_tip_doc_adm) de_tip_doc_adm ,\n\tA.NU_ANN,A.DE_DOC_SIG,\n\ta.nu_dia_ate,\n\tLTRIM(RTRIM(SUBSTRING(a.de_asu, 1, 400))) de_asu,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE](A.NU_ANN_EXP, A.NU_SEC_EXP) NU_EXPEDIENTE,\n\tCONVERT(VARCHAR(10), FE_EMI, 103) FECHA,\n\tCAST(ISNULL(NU_DOC, 0) AS VARCHAR) NU_DOC,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](a.co_emp_emi) de_emp_emi,\n\t(SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_CARGO_DOCUMENTO](a.co_dep_emi,a.co_emp_emi)) cargo_emp_emi,\nCOALESCE((SELECT DE_PAR FROM IDOSGD.TDTR_PARAMETROS WHERE CO_PAR = 'SIGLA_INSTITUCION'),' ') sigla_Institucion \n FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) \nWHERE a.es_eli='0'\nAND a.nu_ann = ?\nAND a.nu_emi = ?");
 
  
     DocumentoDatoBean docDatoBean = new DocumentoDatoBean();
@@ -478,7 +478,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public List<DocumentoDatoBean> CargarSubReporte1(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select    a.nu_ann NU_ANN_R,\n\ta.nu_emi NU_EMI_R,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](b.co_tip_doc_adm) + ' N' +\n\tCASE B.TI_EMI\n\t\tWHEN '01' THEN B.NU_DOC_EMI + '-' + B.NU_ANN + '-' + B.DE_DOC_SIG\n\t\tWHEN '05' THEN B.NU_DOC_EMI + '-' + B.NU_ANN + '-' + B.DE_DOC_SIG\n\t\tELSE B.DE_DOC_SIG\n\tEND DOCUMENTO,\n\tb.fe_emi FE_EMI_R,\n\tLTRIM(RTRIM(SUBSTRING(b.de_asu, 1, 200))) DE_ASU_R\nfrom IDOSGD.TDTR_REFERENCIA a \nINNER JOIN  IDOSGD.TDTV_REMITOS b ON a.nu_emi_ref = b.nu_emi and a.nu_ann_ref = b.nu_ann \nwhere  a.nu_ann= ?\nand a.nu_emi= ?");
+    sql.append("select    a.nu_ann NU_ANN_R,\n\ta.nu_emi NU_EMI_R,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](b.co_tip_doc_adm) + ' N' +\n\tCASE B.TI_EMI\n\t\tWHEN '01' THEN B.NU_DOC_EMI + '-' + B.NU_ANN + '-' + B.DE_DOC_SIG\n\t\tWHEN '05' THEN B.NU_DOC_EMI + '-' + B.NU_ANN + '-' + B.DE_DOC_SIG\n\t\tELSE B.DE_DOC_SIG\n\tEND DOCUMENTO,\n\tb.fe_emi FE_EMI_R,\n\tLTRIM(RTRIM(SUBSTRING(b.de_asu, 1, 200))) DE_ASU_R\nfrom IDOSGD.TDTR_REFERENCIA a WITH (NOLOCK) \n INNER JOIN  IDOSGD.TDTV_REMITOS b WITH (NOLOCK) ON a.nu_emi_ref = b.nu_emi and a.nu_ann_ref = b.nu_ann \nwhere  a.nu_ann= ?\nand a.nu_emi= ?");
 
 
     List<DocumentoDatoBean> list = new ArrayList<DocumentoDatoBean>();
@@ -497,7 +497,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
   
   public List<DocumentoDatoBean> CargarSubReporte2(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("SELECT    a.nu_ann,\n\ta.nu_emi,\n\tb.nu_des,\n\ta.nu_cor_emi,a.co_dep_emi,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](a.co_dep_emi) de_dep_emi,\n\ta.co_emp_emi,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](a.co_emp_emi) de_emp_emi,\n\ta.fe_emi,\n\ta.co_tip_doc_adm,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](a.co_tip_doc_adm) de_tip_doc_adm,\n\tCASE A.TI_EMI\n\t\tWHEN '01' THEN A.NU_DOC_EMI + '-' + A.NU_ANN + '-' + A.DE_DOC_SIG\n\t\tWHEN '05' THEN A.NU_DOC_EMI + '-' + A.NU_ANN + '-' + A.DE_DOC_SIG\n\t\tELSE A.DE_DOC_SIG\n\tEND NU_DOC,\n\ta.nu_dia_ate,\n\tSUBSTRING(a.de_asu,1,400) de_asu,\n\tb.co_dep_des,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des) de_dep_des,\n\tb.co_emp_des,\n\tCASE b.ti_des\n\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](b.co_emp_des)\n\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_PROVEEDOR](B.NU_RUC_DES)\n\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](b.Nu_Dni_Des)\n\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](b.co_otr_ori_des)\n\tEND de_emp_des,\n\tCASE b.CO_EMP_DES\n\t\tWHEN (SELECT CO_EMPLEADO FROM IDOSGD.RHTM_DEPENDENCIA WHERE CO_DEPENDENCIA = b.CO_DEP_DES)\n\t\t\tTHEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des)\n\t\tELSE [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des) + CHAR(10) + (\n\t\t\t\tCASE b.ti_des\n\t\t\t\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](b.co_emp_des)\n\t\t\t\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_PROVEEDOR](B.NU_RUC_DES)\n\t\t\t\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](b.Nu_Dni_Des)\n\t\t\t\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](b.co_otr_ori_des)\n\t\t\t\tEND)\n\tEND DE_DEP_EMP,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_MOTIVO](b.co_mot) de_mot,\n\t(SELECT DE_PRI FROM IDOSGD.TDTR_PRIORIDAD WHERE CO_PRI = b.co_pri) de_pri,\n\tb.de_pro,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE](A.NU_ANN_EXP,A.NU_SEC_EXP) NU_EXPEDIENTE\nFROM IDOSGD.tdtv_remitos a \n INNER JOIN    IDOSGD.tdtv_destinos b ON a.nu_ann = b.nu_ann AND a.nu_emi = b.nu_emi  \nWHERE a.es_eli = '0'\nAND b.es_eli = '0'\nAND a.nu_ann = ?\nAND a.nu_emi = ?\norder by 3");
+    sql.append("SELECT    a.nu_ann,\n\ta.nu_emi,\n\tb.nu_des,\n\ta.nu_cor_emi,a.co_dep_emi,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](a.co_dep_emi) de_dep_emi,\n\ta.co_emp_emi,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](a.co_emp_emi) de_emp_emi,\n\ta.fe_emi,\n\ta.co_tip_doc_adm,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](a.co_tip_doc_adm) de_tip_doc_adm,\n\tCASE A.TI_EMI\n\t\tWHEN '01' THEN A.NU_DOC_EMI + '-' + A.NU_ANN + '-' + A.DE_DOC_SIG\n\t\tWHEN '05' THEN A.NU_DOC_EMI + '-' + A.NU_ANN + '-' + A.DE_DOC_SIG\n\t\tELSE A.DE_DOC_SIG\n\tEND NU_DOC,\n\ta.nu_dia_ate,\n\tSUBSTRING(a.de_asu,1,400) de_asu,\n\tb.co_dep_des,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des) de_dep_des,\n\tb.co_emp_des,\n\tCASE b.ti_des\n\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](b.co_emp_des)\n\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_PROVEEDOR](B.NU_RUC_DES)\n\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](b.Nu_Dni_Des)\n\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](b.co_otr_ori_des)\n\tEND de_emp_des,\n\tCASE b.CO_EMP_DES\n\t\tWHEN (SELECT CO_EMPLEADO FROM IDOSGD.RHTM_DEPENDENCIA WHERE CO_DEPENDENCIA = b.CO_DEP_DES)\n\t\t\tTHEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des)\n\t\tELSE [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](b.co_dep_des) + CHAR(10) + (\n\t\t\t\tCASE b.ti_des\n\t\t\t\t\tWHEN '01' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](b.co_emp_des)\n\t\t\t\t\tWHEN '02' THEN [IDOSGD].[PK_SGD_DESCRIPCION_DE_PROVEEDOR](B.NU_RUC_DES)\n\t\t\t\t\tWHEN '03' THEN [IDOSGD].[PK_SGD_DESCRIPCION_ANI_SIMIL](b.Nu_Dni_Des)\n\t\t\t\t\tWHEN '04' THEN [IDOSGD].[PK_SGD_DESCRIPCION_OTRO_ORIGEN](b.co_otr_ori_des)\n\t\t\t\tEND)\n\tEND DE_DEP_EMP,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_MOTIVO](b.co_mot) de_mot,\n\t(SELECT DE_PRI FROM IDOSGD.TDTR_PRIORIDAD WHERE CO_PRI = b.co_pri) de_pri,\n\tb.de_pro,\n\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE](A.NU_ANN_EXP,A.NU_SEC_EXP) NU_EXPEDIENTE \n FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) \n INNER JOIN    IDOSGD.tdtv_destinos b WITH (NOLOCK) ON a.nu_ann = b.nu_ann AND a.nu_emi = b.nu_emi  \nWHERE a.es_eli = '0'\nAND b.es_eli = '0'\nAND a.nu_ann = ?\nAND a.nu_emi = ?\norder by 3");
 
 
     

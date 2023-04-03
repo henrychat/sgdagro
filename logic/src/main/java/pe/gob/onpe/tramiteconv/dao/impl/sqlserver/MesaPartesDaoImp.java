@@ -83,8 +83,8 @@ public class MesaPartesDaoImp
     sql.append("        A.CO_DEP, ");
     sql.append("        A.NU_COR_EMI, ");
     sql.append("        ROW_NUMBER() OVER (ORDER BY A.NU_COR_EMI) AS ROWNUM ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("INNER JOIN   IDOSGD.TDTX_REMITOS_RESUMEN B ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("INNER JOIN   IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
     sql.append("WHERE 1=1 ");
 
     
@@ -188,7 +188,7 @@ public class MesaPartesDaoImp
     if (buscarDocumentoExtRecepBean.getCoTipoExp() != null && !buscarDocumentoExtRecepBean.getCoTipoExp().equals("")) {
       //sql.append(" AND C.CCOD_TIPO_EXP = :codTipoExp");
       //objectParam.put("codTipoExp", buscarDocumentoExtRecepBean.getCoTipoExp());
-    	sql.append(" and exists( select  CCOD_TIPO_EXP from IDOSGD.tdtc_expediente where NU_SEC_EXP=A.NU_SEC_EXP");
+    	sql.append(" and exists( select  CCOD_TIPO_EXP from IDOSGD.tdtc_expediente WITH (NOLOCK) where NU_SEC_EXP=A.NU_SEC_EXP");
     	sql.append(" and NU_ANN_EXP=A.NU_ANN_EXP and CCOD_TIPO_EXP=:codTipoExp)");
     	objectParam.put("codTipoExp", buscarDocumentoExtRecepBean.getCoTipoExp());
     	 
@@ -245,7 +245,7 @@ public class MesaPartesDaoImp
     String clave = Utilidades.generateRandomLetter(4);
     StringBuffer sqlQry1 = new StringBuffer();
     sqlQry1.append("select RIGHT(REPLICATE('0', 10) + CAST((ISNULL(MAX(nu_sec_exp), 0) + 1) AS VARCHAR), 10) ");
-    sqlQry1.append("from IDOSGD.tdtc_expediente ");
+    sqlQry1.append("from IDOSGD.tdtc_expediente WITH (NOLOCK) ");
     sqlQry1.append("where nu_ann_exp = ? ");
     
     StringBuffer sqlIns = new StringBuffer();
@@ -526,7 +526,7 @@ public class MesaPartesDaoImp
     String vReturn = "NO_OK";
     StringBuffer sqlQry = new StringBuffer();
     sqlQry.append("select ISNULL(MAX(nu_cor_doc), 0) + 1 ");
-    sqlQry.append("from IDOSGD.tdtv_remitos ");
+    sqlQry.append("from IDOSGD.tdtv_remitos WITH (NOLOCK) ");
     sqlQry.append("where nu_ann=? ");
     sqlQry.append("and co_dep_emi=? ");
     sqlQry.append("AND TI_EMI=? ");
@@ -593,12 +593,12 @@ public class MesaPartesDaoImp
     sql.append("        B.NU_EXPEDIENTE, ");
     sql.append("        CONVERT(VARCHAR(10), B.FE_EXP, 3) FE_EXP, ");
     sql.append("        SUBSTRING(a.de_asu, 1, 59) de_asu,a.de_doc_sig ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("LEFT JOIN\t IDOSGD.TDTC_EXPEDIENTE B ON A.NU_ANN_EXP=B.NU_ANN_EXP AND A.NU_SEC_EXP=B.NU_SEC_EXP AND A.NU_COR_EMI=B.NU_CORR_EXP ");
-    sql.append("INNER JOIN  IDOSGD.TDTV_DESTINOS D  ON A.NU_ANN=D.NU_ANN AND A.NU_EMI=D.NU_EMI ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("LEFT JOIN\t IDOSGD.TDTC_EXPEDIENTE B WITH (NOLOCK) ON A.NU_ANN_EXP=B.NU_ANN_EXP AND A.NU_SEC_EXP=B.NU_SEC_EXP AND A.NU_COR_EMI=B.NU_CORR_EXP ");
+    sql.append("INNER JOIN  IDOSGD.TDTV_DESTINOS D WITH (NOLOCK) ON A.NU_ANN=D.NU_ANN AND A.NU_EMI=D.NU_EMI ");
     sql.append("WHERE  A.NU_ANN=? AND ");
     sql.append("A.CO_TIP_DOC_ADM=? AND ");
-    sql.append("A.CO_DEP_EMI=? AND ");
+//    sql.append("A.CO_DEP_EMI=? AND ");
     
     if (pnuExpediente.trim().length() > 0) {
       sql.append("(B.NU_CORR_EXP = '" + pnuExpediente + "' OR A.NU_DOC_EMI = '" + pnuExpediente + "') AND\n");
@@ -628,7 +628,7 @@ public class MesaPartesDaoImp
     String vReturn = "1";
     StringBuffer sqlQry = new StringBuffer();
     sqlQry.append("SELECT ISNULL(MAX(a.NU_COR_EMI), 0) + 1 ");
-    sqlQry.append("FROM IDOSGD.TDTV_REMITOS a ");
+    sqlQry.append("FROM IDOSGD.TDTV_REMITOS a WITH (NOLOCK) ");
     sqlQry.append("WHERE NU_ANN = ? ");
     sqlQry.append("AND CO_DEP_EMI=? ");
     sqlQry.append("AND co_gru ='3' ");
@@ -753,8 +753,8 @@ public class MesaPartesDaoImp
     sql.append("A.CDIR_REMITE DE_DIRECCION, ISNULL(A.AUT_CORREOE,'0') NOTIFICADO, A.CEXP_CORREOE DE_CORREO, A.CTELEFONO TELEFONO, A.CCOD_PROV ID_PROVINCIA, A.CCOD_DIST ID_DISTRITO,  A.CCOD_DPTO ID_DEPARTAMENTO ,   ");
     sql.append("A.REMI_TI_EMI EMI_RESP, A.REMI_NU_DNI_EMI NU_DNI_RES, IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(A.REMI_NU_DNI_EMI) DE_NU_DNI_RES,A.REMI_CO_OTR_ORI_EMI CO_OTROS_RES,IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN (A.REMI_CO_OTR_ORI_EMI) DE_NOM_OTROS_RES, A.REMI_CARGO DE_CARGO, A.CCOD_ORIGING CO_ORI_DOC, A.CNUM_DNIMSG NRO_DNI_TRAMITANTE, A.COBS_DOCUMENTO DE_OBSERVACION, A.CDOC_DESTRAM CO_TRA_DEST,  ");
     sql.append("A.CONG_CO_OTR_ORI CO_COMISION, A.IND_TIPOCONG CO_TIPO_CONGRESISTA, A.IND_TIPOCONGINV CO_TIPO_INV, ISNULL(A.IND_REITCONGINV,'0') REITERATIVO, A.NRO_SOBREAUT NSOBRE, A.AN_SOBREAUT ANIO_SOBRE, B.CCOD_TIPO_EXP CO_TIPO_EXP, ISNULL(A.CIND_SENSIBLE,'0') SENSIBLE ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A ");
-    sql.append("left join IDOSGD.TDTC_EXPEDIENTE B ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("left join IDOSGD.TDTC_EXPEDIENTE B WITH (NOLOCK) ");
     sql.append("ON A.NU_ANN_EXP = B.NU_ANN_EXP AND A.NU_SEC_EXP = B.NU_SEC_EXP ");
     sql.append("WHERE A.NU_ANN=? ");
     sql.append("AND A.NU_EMI=? ");
@@ -821,7 +821,7 @@ public class MesaPartesDaoImp
     sql.append("        a.de_pro de_indicaciones, ");
     sql.append("        a.ti_des co_tipo_destino, ");
     sql.append("        'BD' accionBD ");
-    sql.append("FROM IDOSGD.tdtv_destinos a ");
+    sql.append("FROM IDOSGD.tdtv_destinos a WITH (NOLOCK) ");
     sql.append("where nu_ann = ? ");
     sql.append("and nu_emi = ? ");
     sql.append("AND ES_ELI='0' ");
@@ -851,8 +851,8 @@ public class MesaPartesDaoImp
     sql.append("        CONVERT(VARCHAR(10), A.FE_EMI, 3) FE_EXP, ");
     sql.append("        'BD' ACCION_BD, ");
     sql.append("        B.CO_REF ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("INNER JOIN\t IDOSGD.TDTR_REFERENCIA B ON  A.NU_ANN = B.NU_ANN_REF AND A.NU_EMI = B.NU_EMI_REF ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("INNER JOIN\t IDOSGD.TDTR_REFERENCIA B WITH (NOLOCK) ON  A.NU_ANN = B.NU_ANN_REF AND A.NU_EMI = B.NU_EMI_REF ");
     sql.append("WHERE B.NU_ANN = ? AND ");
     sql.append("B.NU_EMI = ? AND ");
     sql.append("A.ES_DOC_EMI NOT IN ('9', '7', '5') AND ");
@@ -887,7 +887,7 @@ public class MesaPartesDaoImp
     sql.append("        A.NU_FOLIOS, ");
     sql.append("        A.NU_ANN_EXP, ");
     sql.append("        A.NU_SEC_EXP ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
     sql.append("WHERE A.NU_ANN=? ");
     sql.append("AND A.NU_EMI=? ");
     sql.append("AND CO_GRU='3' ");
@@ -933,7 +933,7 @@ public class MesaPartesDaoImp
   public String anularDocumentoExtRecep(DocumentoExtRecepBean documentoExtRecepBean) {
     String vReturn = "NO_OK";
     StringBuffer sqlQry = new StringBuffer();
-    sqlQry.append("SELECT ISNULL(MAX(nu_cor_doc), 1) + 1\nFROM IDOSGD.tdtv_remitos\nWHERE nu_ann         = ?\nAND ti_emi         = ?\nAND co_dep_emi     = ?\nAND co_tip_doc_adm = ?");
+    sqlQry.append("SELECT ISNULL(MAX(nu_cor_doc), 1) + 1\nFROM IDOSGD.tdtv_remitos WITH (NOLOCK) \nWHERE nu_ann         = ?\nAND ti_emi         = ?\nAND co_dep_emi     = ?\nAND co_tip_doc_adm = ?");
 
   
     StringBuffer sqlUpd = new StringBuffer();
@@ -963,8 +963,8 @@ public class MesaPartesDaoImp
     sql.append("\t\tCONVERT(VARCHAR(10), B.FE_EXP, 3) FE_EXP, ");
     sql.append("\t\tA.CO_TIP_DOC_ADM CO_TIP_DOC, ");
     sql.append("\t\t'INS' ACCION_BD ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("INNER JOIN IDOSGD.TDTC_EXPEDIENTE B ON B.NU_ANN_EXP=A.NU_ANN_EXP AND B.NU_SEC_EXP=A.NU_SEC_EXP ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("INNER JOIN IDOSGD.TDTC_EXPEDIENTE B WITH (NOLOCK) ON B.NU_ANN_EXP=A.NU_ANN_EXP AND B.NU_SEC_EXP=A.NU_SEC_EXP ");
     sql.append("WHERE A.NU_ANN = ? ");
     sql.append("AND A.NU_EMI = ? ");
     sql.append("AND A.ES_DOC_EMI NOT IN ('9', '7', '5') ");
@@ -988,7 +988,7 @@ public class MesaPartesDaoImp
     StringBuffer sqlQry1 = new StringBuffer();
     sqlQry1.append("select\tRIGHT(REPLICATE('0', 7) + (RTRIM(LTRIM(CAST((ISNULL(MAX(NU_CORR_EXP), 0) + 1) AS VARCHAR)))), 7) nuCorrExp, ");
     sqlQry1.append("\tSUBSTRING((SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA_CORTA](?)), 1, 6) deSiglaCorta ");
-    sqlQry1.append("from IDOSGD.tdtc_expediente ");
+    sqlQry1.append("from IDOSGD.tdtc_expediente WITH (NOLOCK) ");
     sqlQry1.append("where nu_ann_exp = ? ");
     sqlQry1.append("and co_dep_exp = ? ");
     sqlQry1.append("and co_gru = '3' ");
@@ -1186,7 +1186,7 @@ public class MesaPartesDaoImp
     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DISTINCT REX.NU_ANN_EXP + REX.NU_SEC_EXP ");
     sql.append("FROM (SELECT NU_ANN, NU_EMI, NU_DES FROM IDOSGD.PK_SGD_DESCRIPCION_ARBOL_SEG(?, ?)) DO  ");
-    sql.append("INNER JOIN\t IDOSGD.TDTV_REMITOS RE ON RE.NU_ANN=DO.NU_ANN AND RE.NU_EMI=DO.NU_EMI  ");
+    sql.append("INNER JOIN\t IDOSGD.TDTV_REMITOS RE WITH (NOLOCK) ON RE.NU_ANN=DO.NU_ANN AND RE.NU_EMI=DO.NU_EMI  ");
     sql.append("INNER JOIN\t IDOSGD.TDTX_REQUISITO_EXPEDIENTE REX ON   REX.NU_ANN_EXP=RE.NU_ANN_EXP AND REX.NU_SEC_EXP=RE.NU_SEC_EXP ");
     sql.append("WHERE  RE.ES_ELI='0' ");
     sql.append("AND RE.CO_GRU='3' ");
@@ -1250,8 +1250,8 @@ public class MesaPartesDaoImp
     prutaReporte.append("\t\tISNULL((SELECT PAR.DE_PAR FROM IDOSGD.TDTR_PARAMETROS PAR WHERE PAR.CO_PAR='DE_SLOGAN'), '') DE_SLOGAN, ");
     prutaReporte.append("\t\tEX.FE_EXP, (SELECT COD_USER FROM IDOSGD.SEG_USUARIOS1 WHERE CEMP_CODEMP = RE.CO_EMP_RES) COD_USER, ");
     prutaReporte.append("\t\tEX.CCLAVE ");
-    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS RE  ");
-    prutaReporte.append("INNER JOIN\t  IDOSGD.TDTC_EXPEDIENTE EX ON RE.NU_ANN_EXP=EX.NU_ANN_EXP AND RE.NU_SEC_EXP=EX.NU_SEC_EXP ");
+    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS RE WITH (NOLOCK) ");
+    prutaReporte.append("INNER JOIN\t  IDOSGD.TDTC_EXPEDIENTE EX WITH (NOLOCK) ON RE.NU_ANN_EXP=EX.NU_ANN_EXP AND RE.NU_SEC_EXP=EX.NU_SEC_EXP ");
     
     try {
       prutaReporte.append("WHERE RE.NU_ANN = :nu_ann ");
@@ -1308,9 +1308,9 @@ public class MesaPartesDaoImp
     prutaReporte.append("\t     B.CO_PROCESO_EXP AS coProcesoExp, ");
     prutaReporte.append("\t     A.NU_FOLIOS AS nuFolios, ");
     prutaReporte.append("\t     IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_RES) DE_EMP_REC ");
-    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS A With (readuncommitted) ");
-    prutaReporte.append("INNER JOIN     IDOSGD.TDTX_REMITOS_RESUMEN B  With (readuncommitted) ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
-    prutaReporte.append("INNER JOIN     IDOSGD.TDTC_EXPEDIENTE C  With (readuncommitted) ON C.NU_ANN_EXP=A.NU_ANN_EXP AND C.NU_SEC_EXP=A.NU_SEC_EXP ");
+    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    prutaReporte.append("INNER JOIN     IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
+    prutaReporte.append("INNER JOIN     IDOSGD.TDTC_EXPEDIENTE C WITH (NOLOCK) ON C.NU_ANN_EXP=A.NU_ANN_EXP AND C.NU_SEC_EXP=A.NU_SEC_EXP ");
     prutaReporte.append("WHERE 1=1 ");
     
     try {
@@ -1415,7 +1415,7 @@ public class MesaPartesDaoImp
        // prutaReporte.append(" AND C.CCOD_TIPO_EXP = :codTipoExp");
       //  objectParam.put("codTipoExp", buscarDocumentoExtRecepBean.getCoTipoExp());
         
-        prutaReporte.append(" and exists( select  CCOD_TIPO_EXP from IDOSGD.tdtc_expediente where NU_SEC_EXP=A.NU_SEC_EXP");
+        prutaReporte.append(" and exists( select  CCOD_TIPO_EXP from IDOSGD.tdtc_expediente WITH (NOLOCK) where NU_SEC_EXP=A.NU_SEC_EXP");
         prutaReporte.append(" and NU_ANN_EXP=A.NU_ANN_EXP and CCOD_TIPO_EXP=:codTipoExp)");
     	objectParam.put("codTipoExp", buscarDocumentoExtRecepBean.getCoTipoExp());
       } 

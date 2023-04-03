@@ -93,10 +93,19 @@ public class DocumentoMensajeriaServiceImp   implements DocumentoMensajeriaServi
     return vReturn;
   }
   
+  /*
+   * MODIFICADO: 12/07/2022 0027
+   * DEVELOPER: ESILVERIO
+   */
   public String updMensajeriaDocumentoRecibir(String codigos) {
     String vReturn = "ERR";
+    String[] arrCodigo = codigos.split(",");
     try {
-      vReturn = this.mensajeriaDao.updMensajeriaDocumentoRecibir(codigos);
+    	for (int i = 0; i < arrCodigo.length; i++) {
+    		vReturn = this.mensajeriaDao.updMensajeriaDocumentoRecibir(arrCodigo[i]);
+    		if ("ERR".equals(vReturn))
+    			break;
+    	}
     } catch (Exception e) {
       vReturn = "ERR";
     } 

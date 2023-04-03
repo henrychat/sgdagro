@@ -790,7 +790,7 @@ public class MensajesDaoImp
 
     
     try {
-      sqlQry2.append("SET LANGUAGE Español CONVERT(VARCHAR(20),IDOSGD.PK_SGD_CONSULTAS_CALCULAR_DIAS_HABILES( CONVERT(DATETIME,'" + descargaMensaje.getFe_ent_msj() + "')  ,1),103)    ");
+      sqlQry2.append("SET LANGUAGE Español select CONVERT(VARCHAR(20),IDOSGD.PK_SGD_CONSULTAS_CALCULAR_DIAS_HABILES( CONVERT(DATETIME,'" + descargaMensaje.getFe_ent_msj() + "')  ,1),103)    ");
       String snufechai = (String)this.jdbcTemplate.queryForObject(sqlQry2.toString(), String.class);
 
       

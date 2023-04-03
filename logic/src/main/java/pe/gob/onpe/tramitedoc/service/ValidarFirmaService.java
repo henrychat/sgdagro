@@ -11,6 +11,7 @@ package pe.gob.onpe.tramitedoc.service;
  * @author WCutipa
  */
 public interface ValidarFirmaService {
-    String getValidaCertificadoEmp(String filePdf,String pNuDni,String pNuRUC);
+	String getValidaCertificadoEmp(String filePdf,String pNuDni,String pNuRUC);
+    String getValidaCertificadoEmp_1(String filePdf,String pNuDni,String pNuRUC);
     String getValidaCertificadoEmp(String filePdf, String pNuDni);
 }

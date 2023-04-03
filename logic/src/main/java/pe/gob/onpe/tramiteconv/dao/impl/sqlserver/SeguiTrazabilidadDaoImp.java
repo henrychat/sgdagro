@@ -52,7 +52,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 	sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](A.CO_DEP_EMI) as DEPENDENCIA_ORIGEN, IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (a.NU_ANN, a.NU_EMI) REMITENTE,   ");
     sql.append(" DE_ASU ASUNTO,CASE A.NU_CANDES     WHEN 1 THEN (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP](A.NU_ANN, A.NU_EMI))  ");
     sql.append(" ELSE (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_TI_DES_EMP_V](A.NU_ANN, A.NU_EMI))     END as destinos ");
-    sql.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+    sql.append(" FROM IDOSGD.TDTV_REMITOS A  WITH (NOLOCK) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R  WITH (NOLOCK) ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
     sql.append("AND A.ES_ELI = '0' 		AND A.ES_DOC_EMI NOT IN ('5', '9', '7') AND A.IN_OFICIO = '0' AND A.CO_GRU IN ('1','2','3')  ");
     sql.append("Where 1=1");
 
@@ -70,7 +70,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     	sql.append(" and  ( a.co_emp_emi= :COD_EMP_EMI_ or A.CO_EMP_RES=:COD_EMP_RES_ ");
     	sql.append(" or exists (");
     	
-        sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD With (readuncommitted)  ");
+        sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD WITH (NOLOCK) ");
  		     sql.append("  where DD.NU_ANN = A.NU_ANN AND DD.NU_EMI = A.NU_EMI and ");
  		     sql.append(" (dd.CO_EMP_DES= :COD_EMP_DES_ or dd.CO_EMP_REC=:CO_EMP_REC_) ");
  		    
@@ -263,7 +263,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
   public DocumentoSeguiEstEmitidoBean existeDocumentoReferenciado(BuscarDocTrazabilidadBean buscarDocumentoSeguiEstEmiBean) {
     StringBuffer sql = new StringBuffer();
     DocumentoSeguiEstEmitidoBean documentoSeguiEstEmitidoBean = null;
-    sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\nWHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
+    sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) \nWHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
 
 
     
@@ -374,9 +374,9 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("\t\t\t\tb.fe_ate_doc, ");
     sql.append("\t\t\t\tCONVERT(VARCHAR(10), b.fe_arc_doc, 3) fe_arc_doc_CORTA, ");
     sql.append("\t\t\t\tCONVERT(VARCHAR(10), b.fe_ate_doc, 3) fe_ate_doc_CORTA ");
-    sql.append("\tFROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("\tINNER JOIN\t IDOSGD.TDTV_DESTINOS B ON  A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
-    sql.append("\tINNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C ON C.NU_ANN=B.NU_ANN AND C.NU_EMI = B.NU_EMI ");
+    sql.append("\tFROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("\tINNER JOIN\t IDOSGD.TDTV_DESTINOS B WITH (NOLOCK) ON  A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI ");
+    sql.append("\tINNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C WITH (NOLOCK) ON C.NU_ANN=B.NU_ANN AND C.NU_EMI = B.NU_EMI ");
     sql.append("\tINNER JOIN\t IDOSGD.TDTR_MOTIVO D ON  b.co_mot = d.co_mot ");
     sql.append("\tINNER JOIN\t (SELECT y.nu_ann, ");
     sql.append("\t\t\t\t y.nu_emi, ");
@@ -385,7 +385,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("\t\t  FROM (SELECT x.nu_ann, ");
     sql.append("\t\t\t\t\t   x.nu_emi, ");
     sql.append("\t\t\t\t\t   (DATEADD(DAY, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, x.fe_emi), nu_dia_ate)), CONVERT(DATE, x.fe_emi))) AS fe_finaliza ");
-    sql.append("\t\t\t\tFROM IDOSGD.tdtv_remitos x) y ");
+    sql.append("\t\t\t\tFROM IDOSGD.tdtv_remitos x WITH (NOLOCK)) y ");
     sql.append("\t\t ) E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi ");
     sql.append("\tINNER JOIN\t  [IDOSGD].[PK_SGD_DESCRIPCION_ARBOL_SEG](:pCoAnio, :pNuEmi) F ON F.NU_ANN=A.NU_ANN AND F.NU_EMI=A.NU_EMI ");
     
@@ -432,7 +432,7 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("\t\tB.NU_COR_DES, ");
     sql.append("\t\tC.NU_EXPEDIENTE, ");
     sql.append("\t\tCONVERT(VARCHAR(10), (SELECT FE_EXP ");
-    sql.append("\t\t\t\t\t\t\t  FROM IDOSGD.TDTC_EXPEDIENTE ");
+    sql.append("\t\t\t\t\t\t\t  FROM IDOSGD.TDTC_EXPEDIENTE WITH (NOLOCK) ");
     sql.append("\t\t\t\t\t\t\t  WHERE NU_ANN_EXP=A.NU_ANN_EXP ");
     sql.append("\t\t\t\t\t\t\t  AND NU_SEC_EXP=A.NU_SEC_EXP), 103) FE_EXP_CORTA, ");
     sql.append("\t\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_PROCESO_EXP](C.CO_PROCESO_EXP) DE_PROCESO_EXP, ");
@@ -461,9 +461,9 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("\t\tCONVERT(VARCHAR(10), B.FE_ARC_DOC, 103) FE_ARCHIVAMIENTO_CORTA, ");
     sql.append("\t\t[IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS](B.ES_DOC_REC, 'TDTV_DESTINOS') DE_ES_DOC_REC, ");
     sql.append("\t\t[IDOSGD].[PK_SGD_DESCRIPCION_DE_NOM_EMP](A.CO_EMP_RES) DE_EMP_RES ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("INNER JOIN\t IDOSGD.TDTV_DESTINOS B ON A.NU_ANN = B.NU_ANN AND A.NU_EMI = B.NU_EMI ");
-    sql.append("INNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C ON C.NU_ANN = A.NU_ANN  AND C.NU_EMI = A.NU_EMI ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("INNER JOIN\t IDOSGD.TDTV_DESTINOS B WITH (NOLOCK) ON A.NU_ANN = B.NU_ANN AND A.NU_EMI = B.NU_EMI ");
+    sql.append("INNER JOIN\t IDOSGD.TDTX_REMITOS_RESUMEN C WITH (NOLOCK) ON C.NU_ANN = A.NU_ANN  AND C.NU_EMI = A.NU_EMI ");
     sql.append("WHERE A.ES_ELI='0' ");
     sql.append("AND B.ES_ELI='0' ");
     sql.append("AND A.ES_DOC_EMI NOT IN ('5', '9', '7') ");
@@ -502,8 +502,8 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
     sql.append("        b.nu_ann_ref, ");
     sql.append("        b.nu_emi_ref, ");
     sql.append("        b.nu_des_ref ");
-    sql.append("FROM IDOSGD.tdtv_remitos a  ");
-    sql.append("INNER JOIN\t IDOSGD.TDTR_REFERENCIA b ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref ");
+    sql.append("FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) ");
+    sql.append("INNER JOIN\t IDOSGD.TDTR_REFERENCIA b WITH (NOLOCK) ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref ");
     sql.append("WHERE   b.NU_EMI=? ");
     sql.append("AND b.NU_ANN=? ");
     
@@ -668,11 +668,11 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
        sql.append(" WHEN a.nu_dia_ate = 0 OR D.in_dia = 0 THEN '0' END co_est_ven, CASE  WHEN a.nu_dia_ate > 0 AND\tCONVERT(DATE, GETDATE()) > CONVERT(DATE, E.fe_finaliza) AND b.fe_ate_doc IS NULL  AND b.fe_arc_doc IS NULL AND d.in_dia = 0  THEN (SELECT RETORNO "); 
        sql.append("	FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](fe_finaliza, CONVERT(DATETIME, GETDATE()))) ELSE 0 END nu_dia_exc,        CONVERT(VARCHAR(10), b.fe_arc_doc, 103) fe_arc_doc_CORTA, "); 
        sql.append(" CONVERT(VARCHAR(10), b.fe_ate_doc, 103) fe_ate_doc_CORTA "); 
-       sql.append(" FROM IDOSGD.TDTV_REMITOS A With (readuncommitted) INNER JOIN IDOSGD.TDTV_DESTINOS B With (readuncommitted) ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI   INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C ON C.NU_ANN=B.NU_ANN AND C.NU_EMI = B.NU_EMI "); 
-       sql.append("  INNER JOIN  IDOSGD.TDTR_MOTIVO D  With (readuncommitted) ON b.co_mot = d.co_mot ");  
+       sql.append(" FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) INNER JOIN IDOSGD.TDTV_DESTINOS B WITH (NOLOCK) ON A.NU_ANN=B.NU_ANN AND A.NU_EMI=B.NU_EMI   INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C WITH (NOLOCK) ON C.NU_ANN=B.NU_ANN AND C.NU_EMI = B.NU_EMI "); 
+       sql.append("  INNER JOIN  IDOSGD.TDTR_MOTIVO D  WITH (NOLOCK) ON b.co_mot = d.co_mot ");  
        sql.append(" INNER JOIN (SELECT y.nu_ann, y.nu_emi, y.fe_finaliza, (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_TRA](CONVERT(DATETIME, GETDATE()), y.fe_finaliza)) nu_dia_fal "); 
        sql.append("  FROM (SELECT x.nu_ann,  x.nu_emi,   (DATEADD(DAY,     (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_DIA_MAS](CONVERT(DATETIME, X.FE_EMI), nu_dia_ate)),");
-       sql.append("  CONVERT(DATE, x.fe_emi))) AS fe_finaliza FROM IDOSGD.tdtv_remitos x With (readuncommitted) ) y) E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi  WHERE 1=1 ");
+       sql.append("  CONVERT(DATE, x.fe_emi))) AS fe_finaliza FROM IDOSGD.tdtv_remitos x WITH (NOLOCK) ) y) E ON a.nu_ann = E.nu_ann AND a.nu_emi = E.nu_emi  WHERE 1=1 ");
        
       String pNUAnn = buscarDocumentoSeguiEstEmiBean.getCoAnnio();
       if (!buscarDocumentoSeguiEstEmiBean.getEsFiltroFecha().equals("1") || !pNUAnn.equals("0")) {
@@ -852,11 +852,11 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 	    	
 	        sql.append(" select  case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
 	    	sql.append("   then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as SIGLA, R.NU_EXPEDIENTE    "); 
-	    	sql.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
-		    sql.append(" with (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+	    	sql.append(" FROM IDOSGD.TDTV_REMITOS A  WITH (NOLOCK) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
+		    sql.append(" WITH (NOLOCK) ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
 		    sql.append(" and ( a.CO_DEP_EMI= :COD_DEP  ");
 		 	sql.append(" or exists (");
-	    	 sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD With (readuncommitted)  ");
+	    	 sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD WITH (NOLOCK) ");
 	 		     sql.append("  where DD.NU_ANN = A.NU_ANN AND DD.NU_EMI = A.NU_EMI and ");
 	 		     sql.append(" dd.CO_DEP_DES= :COD_DEP ) )  ");
 	 		    
@@ -903,11 +903,11 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 	    	
 	        sql.append(" select  case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
 	    	sql.append("   then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as SIGLA, R.NU_EXPEDIENTE    "); 
-	    	sql.append(" FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
-		     sql.append(" with (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+	    	sql.append(" FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
+		     sql.append(" WITH (NOLOCK) ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
 		     sql.append(" and ( a.co_emp_emi= :COD_EMP_EMI_ or A.CO_EMP_RES= :COD_EMP_RES_  ");
 		 	sql.append(" or exists (");
-	    	 sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD With (readuncommitted)  ");
+	    	 sql.append("  select     1 as existe from   IDOSGD.TDTV_DESTINOS DD WITH (NOLOCK) ");
 	 		     sql.append("  where DD.NU_ANN = A.NU_ANN AND DD.NU_EMI = A.NU_EMI and ");
 	 		     sql.append(" (dd.CO_EMP_DES= :COD_EMP_DES_ or dd.CO_EMP_REC=:CO_EMP_REC_) ");
 	 		    
@@ -953,9 +953,9 @@ public class SeguiTrazabilidadDaoImp    extends SimpleJdbcDaoBase   implements S
 	  try {
 		  	 sql.append(" select  case when A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
 		  	 sql.append("then [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA](A.CO_DEP_EMI) else '' end as SIGLA, R.NU_EXPEDIENTE ");
-		  	 sql.append("      FROM IDOSGD.TDTV_REMITOS A  With (readuncommitted)  "); 
+		  	 sql.append("      FROM IDOSGD.TDTV_REMITOS A  WITH (NOLOCK)  "); 
 		     sql.append(" INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN R ");
-		  	 sql.append("  With (readuncommitted)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
+		  	 sql.append("  WITH (NOLOCK)  ON R.NU_ANN = A.NU_ANN AND R.NU_EMI = A.NU_EMI ");
 		  	 sql.append("  where 1=1  AND A.CO_GRU IN ('1','3')  and  TI_EMI_ref  is null ");
 		    
 		   

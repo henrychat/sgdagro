@@ -3,12 +3,19 @@ package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCallback;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobCreator;
@@ -25,6 +32,10 @@ import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 @Repository("anexoDocumentoDao")
 public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements AnexoDocumentoDao
 {
+
+  private SimpleJdbcCall spdataSource;
+  private static Logger logger = Logger.getLogger("AnexoDocumentoDaoImp");
+
   public List<ReferenciaBean> getDocumentosReferencia(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
     sql.append(" SELECT  IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(a.co_tip_doc_adm) li_tip_doc, ");
@@ -48,8 +59,8 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     sql.append("        b.nu_ann_ref, ");
     sql.append("        b.nu_emi_ref, ");
     sql.append("        ISNULL(LTRIM(RTRIM(CAST(b.nu_des_ref AS VARCHAR))), 'N') nu_des_ref,ISNULL(a.de_asu,'') as deAsu,a.CO_TIP_DOC_ADM  as coTipDocAdm ");
-    sql.append(" FROM IDOSGD.tdtv_remitos a  ");
-    sql.append(" INNER JOIN  IDOSGD.TDTR_REFERENCIA b ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref  ");
+    sql.append(" FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) ");
+    sql.append(" INNER JOIN  IDOSGD.TDTR_REFERENCIA b WITH (NOLOCK) ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref  ");
     sql.append(" WHERE  b.nu_ann = ? ");
     sql.append(" and b.nu_emi = ? ");
     
@@ -90,7 +101,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     sql.append("        a.nu_ann nu_ann_ref, ");
     sql.append("        a.nu_emi nu_emi_ref, ");
     sql.append("        'N'  nu_des_ref ");
-    sql.append(" FROM IDOSGD.tdtv_remitos a ");
+    sql.append(" FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) ");
     sql.append(" WHERE a.nu_ann = ? ");
     sql.append(" and a.nu_emi = ? ");
     
@@ -131,9 +142,9 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     sql.append("        CAST(c.nu_des AS VARCHAR) nu_des, ");
     sql.append("        a.nu_ann_ref, ");
     sql.append("        a.nu_emi_ref ");
-    sql.append(" FROM IDOSGD.tdtr_referencia a  ");
-    sql.append(" INNER JOIN  IDOSGD.tdtv_remitos b ON a.nu_ann = b.nu_ann and a.nu_emi = b.nu_emi ");
-    sql.append(" INNER JOIN  IDOSGD.tdtv_destinos c ON b.nu_ann = c.nu_ann and b.nu_emi = c.nu_emi ");
+    sql.append(" FROM IDOSGD.tdtr_referencia a WITH (NOLOCK) ");
+    sql.append(" INNER JOIN  IDOSGD.tdtv_remitos b WITH (NOLOCK) ON a.nu_ann = b.nu_ann and a.nu_emi = b.nu_emi ");
+    sql.append(" INNER JOIN  IDOSGD.tdtv_destinos c WITH (NOLOCK) ON b.nu_ann = c.nu_ann and b.nu_emi = c.nu_emi ");
     sql.append(" WHERE  b.es_eli = '0' ");
     sql.append(" and b.es_doc_emi <> '9' ");
     sql.append(" and a.nu_ann_ref = ? ");
@@ -175,8 +186,8 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     sql.append("        c.nu_ann, ");
     sql.append("        c.nu_emi, ");
     sql.append("        CAST(c.nu_des AS VARCHAR) nu_des ");
-    sql.append(" FROM IDOSGD.tdtv_remitos b  ");
-    sql.append(" INNER JOIN  IDOSGD.tdtv_destinos c ON b.nu_ann = c.nu_ann and b.nu_emi = c.nu_emi  ");
+    sql.append(" FROM IDOSGD.tdtv_remitos b WITH (NOLOCK)  ");
+    sql.append(" INNER JOIN  IDOSGD.tdtv_destinos c WITH (NOLOCK) ON b.nu_ann = c.nu_ann and b.nu_emi = c.nu_emi  ");
     sql.append(" WHERE  b.es_eli = '0'  and c.es_eli='0' ");
     sql.append(" and b.es_doc_emi <> '9' ");
     sql.append(" and b.nu_ann = ? ");
@@ -207,7 +218,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
     String result = null;
     
     StringBuffer sql = new StringBuffer();
-    sql.append(" select CAST(ISNULL(max(nu_ane),0) + 1 AS VARCHAR(10)) nu_ane  from IDOSGD.tdtv_anexos  where nu_ann = ?  and nu_emi = ? ");
+    sql.append(" select CAST(ISNULL(max(nu_ane),0) + 1 AS VARCHAR(10)) nu_ane  from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ?  and nu_emi = ? ");
 
 
     try {
@@ -347,7 +358,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   public String getNombreArchivo(String pNuAnn, String pNuEmi, String pNuAne) {
     StringBuffer sql = new StringBuffer();
     String result = "NO_OK";
-    sql.append("select de_det from IDOSGD.tdtv_anexos where nu_ann=? and nu_emi=? and nu_ane=?");
+    sql.append("select de_det from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann=? and nu_emi=? and nu_ane=?");
     
     try {
       result = (String)this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[] { pNuAnn, pNuEmi, pNuAne });
@@ -374,7 +385,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   
   public DocumentoObjBean getPropiedadesArchivo(String pnuAnn, String pnuEmi, String pnuAne) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select  nu_ann,  nu_emi,  de_rut_ori nombre_Archivo, UPPER(right(de_rut_ori,3 ))  tipo_doc from IDOSGD.tdtv_anexos  where nu_ann = ? and nu_emi = ? AND NU_ANE = ?");
+    sql.append("select  nu_ann,  nu_emi,  de_rut_ori nombre_Archivo, UPPER(right(de_rut_ori,3 ))  tipo_doc from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ? and nu_emi = ? AND NU_ANE = ?");
 
 
 
@@ -399,7 +410,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
   
   public String updRemitosResumenInFirmaAnexos(String pFirmaAnexo, String pnuAnn, String pnuEmi) {
-    String vReturn = "NO_OK";
+    /*String vReturn = "NO_OK";
     StringBuffer sqlUpd = new StringBuffer();
     sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET IN_FIRMA_ANEXO = ? WHERE NU_ANN = ?  AND NU_EMI = ? ");
 
@@ -414,7 +425,37 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
       e.printStackTrace();
     } 
     
+    return vReturn;*/
+
+    /* INICIO
+  DEVELOPER:  LARH
+  FECHA_MODIFICACION: 07/07/2022
+  ACCION: Modificacion de llamado a Query por SP*/
+
+    String vReturn = "NO_OK";
+    StringBuffer sqlUpd = new StringBuffer();
+    this.spdataSource = new SimpleJdbcCall(this.dataSource).withProcedureName("[IDOSGD].[PK_SGD_TRAMITE_PROCE_REMITOS_RESUMEN_FIRMA_ANEXO_UDP]")
+            .withoutProcedureColumnMetaDataAccess()
+            .useInParameterNames("p_anio", "p_nuEmi", "p_pFirmaAnexo")
+            .declareParameters(
+                    new SqlParameter("p_anio", Types.VARCHAR),
+                    new SqlParameter("p_nuEmi", Types.VARCHAR),
+                    new SqlParameter("p_pFirmaAnexo", Types.VARCHAR));
+    SqlParameterSource in = new MapSqlParameterSource()
+            .addValue("p_anio", pnuAnn)
+            .addValue("p_nuEmi", pnuEmi)
+            .addValue("p_pFirmaAnexo", pFirmaAnexo);
+    try {
+      this.spdataSource.execute(in);
+      vReturn = "OK";
+      this.spdataSource = null;
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      ex.printStackTrace();
+    }
+
     return vReturn;
+
   }
 
   
@@ -451,7 +492,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   public String getCanAnexosReqFirma(String nuAnn, String nuEmi) {
     String vReturn = "NO_OK";
     try {
-      vReturn = (String)this.jdbcTemplate.queryForObject("SELECT count(1) from IDOSGD.tdtv_anexos where NU_ANN=? AND NU_EMI=? AND REQ_FIRMA='1'", String.class, new Object[] { nuAnn, nuEmi });
+      vReturn = (String)this.jdbcTemplate.queryForObject("SELECT count(1) from IDOSGD.tdtv_anexos WITH (NOLOCK) where NU_ANN=? AND NU_EMI=? AND REQ_FIRMA='1'", String.class, new Object[] { nuAnn, nuEmi });
 
     
     }

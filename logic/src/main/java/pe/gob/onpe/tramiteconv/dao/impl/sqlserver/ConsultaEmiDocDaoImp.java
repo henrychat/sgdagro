@@ -53,8 +53,8 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
     sql.append("\t\t\tA.NU_CANDES, ");
     sql.append("\t\t\tA.CO_EMP_RES, ");
     sql.append(" CASE A.TI_ENV_MSJ WHEN '0' THEN 'MESA DE PARTES' WHEN '1' THEN 'ENVDIRECTO' WHEN '2' THEN 'MESA VIRTUAL' END    recursoenvio");
-    sql.append("\t\tFROM IDOSGD.TDTV_REMITOS A  ");
-    sql.append("            INNER JOIN  IDOSGD.TDTX_REMITOS_RESUMEN B ON B.NU_ANN = A.NU_ANN  AND B.NU_EMI = A.NU_EMI ");
+    sql.append("\t\tFROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("            INNER JOIN  IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN = A.NU_ANN  AND B.NU_EMI = A.NU_EMI ");
     sql.append("\t\tWHERE 1=1 ");
 
     
@@ -208,8 +208,8 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
 	    sql.append(" A.NU_CANDES, ");
 	    sql.append(" A.CO_EMP_RES, ");
 	    sql.append(" CASE A.TI_ENV_MSJ WHEN '0' THEN 'MESA DE PARTES' WHEN '1' THEN 'ENVDIRECTO' WHEN '2' THEN 'MESA VIRTUAL' END    recursoenvio");
-	    sql.append(" FROM IDOSGD.TDTV_REMITOS A ");
-	    sql.append("            INNER JOIN  IDOSGD.TDTX_REMITOS_RESUMEN B  ON B.NU_ANN = A.NU_ANN  AND B.NU_EMI = A.NU_EMI ");
+	    sql.append(" FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+	    sql.append("            INNER JOIN  IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN = A.NU_ANN  AND B.NU_EMI = A.NU_EMI ");
 	    sql.append(" WHERE 1=1 ");
 
 	    
@@ -337,7 +337,7 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
   
   public DocumentoEmiConsulBean getDocumentoEmiAdm(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
-    sql.append("SELECT CONVERT(VARCHAR(10),(SELECT FE_EXP FROM IDOSGD.TDTC_EXPEDIENTE WHERE NU_ANN_EXP=A.NU_ANN_EXP AND NU_SEC_EXP=A.NU_SEC_EXP),103) FE_EXP_CORTA,\nA.NU_ANN,A.NU_EMI,A.NU_COR_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(A.CO_DEP_EMI) DE_DEP_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(A.CO_LOC_EMI) DE_LOC_EMI,\nIDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_EMI) DE_EMP_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_RES) DE_EMP_RES,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\nB.NU_DOC,CONVERT(VARCHAR(10),A.FE_EMI,103) FE_EMI_CORTA,A.NU_DIA_ATE,A.DE_ASU,B.IN_EXISTE_DOC EXISTE_DOC,B.IN_EXISTE_ANEXO EXISTE_ANEXO,\nIDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(B.CO_PROCESO_EXP) DE_PROCESO_EXP,IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(A.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,\nIDOSGD.PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE(A.NU_ANN_EXP,A.NU_SEC_EXP) NU_EXPEDIENTE\nfrom IDOSGD.TDTV_REMITOS A INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI \nwhere A.NU_ANN=?\nAND A.NU_EMI=?\n");
+    sql.append("SELECT CONVERT(VARCHAR(10),(SELECT FE_EXP FROM IDOSGD.TDTC_EXPEDIENTE WHERE NU_ANN_EXP=A.NU_ANN_EXP AND NU_SEC_EXP=A.NU_SEC_EXP),103) FE_EXP_CORTA,\nA.NU_ANN,A.NU_EMI,A.NU_COR_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(A.CO_DEP_EMI) DE_DEP_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(A.CO_LOC_EMI) DE_LOC_EMI,\n IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_EMI) DE_EMP_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_RES) DE_EMP_RES,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\nB.NU_DOC,CONVERT(VARCHAR(10),A.FE_EMI,103) FE_EMI_CORTA,A.NU_DIA_ATE,A.DE_ASU,B.IN_EXISTE_DOC EXISTE_DOC,B.IN_EXISTE_ANEXO EXISTE_ANEXO,\nIDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(B.CO_PROCESO_EXP) DE_PROCESO_EXP,IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(A.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,\nIDOSGD.PK_SGD_DESCRIPCION_DE_NU_EXPEDIENTE(A.NU_ANN_EXP,A.NU_SEC_EXP) NU_EXPEDIENTE\nfrom IDOSGD.TDTV_REMITOS A WITH (NOLOCK) INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI \nwhere A.NU_ANN=?\nAND A.NU_EMI=?\n");
 
 
     DocumentoEmiConsulBean documentoEmiConsulBean = new DocumentoEmiConsulBean();
@@ -358,7 +358,7 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
     String result = "NO_OK";
     
     sql.append("SELECT MAX(ti_des) ");
-    sql.append("FROM IDOSGD.TDTV_DESTINOS ");
+    sql.append("FROM IDOSGD.TDTV_DESTINOS WITH (NOLOCK) ");
     sql.append("WHERE nu_emi = ? ");
     sql.append("AND nu_ann = ? ");
     sql.append("AND ES_ELI = '0' ");
@@ -375,7 +375,7 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
   public List<DestinatarioDocumentoEmiConsulBean> getLstDestintariotlbEmi(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
     List<DestinatarioDocumentoEmiConsulBean> list = new ArrayList<DestinatarioDocumentoEmiConsulBean>();
-    sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(a.co_loc_des), 1, 100) de_local,\na.co_dep_des co_dependencia,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_des), 1, 100) de_dependencia,\na.co_emp_des co_empleado,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(a.co_emp_des), 1, 100) de_empleado,\na.co_mot co_tramite,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_MOTIVO(a.co_mot), 1, 100) de_tramite,\na.co_pri co_prioridad,(SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_PRIORIDAD(a.co_pri)) de_prioridad,\na.de_pro de_indicaciones,\na.NU_RUC_DES nu_ruc,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(a.NU_RUC_DES), 1, 100) de_proveedor,\na.NU_DNI_DES nu_dni,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(a.NU_DNI_DES), 1, 100) de_ciudadano,\na.CO_OTR_ORI_DES co_otro_origen,\nCOALESCE(\na.CO_OTR_ORI_DES,\n(SELECT C.DE_APE_PAT_OTR+' '+C.DE_APE_MAT_OTR+', '+C.DE_NOM_OTR + ' - ' +\n     C.DE_RAZ_SOC_OTR +'##'+\n     COALESCE(B.CELE_DESELE,'   ') +'##'+\n     C.NU_DOC_OTR_ORI  \n  FROM IDOSGD.TDTR_OTRO_ORIGEN C\n  LEFT OUTER JOIN  (  SELECT CELE_CODELE, CELE_DESELE\n    FROM IDOSGD.SI_ELEMENTO\n   WHERE CTAB_CODTAB ='TIP_DOC_IDENT') B\n ON C.CO_TIP_OTR_ORI = B.CELE_CODELE\n WHERE C.CO_OTR_ORI = a.CO_OTR_ORI_DES\n),\nNULL\n) de_otro_origen_full,\n a.ti_des co_tipo_destino\n FROM IDOSGD.tdtv_destinos a\n where nu_ann = ? and nu_emi = ?\n AND ES_ELI='0' AND NU_EMI_REF is null\n order by 3");
+    sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(a.co_loc_des), 1, 100) de_local,\na.co_dep_des co_dependencia,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_des), 1, 100) de_dependencia,\na.co_emp_des co_empleado,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(a.co_emp_des), 1, 100) de_empleado,\na.co_mot co_tramite,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_MOTIVO(a.co_mot), 1, 100) de_tramite,\na.co_pri co_prioridad,(SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_PRIORIDAD(a.co_pri)) de_prioridad,\na.de_pro de_indicaciones,\na.NU_RUC_DES nu_ruc,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(a.NU_RUC_DES), 1, 100) de_proveedor,\na.NU_DNI_DES nu_dni,SUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(a.NU_DNI_DES), 1, 100) de_ciudadano,\na.CO_OTR_ORI_DES co_otro_origen,\nCOALESCE(\na.CO_OTR_ORI_DES,\n(SELECT C.DE_APE_PAT_OTR+' '+C.DE_APE_MAT_OTR+', '+C.DE_NOM_OTR + ' - ' +\n     C.DE_RAZ_SOC_OTR +'##'+\n     COALESCE(B.CELE_DESELE,'   ') +'##'+\n     C.NU_DOC_OTR_ORI  \n  FROM IDOSGD.TDTR_OTRO_ORIGEN C\n  LEFT OUTER JOIN  (  SELECT CELE_CODELE, CELE_DESELE\n    FROM IDOSGD.SI_ELEMENTO \n   WHERE CTAB_CODTAB ='TIP_DOC_IDENT') B\n ON C.CO_TIP_OTR_ORI = B.CELE_CODELE\n WHERE C.CO_OTR_ORI = a.CO_OTR_ORI_DES\n),\nNULL\n) de_otro_origen_full,\n a.ti_des co_tipo_destino\n FROM IDOSGD.tdtv_destinos a WITH (NOLOCK) \n where nu_ann = ? and nu_emi = ?\n AND ES_ELI='0' AND NU_EMI_REF is null\n order by 3");
 
 
     
@@ -395,7 +395,7 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
   public List<ReferenciaConsulBean> getLstDocumReferenciatblEmi(String pnuAnn, String pnuEmi) {
     StringBuffer sql = new StringBuffer();
     List<ReferenciaConsulBean> list = new ArrayList<ReferenciaConsulBean>();
-    sql.append("SELECT \nIDOSGD.PK_SGD_DESCRIPCION_de_documento (a.co_tip_doc_adm) de_tipo_doc,\n(CASE WHEN a.ti_emi='01' OR a.ti_emi='05' THEN  a.nu_doc_emi + '-' + a.nu_ann + '-' + a.de_doc_sig ELSE a.de_doc_sig END)li_nu_doc,\nSUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_emi), 1, 100) de_dep_emi, \nCONVERT(VARCHAR(10),a.fe_emi,103),\nb.nu_ann,\nb.nu_emi,\nCOALESCE(RTRIM(LTRIM(CAST(b.nu_des AS VARCHAR))),'N') nu_des ,\nb.nu_ann_ref,\nb.nu_emi_ref,\nCOALESCE(RTRIM(LTRIM(CAST(b.nu_des_ref AS VARCHAR))),'N') nu_des_ref,\nb.co_ref,\n(CASE WHEN COALESCE(RTRIM(LTRIM(CAST(b.nu_des_ref AS VARCHAR))),'N')='N' THEN 'emi'\tELSE 'rec' END)tip_doc_ref, \na.co_tip_doc_adm,'BD' accion_bd\nFROM IDOSGD.tdtv_remitos a INNER JOIN IDOSGD.TDTR_REFERENCIA b ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref \nWHERE  b.nu_ann = ?\nand b.nu_emi = ?");
+    sql.append("SELECT \nIDOSGD.PK_SGD_DESCRIPCION_de_documento (a.co_tip_doc_adm) de_tipo_doc,\n(CASE WHEN a.ti_emi='01' OR a.ti_emi='05' THEN  a.nu_doc_emi + '-' + a.nu_ann + '-' + a.de_doc_sig ELSE a.de_doc_sig END)li_nu_doc,\nSUBSTRING(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_emi), 1, 100) de_dep_emi, \nCONVERT(VARCHAR(10),a.fe_emi,103),\nb.nu_ann,\nb.nu_emi,\nCOALESCE(RTRIM(LTRIM(CAST(b.nu_des AS VARCHAR))),'N') nu_des ,\nb.nu_ann_ref,\nb.nu_emi_ref,\nCOALESCE(RTRIM(LTRIM(CAST(b.nu_des_ref AS VARCHAR))),'N') nu_des_ref,\nb.co_ref,\n(CASE WHEN COALESCE(RTRIM(LTRIM(CAST(b.nu_des_ref AS VARCHAR))),'N')='N' THEN 'emi'\tELSE 'rec' END)tip_doc_ref, \na.co_tip_doc_adm,'BD' accion_bd\nFROM IDOSGD.tdtv_remitos a WITH (NOLOCK) INNER JOIN IDOSGD.TDTR_REFERENCIA b WITH (NOLOCK) ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref \nWHERE  b.nu_ann = ?\nand b.nu_emi = ?");
 
   
     try {
@@ -414,7 +414,7 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
   public DocumentoEmiConsulBean existeDocumentoReferenciado(BuscarDocumentoEmiConsulBean buscarDocumentoEmiConsulBean) {
     StringBuffer sql = new StringBuffer();
     DocumentoEmiConsulBean documentoEmiConsulBean = null;
-    sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\nWHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
+    sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) \n WHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
 
  
     try {
@@ -577,8 +577,8 @@ public class ConsultaEmiDocDaoImp   extends SimpleJdbcDaoBase   implements Consu
     prutaReporte.append("FROM IDOSGD.RHTM_PER_EMPLEADOS With (readuncommitted)  ");
     prutaReporte.append("WHERE CEMP_CODEMP = A.CO_EMP_RES) DE_EMP_RES, ");
     prutaReporte.append("B.NU_EXPEDIENTE ");
-    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS A With (readuncommitted) ");
-    prutaReporte.append("INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B With (readuncommitted) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
+    prutaReporte.append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    prutaReporte.append("INNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
     prutaReporte.append("WHERE 1=1 ");
     
     try {

@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExpedienteBean {
+
     private String coDep;
     private String coExp;
     private String deExp;
@@ -20,7 +21,7 @@ public class ExpedienteBean {
     private String feUseCre;
     private String coUseMod;
     private String feUseMod;
-    
+
     private String nuAnnExp;
     private String nuSecExp;
     private String feExp;
@@ -39,7 +40,7 @@ public class ExpedienteBean {
     private String feCreaAudi;
     private String usModiAudi;
     private String feModiAudi;
-    private String esEstado;    
+    private String esEstado;
 
     public ExpedienteBean() {
     }

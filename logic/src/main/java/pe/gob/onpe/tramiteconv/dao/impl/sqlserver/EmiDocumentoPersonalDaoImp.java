@@ -2,6 +2,7 @@ package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,7 @@ import pe.gob.onpe.tramitedoc.bean.ReferenciaRemitoBean;
 import pe.gob.onpe.tramitedoc.dao.EmiDocumentoPersonalDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 
-
-
+import org.apache.log4j.Logger;
 
 
 
@@ -43,6 +43,10 @@ public class EmiDocumentoPersonalDaoImp
   extends SimpleJdbcDaoBase
   implements EmiDocumentoPersonalDao
 {
+
+  private SimpleJdbcCall spdataSource;
+  private static Logger logger = Logger.getLogger("EmiDocumentoPersonalDaoImp");
+
   public List<DocumentoEmiBean> getDocumentosEmiAdm(BuscarDocumentoEmiBean buscarDocumentoEmi) {
     StringBuffer sql = new StringBuffer();
     boolean bBusqFiltro = false;
@@ -74,8 +78,8 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("\t\tELSE 1 ");
     sql.append("\tEND EXISTE_ANEXO, ");
     sql.append("\tROW_NUMBER() OVER (ORDER BY A.NU_COR_EMI) AS ROWNUM ");
-    sql.append("\tFROM IDOSGD.TDTV_REMITOS A  With (readuncommitted) ");
-    sql.append("\tINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B With (readuncommitted) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
+    sql.append("\tFROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
+    sql.append("\tINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN B WITH (NOLOCK) ON B.NU_ANN=A.NU_ANN AND B.NU_EMI=A.NU_EMI ");
     sql.append("\tWHERE 1=1 ");
     sql.append(" AND A.CO_DEP_EMI = :pCoDepEmi");
 
@@ -194,7 +198,7 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("[IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS](A.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI, ");
     sql.append("[IDOSGD].[PK_SGD_DESCRIPCION_DE_DEPENDENCIA](A.CO_DEP_EMI) DE_DEP_EMI, ");
     sql.append("[IDOSGD].[PK_SGD_DESCRIPCION_DE_LOCAL](A.CO_LOC_EMI) DE_LOC_EMI ");
-    sql.append("from IDOSGD.TDTV_REMITOS A ");
+    sql.append("from IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ");
     sql.append("where A.ES_ELI='0' ");
     sql.append("AND A.TI_EMI='05' ");
     sql.append("AND A.NU_ANN = ? ");
@@ -239,7 +243,7 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("a.co_pri co_prioridad, ");
     sql.append("a.de_pro de_indicaciones, ");
     sql.append("a.ti_des co_tipo_destino ");
-    sql.append("FROM IDOSGD.tdtv_destinos a ");
+    sql.append("FROM IDOSGD.tdtv_destinos a WITH (NOLOCK) ");
     sql.append("where A.TI_DES = '01' ");
     sql.append("AND A.nu_ann = ? ");
     sql.append("AND A.nu_emi = ? ");
@@ -287,8 +291,8 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("'BD' accion_bd, ");
     sql.append("A.TI_EMI, ");
     sql.append("A.ES_ELI ");
-    sql.append("FROM IDOSGD.tdtv_remitos a  ");
-    sql.append("INNER JOIN IDOSGD.TDTR_REFERENCIA b ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref ");
+    sql.append("FROM IDOSGD.tdtv_remitos a WITH (NOLOCK) ");
+    sql.append("INNER JOIN IDOSGD.TDTR_REFERENCIA b WITH (NOLOCK) ON a.nu_ann = b.nu_ann_ref AND a.nu_emi = b.nu_emi_ref ");
     sql.append("WHERE b.nu_ann = ? ");
     sql.append("and b.nu_emi = ? ");
     sql.append("AND B.NU_DES IS NULL ");
@@ -573,19 +577,19 @@ public class EmiDocumentoPersonalDaoImp
     StringBuffer sqlQry3 = new StringBuffer();
     
     sqlQry1.append("SELECT ISNULL(MAX(nu_cor_emi), 0) + 1 ");
-    sqlQry1.append("FROM IDOSGD.tdtv_remitos ");
+    sqlQry1.append("FROM IDOSGD.tdtv_remitos WITH (NOLOCK) ");
     sqlQry1.append("WHERE nu_ann = ? ");
     sqlQry1.append("AND co_dep_emi = ? ");
     sqlQry1.append("AND CO_GRU = '2' ");
     
     sqlQry2.append("SELECT ISNULL(MAX(nu_doc), 0) + 1 ");
-    sqlQry2.append("FROM IDOSGD.tdtv_remitos ");
+    sqlQry2.append("FROM IDOSGD.tdtv_remitos WITH (NOLOCK) ");
     sqlQry2.append("WHERE NU_ANN = ? ");
     sqlQry2.append("AND CO_EMP_EMI = ? ");
     sqlQry2.append("AND CO_GRU = '2' ");
     
     sqlQry3.append("SELECT RIGHT(REPLICATE('0', 6) + CAST((ISNULL(MAX(NU_DOC_EMI), 0) + 1) AS VARCHAR), 6) ");
-    sqlQry3.append("FROM IDOSGD.TDTV_REMITOS TR ");
+    sqlQry3.append("FROM IDOSGD.TDTV_REMITOS TR WITH (NOLOCK) ");
     sqlQry3.append("WHERE TR.NU_ANN=? ");
     sqlQry3.append("AND TR.CO_TIP_DOC_ADM=? ");
     sqlQry3.append("AND TR.TI_EMI='05' ");
@@ -656,7 +660,7 @@ public class EmiDocumentoPersonalDaoImp
   public String getCanDocumentoEmiDuplicados(DocumentoEmiBean documentoEmiBean) {
     String vReturn = "NO_OK";
     try {
-      vReturn = (String)this.jdbcTemplate.queryForObject("SELECT COUNT(1)\nFROM IDOSGD.tdtv_remitos tr\nWHERE tr.nu_ann = ?\nAND tr.co_tip_doc_adm = ?\nAND tr.co_emp_emi = ?\nAND tr.nu_doc_emi = ?\nAND tr.ti_emi = '05'", String.class,
+      vReturn = (String)this.jdbcTemplate.queryForObject("SELECT COUNT(1)\nFROM IDOSGD.tdtv_remitos tr WITH (NOLOCK)\nWHERE tr.nu_ann = ?\nAND tr.co_tip_doc_adm = ?\nAND tr.co_emp_emi = ?\nAND tr.nu_doc_emi = ?\nAND tr.ti_emi = '05'", String.class,
     		  new Object[] { documentoEmiBean.getNuAnn(), documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getNuDocEmi() });
     } catch (Exception e) {
       e.printStackTrace();
@@ -669,7 +673,7 @@ public class EmiDocumentoPersonalDaoImp
   public String verificarDocumentoLeido(String pnuAnn, String pnuEmi) {
     String vReturn = "NO_OK";
     StringBuffer sqlQry = new StringBuffer();
-    sqlQry.append("SELECT ISNULL(MAX(es_doc_rec),'0')\nFROM IDOSGD.tdtv_destinos\nWHERE nu_ann = ?\nAND nu_emi = ?\nAND es_eli = '0'");
+    sqlQry.append("SELECT ISNULL(MAX(es_doc_rec),'0')\nFROM IDOSGD.tdtv_destinos WITH (NOLOCK)\nWHERE nu_ann = ?\nAND nu_emi = ?\nAND es_eli = '0'");
 
 
 
@@ -845,7 +849,7 @@ public class EmiDocumentoPersonalDaoImp
   }
   
   public String updRemitoResumenDestinatario(String vti_des, String vco_pri, String vnu_cant_des, String pnuAnn, String pnuEmi) {
-    String vReturn = "NO_OK";
+    /*String vReturn = "NO_OK";
     StringBuffer sqlUpd = new StringBuffer();
     sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET ");
     sqlUpd.append("TI_EMI_DES = ?,CO_PRIORIDAD = ? ,nu_candes=? ");
@@ -860,11 +864,46 @@ public class EmiDocumentoPersonalDaoImp
       e.printStackTrace();
     } 
     
+    return vReturn;*/
+
+    /* INICIO
+  DEVELOPER:  LARH
+  FECHA_MODIFICACION: 07/07/2022
+  ACCION: Modificacion de llamado a Query por SP*/
+
+    String vReturn = "NO_OK";
+    StringBuffer sqlUpd = new StringBuffer();
+    this.spdataSource = new SimpleJdbcCall(this.dataSource).withProcedureName("[IDOSGD].[PK_SGD_TRAMITE_PROCE_REMITOS_RESUMEN_DESTINATARIO_ONLY_UDP]")
+            .withoutProcedureColumnMetaDataAccess()
+            .useInParameterNames("p_anio", "p_nuEmi", "p_vti_des", "p_vco_pri", "p_vnu_cant_des")
+            .declareParameters(
+                    new SqlParameter("p_anio", Types.VARCHAR),
+                    new SqlParameter("p_nuEmi", Types.VARCHAR),
+                    new SqlParameter("p_vti_des", Types.VARCHAR),
+                    new SqlParameter("p_vco_pri", Types.VARCHAR),
+                    new SqlParameter("p_vnu_cant_des", Types.VARCHAR));
+    SqlParameterSource in = new MapSqlParameterSource()
+            .addValue("p_anio", pnuAnn)
+            .addValue("p_nuEmi", pnuEmi)
+            .addValue("p_vti_des", vti_des)
+            .addValue("p_vco_pri", vco_pri)
+            .addValue("p_vnu_cant_des", vnu_cant_des);
+    try {
+      this.spdataSource.execute(in);
+      vReturn = "OK";
+      this.spdataSource = null;
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      ex.printStackTrace();
+    }
+
     return vReturn;
+
   }
   
   public String updRemitoResumenReferencia(String vti_ori, String pnuAnn, String pnuEmi) {
-    String vReturn = "NO_OK";
+
+    /*String vReturn = "NO_OK";
     StringBuffer sqlUpd = new StringBuffer();
     sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET ");
     sqlUpd.append("TI_EMI_REF = ? ");
@@ -879,14 +918,44 @@ public class EmiDocumentoPersonalDaoImp
       e.printStackTrace();
     } 
     
+    return vReturn;*/
+
+    /* INICIO
+  DEVELOPER:  LARH
+  FECHA_MODIFICACION: 07/07/2022
+  ACCION: Modificacion de llamado a Query por SP*/
+
+    String vReturn = "NO_OK";
+    StringBuffer sqlUpd = new StringBuffer();
+    this.spdataSource = new SimpleJdbcCall(this.dataSource).withProcedureName("[IDOSGD].[PK_SGD_TRAMITE_PROCE_REMITOS_RESUMEN_REFERENCIA_ONLY_UDP]")
+            .withoutProcedureColumnMetaDataAccess()
+            .useInParameterNames("p_anio", "p_nuEmi", "p_vti_ori")
+            .declareParameters(
+                    new SqlParameter("p_anio", Types.VARCHAR),
+                    new SqlParameter("p_nuEmi", Types.VARCHAR),
+                    new SqlParameter("p_vti_ori", Types.VARCHAR));
+    SqlParameterSource in = new MapSqlParameterSource()
+            .addValue("p_anio", pnuAnn)
+            .addValue("p_nuEmi", pnuEmi)
+            .addValue("p_vti_ori", vti_ori);
+    try {
+      this.spdataSource.execute(in);
+      vReturn = "OK";
+      this.spdataSource = null;
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      ex.printStackTrace();
+    }
+
     return vReturn;
+
   }
   
   public String getNumDestinos(String nu_ann, String nu_emi) {
     String vReturn = "0";
     StringBuffer sqlQry = new StringBuffer();
     sqlQry.append("SELECT count(nu_des) ");
-    sqlQry.append("FROM IDOSGD.tdtv_destinos ");
+    sqlQry.append("FROM IDOSGD.tdtv_destinos WITH (NOLOCK) ");
     sqlQry.append("WHERE nu_ann = ? ");
     sqlQry.append("AND nu_emi = ? ");
     try {
@@ -902,7 +971,7 @@ public class EmiDocumentoPersonalDaoImp
     StringBuffer sql = new StringBuffer();
     List<DestinoBean> list = new ArrayList<DestinoBean>();
     sql.append("SELECT DISTINCT co_dep_des, ti_des ");
-    sql.append("FROM IDOSGD.tdtv_destinos ");
+    sql.append("FROM IDOSGD.tdtv_destinos WITH (NOLOCK) ");
     sql.append("WHERE es_eli = '0' ");
     sql.append("AND nu_ann = ? ");
     sql.append("AND nu_emi = ? ");
@@ -923,7 +992,7 @@ public class EmiDocumentoPersonalDaoImp
     StringBuffer sql = new StringBuffer();
     List<ReferenciaRemitoBean> list = new ArrayList<ReferenciaRemitoBean>();
     sql.append("SELECT DISTINCT b.ti_emi, b.co_dep_emi,b.nu_ann,b.nu_emi,a.nu_des_ref ");
-    sql.append("FROM   IDOSGD.tdtr_referencia a INNER JOIN IDOSGD.tdtv_remitos b ON a.nu_ann_ref = b.nu_ann AND    a.nu_emi_ref = b.nu_emi  ");
+    sql.append("FROM   IDOSGD.tdtr_referencia a WITH (NOLOCK) INNER JOIN IDOSGD.tdtv_remitos b WITH (NOLOCK) ON a.nu_ann_ref = b.nu_ann AND    a.nu_emi_ref = b.nu_emi  ");
     sql.append("WHERE   a.nu_ann = ? ");
     sql.append("AND    a.nu_emi = ? ");
     sql.append("ORDER  BY b.ti_emi");
@@ -943,7 +1012,7 @@ public class EmiDocumentoPersonalDaoImp
     StringBuffer sql = new StringBuffer();
     List<DestinoBean> list = new ArrayList<DestinoBean>();
     sql.append("SELECT co_pri ");
-    sql.append("FROM IDOSGD.tdtv_destinos ");
+    sql.append("FROM IDOSGD.tdtv_destinos WITH (NOLOCK) ");
     sql.append("WHERE es_eli = '0' ");
     sql.append("AND nu_ann = ? ");
     sql.append("AND nu_emi = ? ");
@@ -967,7 +1036,7 @@ public class EmiDocumentoPersonalDaoImp
     try {
       StringBuffer sql = new StringBuffer();
       sql.append("SELECT RIGHT(REPLICATE('0', 6) + CAST((ISNULL(MAX(NU_DOC_EMI), 0) + 1) AS VARCHAR), 6) ");
-      sql.append("FROM IDOSGD.TDTV_REMITOS TR ");
+      sql.append("FROM IDOSGD.TDTV_REMITOS TR WITH (NOLOCK) ");
       sql.append("WHERE TR.NU_ANN=? ");
       sql.append("AND TR.CO_TIP_DOC_ADM=? ");
       sql.append("AND TR.TI_EMI='05' ");
@@ -996,7 +1065,7 @@ public class EmiDocumentoPersonalDaoImp
     sql.append("CO_DEP_EMI, ");
     sql.append("CO_TIP_DOC_ADM, ");
     sql.append("NU_DOC_EMI ");
-    sql.append("FROM IDOSGD.TDTV_REMITOS ");
+    sql.append("FROM IDOSGD.TDTV_REMITOS WITH (NOLOCK) ");
     sql.append("WHERE nu_ann = ? ");
     sql.append("AND nu_emi = ? ");
     sql.append("AND ES_ELI='0' ");

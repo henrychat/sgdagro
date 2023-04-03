@@ -150,6 +150,7 @@ public class DocumentoVoBoServiceImp
               docObjBean.setCoUseMod(docVobo.getCoEmpUsu());
               
               vReturn = this.validarFirmaService.getValidaCertificadoEmp(docObjBean.getNumeroSecuencia(), nuDni, nroRucInstitucion);
+              System.out.println(vReturn);
               if(vReturn.equals("NO_OK_ARCHIVO")) {
               	throw new validarDatoException("Error al cargar documento para firma"); 
               }

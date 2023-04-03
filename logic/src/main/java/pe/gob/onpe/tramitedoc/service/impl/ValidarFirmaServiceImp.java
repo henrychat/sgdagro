@@ -21,8 +21,58 @@ import pe.gob.onpe.tramitedoc.service.ValidarFirmaService;
 @Service("validarFirmaService")
 public class ValidarFirmaServiceImp implements ValidarFirmaService
 {
+	
+	@SuppressWarnings("unchecked")
+    public String getValidaCertificadoEmp_1(String filePdf, String pNuDni, String pNuRucInstitucion) {
+        //agregado para soporte de SHA256
+        this.setBouncyCastleProvider();
+        String vret = "NO_OK";
+        PdfReader reader = null;
+        try {
+            reader = new PdfReader(filePdf);
+            AcroFields af = reader.getAcroFields();
+            List<String> names = af.getSignatureNames();
+            if(!names.isEmpty()){
+                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
+                for (String name : names) {
+                    LsSignature.add(af.verifySignature(name, "BC"));//agregado para soporte de SHA256
+                }
+                Collections.sort(LsSignature, new Comparator<PdfPKCS7>(){
+                    @Override
+                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2){
+                        if(o1.getSignDate() == null || o2.getSignDate() == null)
+                            return 0;
+                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
+                    }
+                });
+                for(PdfPKCS7 pk : LsSignature){
+                    String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+                    if(dn.contains(pNuDni)){
+                        //vret = "OK";
+                        if(dn.contains(pNuRucInstitucion)){
+                            vret = "OK";
+                        }
+                    }
+                    break;
+                }
+            }else{
+                vret="";//documento sin firmar
+            }
+        } catch (Exception e) {
+              e.printStackTrace();
+        }finally{
+            if(reader!=null){
+                reader.close();                
+            }
+        }
+        return vret;
+    }
+	
   @SuppressWarnings("unchecked")
 public String getValidaCertificadoEmp(String filePdf, String pNuDni, String pNuRucInstitucion) {
+	  /*System.out.println(filePdf);
+	  System.out.println(pNuDni);
+	  System.out.println(pNuRucInstitucion);*/
     setBouncyCastleProvider();
     String vret = "NO_OK";
     // EJHM

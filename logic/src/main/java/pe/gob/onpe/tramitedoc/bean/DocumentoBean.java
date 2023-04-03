@@ -1,10 +1,9 @@
 package pe.gob.onpe.tramitedoc.bean;
 
 import java.util.Date;
-import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 
 public class DocumentoBean extends ReporteBean {
-    
+
     private String nuAnn;
     private String nuEmi;
     private String nuCorEmi;
@@ -96,7 +95,7 @@ public class DocumentoBean extends ReporteBean {
     private String codUseMod;
     private String feExpCorta;
     private String coProceso;
-    private String deProceso;
+    private String deProceso;    
     private String feEmiCorta2;//DD/MM/YY
     private String msjResult;
     private String tiFisicoEmi;
@@ -116,10 +115,10 @@ public class DocumentoBean extends ReporteBean {
     private String codUser;
     private String enprocesoatencion;
     private int iCanAvance;
-    
+
     private float fila;
     private float filasTotal;
-    
+
     private String deEmiRef;
     private String recursoenvio;
     private String deEmpPro;
@@ -127,13 +126,13 @@ public class DocumentoBean extends ReporteBean {
     private String docEstadoMsj;
     private String tiDest;
     private String deObsDoc;
- 
-    private String orden ;
-    
+
+    private String orden;
+
     private String iPendientes;
     private String iUrgentes;
     private String iNormal;
-    
+
     private String tiVoucherMP;
     private String obsVoucherMP;
     private String nuCopias;
@@ -143,38 +142,51 @@ public class DocumentoBean extends ReporteBean {
     private String obsRemite;
     private String telefonoRemite;
 
+    private String celeDesele;
+    
+    public DocumentoBean() {
+    }
+
+    public String getCeleDesele() {
+        return celeDesele;
+    }
+
+    public void setCeleDesele(String celeDesele) {
+        this.celeDesele = celeDesele;
+    }
+
     public String getCorreoRemite() {
-		return correoRemite;
-	}
+        return correoRemite;
+    }
 
-	public void setCorreoRemite(String correoRemite) {
-		this.correoRemite = correoRemite;
-	}
+    public void setCorreoRemite(String correoRemite) {
+        this.correoRemite = correoRemite;
+    }
 
-	public String getObsRemite() {
-		return obsRemite;
-	}
+    public String getObsRemite() {
+        return obsRemite;
+    }
 
-	public void setObsRemite(String obsRemite) {
-		this.obsRemite = obsRemite;
-	}
+    public void setObsRemite(String obsRemite) {
+        this.obsRemite = obsRemite;
+    }
 
-	public String getTelefonoRemite() {
-		return telefonoRemite;
-	}
+    public String getTelefonoRemite() {
+        return telefonoRemite;
+    }
 
-	public void setTelefonoRemite(String telefonoRemite) {
-		this.telefonoRemite = telefonoRemite;
-	}
+    public void setTelefonoRemite(String telefonoRemite) {
+        this.telefonoRemite = telefonoRemite;
+    }
 
-	public String getConfidencial() {
+    public String getConfidencial() {
         return confidencial;
     }
 
     public void setConfidencial(String confidencial) {
         this.confidencial = confidencial;
     }
-    
+
     public float getFila() {
         return fila;
     }
@@ -190,18 +202,13 @@ public class DocumentoBean extends ReporteBean {
     public void setFilasTotal(float filasTotal) {
         this.filasTotal = filasTotal;
     }
-    
-    
+
     public String getEnprocesoatencion() {
         return enprocesoatencion;
     }
 
     public void setEnprocesoatencion(String enprocesoatencion) {
         this.enprocesoatencion = enprocesoatencion;
-    }
-
-    public DocumentoBean() {
-        // TODO Auto-generated constructor stub
     }
 
     public String getDeMesaPartes() {
@@ -1075,7 +1082,6 @@ public class DocumentoBean extends ReporteBean {
     public void setCodUser(String codUser) {
         this.codUser = codUser;
     }
- 
 
     /**
      * @return the iCanAvance
@@ -1259,8 +1265,6 @@ public class DocumentoBean extends ReporteBean {
         this.tiVoucherMP = tiVoucherMP;
     }
 
- 
-
     /**
      * @return the nuCopias
      */
@@ -1303,5 +1307,4 @@ public class DocumentoBean extends ReporteBean {
         this.obsVoucherMP = obsVoucherMP;
     }
 
-    
 }

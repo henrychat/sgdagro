@@ -186,7 +186,6 @@ public class MensajeriaController {
     UsuarioConfigBean usuarioConfigBean = Utilidades.getInstancia().loadUserConfigFromSession(request);
     String resultJsonStr = "";
     try {
-      codigos = "'" + codigos.replace(",", "','") + "'";
       mensaje = this.documentoMensajeriaService.updMensajeriaDocumentoRecibir(codigos);
     } catch (Exception e) {
       e.printStackTrace();

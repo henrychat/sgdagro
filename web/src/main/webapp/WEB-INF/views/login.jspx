@@ -45,7 +45,8 @@
                    
                     <tr>
                         <td width="45%" align="center">
-                            <img src="${staticResourcesURL}/images/inicio_login.jpg" width="352" height="280"/>
+                            <!--<img src="${staticResourcesURL}/images/inicio_login.jpg" width="352" height="280"/>-->
+							<img src="${staticResourcesURL}/images/logo_sgd.png" width="352" height="280"/>
                         </td>
                         <td width="55%" valign="top" >
                             <div>

@@ -1,14 +1,22 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoRecepMensajeriaBean;
 import pe.gob.onpe.tramitedoc.bean.DestiDocumentoEnvMensajeriaBean;
@@ -30,6 +38,9 @@ public class MensajeriaDaoImp
   extends SimpleJdbcDaoBase
   implements MensajeriaDao
 {
+
+  private SimpleJdbcCall spdataSource;
+  private static Logger logger = Logger.getLogger("MensajeriaDaoImp");
   public List<DocumentoRecepMensajeriaBean> getDocumentoRecepMensajeria(BuscarDocumentoRecepMensajeriaBean buscarDocumentoRecepMensajeriaBean) {
     boolean bBusqFiltro = false;
     boolean bBusqDep = false;
@@ -282,7 +293,8 @@ public class MensajeriaDaoImp
 
   
   public String updMensajeriaDocumentoRecibir(String codigo) {
-    String vReturn = "NO_OK";
+	  System.out.print(codigo);
+    /*String vReturn = "NO_OK";
     StringBuffer sqlIns = new StringBuffer();
     StringBuffer sqlUpd = new StringBuffer();
     sqlIns.append("UPDATE IDOSGD.TDTV_REMITOS  SET FEC_RECEPMP=GETDATE(),DOC_ESTADO_MSJ='1'  WHERE  NU_ANN+NU_EMI IN (" + codigo + " ) ");
@@ -296,6 +308,29 @@ public class MensajeriaDaoImp
     } catch (Exception e) {
       e.printStackTrace();
     } 
+    return vReturn;*/
+    /* INICIO
+  DEVELOPER:  LARH
+  FECHA_MODIFICACION: 07/07/2022
+  ACCION: Modificacion de llamado a Query por SP*/
+
+    String vReturn = "NO_OK";
+    this.spdataSource = new SimpleJdbcCall(this.dataSource)
+    		.withProcedureName("[IDOSGD].[PK_SGD_TRAMITE_PROCE_MENSAJERIA_DOCUMENTO_RECIBIR_UDP]")
+            .withoutProcedureColumnMetaDataAccess()
+            .useInParameterNames("p_codigo")
+            .declareParameters(
+                    new SqlParameter("p_codigo", Types.VARCHAR));
+    SqlParameterSource in = new MapSqlParameterSource()
+            .addValue("p_codigo", codigo);
+    try {
+      this.spdataSource.execute(in);
+      vReturn = "OK";
+      this.spdataSource = null;
+    } catch (Exception ex) {
+      logger.error(ex.getMessage(), ex);
+      ex.printStackTrace();
+    }
     return vReturn;
   }
   

@@ -6,7 +6,7 @@
     <display-name>sgd</display-name>
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>sgd</param-value>
+        <param-value>sgd21</param-value>
     </context-param>    
     <welcome-file-list>  
         <welcome-file>index.jsp</welcome-file>  
