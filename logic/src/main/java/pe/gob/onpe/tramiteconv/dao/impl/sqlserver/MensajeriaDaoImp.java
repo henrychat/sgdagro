@@ -354,12 +354,15 @@ public class MensajeriaDaoImp
   
   public String selectCalcularFechaPlazo(DocumentoRecepMensajeriaBean documentoMensajeria) {
     String vReturn = "NO_OK";
-    StringBuffer sqlQry0 = new StringBuffer();
-    StringBuffer sqlQry1 = new StringBuffer();
-    StringBuffer sqlQry2 = new StringBuffer();
+    StringBuilder sqlQry0 = new StringBuilder();
+    StringBuilder sqlQry1 = new StringBuilder();
+    StringBuilder sqlQry2 = new StringBuilder();
+    
     sqlQry0.append("SELECT CAST(NELE_NUMSEC AS VARCHAR(20)) FROM IDOSGD.SI_ELEMENTO WHERE CTAB_CODTAB='DE_TIP_MSJ_MENS' AND CELE_DESELE='" + documentoMensajeria.getDetipmsj() + "'");
+    
     if (documentoMensajeria.getDetipmsj().equals("COURRIER")) {
-      sqlQry1.append("SELECT  CELE_DESCOR FROM  IDOSGD.si_elemento WHERE CTAB_CODTAB='DE_COURRIER' AND cele_desele='" + documentoMensajeria.getDeNuRuc() + "'  \nAND cele_codele2 IN (SELECT  cele_codele FROM  IDOSGD.si_elemento WHERE CTAB_CODTAB='DE_AMBITO_MENS' AND cele_desele='" + documentoMensajeria
+      sqlQry1.append("SELECT  CELE_DESCOR FROM  IDOSGD.si_elemento WHERE CTAB_CODTAB='DE_COURRIER' AND cele_desele='" + documentoMensajeria.getDeNuRuc() + "' ")
+              .append(" \nAND cele_codele2 IN (SELECT  cele_codele FROM  IDOSGD.si_elemento WHERE CTAB_CODTAB='DE_AMBITO_MENS' AND cele_desele='" + documentoMensajeria
           .getDeambito() + "') \nAND cele_codele3 IN (SELECT  cele_codele FROM  IDOSGD.si_elemento WHERE CTAB_CODTAB='RE_ENV_MSJ_MENS' AND cele_desele='" + documentoMensajeria
           .getDetipenv() + "') ");
     } else {

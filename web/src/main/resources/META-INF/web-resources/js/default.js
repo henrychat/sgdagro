@@ -1,3 +1,5 @@
+/* global dojo, bootbox, pRutaContexto, resourceURL, dijit */
+
 $(document).on('mouseenter', '.toolTipVerTodo', function(e) {
     var posicion = $(this).position();
     var contenido = $(this).is("input")?$(this).val():$(this).text();
@@ -57,7 +59,7 @@ function setEvents(parentFormId) {
     var container;
     if (parentFormId) {
         for (var j = 0; j < document.forms.length; j++) {
-            if (parentFormId == document.forms[j].id) {
+            if (parentFormId === document.forms[j].id) {
                 container = document.forms[j];
                 break;
             }
@@ -66,14 +68,14 @@ function setEvents(parentFormId) {
     else {
         container = document;
     }
-    if (typeof(container) != 'object') {
+    if (typeof(container) !== 'object') {
         container = jQuery(parentFormId);
     }
     jQuery("input, button", container).each(setEventButton);
 }
 
 function setEventButton(obj, index, arr) {
-    if (obj.type == 'submit' || obj.type == 'reset' || obj.type == 'button') {
+    if (obj.type === 'submit' || obj.type === 'reset' || obj.type === 'button') {
         if (!obj.onmouseover) {
             jQuery(obj).onmouseover(function(e) {
                 jQuery(obj).addClass('ui-state-hover');
@@ -82,17 +84,17 @@ function setEventButton(obj, index, arr) {
         if (!obj.onmouseout) {
             jQuery(obj).onmouseout(function(e) {
                 jQuery(obj).removeClass('ui-state-hover');
-            })
+            });
         }
         if (!obj.onfocus) {
             jQuery(obj).onfocus(function(e) {
                 jQuery(obj).addClass('ui-state-hover');
-            })
+            });
         }
         if (!obj.onblur) {
             jQuery(obj).onblur(function(e) {
                 jQuery(obj).removeClass('ui-state-hover');
-            })
+            });
         }
     }
 }
@@ -110,8 +112,8 @@ function setFirstElement(oForm) {
 
     for (var i = 0; i < oForm.elements.length; i++) {
         var oField = oForm.elements[i];
-        if ((oField.type == 'text' || oField.type == 'password' || oField.type == 'select-one' || oField.type == 'textarea')) {
-            if (typeof(oField.tabIndex) != 'undefined' && oField.tabIndex == 1) {
+        if ((oField.type === 'text' || oField.type === 'password' || oField.type === 'select-one' || oField.type === 'textarea')) {
+            if (typeof(oField.tabIndex) !== 'undefined' && oField.tabIndex === 1) {
                 try {
                     oField.focus();
                 } catch (e) {
@@ -127,10 +129,10 @@ function setFirstElement(oForm) {
 
 function pushFocusEvent(setFocusOnLoad, parentFormId, callbackFunction) {
     setEvents(parentFormId);
-    if (typeof(setFocusOnLoad) == 'undefined' || setFocusOnLoad == true || setFocusOnLoad == 'firstElement') {
+    if (typeof(setFocusOnLoad) === 'undefined' || setFocusOnLoad === true || setFocusOnLoad === 'firstElement') {
         if (parentFormId) {
             for (var j = 0; j < document.forms.length; j++) {
-                if (parentFormId == document.forms[j].id) {
+                if (parentFormId === document.forms[j].id) {
                     setFirstElement(document.forms[j]);
                     break;
                 }
@@ -143,7 +145,7 @@ function pushFocusEvent(setFocusOnLoad, parentFormId, callbackFunction) {
         }
     }
     else {
-        if (setFocusOnLoad != false) {
+        if (setFocusOnLoad !== false) {
             if (parentFormId) {
                 try {
                     eval("document." + parentFormId + "." + setFocusOnLoad + ".focus()");
@@ -167,12 +169,12 @@ function filtrarTeclado(pEvent, autoSubmit, pvalidKeys, sucessGoToId, errorGoToI
             mueveFoco(tk.currentObj, sucessGoToId);
         }
     }
-    return (((autoSubmit) ? autoSubmit : false) == true) ? tk.isValidKey : (tk.isValidKey && tk.k != 13);
+    return (((autoSubmit) ? autoSubmit : false) === true) ? tk.isValidKey : (tk.isValidKey && tk.k !== 13);
 }
 
 function mueveFoco(obj, goTo) {
     var to;
-    if (obj.type != 'textarea') {
+    if (obj.type !== 'textarea') {
         if (goTo) {
             to = document.getElementById(goTo);
         }
@@ -180,7 +182,7 @@ function mueveFoco(obj, goTo) {
             var ltabindex = obj.tabIndex + 1;
             to = jQuery("*[tabindex=" + ltabindex + "]")[0];
         }
-        if (to != null && typeof(obj) != 'undefined') {
+        if (to !== null && typeof(obj) !== 'undefined') {
             jQuery(obj).removeClass('activado_confoco').addClass('normal');
             jQuery(to).removeClass('normal').addClass('activado_confoco');
             try {
@@ -202,10 +204,10 @@ function salir(url) {
         $.cookie("JSESSIONID", null, {expires: -1});
         $.cookie("SaveStateCookie", null, {expires: -1});
         var state = $.cookie("State");
-        if (state != 'undefined' && state != null) {
+        if (state !== 'undefined' && state !== null) {
         } else{
             try{cerrarConexion_wsocket();}catch(ex){}
-            if (data == "inicio") {
+            if (data === "inicio") {
                 window.location.replace("/inicio/login.do");
             } else {
                 window.location.replace(url);
@@ -262,7 +264,7 @@ function refreshAppBodyFrame(data) {
 }
 function releaseDojoObj(id) {
     var obj = dijit.byId(id);
-    if (obj != null) {
+    if (obj !== null) {
         obj.destroyRecursive();
     }
 }
@@ -282,7 +284,7 @@ function buscaOpMenu(valOp) {
     for (i = 0; i < dataSource.rows.length; i++)
     {
         var row = dataSource.rows[i];
-        if (row.cell[0] == valOp) {
+        if (row.cell[0] === valOp) {
             vret = row.cell[1];
             return vret;
         }
@@ -404,7 +406,7 @@ function ajaxCall(url, params, mngr, type, sync, silent, tipo) {
     }
     var objAjax = {
         url: urlFullPath,
-        type: (tipo == "GET" || tipo == "get") ? 'get' : 'post',
+        type: (tipo === "GET" || tipo === "get") ? 'get' : 'post',
         dataType: (type) ? type : 'text',
         async: (sync) ? false : true,
         error: function(request, status, error) {
@@ -412,16 +414,16 @@ function ajaxCall(url, params, mngr, type, sync, silent, tipo) {
             refreshAppBody(request.responseText);
         },
         success: function(result, textStatus, xhr) {
-            if (result == null) {
+            if (result === null) {
                 return;
             }
             if (mngr) {
                 mngr(result);
             }
         }};
-    if (typeof(params) == 'object') {
+    if (typeof(params) === 'object') {
         objAjax.data = params;
-    } else if (typeof(params) == "string") {
+    } else if (typeof(params) === "string") {
         objAjax.data = params;
     }
     jQuery.ajax(objAjax);
@@ -1325,6 +1327,7 @@ function appletCargado(datosPC) {
 }
 
 function appletCargadoRutaDoc(datosPC) {
+    debugger;
     jQuery("#RutaDocs").html("<strong>"+datosPC+"</strong>");
 
 }

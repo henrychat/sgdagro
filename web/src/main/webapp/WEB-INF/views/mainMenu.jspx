@@ -55,6 +55,7 @@
             </table>
         </div>
         <script type="text/javascript">
+            debugger;
             /*userDni = "${usuario.nuDni}";
             var pRutaEmi="${usuarioConfig.deDirEmi}";
             $(function() {
@@ -72,7 +73,8 @@
             var wsServiceLocation = auxwsServLoc0+document.location.host+auxwsServLoc1;
             userDni = "${usuario.nuDni}";
             var urlBase = document.location.protocol+'//'+document.location.host+'${pageContext.request.contextPath}'+'/';
-            var rutaPri = '${usuarioConfig.deDirEmi}';
+//            var rutaPri = '${usuarioConfig.deDirEmi}';
+            var rutaPri = '${usuarioConfig.deRutaAnexo}';
             var nroPestana=${usuarioConfig.nroPestanna};
             $(function() {
                 /*$("#idTradocDesktop").click(function(e){
