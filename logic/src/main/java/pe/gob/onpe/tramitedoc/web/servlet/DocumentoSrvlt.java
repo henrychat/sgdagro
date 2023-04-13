@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.service.DocumentoObjService;
 import pe.gob.onpe.tramitedoc.service.DocumentoXmlService;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.util.LsAleatorioViewDoc;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 
@@ -137,7 +138,7 @@ public class DocumentoSrvlt extends HttpServlet {
         File saveFile = new File(rutaFile + "//" + fileName);
         servletInputStream = request.getInputStream();
         outputStream = new FileOutputStream(saveFile);
-        byte[] buffer = new byte[4096];
+        byte[] buffer = new byte[Constantes.BUFFER_SIZE];
         int bytesRead = -1;
         while ((bytesRead = servletInputStream.read(buffer)) != -1)
           outputStream.write(buffer, 0, bytesRead); 
@@ -324,7 +325,7 @@ public class DocumentoSrvlt extends HttpServlet {
         File saveFile = new File(rutaFile + "//" + fileName);
         servletInputStream = request.getInputStream();
         outputStream = new FileOutputStream(saveFile);
-        byte[] buffer = new byte[4096];
+        byte[] buffer = new byte[Constantes.BUFFER_SIZE];
         int bytesRead = -1;
         while ((bytesRead = servletInputStream.read(buffer)) != -1)
           outputStream.write(buffer, 0, bytesRead); 

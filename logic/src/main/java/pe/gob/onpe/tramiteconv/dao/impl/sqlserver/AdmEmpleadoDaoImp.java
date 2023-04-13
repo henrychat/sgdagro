@@ -42,7 +42,7 @@ public class AdmEmpleadoDaoImp
 
   
   public AdmEmpleadoBean getAdmEmpleado(String codEmp) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     sql.append(this.sql_base).append(" WHERE E.CEMP_CODEMP = :pCoEmp");
     objectParam.put("pCoEmp", codEmp);
@@ -60,7 +60,7 @@ public class AdmEmpleadoDaoImp
 
 
   public AdmEmpleadoBean getAdmEmpleadoDesdeDni(String dni) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     sql.append(this.sql_base).append(" WHERE E.CEMP_NU_DNI=:pnuDNI");
     objectParam.put("pnuDNI", dni);
@@ -77,7 +77,7 @@ public class AdmEmpleadoDaoImp
 
 
   public int updAdmEmpleado(AdmEmpleadoBean empleado) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SET LANGUAGE Español ");
     sql.append(" UPDATE IDOSGD.RHTM_PER_EMPLEADOS SET  CEMP_NU_DNI=?, CEMP_APEPAT=?, CEMP_APEMAT=?, CEMP_DENOM=?, FEMP_FECNAC=convert(varchar, ?, 103), CEMP_TIPSEX=?,  CEMP_EMAIL=?,  CEMP_EST_EMP=?,  CEMP_INDBAJ=?, " + (
 
@@ -105,7 +105,7 @@ public class AdmEmpleadoDaoImp
 
   
     try {
-      StringBuffer sql = new StringBuffer();
+       StringBuilder sql = new StringBuilder();
       sql.append("INSERT INTO IDOSGD.RHTM_PER_EMPLEADOS (CEMP_CODEMP,CEMP_CO_EMP, CEMP_NU_DNI,CEMP_APEPAT,CEMP_APEMAT,CEMP_DENOM,CEMP_EMAIL,CEMP_EST_EMP,CEMP_INDBAJ, CEMP_TIPSEX,FEMP_FECNAC,CEMP_CO_DEPEND,CO_DEPENDENCIA,CEMP_CO_CARGO,CEMP_CO_CATEGORIA,CEMP_FE_CREA,CEMP_ID_CREA,CEMP_FE_ACT,CEMP_ID_ACT,FEMP_FECALT,CEMP_TI_EMPLEADO,CEMP_CO_LOCAL ) VALUES (?,?,?,?,?,?,?,?,?, ?,convert(varchar, ?, 103),?,?, ?,'' ,GETDATE(),?,GETDATE(),? ,GETDATE(),'3','001' )");
 
     
@@ -129,7 +129,7 @@ public class AdmEmpleadoDaoImp
 
 
   public AdmEmpleadoBean getPersonaDesdeDni(String dni) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT A.nulem dni, A.DEAPP apPaterno, A.DEAPM apMaterno, A.DENOM nombres, ");
     sql.append(" convert(varchar, A.FENAC, 103) fechaNacimiento,A.INSEX sexo FROM  IDOSGD.idtanirs A ");
     sql.append(" WHERE A.nulem='").append(dni).append("' ");
@@ -147,7 +147,7 @@ public class AdmEmpleadoDaoImp
 
   
   public List<AdmEmpleadoBean> getBsqAdmEmpleado(String dni, String apPaterno, String apMaterno, String nombres, String usuario) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     sql.append(this.sql_base);
     if (dni.length() > 0 || apPaterno.length() > 0 || apMaterno.length() > 0 || nombres.length() > 0 || usuario.length() > 0) {
@@ -188,7 +188,7 @@ public class AdmEmpleadoDaoImp
 
 
   public List<DependenciaBean> getBsqDependencia(String criterio) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     sql.append("SELECT CO_DEPENDENCIA coDependencia,DE_CORTA_DEPEN deCortaDepen, ");
     sql.append(" DE_DEPENDENCIA deDependencia  FROM IDOSGD.RHTM_DEPENDENCIA ");
@@ -205,7 +205,7 @@ public class AdmEmpleadoDaoImp
 
  
   public List<AdmEmpleadoCargoBean> getLsCargo() throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CCAR_CO_CARGO coCargo,CCAR_DESCAR deCargo FROM IDOSGD.RHTM_CARGOS ORDER BY CCAR_CO_CARGO ASC ");
     List<AdmEmpleadoCargoBean> list = new ArrayList<AdmEmpleadoCargoBean>();
     try {
@@ -217,7 +217,7 @@ public class AdmEmpleadoDaoImp
   }
   
   public AdmEmpleadoAccesoBean getAcceso(String coEmpleado) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario,ES_USUARIO esUsuario,IN_AD inAD FROM IDOSGD.SEG_USUARIOS1 WHERE CEMP_CODEMP='" + coEmpleado + "'");
     AdmEmpleadoAccesoBean usuario = new AdmEmpleadoAccesoBean();
     try {
@@ -232,7 +232,7 @@ public class AdmEmpleadoDaoImp
 
  
   public List<AdmEmpleadoAccesoBean> getLsAcceso(AdmEmpleadoAccesoBean acceso) throws Exception {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     
     sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM IDOSGD.SEG_USUARIOS1 WHERE COD_USER=:pcoUser ");
@@ -284,7 +284,7 @@ public class AdmEmpleadoDaoImp
   
   public String updAcceso(String coUser, String coEmp, String nuDni, String inAD) {
     String vReturn = "NO_OK";
-    StringBuffer sqlUpd = new StringBuffer();
+     StringBuilder sqlUpd = new StringBuilder();
     sqlUpd.append("update IDOSGD.SEG_USUARIOS1 \nset IN_AD=?\nwhere\n CEMP_CODEMP=? \n");
 
 

@@ -31,7 +31,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public List<DocumentoSeguiEstEmitidoBean> getListDocSeguiEstRec(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
@@ -280,7 +280,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public List<DependenciaBean> getListDestinatarioEmi(String coDep, String pdeDepEmite) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         boolean vfiltro = pdeDepEmite != null && !pdeDepEmite.trim().equals("") ? true : false;
 
@@ -335,7 +335,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public DocumentoSeguiEstEmitidoBean existeDocumentoReferenciado(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocumentoSeguiEstEmitidoBean documentoSeguiEstEmitidoBean = null;
         sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM TDTV_REMITOS A\n"
                 + "WHERE A.NU_ANN=?\n"
@@ -361,7 +361,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public List<DocumentoSeguiEstEmitidoBean> getDocumentosReferenciadoBusq(DocumentoSeguiEstEmitidoBean documentoSeguiEstEmitidoBean, String tiAcceso) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoSeguiEstEmitidoBean> list = new ArrayList<DocumentoSeguiEstEmitidoBean>();
 
@@ -474,7 +474,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public DocumentoEmiSeguiBean getDocumentoEmiSeguiBean(String pnuAnn, String pnuEmi, String pnuDes) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT B.DE_ANE,A.NU_ANN,A.NU_EMI,B.NU_DES,B.NU_COR_DES,C.NU_EXPEDIENTE,TO_CHAR((SELECT FE_EXP FROM TDTC_EXPEDIENTE WHERE NU_ANN_EXP=A.NU_ANN_EXP AND NU_SEC_EXP=A.NU_SEC_EXP),'DD/MM/YYYY') FE_EXP_CORTA,\n"
                 + "PK_SGD_DESCRIPCION.DE_PROCESO_EXP(C.CO_PROCESO_EXP) DE_PROCESO_EXP,PK_SGD_DESCRIPCION.TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI,PK_SGD_DESCRIPCION.DE_NOM_EMP (B.CO_EMP_REC) DE_EMP_REC,\n"
                 + "DECODE (B.TI_DES,'01', PK_SGD_DESCRIPCION.DE_NOM_EMP (B.CO_EMP_DES),'02', PK_SGD_DESCRIPCION.DE_NOM_EMP (B.NU_RUC_DES), '03', PK_SGD_DESCRIPCION.ANI_SIMIL (B.NU_DNI_DES), '04', PK_SGD_DESCRIPCION.OTRO_ORIGEN (B.CO_OTR_ORI_DES)) DE_EMP_DES,\n"
@@ -507,7 +507,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
 
     @Override
     public List<ReferenciaConsulBean> getDocumentosRefRecepAdm(String snuAnn, String snuEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT PK_SGD_DESCRIPCION.de_documento (a.co_tip_doc_adm) de_tipo_doc,           DECODE (a.ti_emi,\n"
                 + "                  '01', a.nu_doc_emi || '-' || a.nu_ann || '/' || a.de_doc_sig,\n"
                 + "                  '05', a.nu_doc_emi || '-' || a.nu_ann || '/' || a.de_doc_sig,\n"
@@ -536,7 +536,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
     @Override
     public String getRutaReporte(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
         String vResult;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         try {
 
             String pNUAnn = buscarDocumentoSeguiEstEmiBean.getCoAnnio();
@@ -654,7 +654,7 @@ public class SeguiEstEmitidoDaoImp extends SimpleJdbcDaoQuery implements SeguiEs
     @Override
     public List<DocumentoSeguiEstEmitidoBean> getListaReporteBusqueda(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
         Map<String, Object> objectParam = new HashMap<String, Object>();
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         List<DocumentoSeguiEstEmitidoBean> list = new ArrayList<DocumentoSeguiEstEmitidoBean>();
         try {

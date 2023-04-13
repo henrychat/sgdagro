@@ -29,7 +29,7 @@ public class SeguiEstRecibidoDaoImp
   implements SeguiEstRecibidoDao
 {
   public List<DocumentoSeguiEstRecibidoBean> getListDocSeguiEstRec(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     boolean bBusqFiltro = false;
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
@@ -373,7 +373,7 @@ public class SeguiEstRecibidoDaoImp
 
   
   public List<DependenciaBean> getListDestinatarioEmi(String pcoDepen, String pdeDepEmite) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     boolean vfiltro = (pdeDepEmite != null && !pdeDepEmite.trim().equals(""));
     
@@ -428,7 +428,7 @@ public class SeguiEstRecibidoDaoImp
   
   public String getRutaReporte(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) {
     String vResult;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     try {
       sql.append(" B.NU_ANN = A.NU_ANN");
@@ -546,7 +546,7 @@ public class SeguiEstRecibidoDaoImp
 
   
   public DocumentoSeguiEstRecibidoBean existeDocumentoReferenciado(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     DocumentoSeguiEstRecibidoBean documentoSeguiEstRecibidoBean = null;
     sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\nWHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
 
@@ -572,7 +572,7 @@ public class SeguiEstRecibidoDaoImp
 
   
   public List<DocumentoSeguiEstRecibidoBean> getDocumentosReferenciadoBusq(DocumentoSeguiEstRecibidoBean documentoRecepConsulBean, String tiAcceso) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     List<DocumentoSeguiEstRecibidoBean> list = new ArrayList<DocumentoSeguiEstRecibidoBean>();
 
@@ -718,7 +718,7 @@ public class SeguiEstRecibidoDaoImp
 
   
   public List<DocumentoSeguiEstRecibidoBean> getListaReporteBusqueda(BuscarDocumentoSeguiEstRecBean buscarDocumentoSeguiEstRecBean) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     boolean bBusqFiltro = false;
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";

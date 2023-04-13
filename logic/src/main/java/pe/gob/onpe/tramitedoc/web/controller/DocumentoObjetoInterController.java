@@ -1078,7 +1078,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaCargaDoc")
     private @ResponseBody String goRutaCargaDoc(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
 
         String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
@@ -1126,7 +1126,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaFirmaDoc")
     private @ResponseBody String goRutaFirmaDoc(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         
         String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
         String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1176,7 +1176,7 @@ public class DocumentoObjetoInterController {
 
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaCargaFirmaDoc")
     private @ResponseBody String goRutaCargaFirmaDoc(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
 
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         DocumentoVerBean docSession =Utilidades.getInstancia().loadDocFromSession(request);
@@ -1274,7 +1274,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaVoBoDoc")
     private @ResponseBody String goRutaVoBoDoc(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         
         String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
         String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1325,7 +1325,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaCargaVoBoDoc")
     private @ResponseBody String goRutaCargaVoBoDoc(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
 
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         DocumentoVerBean docSession =Utilidades.getInstancia().loadDocFromSession(request);
@@ -1383,7 +1383,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaFirmaDocAnexo")
     private @ResponseBody String goRutaFirmaDocAnexo(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         
         String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
         String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1432,7 +1432,7 @@ public class DocumentoObjetoInterController {
     
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaCargaFirmaDocAnexo")
     private @ResponseBody String goRutaCargaFirmaDocAnexo(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
 
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         DocumentoVerBean docSession =Utilidades.getInstancia().loadDocFromSession(request);
@@ -1585,7 +1585,7 @@ public class DocumentoObjetoInterController {
     }
     @RequestMapping(method = RequestMethod.POST, params = "accion=goRutaFirmaDocReporte")
     private @ResponseBody String goRutaFirmaDocReporte(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         
         String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
         String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");

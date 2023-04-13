@@ -20,6 +20,7 @@ import pe.gob.onpe.tramitedoc.bean.ReferenciaBean;
 import pe.gob.onpe.tramitedoc.dao.AnexoDocumentoDao;
 import pe.gob.onpe.tramitedoc.dao.CommonQueryDao;
 import pe.gob.onpe.tramitedoc.service.AnexoDocumentoService;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 
 
@@ -615,7 +616,7 @@ public class AnexoDocumentoServiceImp
     int size = (pfileAnexo.getArchivoBytes()).length;
     int maxUploadSize = 10000000;
     try {
-      if (size <= maxUploadSize) {
+      if (size <= Constantes.MAX_SIZE_UPLOAD) {
         vReturn = this.anexoDocumentoDao.updArchivoAnexo(docAnexo, archivoAnexo, size);
       }
     } catch (Exception e) {
@@ -716,7 +717,7 @@ public class AnexoDocumentoServiceImp
     int maxUploadSize = 10000000;
     
     try {
-      if (size <= maxUploadSize) {
+      if (size <= Constantes.MAX_SIZE_UPLOAD) {
         vReturn = this.anexoDocumentoDao.insArchivoAnexo(docAnexo, archivoAnexo, size);
       }
     } catch (Exception e) {

@@ -40,7 +40,7 @@ public class EmiDocumentoAltaServiceImp
       
       vReturn = this.emiDocumentoAdmDao.updDocumentoObj(docObjBean);
     } catch (Exception ex) {
-      StringBuffer mensaje = new StringBuffer();
+       StringBuilder mensaje = new StringBuilder();
       vReturn = "Error en Leer Documento de Repositorio";
       mensaje.append(docObjBean.getNuAnn() + "." + docObjBean.getNuEmi());
       logger.error(mensaje, ex);

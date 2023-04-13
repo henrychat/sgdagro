@@ -44,6 +44,7 @@ import pe.gob.onpe.autentica.model.UsuarioAcceso;
 import pe.gob.onpe.libreria.util.ServletUtility;
 import pe.gob.onpe.tramitedoc.bean.DocumentoVerBean;
 import pe.gob.onpe.tramitedoc.bean.UsuarioConfigBean;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 
 public class Utilidades {
   private static boolean instanciated = false;
@@ -154,7 +155,7 @@ public class Utilidades {
     try {
       long h = 0L;
       int length = -1;
-      byte[] buffer = new byte[4096];
+      byte[] buffer = new byte[Constantes.BUFFER_SIZE];
       response.setContentType(contentType);
       ServletOutputStream ouputStream = response.getOutputStream();
       while ((length = in.read(buffer)) != -1) {
@@ -169,8 +170,8 @@ public class Utilidades {
     } 
   }
   
-  public StringBuffer readHttpAndWriteInOutput(InputStream in) throws Exception {
-    StringBuffer sf = new StringBuffer();
+  public StringBuilder readHttpAndWriteInOutput(InputStream in) throws Exception {
+    StringBuilder sf = new StringBuilder();
     try {
       BufferedReader input = new BufferedReader(new InputStreamReader(in));
       String line = "";
@@ -233,7 +234,7 @@ public class Utilidades {
           readHttpAndWriteInOutputStream(in, response, contentType);
         } else {
           urlRetval = "reportError";
-          StringBuffer sf = readHttpAndWriteInOutput(m_con.getInputStream());
+          StringBuilder sf = readHttpAndWriteInOutput(m_con.getInputStream());
           model.addAttribute("textError", sf.toString());
         } 
       } else {

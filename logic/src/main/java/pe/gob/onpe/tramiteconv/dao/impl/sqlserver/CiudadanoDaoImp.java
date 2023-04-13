@@ -27,7 +27,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
   private ApplicationProperties applicationProperties;
   
   public List<CitizenBean> getCiudadanoList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("SELECT NULEM, UBDEP, UBPRV, UBDIS, LTRIM(RTRIM(DEAPP)) AS DEAPP, LTRIM(RTRIM(DEAPM)) AS DEAPM, LTRIM(RTRIM(DENOM)) AS DENOM, ");
     sql.append("(select retorno from IDOSGD.PK_SGD_DESCRIPCION_FU_GET_DEPARTAMENTO(ubdep)) NO_DEP, ");
@@ -50,7 +50,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
 
   
   public List<CitizenBean> getCiudadanoBusqList(String busCiudDocumento, String busCiudApPaterno, String busCiudApMaterno, String busCiudNombres) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     List<CitizenBean> list = new ArrayList<CitizenBean>();
     Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -120,7 +120,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
   
   public String insCiudadano(CitizenBean ciudadano, String codUsuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String genCoProceso = "";
     
     sql.append("insert into IDOSGD.TDTX_ANI_SIMIL ");
@@ -148,7 +148,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
   
   public CitizenBean getCiudadano(String codCiudadano) {
     CitizenBean ciudadanoBean = new CitizenBean();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("SELECT NULEM, UBDEP, UBPRV, UBDIS, LTRIM(RTRIM(DEAPP)) AS DEAPP, LTRIM(RTRIM(DEAPM)) AS DEAPM, LTRIM(RTRIM(DENOM)) AS DENOM, ");
     sql.append("(select retorno from IDOSGD.PK_SGD_DESCRIPCION_FU_GET_DEPARTAMENTO(ubdep)) NO_DEP, ");
@@ -172,7 +172,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
   public String updCiudadano(CitizenBean ciudadano, String codUsuario) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.TDTX_ANI_SIMIL set ");
     sql.append("UBDEP=?, UBPRV=?, UBDIS=?, DEAPP=?, DEAPM = ?, DENOM= ?, ");
     sql.append("DEDOMICIL=?, DEEMAIL=?, DETELEFO=? ");
@@ -194,7 +194,7 @@ public class CiudadanoDaoImp   extends SimpleJdbcDaoBase   implements CiudadanoD
   
   public String insPideCiudadano(ConsultaDniBean ciudadano, String codUsuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
 
     
     sql.append("insert into IDOSGD.TDTX_ANI_SIMIL ");

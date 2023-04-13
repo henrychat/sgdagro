@@ -43,7 +43,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
      */
 //	@Override
 //	public List<DocumentoBean> getDocumentosRecepAdm(BuscarDocumentoRecepBean buscarDocumentoRecep){
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        sql.append("SELECT NU_ANN,NU_EMI,TI_CAP,NU_COR_DES,TO_CHAR(FE_EMI,'DD/MM/YY') FE_EMI_CORTA,FE_EMI,DE_ORI_EMI,DE_TIP_DOC_ADM,NU_DOC,DE_EMP_DES,DE_ASU_M,NU_EXPEDIENTE,DE_ES_DOC_DES,");
 //        sql.append("'1' EXISTE_DOC,TD_PK_TRAMITE.FU_DOC_ANE(NU_ANN,NU_EMI) EXISTE_ANEXO,NU_DES ");
 //        sql.append("FROM TDVV_DESTINOS_ADM ");
@@ -86,7 +86,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 //    }
     @Override
     public List<DocumentoBean> getDocumentosBuscaRecepAdm(BuscarDocumentoRecepBean buscarDocumentoRecep) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         String sOrdenList="";
         Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -255,7 +255,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     }
 @Override
     public List<DependenciaBean> getDocumDepenProveido(String codDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
@@ -276,7 +276,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     }
     @Override
     public DocumentoBean getDocumentoRecepAdm(String pnuAnn, String pnuEmi, String pnuDes) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT A.NU_ANN,A.NU_EMI,A.TI_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (A.CO_EMP_RES) DE_EMP_RES,A.FE_EMI,\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI,A.CO_TIP_DOC_ADM,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n"
                 + "CASE  WHEN A.TI_EMI='01' THEN\n"
@@ -323,7 +323,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public ExpedienteBean getExpDocumentoRecepAdm(String pnuAnnExp, String pnuSecExp) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT NU_ANN_EXP,NU_SEC_EXP,FE_EXP,TO_CHAR(FE_EXP,'DD/MM/YYYY') FE_EXP_CORTA,FE_VENCE,CO_PROCESO,IDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(CO_PROCESO) DE_PROCESO,DE_DETALLE,CO_DEP_EXP,CO_GRU,NU_CORR_EXP,NU_EXPEDIENTE,NU_FOLIOS,NU_PLAZO,US_CREA_AUDI,FE_CREA_AUDI,US_MODI_AUDI,FE_MODI_AUDI,ES_ESTADO\n"
                 + "FROM IDOSGD.TDTC_EXPEDIENTE\n"
                 + "where\n"
@@ -343,7 +343,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public List<ReferenciaBean> getDocumentosRefRecepAdm(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT IDOSGD.PK_SGD_DESCRIPCION_de_documento (a.co_tip_doc_adm) li_tip_doc,"
                 + "CASE  WHEN A.TI_EMI='01' THEN\n"
                 + "A.NU_DOC_EMI || '-' || A.NU_ANN || '/' || A.DE_DOC_SIG\n"
@@ -403,7 +403,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     @Override
     public String getNumCorrelativoDestino(String nuAnn, String coDepDes) {
         String result = "1";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT COALESCE(MAX(nu_cor_des), 0) + 1\n"
                 + "FROM IDOSGD.tdtv_destinos\n"
                 + "WHERE nu_ann = ?\n"
@@ -501,7 +501,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     @Override
     public List<DocumentoBean> getDocumentosRecepAdm(BuscarDocumentoRecepBean buscarDocumentoRecep, Paginacion paginacion) {
         
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        //para paginacion
 //        sql.append("SELECT * ");
 //        sql.append("FROM ( SELECT A.*  ");
@@ -559,7 +559,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     @Override
     public int getRowDocumentosRecepAdm(BuscarDocumentoRecepBean buscarDocumentoRecep) {
 //        int result = -1;
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        sql.append("SELECT COUNT(1) ");
 //        sql.append("FROM IDOSGD.TDVV_DESTINOS_ADM ");
 //        sql.append("WHERE ");
@@ -599,7 +599,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     /*comentado ini*/
 //	@Override
 //	public List<DocumentoBean> _getDocumentosRecepAdm(BuscarDocumentoRecepBean buscarDocumentoRecep){
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        sql.append("SELECT NU_ANN,NU_EMI,TI_CAP,NU_COR_DES,TO_CHAR(FE_EMI,'DD/MM/YY') FE_EMI_CORTA,FE_EMI,DE_ORI_EMI,DE_TIP_DOC_ADM,NU_DOC,DE_EMP_DES,DE_ASU_M,NU_EXPEDIENTE,DE_ES_DOC_DES ");
 //        sql.append("FROM TDVV_DESTINOS_ADM ");
 //        sql.append("WHERE ");
@@ -697,7 +697,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     /*comentado fin*/
     public String getDesEstadoDocRecepcion(String sesDocRec) {
         String result = null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(?,'TDTV_DESTINOS')");
 
         try {
@@ -710,7 +710,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     public String validarAnulacionDocRecepcion(String pnuAnn, String pnuEmi, String pnuDes) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry1 = new StringBuffer();
+         StringBuilder sqlQry1 = new StringBuilder();
         sqlQry1.append("SELECT COUNT(re.nu_emi)\n"
                 + "FROM IDOSGD.tdtr_referencia rf,\n"
                 + "IDOSGD.tdtv_remitos   re\n"
@@ -720,7 +720,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
                 + "AND rf.nu_emi_ref = ?\n"
                 + "AND rf.nu_des_ref = ?\n"
                 + "AND re.ES_DOC_EMI <> '9'");
-        StringBuffer sqlQry2 = new StringBuffer();
+         StringBuilder sqlQry2 = new StringBuilder();
         sqlQry2.append("SELECT COUNT(nu_emi)\n"
                 + "FROM IDOSGD.tdtv_destinos\n"
                 + "WHERE nu_ann = ?\n"
@@ -728,7 +728,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
                 + "AND nu_des <> ?\n"
                 + "AND es_doc_rec <> '0'\n"
                 + "AND es_eli = '0'");
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.tdtv_remitos\n"
                 + "SET es_doc_emi = '0' -- EMITIDO\n"
                 + "WHERE nu_ann = ?\n"
@@ -753,7 +753,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public DocumentoBean existeDocumentoReferenciado(BuscarDocumentoRecepBean buscarDocumentoRecep) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocumentoBean documentoBean = null;
         sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\n"
                 + "WHERE A.NU_ANN=?\n"
@@ -779,7 +779,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public List<DocumentoBean> getDocumentosReferenciadoBusq(DocumentoBean documentoBean, String sTipoAcceso) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
 
@@ -870,7 +870,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
     @Override
     public String getVerificaAtendido(String pnuAnn, String pnuEmi, String pnuDes) {
         String vResult = "0";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT count(a.nu_ann) nu_cantidad \n"
                 + "FROM IDOSGD.tdtr_referencia a, IDOSGD.tdtv_remitos b \n"
                 + "WHERE a.nu_ann = b.nu_ann \n"
@@ -892,7 +892,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public List<ReferenciaBean> getConsultaAtendido(String pnuAnn, String pnuEmi, String pnuDes) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_de_documento (b.co_tip_doc_adm) li_tip_doc, \n"
 //                + "DECODE (b.ti_emi,'01', b.nu_doc_emi || '-' || b.nu_ann || '-' || b.de_doc_sig, \n"
@@ -931,7 +931,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public String updEtiquetaTipoRecepDocumento(DocumentoBean documentoBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE IDOSGD.TDTV_DESTINOS ");
         sql.append("SET ti_fisico_rec =?,co_etiqueta_rec =?");
         sql.append(" WHERE NU_ANN = ? ");
@@ -951,7 +951,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
     @Override
     public DocumentoBean getEstadoDocumento(String nuAnn, String nuEmi, String nuDes) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocumentoBean documentoBean = null;
         sql.append("SELECT CO_EMP_DES,ES_DOC_REC,NU_ANN,NU_EMI,NU_DES,TI_DES,CO_DEP_DES\n" +
         "FROM IDOSGD.TDTV_DESTINOS\n" +

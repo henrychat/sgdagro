@@ -1292,7 +1292,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         
         vReturn = this.anexoDocumentoService.updArchivoAnexoFirmado(docObjBean);
       } catch (Exception ex) {
-        StringBuffer mensaje = new StringBuffer();
+         StringBuilder mensaje = new StringBuilder();
         vReturn = "Error en Leer Documento de Repositorio";
         mensaje.append(docObjBean.getNumeroSecuencia() + ":");
         mensaje.append(docObjBean.getNuAnn() + "." + docObjBean.getNuEmi());
@@ -1300,7 +1300,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
       } 
     } else {
       vReturn = "Error en Carga de Documento";
-      StringBuffer mensaje = new StringBuffer();
+       StringBuilder mensaje = new StringBuilder();
       mensaje.append("cargaDocEmi:Objeto docObjBean NULO");
       logger.error(mensaje);
     } 

@@ -29,7 +29,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
 
     @Override
     public List<DocumentoExtConsulBean> getDocumentosExternos(BuscarDocumentoExtConsulBean buscarDocExt) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         boolean bBusqDep = false;
         Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -208,7 +208,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
     
     @Override
     public DocumentoExtConsulBean getDocumentoExtConsulBean(String nuAnn, String nuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_EMI,B.NU_EXPEDIENTE,\n" +
                 "TO_CHAR(B.FE_EXP,'DD/MM/YYYY') FE_EXP_CORTA,IDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(B.CO_PROCESO) DE_PROCESO_EXP, IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI,\n" +
                 "IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(A.CO_LOC_EMI) DE_LOC_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n" +
@@ -237,7 +237,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
     
     @Override
     public List<ReferenciaDocExtRecepBean> getLsRefDocExterno(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<ReferenciaDocExtRecepBean> list;
         sql.append("SELECT A.NU_ANN,A.NU_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n" +
                     "C.NU_DOC de_doc_sig,\n" +
@@ -266,7 +266,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
     
     @Override
     public List<DestinatarioDocumentoEmiConsulBean> getLsDestinoEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiConsulBean> list = null;
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local,"
                 + " CASE WHEN a.co_loc_des IS NOT NULL\n"
@@ -358,7 +358,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
     public String getRutaReporte(BuscarDocumentoExtConsulBean DocExt){
         String vResult="0";
         boolean bBusqDep = false;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         try {
             sql.append(" A.NU_ANN=B.NU_ANN");
@@ -434,7 +434,7 @@ public class ConsultaEmiDocExtDaoImp extends SimpleJdbcDaoBase implements Consul
     @Override
     public List<DocumentoExtConsulBean> getListaReporteBusqueda(BuscarDocumentoExtConsulBean buscarDocumentoExtConsulBean) {
         String vResult;
-        StringBuffer prutaReporte = new StringBuffer();
+         StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List list = null;
         boolean bBusqFiltro = false;

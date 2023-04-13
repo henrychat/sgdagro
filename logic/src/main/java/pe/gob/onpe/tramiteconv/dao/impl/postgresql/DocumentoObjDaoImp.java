@@ -19,6 +19,7 @@ import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoObjBlock;
 import pe.gob.onpe.tramitedoc.dao.DocumentoObjDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
+import pe.gob.onpe.tramitedoc.util.Constantes;
 
 
 @Repository("documentoObjDao")
@@ -27,7 +28,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     private static Logger logger=Logger.getLogger("SGDDocumentoObjDaoImp");
              
     public DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -63,7 +64,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
     
     public  DocumentoObjBean getDatosDoc(String pnuAnn, String pnuEmi, String ptiCap){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann, \n" +
                     "nu_emi, \n" +
@@ -89,7 +90,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     
     @Override
     public  DocumentoObjBean getNombreArchivo(String pnuAnn, String pnuEmi, String ptiCap){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann, \n" +
                     "nu_emi, \n" +
@@ -113,7 +114,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     
     @Override
     public  DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann, \n" +
                     "nu_emi, \n" +
@@ -130,7 +131,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {
-            StringBuffer mensaje = new StringBuffer();
+             StringBuilder mensaje = new StringBuilder();
             mensaje.append("DocBlob:"+pnuAnn+"."+pnuEmi+"."+ptiCap);
             logger.error(mensaje,e);            
             //e.printStackTrace();
@@ -208,7 +209,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
     @Override
     public List<DocumentoDatoBean> CargarSubReporte2(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
             sql.append("SELECT    a.nu_ann,\n" +
                         "	a.nu_emi,\n" +
                         "	b.nu_des,\n" +
@@ -309,7 +310,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                     try {
 //                         blobStream = documento.getBinaryStream();
                         blobStream = new ByteArrayInputStream(fileBytes);
-                         byte[] buffer = new byte[1024*8];
+                         byte[] buffer = new byte[Constantes.BUFFER_SIZE];
                          int bytesRead;
                          do {
                               bytesRead = blobStream.read(buffer);
@@ -330,7 +331,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 }
                 fileBytes=null;
             } catch (Exception e) {
-                StringBuffer mensaje = new StringBuffer();
+                 StringBuilder mensaje = new StringBuilder();
                 mensaje.append("LeerBlob:"+this.docObjBean.getNuAnn()+"."+this.docObjBean.getNuEmi());
                 logger.error(mensaje,e);            
                 //e.printStackTrace();
@@ -342,7 +343,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
     @Override
     public  DocumentoObjBean getNombreArchivoAnexo(String pnuAnn, String pnuEmi, String pnuAnexo){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -375,7 +376,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     
     @Override
     public  DocumentoObjBean getNombreArchivoAnexoArchivado(String pnuAnn, String pnuEmi, String pnuAnexo){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -403,7 +404,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     
     @Override
     public  DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -422,7 +423,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {
-            StringBuffer mensaje = new StringBuffer();
+             StringBuilder mensaje = new StringBuilder();
             mensaje.append("Anexo:"+pnuAnn+"."+pnuEmi+"."+pnuAne);
             logger.error(mensaje,e);            
             //e.printStackTrace();
@@ -433,7 +434,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
    }
     @Override
     public  List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -452,7 +453,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {
-            StringBuffer mensaje = new StringBuffer();
+             StringBuilder mensaje = new StringBuilder();
             mensaje.append("Anexo:"+pnuAnn+"."+pnuEmi);
             logger.error(mensaje,e);            
             //e.printStackTrace();
@@ -463,7 +464,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
    }
     @Override
     public String getInFirmaDoc(String pcoDep,String pcoTipoDoc){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append(" SELECT CASE WHEN es_obl_firma='0' THEN 'N' ELSE 'F' END \n" +
                     "FROM IDOSGD.sitm_doc_dependencia\n" +
@@ -484,7 +485,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     @Override
     public String insRemitosBlock(DocumentoObjBlock docBlock){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.TDTV_REMITOS_BLOCK(NU_ANN,NU_EMI,NU_SEC_FIRMA,\n" +
                     "FECHA_FIRMA,TIPO_FIRMA)\n" +
                     "VALUES(?,?,?,\n" +
@@ -504,7 +505,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     @Override
     public String updRemitosBlock(DocumentoObjBlock docBlock) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("UPDATE IDOSGD.TDTV_REMITOS_BLOCK \n"
                 + "SET NU_SEC_FIRMA=?\n"
@@ -525,7 +526,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     
     @Override
     public DocumentoObjBlock getDatosDocBlock(String pnuAnn,String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocumentoObjBlock docBlock = null;
         sql.append("SELECT RB.NU_ANN,RB.NU_EMI,RB.NU_SEC_FIRMA,\n" +
                     "RB.FECHA_FIRMA,RB.TIPO_FIRMA,CURRENT_TIMESTAMP FECHA_ACTUAL\n" +
@@ -547,7 +548,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
      
     @Override
     public  DocumentoObjBean leerActaNotificacion(String pnuAnn, String pnuEmi, String pnuDes, String pnuActa){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -567,7 +568,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {
-            StringBuffer mensaje = new StringBuffer();
+             StringBuilder mensaje = new StringBuilder();
             mensaje.append("Acta:"+pnuAnn+"."+pnuEmi+"."+pnuDes+"."+pnuActa);
             logger.error(mensaje,e);            
             //e.printStackTrace();

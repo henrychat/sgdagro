@@ -27,7 +27,7 @@ public class TupaDaoImp
   private ApplicationProperties applicationProperties;
   
   public List<TupaBean> getTupaList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("SELECT  CO_PROCESO, ");
     sql.append("        TI_PROCESO, ");
@@ -55,7 +55,7 @@ public class TupaDaoImp
   }
   
   public List<TupaBean> getTupaBusqList(String busTupaCorto, String busTupaDescripcion) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Object[] objectParam = null;
     
     sql.append("SELECT A.* FROM ( ");
@@ -100,7 +100,7 @@ public class TupaDaoImp
   
   public String insTupa(TupaBean tupa, String codusuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String genCoProceso = "";
     
     sql.append("insert into IDOSGD.TDTR_PROCESOS_EXP ");
@@ -131,7 +131,7 @@ public class TupaDaoImp
   
   public TupaBean getTupa(String codTupa) {
     TupaBean tupaBean = new TupaBean();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("SELECT  CO_PROCESO, ");
     sql.append("        TI_PROCESO, ");
@@ -163,7 +163,7 @@ public class TupaDaoImp
   public String updTupa(TupaBean tupa, String codusuario) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.TDTR_PROCESOS_EXP set ");
     
     sql.append(" ES_ESTADO=?, DE_NOMBRE=?, DE_DESCRIPCION=?, NU_PLAZO=?, US_MODI_AUDI=?, FE_MODI_AUDI=CURRENT_TIMESTAMP ");

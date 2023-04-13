@@ -15,7 +15,7 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 public class AdmPermisoDaoImp   extends SimpleJdbcDaoBase   implements AdmPermisoDao
 {
   public List<PermisoBean> getPermisoList(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select s.cdes_user, p.co_use, p.co_dep, p.es_act, p.es_act_wf from IDOSGD.TDTR_PERMISOS p inner join IDOSGD.seg_usuarios1 s on p.co_use = s.cod_user where co_dep=? ");
     List<PermisoBean> list = new ArrayList<PermisoBean>();
     try {
@@ -33,7 +33,7 @@ public class AdmPermisoDaoImp   extends SimpleJdbcDaoBase   implements AdmPermis
   
   public String eliPermiso(String codDep) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("delete from IDOSGD.TDTR_PERMISOS where co_dep=?");
     try {
@@ -50,7 +50,7 @@ public class AdmPermisoDaoImp   extends SimpleJdbcDaoBase   implements AdmPermis
   
   public String insertarPermiso(PermisoBean permisoDetalle) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.TDTR_PERMISOS(co_use, co_dep, es_act) ");
     sql.append("values (?,?,?)");
     try {

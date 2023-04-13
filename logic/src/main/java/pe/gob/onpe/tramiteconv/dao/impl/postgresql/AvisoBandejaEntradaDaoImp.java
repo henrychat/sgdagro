@@ -26,7 +26,7 @@ public class AvisoBandejaEntradaDaoImp  extends SimpleJdbcDaoBase implements Avi
 	
     @Override
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoTotal(String coDependencia,String coEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT 1 orden,'06' Ti_Pen,\n" +
                     "      'PARA DESPACHO' de_pen, 'Documentos Administrativos listos para la Firma' de_resumen,\n" +
                     "      SUM(nu_can) Nu_Can , :pCoDep co_dep \n" +
@@ -125,7 +125,7 @@ public class AvisoBandejaEntradaDaoImp  extends SimpleJdbcDaoBase implements Avi
 
       @Override
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAltaDireccionTotal(String coDependencia,String coEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT 1 orden,'06' Ti_Pen,\n" +
                     "      'PARA DESPACHO' de_pen, 'Documentos Administrativos listos para la Firma' de_resumen,\n" +
                     "      SUM(nu_can) Nu_Can , :pCoDep co_dep \n" +
@@ -225,7 +225,7 @@ public class AvisoBandejaEntradaDaoImp  extends SimpleJdbcDaoBase implements Avi
     
     @Override
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoPersonal(String coDependencia,String coEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT 1 orden,'06' Ti_Pen,\n" +
                     "      'PARA DESPACHO' De_Pen, 'Documentos Administrativos listos para la Firma' de_resumen,\n" +
                     "      SUM(nu_can) Nu_Can , :pCoDep co_dep \n" +
@@ -339,7 +339,7 @@ public class AvisoBandejaEntradaDaoImp  extends SimpleJdbcDaoBase implements Avi
     
     @Override
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoFuncionario(String coDependencia,String coEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT 1 orden,'06' Ti_Pen,\n" +
                     "	       'PARA DESPACHO' De_Pen, 'Documentos Administrativos listos para la Firma' de_resumen ,\n" +
                     "	       COUNT(1) Nu_Can, :pCoDep co_dep\n" +
@@ -441,7 +441,7 @@ public class AvisoBandejaEntradaDaoImp  extends SimpleJdbcDaoBase implements Avi
 
     @Override
     public List<EtiquetaBandejaEnBean> getListEtiquetaBandejaEntrada(String coDep, String coEmp) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select e.co_est,e.de_est descripcion,count(*) numero_documentos,d.co_dep_des,d.co_emp_rec ");
         sql.append("from IDOSGD.tdtv_bandeja_rec d,IDOSGD.tdtr_estados e ");
         sql.append("where d.co_dep_des = :pCoDep ");

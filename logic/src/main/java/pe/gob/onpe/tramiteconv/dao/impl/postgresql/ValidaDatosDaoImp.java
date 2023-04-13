@@ -22,7 +22,7 @@ public class ValidaDatosDaoImp extends SimpleJdbcDaoBase implements ValidaDatosD
     
     @Override
     public String getValidaDep(String pcoEmp, String pcoUsu, String pcoDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         Map<String, Object> objectParam = new HashMap<String, Object>();
         

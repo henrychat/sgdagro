@@ -37,7 +37,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
   private static Logger logger = Logger.getLogger("AnexoDocumentoDaoImp");
 
   public List<ReferenciaBean> getDocumentosReferencia(String pnuAnn, String pnuEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append(" SELECT  IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(a.co_tip_doc_adm) li_tip_doc, ");
     sql.append("        (CASE WHEN (a.ti_emi='01' OR a.ti_emi='05') THEN ISNULL(a.nu_doc_emi,' ') + '-' + a.nu_ann + '-' + a.de_doc_sig ");
     sql.append("    ELSE ISNULL(a.de_doc_sig,'S/N') ");
@@ -79,7 +79,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
 
   
   public List<ReferenciaBean> getDocumentoEmi(String pnuAnn, String pnuEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append(" SELECT  IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (a.co_tip_doc_adm) li_tip_doc, ");
     sql.append("        (CASE WHEN (a.ti_emi='01' OR a.ti_emi='05') THEN ISNULL(a.nu_doc_emi,' ') + '-' + a.nu_ann + '-' + a.de_doc_sig ");
     sql.append("    ELSE ISNULL(a.de_doc_sig, 'S/N') ");
@@ -119,7 +119,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
 
   
   public List<ReferenciaBean> getDocumentosSeguimiento(String pnuAnn, String pnuEmi, String pnuDes) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append(" SELECT  [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](b.co_tip_doc_adm) li_tip_doc, ");
     sql.append("        CASE b.ti_emi ");
     sql.append("  WHEN '01' THEN COALESCE(b.nu_doc_emi,'') + '-' + COALESCE(b.nu_ann,'') + '-' + COALESCE(b.de_doc_sig, '') ");
@@ -165,7 +165,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
 
   
   public List<ReferenciaBean> getDocumentoEmiSeg(String pnuAnn, String pnuEmi, String pnuDes) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Object[] objectParam = null;
     
     sql.append(" SELECT  [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](b.co_tip_doc_adm) li_tip_doc, ");
@@ -217,7 +217,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
   public String getUltimoAnexo(String pnuAnn, String pnuEmi) {
     String result = null;
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append(" select CAST(ISNULL(max(nu_ane),0) + 1 AS VARCHAR(10)) nu_ane  from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ?  and nu_emi = ? ");
 
 
@@ -235,7 +235,7 @@ public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements Anexo
 public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStream archivoAnexo, final int size) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.tdtv_anexos set ti_public=?,nu_ann=?,nu_emi=?, nu_ane=?, de_det=?, de_rut_ori=?, co_use_cre=?, ");
     sql.append(" fe_use_cre=CURRENT_TIMESTAMP, co_use_mod=?, fe_use_mod=CURRENT_TIMESTAMP, ");
     sql.append(" feula=convert(varchar, GETDATE(), 103), bl_doc=? where  nu_ann=? and nu_emi=? and nu_ane=? ");
@@ -272,7 +272,7 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   public String delArchivoAnexo(DocumentoAnexoBean docAnexo) {
     String vReturn = "NO_OK";
     
-    StringBuffer sqlDel = new StringBuffer();
+     StringBuilder sqlDel = new StringBuilder();
     sqlDel.append("delete from IDOSGD.tdtv_anexos WHERE NU_ANN = ? AND NU_EMI = ? and nu_ane=CAST(? AS NUMERIC(2,0))");
 
     try {
@@ -288,7 +288,7 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   
   public String delArchivoAnexoDest(String pNuAnn, String pNuEmi, String pNuDes) {
     String vReturn = "NO_OK";
-    StringBuffer sqlDel = new StringBuffer();
+     StringBuilder sqlDel = new StringBuilder();
     sqlDel.append("delete from idosgd.tdtv_anexos WHERE NU_ANN = ? AND NU_EMI = ? and nu_des=?");
 
  
@@ -305,7 +305,7 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   
   public String updAnexoDetalle(DocumentoAnexoBean docAnexo) {
     String vReturn = "NO_OK";
-    StringBuffer sqlUpd = new StringBuffer();
+     StringBuilder sqlUpd = new StringBuilder();
     sqlUpd.append("update IDOSGD.tdtv_anexos  set ti_public=?,de_det=? ,co_use_mod=? ,fe_use_mod=GETDATE() ,REQ_FIRMA=? where nu_ann=? and nu_emi=? and nu_ane=?");
 
  
@@ -325,7 +325,7 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStream archivoAnexo, final int size) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.tdtv_anexos( nu_ann, nu_emi, nu_ane, de_det, de_rut_ori, co_use_cre, fe_use_cre, co_use_mod, fe_use_mod, feula,  bl_doc,ti_public  ) values(?,?,?,?,?,?,GETDATE(),?,GETDATE(),IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'yyyymmdd'),?,'1')");
 
 
@@ -356,7 +356,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
   
   public String getNombreArchivo(String pNuAnn, String pNuEmi, String pNuAne) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String result = "NO_OK";
     sql.append("select de_det from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann=? and nu_emi=? and nu_ane=?");
     
@@ -370,7 +370,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
   
   public String updExisteAnexo(String pNuAnn, String pNuEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String result = "NO_OK";
     sql.append("update IDOSGD.TDTX_REMITOS_RESUMEN SET IN_EXISTE_ANEXO ='0' where NU_ANN=? and NU_EMI=?");
     
@@ -384,7 +384,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
   
   public DocumentoObjBean getPropiedadesArchivo(String pnuAnn, String pnuEmi, String pnuAne) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select  nu_ann,  nu_emi,  de_rut_ori nombre_Archivo, UPPER(right(de_rut_ori,3 ))  tipo_doc from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ? and nu_emi = ? AND NU_ANE = ?");
 
 
@@ -411,7 +411,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   
   public String updRemitosResumenInFirmaAnexos(String pFirmaAnexo, String pnuAnn, String pnuEmi) {
     /*String vReturn = "NO_OK";
-    StringBuffer sqlUpd = new StringBuffer();
+     StringBuilder sqlUpd = new StringBuilder();
     sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET IN_FIRMA_ANEXO = ? WHERE NU_ANN = ?  AND NU_EMI = ? ");
 
 
@@ -433,7 +433,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   ACCION: Modificacion de llamado a Query por SP*/
 
     String vReturn = "NO_OK";
-    StringBuffer sqlUpd = new StringBuffer();
+     StringBuilder sqlUpd = new StringBuilder();
     this.spdataSource = new SimpleJdbcCall(this.dataSource).withProcedureName("[IDOSGD].[PK_SGD_TRAMITE_PROCE_REMITOS_RESUMEN_FIRMA_ANEXO_UDP]")
             .withoutProcedureColumnMetaDataAccess()
             .useInParameterNames("p_anio", "p_nuEmi", "p_pFirmaAnexo")
@@ -463,7 +463,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
     String vReturn = "NO_OK";
     
     DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("UPDATE IDOSGD.TDTV_ANEXOS SET BL_DOC=?, CO_USE_MOD=?, FE_USE_MOD=GETDATE(), FEULA=IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYYMMDD'), REQ_FIRMA='0' WHERE NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
 
     

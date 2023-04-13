@@ -46,7 +46,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
         public List<AnnioBean> listAnnioEjec() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CANO_ANOEJE CANO, CANO_ANOEJE DE_ANIO ");
         sql.append("FROM IDOSGD.SI_MAE_ANO_EJECUCION UNION SELECT '.:TODOS.:', ");
         sql.append("NULL ORDER BY 1 DESC ");
@@ -67,7 +67,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
         public List<EstadoDocumentoBean> listEstadosDocumento(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST,CO_EST ");
         sql.append("FROM IDOSGD.TDTR_ESTADOS ");
         sql.append("WHERE DE_TAB = ? ");
@@ -91,7 +91,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
         public List<PrioridadDocumentoBean> listPrioridadDocumento() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT DE_PRI,CO_PRI ");
         sql.append("FROM IDOSGD.TDTR_PRIORIDAD ");
@@ -163,7 +163,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
         public List<ExpedienteBean> listExpedientes(String coDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT DE_EXP, CO_EXP ");
         sql.append("FROM IDOSGD.TDTR_EXPEDIENTE ");
@@ -187,7 +187,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
         public List<RemitenteBean> listRemitente(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("select distinct   ");
         sql.append("	DE_DEPENDENCIA descrip,");
@@ -246,7 +246,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
         public List<DestinatarioBean> listDestinatario(String annio, String coDependencia,String ptiAcceso,String pcoEmpleado) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bquery=false;
         
         if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
@@ -296,7 +296,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public List<EmpleadoBean> listEmpleadoDependencia(String pcodDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
        
         sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.CEMP_DENOM, e.CEMP_CODEMP\n" +
         "FROM IDOSGD.RHTM_PER_EMPLEADOS e\n" +
@@ -321,7 +321,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
         public List<RemitenteBean> listReferenciaOrigen(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append(" select distinct   ");
         sql.append(" 	b.DE_DEPENDENCIA descrip,");
@@ -373,7 +373,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
         @Override
         public List<DependenciaBean> listDestinatarioEmi(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append(" select distinct   ");
         sql.append(" 	b.DE_DEPENDENCIA deDependencia,");
@@ -430,7 +430,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         
     @Override
     public List<EmpleadoBean> listEmpleadoElaboradoPor(String pcodDependencia,String ptiAcceso,String pcoEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bquery=false;
        
         if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
@@ -483,7 +483,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
      public List<EmpleadoBean> listEmpleadoDestino(String pcodDependencia,String ptiAcceso,String pcoEmpleado){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bquery=false;
        
         if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
@@ -538,7 +538,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
      
      @Override
         public List<DependenciaBean> listDependenciaDestinatarioEmi(String coDepen, String deDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
             sql.append("SELECT DE_DEPENDENCIA,\n"
                     + "       CO_DEPENDENCIA,\n"
@@ -575,7 +575,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         
     @Override
     public List<TipoDocumentoBean> listTipDocXDependencia(String coDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC\n" +
             "FROM IDOSGD.SI_MAE_TIPO_DOC A,IDOSGD.SITM_DOC_DEPENDENCIA B\n" +
             "WHERE A.CDOC_INDBAJ ='0'\n" +
@@ -597,7 +597,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     }
     @Override
     public List<TipoDocumentoBean> listTipDocXDependenciaPersonal(String coDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC,CDOC_GRUPO \n" +
             "FROM IDOSGD.SI_MAE_TIPO_DOC A,IDOSGD.SITM_DOC_DEPENDENCIA B\n" +
             "WHERE A.CDOC_INDBAJ ='0'AND CDOC_GRUPO='02' \n" +
@@ -619,7 +619,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     }
     @Override
     public List<PrioridadDocumentoBean> listPrioridadDocTblEmi() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT DE_PRI,CO_PRI ");
         sql.append("FROM IDOSGD.TDTR_PRIORIDAD ");
@@ -640,7 +640,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<TipoDocumentoBean> listTipDocReferencia(String coDependencia){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("select a.CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\n" +
                     "from (\n" +
@@ -665,7 +665,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<TipoDestinatarioEmiBean> listTipDestinatarioEmi(){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from IDOSGD.SI_ELEMENTO WHERE CTAB_CODTAB='TIP_DESTINO' AND CELE_CODELE not in  ('05')"); 
         
@@ -684,7 +684,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<GrupoDestinatarioBean> listGrupoDestinatario(String codDependencia){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT DE_GRU_DES de_grupo,CO_GRU_DES co_grupo FROM IDOSGD.TDTM_GRU_DES WHERE CO_DEP=? AND ES_GRU_DES='1' ORDER BY 2"); 
         
@@ -724,7 +724,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<DependenciaBean> listDependenciaRemitenteEmi(String coDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA \n" +
                     "FROM IDOSGD.RHTM_DEPENDENCIA \n" +
                     "where CO_DEPENDENCIA in (SELECT ?  \n" +//FROM DUAL
@@ -748,7 +748,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override    
     public List<LocalBean> listLocalRemitenteEmi(String coDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from IDOSGD.SI_MAE_LOCAL WHERE CCOD_LOCAL IN (SELECT CO_LOC FROM IDOSGD.SITM_LOCAL_DEPENDENCIA WHERE CO_DEP = ?)"); 
         
         List<LocalBean> list = new ArrayList<LocalBean>();
@@ -766,7 +766,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override    
     public List<LocalBean> listLocal(){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from IDOSGD.SI_MAE_LOCAL ORDER BY 2"); 
         
         List<LocalBean> list = new ArrayList<LocalBean>();
@@ -784,7 +784,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<RemitenteBean> listReferenciaOrigenPersonal(String sCoEmpEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
 
     sql.append(""+
 //             "SELECT DECODE(c.ti_emi,\n" +
@@ -847,7 +847,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
         @Override
         public List<DependenciaBean> listDestinatarioEmiPersonal(String sCoEmpEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT CASE  \n" +
                     "            WHEN  c.ti_des='01' THEN d.de_dependencia \n" +
@@ -896,7 +896,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public DependenciaBean getDatosDependencia(String codDependencia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "co_dependencia,\n" +
                     "co_empleado,\n" +
@@ -922,7 +922,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
         public List<EstadoDocumentoBean> listEstadosDocumentoMP(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST_MP DE_EST,CO_EST \n" +
                     "FROM IDOSGD.TDTR_ESTADOS \n" +
                     "WHERE DE_TAB=?\n" +
@@ -947,7 +947,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public List<EstadoDocumentoBean> listEstMensajeria(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT '[TODOS]',NULL FROM DUAL ORDER BY CO_EST ");
         sql.append("UNION ");
         sql.append("SELECT DE_EST,CO_EST ");
@@ -972,7 +972,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         
     @Override
     public List<TipoDestinatarioEmiBean> listTipEmisorDocExtRecep(){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from IDOSGD.SI_ELEMENTO \n" +
                     "WHERE CTAB_CODTAB='TIP_DESTINO' \n" +
@@ -996,7 +996,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<TupaExpedienteBean> listTupaExpedienteNew(){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n" +
                     "FROM IDOSGD.TDTR_PROCESOS_EXP \n" +
@@ -1022,7 +1022,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<TupaExpedienteBean> listTupaExpediente(){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n" +
                     "FROM IDOSGD.TDTR_PROCESOS_EXP \n" +
@@ -1047,7 +1047,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<LocalBean> lsLocal(){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from IDOSGD.SI_MAE_LOCAL \n" +
                     "union\n" +
                     "select ' [TODOS]' DE_LOCAL,NULL CO_LOCAL\n" +
@@ -1069,7 +1069,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<EtiquetaBean> getEtiquetasList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("select co_est,de_est \n"
                 + "from IDOSGD.tdtr_estados \n"
@@ -1092,7 +1092,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<DependenciaBean> getlsDestinatarioEmiDocExt(String annio,String coDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append(" select\n" +
                     "   b.DE_DEPENDENCIA deDependencia,\n" +
@@ -1127,7 +1127,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<DependenciaBean> getlsDestinatarioDocPendEntrega(String coDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT DE_DEPENDENCIA , CO_DEPENDENCIA , DE_CORTA_DEPEN\n" +
                 "FROM IDOSGD.RHTM_DEPENDENCIA \n" +
@@ -1152,7 +1152,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public List<VencimientoBean> getVencimientoList() {
-         StringBuffer sql = new StringBuffer();
+          StringBuilder sql = new StringBuilder();
 
         sql.append("select co_est,de_est \n"
                 + "from IDOSGD.tdtr_estados \n"
@@ -1175,7 +1175,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public List<EstadoDocumentoBean> listEstadosDocumentoEmiSegui(String tdtv_destinos) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST,CO_EST ");
         sql.append("FROM IDOSGD.TDTR_ESTADOS ");
         sql.append("WHERE DE_TAB = ? ");
@@ -1199,7 +1199,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<SiElementoBean> getLsSiElementoBean(String pctabCodtab){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR\n" +
             "FROM   IDOSGD.SI_ELEMENTO\n" +
             "WHERE  CTAB_CODTAB = ?");
@@ -1216,7 +1216,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
      @Override
     public List<SiElementoBean> getLsSiElementoBeanOrder(String pctabCodtab){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR,BL_DOC as archivo \n" +
             "FROM   SI_ELEMENTO\n" +
             "WHERE  CTAB_CODTAB = ?"+
@@ -1235,7 +1235,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<DepartamentoBean> listDepartamentos(){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
 
         sql.append("select ubdep coDepartamento,nodep noDepartamento "
                 + "from idosgd.idtubias "
@@ -1300,7 +1300,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
      
     @Override
     public List<ProvinciaBean> listProvincia(String coDep){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
 
         sql.append("select ubprv coProvincia, noprv noProvincia from idtubias where ubdep=? and trim(noprv) is not null group by ubprv,noprv order by 2");
 
@@ -1319,7 +1319,7 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     
     @Override
     public List<DistritoBean> listDistrito(String coDep,String coDis){
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
 
         sql.append("select ubdis coDistrito, cpdis noDistrito from idtubias where ubdep=? and ubprv=? and ubdis not in('00') and trim(cpdis) is not null group by ubdis,cpdis order by 2");
         List<DistritoBean> list;

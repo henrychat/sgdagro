@@ -26,7 +26,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     @Override
     public DatosPlantillaDoc getDocumentoEmitido(String pnuAnn, String pnuEmi) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n"
                 + "a.nu_ann, \n"
                 + "a.nu_emi, \n"
@@ -95,7 +95,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     
     @Override
     public List<DestinatarioDocumentoEmiBean> getLstDestintarios(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();                
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,\n"
                 + "COALESCE(a.co_dep_des,' ') co_dependencia,\n"
@@ -132,7 +132,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     
     @Override
     public List<ReferenciaBean> getLstReferencia(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         List<ReferenciaBean> list = new ArrayList<ReferenciaBean>();                
         sql.append("SELECT \n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_de_documento (a.co_tip_doc_adm) de_tipo_doc, \n"
@@ -174,7 +174,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     
     @Override
     public String getDistritoLocal(String pco_local){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append("      SELECT trim(initcap(b.nodis))\n" +
                     "        FROM IDOSGD.si_mae_local l,\n" +
@@ -198,7 +198,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
 
     @Override
     public String getParametros(String pco_param){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append("select de_par\n" +
                     "from IDOSGD.TDTR_PARAMETROS\n" +
@@ -218,7 +218,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     
     @Override
     public String getPiePagina(String pco_emp, String pco_dep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append("SELECT de_pie_pagina\n" +
                     "  FROM IDOSGD.tdtx_config_emp\n" +
@@ -244,7 +244,7 @@ public class DatosPlantillaDaoImp extends SimpleJdbcDaoBase implements DatosPlan
     
     @Override
     public List<PlantillaDocx> getLstPlantillasDocx(String pcoDep,String idPlantilla){
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         List<PlantillaDocx> list = new ArrayList<PlantillaDocx>();                
         sql.append("select \n" +
                     "co_dep, \n" +

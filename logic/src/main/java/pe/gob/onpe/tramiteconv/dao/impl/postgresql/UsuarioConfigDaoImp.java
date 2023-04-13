@@ -23,7 +23,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
         if(msg==null){
             msg = new Mensaje();
         }
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select\n" +
                     "replace(a.de_dir_emi,'\\','|') de_dir_emi ,\n" +
                     "a.IN_TIPO_DOC in_tipo_doc ,\n" +
@@ -80,7 +80,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public String insUsuarioConfingBasico(UsuarioConfigBean usuarioConf) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into IDOSGD.TDTX_CONFIG_EMP(\n" +
                     "co_emp, \n" +
                     "co_dep, \n" +
@@ -117,7 +117,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public String updUsuarioConfing(UsuarioConfigBean usuarioConf) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update IDOSGD.TDTX_CONFIG_EMP set ");
         sql.append("de_dir_emi=?, de_pie_pagina=?, ti_acceso=?, in_carga_doc=?, in_firma=?, in_tipo_doc =?, fe_use_mod=CURRENT_TIMESTAMP ");
         sql.append("where co_dep = ? AND co_emp = ? ");
@@ -137,7 +137,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     
     @Override
 	public List<UsuarioDepAcceso> getListDepAccesos(String cempCodemp , String coUsuario){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEPENDENCIA, DE_DEPENDENCIA , de_Corta_Depen \n" +
                     "  FROM idosgd.RHTM_DEPENDENCIA\n" +
                     " WHERE CO_DEPENDENCIA IN (\n" +
@@ -182,7 +182,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
 
     @Override
 	public List<UsuarioDepAcceso> getListDepTotal(String cempCodemp){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEPENDENCIA, DE_DEPENDENCIA , de_Corta_Depen \n" +
                     "  FROM IDOSGD.RHTM_DEPENDENCIA\n" +
                     " ORDER BY ti_dependencia, CO_DEPENDENCIA");
@@ -204,7 +204,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public String getCoDepUsuario(String pcoEmp) {
         String vcoDep=null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select B.CO_DEPENDENCIA\n"
                 + "from IDOSGD.RHTM_PER_EMPLEADOS B\n"
                 + "WHERE B.CEMP_CODEMP = ? \n"
@@ -224,7 +224,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public String getTiEncargadoDep(String pcoEmp, String pcoDep) {
         String vcoDep=null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT coalesce(co_tipo_encargatura,'3') \n" +
                     "FROM IDOSGD.RHTM_DEPENDENCIA\n" +
                     "WHERE IN_BAJA = '0'\n" +
@@ -242,7 +242,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     }
     
      public List<UsuarioBean> getUsuariosList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
           
         sql.append("SELECT u.cod_user, s.cdes_user, u.es_activo FROM IDOSGD.seg_user_aplica u ");
         sql.append("INNER JOIN IDOSGD.seg_usuarios1 s on u.cod_user = s.cod_user ");
@@ -266,7 +266,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public UsuarioBean getUsuarioxCodEmp(String coEmp) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         objectParam.put("pCoEmp", coEmp);
         sql.append("SELECT u.COD_USER from IDOSGD.rhtm_per_empleados e INNER JOIN IDOSGD.seg_usuarios1 u "
@@ -286,7 +286,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public UsuarioConfigBean getTipAccesoConsulta(String codEmp, String coDep){
 
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  TI_ACCESO, IN_CONSULTA TI_CONSULTA from IDOSGD.tdtx_config_emp WHERE co_emp = ? and co_dep = ?");
 
         UsuarioConfigBean usuConfig = new UsuarioConfigBean();
@@ -304,7 +304,7 @@ public class UsuarioConfigDaoImp extends SimpleJdbcDaoBase implements UsuarioCon
     @Override
     public String updTipoPermisoUsuario(String codEmp, String codDep, String tipoAcceso, String tipoConsulta ) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update IDOSGD.tdtx_config_emp set TI_ACCESO = ? , IN_CONSULTA = ? where  co_emp = ? and co_dep = ? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{

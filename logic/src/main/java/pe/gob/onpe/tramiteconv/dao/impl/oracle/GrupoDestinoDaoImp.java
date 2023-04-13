@@ -24,7 +24,7 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestinoDao {
 
     public List<GrupoDestinoBean> getGruposDestinosList(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select co_gru_des,co_dep,de_gru_des from TDTM_GRU_DES where co_dep=? and es_gru_des=1 ");
         List<GrupoDestinoBean> list = new ArrayList<GrupoDestinoBean>();
         try {
@@ -40,7 +40,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     }
 
     public List<GrupoDestinoDetalleBean> getGrupoDestinoDetalleList(String codGrupoDestino) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select co_gru_des,"
                 + " co_dep , "
                 + " PK_SGD_DESCRIPCION.de_dependencia(co_dep) de_dependencia,"
@@ -61,7 +61,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     }
 
     public List<DependenciaBean> getDependenciasList(String codDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEPENDENCIA , DE_DEPENDENCIA  FROM RHTM_DEPENDENCIA ");
         sql.append("WHERE CO_NIVEL <> '04' AND IN_BAJA = '0' ");
         sql.append("UNION SELECT CO_DEPENDENCIA COD_DEP, DE_DEPENDENCIA DESCRIP FROM RHTM_DEPENDENCIA ");
@@ -82,7 +82,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     public String insDependenciaDestino(GrupoDestinoDetalleBean destDet) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTD_DEP_GRU(co_gru_des,co_dep,es_dep_gru,co_use_cre,co_use_mod,fe_use_cre,fe_use_mod,co_emp) ");
         sql.append("values (?,?,?,?,?,sysdate,sysdate,?)");
         try {
@@ -97,7 +97,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     }
 
     public List<EmpleadoBean> getEmpleadosDestList(String codDepen, String codGrupoDest) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP cempCodemp ");
         sql.append("FROM RHTM_PER_EMPLEADOS e ");
         sql.append("where e.CEMP_EST_EMP = '1' ");
@@ -129,7 +129,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     public String updDependenciaDestino(GrupoDestinoDetalleBean destDet, String codEmpActual) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         if (codEmpActual.isEmpty()) {
             sql.append("update TDTD_DEP_GRU set co_emp=?,co_use_mod=?,fe_use_mod=sysdate  where co_gru_des=? and co_dep=? and co_emp IS NULL");
         } else {
@@ -155,7 +155,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     public String eliDetalleGrupoDest(GrupoDestinoDetalleBean destDet) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         if (destDet.getCo_emp()==null) {
             sql.append("delete from TDTD_DEP_GRU where co_gru_des=? and co_dep=? and co_emp is null");
         } else {
@@ -180,7 +180,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     public String insGrupoDest(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTM_GRU_DES(co_gru_des,co_dep,de_gru_des, es_gru_des, co_use_cre, co_use_mod, fe_use_cre ,fe_use_mod) ");
         sql.append("values(?,?,?,?,?,?,sysdate,sysdate) ");
         try {
@@ -198,7 +198,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     public String eliGrupoDestino(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update TDTM_GRU_DES set es_gru_des=0, co_use_mod=?,fe_use_mod=sysdate  where co_gru_des=? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
@@ -212,7 +212,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     }
     public String updGrupoDestinoCabecera(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update TDTM_GRU_DES set de_gru_des=?, co_use_mod=?,fe_use_mod=sysdate  where co_gru_des=? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
@@ -226,7 +226,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     }
 
     public List<EmpleadoBean> getEmpleadosDependenciaList(String codDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP cempCodemp ");
         sql.append("FROM RHTM_PER_EMPLEADOS e ");
@@ -268,7 +268,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     @Override
     public List<DependenciaBean> getDestinatariosList(String coTipo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         if (coTipo.equals("02"))//PERSONA JURIDICA
         {
@@ -316,7 +316,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     @Override
     public String insGrupoDestVar(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTM_GRU_DES_VAR(co_gru_des,ti_des,de_gru_des, es_gru_des, co_use_cre, co_use_mod, fe_use_cre ,fe_use_mod) ");
         sql.append("values(?,?,?,?,?,?,sysdate,sysdate) ");
         try {
@@ -335,7 +335,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     @Override
     public String insDependenciaDestinoVar(GrupoDestinoDetalleBean destDet) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTD_DEP_GRU_VAR(co_gru_des,ti_des,es_dep_gru,co_use_cre,co_use_mod,fe_use_cre,fe_use_mod,co_des) ");
         sql.append("values (?,?,?,?,?,sysdate,sysdate,?)");
         try {
@@ -351,7 +351,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     @Override
     public List<GrupoDestinoDetalleBean> getGrupoDestinoVarDetalleList(String codGrupoDestino,String codTipoDestino) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select g.co_gru_des,\n");
         sql.append(" g.ti_des co_dep , \n");
         sql.append(" g.co_des co_emp, \n");
@@ -390,7 +390,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     @Override
     public List<GrupoDestinoBean> getGruposDestinosVarList(String codTipo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select co_gru_des,ti_des co_dep,de_gru_des from tdtm_gru_des_var where ti_des=? and es_gru_des=1 ");
         List<GrupoDestinoBean> list = new ArrayList<GrupoDestinoBean>();
         try {
@@ -408,7 +408,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     @Override
     public String updGrupoDestinoVarCabecera(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update TDTM_GRU_DES_VAR set de_gru_des=?, co_use_mod=?,fe_use_mod=sysdate  where co_gru_des=? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
@@ -424,7 +424,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     @Override
     public String eliDetalleGrupoDestVar(GrupoDestinoDetalleBean destDet) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         if (destDet.getCo_emp()==null) {
             sql.append("delete from TDTD_DEP_GRU_VAR where co_gru_des=? and ti_des=? and co_des is null");
         } else {
@@ -449,7 +449,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
 
     @Override
     public List<GrupoDestinoDetalleBean> getGrupoDestinoVarDetalleList(String codGrupoDestino) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select co_gru_des,"
                 + " ti_des co_dep, "
                 + " co_des co_emp"
@@ -470,7 +470,7 @@ public class GrupoDestinoDaoImp extends SimpleJdbcDaoBase implements GrupoDestin
     @Override
     public String eliGrupoDestinoVar(GrupoDestinoBean gruDest) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update TDTM_GRU_DES_VAR set es_gru_des=0, co_use_mod=?,fe_use_mod=sysdate  where co_gru_des=? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{

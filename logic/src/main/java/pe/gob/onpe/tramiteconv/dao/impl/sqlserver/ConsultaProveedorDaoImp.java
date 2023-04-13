@@ -32,7 +32,7 @@ public class ConsultaProveedorDaoImp
   private ApplicationProperties applicationProperties;
   
   public ProcessResult<List<ProveedorBean>> getProveedoresBusqList(String busNroRuc, String busRazonSocial, FiltroPaginate paginate) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String sqlContains = "";
     Map<String, Object> objectParam = new HashMap<String, Object>();
     

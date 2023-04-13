@@ -16,7 +16,7 @@ public class CasillaElectronicaDaoImpl extends SimpleJdbcDaoBase implements Casi
 	public CasillaElectronicaBean obtenerCasilla( String tipdoc, String numdoc) throws Exception {
 		 
 			    
-			    StringBuffer sqlQry = new StringBuffer();
+			     StringBuilder sqlQry = new StringBuilder();
 			    sqlQry.append(" SELECT TP.TX_DESCRIPCION tipoUsuario,null ruc ,MP.[TX_NRO_DOCUMENTO_IDENTIDAD] nroDocIdentidad");
 			    sqlQry.append(" ,MP.[TX_APELLIDO_PATERNO] apePaterno ,MP.[TX_APELLIDO_MATERNO] apeMaterno, MP.[TX_NOMBRES] nombres ");
 			    sqlQry.append(" FROM [MPV].[T_MVC_SOLICITANTE] MS ");
@@ -55,7 +55,7 @@ public class CasillaElectronicaDaoImpl extends SimpleJdbcDaoBase implements Casi
 	public CasillaElectronicaBean obtenerCasillaPersonaJuridica( String tipdoc, String numdoc,String numRuc) throws Exception{
 
 	    String vReturn = "2";
-	    StringBuffer sqlQry = new StringBuffer();
+	     StringBuilder sqlQry = new StringBuilder();
 	    sqlQry.append(" SELECT TP.TX_DESCRIPCION tipoUsuario,null  ruc,MP.[TX_NRO_DOCUMENTO_IDENTIDAD] nroDocIdentidad ");
 	    sqlQry.append(" ,MP.[TX_APELLIDO_PATERNO] apePaterno ,MP.[TX_APELLIDO_MATERNO] apeMaterno, MP.[TX_NOMBRES] nombres ");
 	    sqlQry.append(" FROM [MPV].[T_MVC_SOLICITANTE] MS ");

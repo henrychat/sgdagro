@@ -13,7 +13,7 @@ public class AuditoriaMovimientoDocDaoImp   extends SimpleJdbcDaoBase   implemen
 {
   public String audiVisualizaDocumento(DocumentoObjBean docVisualiza, Usuario usu) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.TDTV_VISUALIZA_DOC( NU_ANN, NU_EMI, FE_DML, DE_USER, DE_IPPC, DE_NAMEPC, DE_USERPC ) VALUES(?,?,GETDATE(),?,?,?,?)");
 
 
@@ -29,7 +29,7 @@ public class AuditoriaMovimientoDocDaoImp   extends SimpleJdbcDaoBase   implemen
   
   public String audiEstadoDocumento(AudiEstadosMovDocBean audi) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.tdtv_estados_mov( NU_ANN, NU_EMI, NU_DES, FE_DML, TI_PROCESO, ES_PROCESO, DE_USER, DE_IPPC, DE_NAMEPC, DE_USERPC ) VALUES(?,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?)");
 
 

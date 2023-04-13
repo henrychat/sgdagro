@@ -30,7 +30,7 @@ public class SeguiEstEmitidoDaoImp
   implements SeguiEstEmitidoDao
 {
   public List<DocumentoSeguiEstEmitidoBean> getListDocSeguiEstRec(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     boolean bBusqFiltro = false;
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
@@ -315,7 +315,7 @@ public class SeguiEstEmitidoDaoImp
 
   
   public List<DependenciaBean> getListDestinatarioEmi(String coDep, String pdeDepEmite) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     boolean vfiltro = (pdeDepEmite != null && !pdeDepEmite.trim().equals(""));
     
@@ -371,7 +371,7 @@ public class SeguiEstEmitidoDaoImp
 
   
   public DocumentoSeguiEstEmitidoBean existeDocumentoReferenciado(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     DocumentoSeguiEstEmitidoBean documentoSeguiEstEmitidoBean = null;
     sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\nWHERE A.NU_ANN=?\nAND A.CO_DEP_EMI=?\nAND A.TI_EMI='01'\nAND A.CO_TIP_DOC_ADM=?\nAND A.NU_DOC_EMI=?\nAND A.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5','7','9')");
 
@@ -397,7 +397,7 @@ public class SeguiEstEmitidoDaoImp
 
   
   public List<DocumentoSeguiEstEmitidoBean> getDocumentosReferenciadoBusq(DocumentoSeguiEstEmitidoBean documentoSeguiEstEmitidoBean, String tiAcceso) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     List<DocumentoSeguiEstEmitidoBean> list = new ArrayList<DocumentoSeguiEstEmitidoBean>();
     
@@ -539,7 +539,7 @@ public class SeguiEstEmitidoDaoImp
 
   
   public DocumentoEmiSeguiBean getDocumentoEmiSeguiBean(String pnuAnn, String pnuEmi, String pnuDes) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT      B.DE_ANE, ");
     sql.append("\t\tA.NU_ANN, ");
     sql.append("\t\tA.NU_EMI, ");
@@ -602,7 +602,7 @@ public class SeguiEstEmitidoDaoImp
 
   
   public List<ReferenciaConsulBean> getDocumentosRefRecepAdm(String snuAnn, String snuEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](a.co_tip_doc_adm) de_tipo_doc, ");
     sql.append("        CASE a.ti_emi ");
     sql.append("\t\tWHEN '01' THEN a.nu_doc_emi + '-' + a.nu_ann + '/' + a.de_doc_sig ");
@@ -638,7 +638,7 @@ public class SeguiEstEmitidoDaoImp
   
   public String getRutaReporte(BuscarDocumentoSeguiEstEmiBean buscarDocumentoSeguiEstEmiBean) {
     String vResult;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     try {
       String pNUAnn = buscarDocumentoSeguiEstEmiBean.getCoAnnio();
@@ -759,7 +759,7 @@ public class SeguiEstEmitidoDaoImp
     boolean bBusqFiltro = false;
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     List<DocumentoSeguiEstEmitidoBean> list = new ArrayList<DocumentoSeguiEstEmitidoBean>();
     
     try {

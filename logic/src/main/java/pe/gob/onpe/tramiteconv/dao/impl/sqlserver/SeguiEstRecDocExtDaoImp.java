@@ -31,7 +31,7 @@ public class SeguiEstRecDocExtDaoImp
   implements SeguiEstRecDocExtDao
 {
   public List<DocExtRecSeguiEstBean> getLsDocExtRecSegui(DocExtRecSeguiEstBean docBuscar) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     boolean bBusqFiltro = false;
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
@@ -359,7 +359,7 @@ public class SeguiEstRecDocExtDaoImp
   }
   
   public DocExtRecSeguiEstBean getDocumentoExtSeguiBean(String nuAnn, String nuEmi, String nuDes) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT A.NU_ANN,A.NU_EMI,B.NU_DES,A.NU_COR_EMI,C.NU_EXPEDIENTE,IDOSGD.PK_SGD_DESCRIPCION_FORMAT((SELECT FE_EXP FROM IDOSGD.TDTC_EXPEDIENTE WITH (NOLOCK) WHERE NU_ANN_EXP=A.NU_ANN_EXP AND NU_SEC_EXP=A.NU_SEC_EXP),'DD/MM/YYYY') FE_EXP_CORTA,\nIDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(C.CO_PROCESO_EXP) DE_PROCESO_EXP,IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (B.CO_EMP_REC) DE_EMP_REC,\nCASE\nWHEN B.TI_DES = '01' THEN\nIDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (B.CO_EMP_DES) \nWHEN B.TI_DES = '02' THEN\nIDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (B.NU_RUC_DES) \nWHEN B.TI_DES = '03' THEN\nIDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL (B.NU_DNI_DES) \nWHEN B.TI_DES = '04' THEN\nIDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN (B.CO_OTR_ORI_DES) \nEND DE_EMP_DES, C.NU_DOC,\nIDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA (B.CO_DEP_DES) DE_DEP_DES,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,IDOSGD.PK_SGD_DESCRIPCION_FORMAT(A.FE_EMI,'DD/MM/YYYY') FE_EMI_CORTA,\nA.DE_ASU,A.NU_DIA_ATE,IDOSGD.PK_SGD_DESCRIPCION_MOTIVO (B.CO_MOT) DE_MOTIVO,B.DE_PRO DE_INDICACIONES,(SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_PRIORIDAD (B.CO_PRI)) DE_PRIORIDAD,\nIDOSGD.PK_SGD_DESCRIPCION_FORMAT(B.FE_REC_DOC,'DD/MM/YYYY HH24:MI:SS') FE_REC_DOC_CORTA,IDOSGD.PK_SGD_DESCRIPCION_FORMAT(B.FE_ATE_DOC,'DD/MM/YYYY') FE_ATE_DOC_CORTA,\nIDOSGD.PK_SGD_DESCRIPCION_FORMAT(B.FE_ARC_DOC,'DD/MM/YYYY') FE_ARC_DOC_CORTA,\nIDOSGD.PK_SGD_DESCRIPCION_ESTADOS (A.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,\nIDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (A.CO_EMP_RES) DE_EMP_RES,A.NU_FOLIOS\nFROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) \nINNER JOIN IDOSGD.TDTV_DESTINOS B WITH (NOLOCK) ON A.NU_ANN = B.NU_ANN AND A.NU_EMI = B.NU_EMI \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C WITH (NOLOCK) ON C.NU_ANN = A.NU_ANN AND C.NU_EMI = A.NU_EMI \nWHERE A.ES_ELI='0' AND B.ES_ELI='0'\nAND A.ES_DOC_EMI NOT IN ('5', '9', '7')\nAND A.CO_GRU='3'\nand A.TI_EMI IN ('02','03','04')\nAND B.NU_ANN=? AND B.NU_EMI=? AND B.NU_DES=?");
 
     DocExtRecSeguiEstBean docExt = new DocExtRecSeguiEstBean();
@@ -376,7 +376,7 @@ public class SeguiEstRecDocExtDaoImp
   
   public List<ReferenciaDocExtRecepBean> getLsRefDocExterno(String pnuAnn, String pnuEmi) {
     List<ReferenciaDocExtRecepBean> list;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("SELECT A.NU_ANN,A.NU_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\nC.NU_DOC de_doc_sig,\nC.NU_EXPEDIENTE,\nIDOSGD.PK_SGD_DESCRIPCION_FORMAT(A.FE_EMI,'DD/MM/YY') FE_EMI_CORTA\nFROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) \nINNER JOIN IDOSGD.TDTR_REFERENCIA B WITH (NOLOCK) ON  A.NU_ANN=B.NU_ANN_REF AND A.NU_EMI=B.NU_EMI_REF \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN C WITH (NOLOCK) ON C.NU_ANN=A.NU_ANN AND C.NU_EMI=A.NU_EMI \nWHERE B.NU_ANN=? AND\nB.NU_EMI=?");
 
@@ -401,7 +401,7 @@ public class SeguiEstRecDocExtDaoImp
 
   
   public List<DestinatarioDocumentoEmiConsulBean> getLsDestinoEmi(String pnuAnn, String pnuEmi) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     List<DestinatarioDocumentoEmiConsulBean> list = null;
     sql.append("select\ta.nu_ann, ");
     sql.append("\t\ta.nu_emi, ");
@@ -459,7 +459,7 @@ public class SeguiEstRecDocExtDaoImp
   
   public String getRutaReporte(DocExtRecSeguiEstBean docBuscar) {
     String vResult;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     try {
       sql.append(" D.NU_ANN=R.NU_ANN");
@@ -586,7 +586,7 @@ public class SeguiEstRecDocExtDaoImp
     String vResult = "";
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
-    StringBuffer prutaReporte = new StringBuffer();
+     StringBuilder prutaReporte = new StringBuilder();
     List<DocExtRecSeguiEstBean> list = null;
     
     prutaReporte.append("SELECT\tR.NU_COR_EMI, ");

@@ -61,7 +61,7 @@ public class UsuarioConfigDaoImp
 
     public String insUsuarioConfingBasico(UsuarioConfigBean usuarioConf) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into IDOSGD.TDTX_CONFIG_EMP(\nco_emp, \nco_dep, \nco_loc, \nfe_use_cre, \nfe_use_mod, \nti_acceso, \nes_reg, \nin_carga_doc, \nin_firma, \nin_tipo_doc, \nin_obs_docu, \nin_revi_docu, \nin_consulta \n)\nvalues(?,?,'001',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?,'0',?,?,?,?,?,?)");
 
         try {
@@ -81,7 +81,7 @@ public class UsuarioConfigDaoImp
 
     public String updUsuarioConfing(UsuarioConfigBean usuarioConf) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update IDOSGD.TDTX_CONFIG_EMP set ");
         sql.append("de_dir_emi=?, de_pie_pagina=?, ti_acceso=?, in_carga_doc=?, in_firma=?, in_tipo_doc =?, IN_MAIL_DERIV=?,fe_use_mod=CURRENT_TIMESTAMP ");
         sql.append("where co_dep = ? AND co_emp = ? ");
@@ -99,7 +99,7 @@ public class UsuarioConfigDaoImp
     }
 
     public List<UsuarioDepAcceso> getListDepAccesos(String cempCodemp, String coUsuario) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  CO_DEPENDENCIA, ");
         sql.append("        DE_DEPENDENCIA, ");
         sql.append("        de_Corta_Depen ");
@@ -145,7 +145,7 @@ public class UsuarioConfigDaoImp
     }
 
     public List<UsuarioDepAcceso> getListDepTotal(String cempCodemp) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEPENDENCIA, DE_DEPENDENCIA, de_Corta_Depen \n  FROM IDOSGD.RHTM_DEPENDENCIA\n ORDER BY ti_dependencia, CO_DEPENDENCIA");
 
         List<UsuarioDepAcceso> list = new ArrayList<UsuarioDepAcceso>();
@@ -163,7 +163,7 @@ public class UsuarioConfigDaoImp
 
     public String getCoDepUsuario(String pcoEmp) {
         String vcoDep = null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select B.CO_DEPENDENCIA  from IDOSGD.RHTM_PER_EMPLEADOS B WHERE B.CEMP_CODEMP = ?  AND B.CEMP_EST_EMP ='1' ");
 
         try {
@@ -179,7 +179,7 @@ public class UsuarioConfigDaoImp
 
     public String getTiEncargadoDep(String pcoEmp, String pcoDep) {
         String vcoDep = null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT COALESCE(co_tipo_encargatura,'3') \nFROM IDOSGD.RHTM_DEPENDENCIA\nWHERE IN_BAJA = '0'\nAND CO_DEPENDENCIA = ?\nAND CO_EMPLEADO = ?");
 
         try {
@@ -194,7 +194,7 @@ public class UsuarioConfigDaoImp
     }
 
     public List<UsuarioBean> getUsuariosList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT u.cod_user, s.cdes_user, u.es_activo FROM IDOSGD.seg_user_aplica u ");
         sql.append("INNER JOIN IDOSGD.seg_usuarios1 s on u.cod_user = s.cod_user ");
@@ -214,7 +214,7 @@ public class UsuarioConfigDaoImp
     }
 
     public UsuarioBean getUsuarioxCodEmp(String coEmp) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         objectParam.put("pCoEmp", coEmp);
         sql.append("SELECT u.COD_USER from IDOSGD.rhtm_per_empleados e INNER JOIN IDOSGD.seg_usuarios1 u ON e.CEMP_CODEMP = u.CEMP_CODEMP where e.CEMP_CODEMP = :pCoEmp");
@@ -232,7 +232,7 @@ public class UsuarioConfigDaoImp
     }
 
     public UsuarioConfigBean getTipAccesoConsulta(String codEmp, String coDep) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  TI_ACCESO, IN_CONSULTA TI_CONSULTA from IDOSGD.tdtx_config_emp WHERE co_emp = ? and co_dep = ?");
 
         UsuarioConfigBean usuConfig = new UsuarioConfigBean();
@@ -248,7 +248,7 @@ public class UsuarioConfigDaoImp
 
     public String updTipoPermisoUsuario(String codEmp, String codDep, String tipoAcceso, String tipoConsulta) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update IDOSGD.tdtx_config_emp set TI_ACCESO = ? , IN_CONSULTA = ? where  co_emp = ? and co_dep = ? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{tipoAcceso, tipoConsulta, codEmp, codDep});

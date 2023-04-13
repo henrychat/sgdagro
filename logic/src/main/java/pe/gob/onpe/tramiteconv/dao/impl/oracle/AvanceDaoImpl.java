@@ -21,45 +21,46 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
  */
 @Repository("avanceDaoImpl")
 public class AvanceDaoImpl extends SimpleJdbcDaoBase implements AvanceDao {
-     @Override
+
+    @Override
     public List<AvanceBean> getListAvance(AvanceBean buscarAvanzadaBean) {
-        StringBuffer sql = new StringBuffer();
-        sql.append(" SELECT     nu_ann,    nu_emi, nu_des ,  es_ultimo,    de_avance,    fe_avance,    ti_avance,    es_eli,    co_user\n" +
-                   " FROM   tdtr_avance WHERE nu_ann=? and nu_emi=? and nu_des=? and ti_avance=? ORDER BY FE_AVANCE DESC ");        
+        StringBuilder sql = new StringBuilder();
+        sql.append(" SELECT     nu_ann,    nu_emi, nu_des ,  es_ultimo,    de_avance,    fe_avance,    ti_avance,    es_eli,    co_user\n"
+                + " FROM   tdtr_avance WHERE nu_ann=? and nu_emi=? and nu_des=? and ti_avance=? ORDER BY FE_AVANCE DESC ");
         List<AvanceBean> list = new ArrayList<AvanceBean>();
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(AvanceBean.class),
-                    new Object[]{buscarAvanzadaBean.getNuAnn(),buscarAvanzadaBean.getNuEmi()
-                            ,buscarAvanzadaBean.getNuDes(),buscarAvanzadaBean.getTiAvance()});
-        }catch (EmptyResultDataAccessException e) {
+                    new Object[]{buscarAvanzadaBean.getNuAnn(), buscarAvanzadaBean.getNuEmi(),
+                         buscarAvanzadaBean.getNuDes(), buscarAvanzadaBean.getTiAvance()});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
     }
-    
-     @Override
+
+    @Override
     public String insertAvance(AvanceBean buscarAvanzadaBean) {
-        String vReturn = "NO_OK";    
-        StringBuffer sqlIns = new StringBuffer();   
-        StringBuffer sqlupda = new StringBuffer();  
-        sqlupda.append("update TDTV_DESTINOS set DE_AVANCE = ?  where nu_ann||nu_emi||nu_des=? "); 
-        sqlIns.append("INSERT INTO tdtr_avance (  nu_ann,  nu_emi,nu_des,   ti_avance,  es_ultimo,  de_avance,   fe_avance, es_eli,  co_user) \n" +
-                       " VALUES ( ?,?,?,?,'1',?,sysdate,'0',?) "); 
-        try{
-            this.jdbcTemplate.update(sqlupda.toString(),new Object[]{buscarAvanzadaBean.getDeAvance(),
-                buscarAvanzadaBean.getNuAnn()+buscarAvanzadaBean.getNuEmi()+ buscarAvanzadaBean.getNuDes() } ); 
-            this.jdbcTemplate.update(sqlIns.toString(),new Object[]{
-                buscarAvanzadaBean.getNuAnn(),buscarAvanzadaBean.getNuEmi(), buscarAvanzadaBean.getNuDes()
-            , buscarAvanzadaBean.getTiAvance(),buscarAvanzadaBean.getDeAvance(),buscarAvanzadaBean.getCoUser()} ); 
+        String vReturn = "NO_OK";
+        StringBuilder sqlIns = new StringBuilder();
+        StringBuilder sqlupda = new StringBuilder();
+        sqlupda.append("update TDTV_DESTINOS set DE_AVANCE = ?  where nu_ann||nu_emi||nu_des=? ");
+        sqlIns.append("INSERT INTO tdtr_avance (  nu_ann,  nu_emi,nu_des,   ti_avance,  es_ultimo,  de_avance,   fe_avance, es_eli,  co_user) \n"
+                + " VALUES ( ?,?,?,?,'1',?,sysdate,'0',?) ");
+        try {
+            this.jdbcTemplate.update(sqlupda.toString(), new Object[]{buscarAvanzadaBean.getDeAvance(),
+                buscarAvanzadaBean.getNuAnn() + buscarAvanzadaBean.getNuEmi() + buscarAvanzadaBean.getNuDes()});
+            this.jdbcTemplate.update(sqlIns.toString(), new Object[]{
+                buscarAvanzadaBean.getNuAnn(), buscarAvanzadaBean.getNuEmi(), buscarAvanzadaBean.getNuDes(),
+                 buscarAvanzadaBean.getTiAvance(), buscarAvanzadaBean.getDeAvance(), buscarAvanzadaBean.getCoUser()});
             vReturn = "OK";
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return vReturn;        
+        return vReturn;
     }
-    
+
 }

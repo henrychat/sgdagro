@@ -23,7 +23,7 @@ public class AuditoriaMovimientoDocDaoImp extends SimpleJdbcDaoBase implements A
     @Override
     public String audiVisualizaDocumento(DocumentoObjBean docVisualiza,Usuario usu){
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO IDOSGD.TDTV_VISUALIZA_DOC(\n" +
                     "NU_ANN,\n" +
                     "NU_EMI,\n" +
@@ -45,7 +45,7 @@ public class AuditoriaMovimientoDocDaoImp extends SimpleJdbcDaoBase implements A
     @Override
     public String audiEstadoDocumento(AudiEstadosMovDocBean audi){
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO IDOSGD.tdtv_estados_mov(\n" +
                     "NU_ANN,\n" +
                     "NU_EMI,\n" +

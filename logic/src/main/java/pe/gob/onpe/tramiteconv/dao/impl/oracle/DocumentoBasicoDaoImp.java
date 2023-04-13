@@ -20,10 +20,11 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
  * @author wcutipa
  */
 @Repository("documentoBasicoDao")
-public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements DocumentoBasicoDao{
+public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements DocumentoBasicoDao {
+
     @Override
-    public RemitosResBean getRemitoResumen(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+    public RemitosResBean getRemitoResumen(String pnuAnn, String pnuEmi) {
+         StringBuilder sql = new StringBuilder();
 //        sql.append("select \n" +
 //                    "nu_ann, \n" +
 //                    "nu_emi, \n" +
@@ -112,215 +113,207 @@ public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements Document
                 + "DECODE (a.nu_sec_exp, NULL, NULL, 'E') in_expe, \n"
                 + "nu_folios, \n"
                 + "SE_MESA_PARTES\n"
-                + "FROM tdtv_remitos a\n"
+                + "FROM tdtv_remitos a WITH(NOLOCK)\n"
                 + "WHERE a.es_eli = '0' AND a.nu_ann=? AND nu_emi=?");
 
         RemitosResBean remitoDocBean = new RemitosResBean();
 
         try {
-            remitoDocBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(RemitosResBean.class),new Object[]{ pnuAnn,pnuEmi} );
+            remitoDocBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(RemitosResBean.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             remitoDocBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return(remitoDocBean);
-    
-    
+        return (remitoDocBean);
+
     }
-    
+
     @Override
-    public DestinoResBen  getDestinoResumen(String pnuAnn, String pnuEmi, String pnuDes){
+    public DestinoResBen getDestinoResumen(String pnuAnn, String pnuEmi, String pnuDes) {
         //YUAL
-        StringBuffer sql = new StringBuffer();
-        
-         String g="";
-        if(pnuDes==null || pnuDes.trim()==""|| pnuDes.trim().equals("null")){
-         g=" AND NU_DES IS NULL "; 
+         StringBuilder sql = new StringBuilder();
+
+        String g = "";
+        if (pnuDes == null || pnuDes.trim() == "" || pnuDes.trim().equals("null")) {
+            g = " AND NU_DES IS NULL ";
+        } else {
+
+            g = " AND NU_DES='" + pnuDes + "' ";
         }
-        else
-        {
-         
-         g=" AND NU_DES='"+pnuDes+"' ";
-        }
-        
-        sql.append("SELECT \n" +
-                    "b.de_ane, \n" +
-                    "b.nu_ann, \n" +
-                    "b.nu_emi, \n" +
-                    "b.nu_des,\n" +
-                    "PK_SGD_DESCRIPCION.ti_destino(b.ti_des) de_tip_des,\n" +
-                    "PK_SGD_DESCRIPCION.ti_des_ori (b.nu_ann, b.nu_emi, b.nu_des) de_ori_des,\n" +
-                    "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_emp_rec) de_emp_rec,\n" +
-                    "PK_SGD_DESCRIPCION.de_prioridad(b.co_pri) de_pri,\n" +
-                    "PK_SGD_DESCRIPCION.motivo (b.co_mot) de_mot,\n" +
-                    "b.de_pro de_indica,\n" +
-                    "PK_SGD_DESCRIPCION.estados (b.es_doc_rec,'TDTV_DESTINOS') de_es_doc_des,\n" +
-                    "to_char(b.fe_rec_doc,'dd/mm/yyyy HH24:MI') fe_rec_doc, \n" +
-                    "to_char(b.fe_arc_doc,'dd/mm/yyyy') fe_arc_doc, \n" +
-                    "to_char(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc, \n" +
-                    "to_char(b.fe_der_doc,'dd/mm/yyyy') fe_der_doc, \n" +
-                    "de_avance \n" +
-                    "FROM  tdtv_destinos b\n" +
-                    "where nu_ann = ?\n" +
-                    "and nu_emi = ?\n " +g);
-                    //"and nu_des = ?");
-        
-   
+
+        sql.append("SELECT \n"
+                + "b.de_ane, \n"
+                + "b.nu_ann, \n"
+                + "b.nu_emi, \n"
+                + "b.nu_des,\n"
+                + "PK_SGD_DESCRIPCION.ti_destino(b.ti_des) de_tip_des,\n"
+                + "PK_SGD_DESCRIPCION.ti_des_ori (b.nu_ann, b.nu_emi, b.nu_des) de_ori_des,\n"
+                + "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_emp_rec) de_emp_rec,\n"
+                + "PK_SGD_DESCRIPCION.de_prioridad(b.co_pri) de_pri,\n"
+                + "PK_SGD_DESCRIPCION.motivo (b.co_mot) de_mot,\n"
+                + "b.de_pro de_indica,\n"
+                + "PK_SGD_DESCRIPCION.estados (b.es_doc_rec,'TDTV_DESTINOS') de_es_doc_des,\n"
+                + "to_char(b.fe_rec_doc,'dd/mm/yyyy HH24:MI') fe_rec_doc, \n"
+                + "to_char(b.fe_arc_doc,'dd/mm/yyyy') fe_arc_doc, \n"
+                + "to_char(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc, \n"
+                + "to_char(b.fe_der_doc,'dd/mm/yyyy') fe_der_doc, \n"
+                + "de_avance \n"
+                + "FROM  tdtv_destinos b WITH(NOLOCK)\n"
+                + "where nu_ann = ?\n"
+                + "and nu_emi = ?\n " + g);
+        //"and nu_des = ?");
+
         DestinoResBen destinoDocBean = new DestinoResBen();
 
         try {
-            destinoDocBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DestinoResBen.class),new Object[]{ pnuAnn,pnuEmi} );
+            destinoDocBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DestinoResBen.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             destinoDocBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return(destinoDocBean);
+        return (destinoDocBean);
     }
-    
+
     @Override
-    public List<DestinoResBen>  getDestinoResumenList(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT \n" +
-                    "b.nu_ann, \n" +
-                    "b.nu_emi, \n" +
-                    "b.nu_des,\n" +
-                    "PK_SGD_DESCRIPCION.ti_destino(b.ti_des) de_tip_des,\n" +
-                    "PK_SGD_DESCRIPCION.ti_des_ori (b.nu_ann, b.nu_emi, b.nu_des) de_ori_des,\n" +
-                    "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_emp_rec) de_emp_rec,\n" +
-                    "PK_SGD_DESCRIPCION.de_prioridad(b.co_pri) de_pri,\n" +
-                    "PK_SGD_DESCRIPCION.motivo (b.co_mot) de_mot,\n" +
-                    "b.de_pro de_indica,\n" +
-                    "PK_SGD_DESCRIPCION.estados (b.es_doc_rec,'TDTV_DESTINOS') de_es_doc_des,\n" +
-                    "to_char(b.fe_rec_doc,'dd/mm/yyyy HH24:MI') fe_rec_doc, \n" +
-                    "to_char(b.fe_arc_doc,'dd/mm/yyyy') fe_arc_doc, \n" +
-                    "to_char(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc, \n" +
-                    "to_char(b.fe_der_doc,'dd/mm/yyyy') fe_der_doc, \n" +
-                    "de_avance \n" +
-                    "FROM  tdtv_destinos b\n" +
-                    "where nu_ann = ?\n" +
-                    "and nu_emi = ? ");
-   
-        
+    public List<DestinoResBen> getDestinoResumenList(String pnuAnn, String pnuEmi) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT \n"
+                + "b.nu_ann, \n"
+                + "b.nu_emi, \n"
+                + "b.nu_des,\n"
+                + "PK_SGD_DESCRIPCION.ti_destino(b.ti_des) de_tip_des,\n"
+                + "PK_SGD_DESCRIPCION.ti_des_ori (b.nu_ann, b.nu_emi, b.nu_des) de_ori_des,\n"
+                + "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_emp_rec) de_emp_rec,\n"
+                + "PK_SGD_DESCRIPCION.de_prioridad(b.co_pri) de_pri,\n"
+                + "PK_SGD_DESCRIPCION.motivo (b.co_mot) de_mot,\n"
+                + "b.de_pro de_indica,\n"
+                + "PK_SGD_DESCRIPCION.estados (b.es_doc_rec,'TDTV_DESTINOS') de_es_doc_des,\n"
+                + "to_char(b.fe_rec_doc,'dd/mm/yyyy HH24:MI') fe_rec_doc, \n"
+                + "to_char(b.fe_arc_doc,'dd/mm/yyyy') fe_arc_doc, \n"
+                + "to_char(b.fe_ate_doc,'dd/mm/yyyy') fe_ate_doc, \n"
+                + "to_char(b.fe_der_doc,'dd/mm/yyyy') fe_der_doc, \n"
+                + "de_avance \n"
+                + "FROM  tdtv_destinos b WITH(NOLOCK)\n"
+                + "where nu_ann = ?\n"
+                + "and nu_emi = ? ");
+
         List<DestinoResBen> list = new ArrayList<DestinoResBen>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinoResBen.class), new Object[]{pnuAnn,pnuEmi});
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinoResBen.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return(list);
-    
+        return (list);
+
     }
 
     @Override
-    public List<DocumentoAnexoBean>  getAnexosList(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
-        sql.append("select  \n" +
-                    "nu_ann,\n" +
-                    "nu_emi,\n" +
-                    "nu_ane,\n" +
-                    "de_det,\n" +
-                    "de_rut_ori,\n" +
-                    "co_use_cre,\n" +
-                    "fe_use_cre,\n" +
-                    "co_use_mod,\n" +
-                    "fe_use_mod,\n" +
-                    "nvl(req_firma,'0') req_firma,\n" +
-                    "nvl(ti_public,'0') ti_public\n" + //SEGDI MVALDERA
-                    "from tdtv_anexos \n" +
-                    "where nu_ann = ? \n" +
-                    "and nu_emi = ? \n"+
-                    "order by nu_ane ");
-   
-        
+    public List<DocumentoAnexoBean> getAnexosList(String pnuAnn, String pnuEmi) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("select  \n"
+                + "nu_ann,\n"
+                + "nu_emi,\n"
+                + "nu_ane,\n"
+                + "de_det,\n"
+                + "de_rut_ori,\n"
+                + "co_use_cre,\n"
+                + "fe_use_cre,\n"
+                + "co_use_mod,\n"
+                + "fe_use_mod,\n"
+                + "nvl(req_firma,'0') req_firma,\n"
+                + "nvl(ti_public,'0') ti_public\n"
+                + //SEGDI MVALDERA
+                "from tdtv_anexos WITH(NOLOCK)\n"
+                + "where nu_ann = ? \n"
+                + "and nu_emi = ? \n"
+                + "order by nu_ane ");
+
         List<DocumentoAnexoBean> list = new ArrayList<DocumentoAnexoBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn,pnuEmi});
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return(list);
-    
+        return (list);
+
     }
 
     @Override
     public List<DocumentoAnexoBean> getAnexosMsjList(String pnuAnn, String pnuEmi) {
-        
-        StringBuffer sql = new StringBuffer();
-        sql.append("select \n" +
-                    "A.nu_ann,\n" +
-                    "A.nu_emi,\n" +
-                    "A.nu_des,\n" +
-                    "B.nu_ane,\n" +
-                    "NVL(B.de_det,'-1') de_det,\n" +
-                    "NVL(B.de_rut_ori,'') de_rut_ori,\n" +
-                    "B.co_use_cre,\n" +
-                    "B.fe_use_cre,\n" +
-                    "B.co_use_mod,\n" +
-                    "B.fe_use_mod,\n" +
-                    "nvl(B.req_firma,'0') req_firma,\n" +
-                    "DECODE(A.TI_DES,\n" +
-                    "'01', PK_SGD_DESCRIPCION.DE_DEPENDENCIA(A.CO_DEP_DES) ||'-'||PK_SGD_DESCRIPCION.DE_NOM_EMP (A.CO_EMP_DES),\n" +
-                    "'02', PK_SGD_DESCRIPCION.DE_PROVEEDOR (A.NU_RUC_DES),\n" +
-                    "'03', PK_SGD_DESCRIPCION.ANI_SIMIL (A.NU_DNI_DES),\n" +
-                    "'04', PK_SGD_DESCRIPCION.OTRO_ORIGEN (A.CO_OTR_ORI_DES),\n" +
-                    "'05', PK_SGD_DESCRIPCION.DE_DEPENDENCIA(A.CO_DEP_DES) ||'-'||PK_SGD_DESCRIPCION.DE_NOM_EMP (A.CO_EMP_DES)) deDestino,\n" +
-                    "(SELECT DE_EST FROM TDTR_ESTADOS WHERE CO_EST=A.ES_DOC_REC AND DE_TAB='TD_MENSAJERIA') esDoc, \n" +
-                    "(SELECT NVL(TI_ENV_MSJ,'0') FROM TDTV_REMITOS WHERE NU_ANN=A.NU_ANN AND NU_EMI=A.NU_EMI) tiEnv, \n" +
-                    " (CASE WHEN B.DE_DET='CARGO_NOTIFICACION'||TO_CHAR(B.NU_DES)||'.pdf'  THEN '1' ELSE '0' END) esNotificado"+
-                    " FROM tdtv_destinos A LEFT JOIN tdtv_anexos B \n" +
-                    "ON A.nu_ann=B.nu_ann AND A.nu_emi=B.nu_emi AND A.nu_des=B.nu_des \n" +
-                    "where A.nu_ann = ? \n" +             
-                    "and A.nu_emi = ? \n"+
-                    "order by B.nu_ane ");
-   
-        
+
+         StringBuilder sql = new StringBuilder();
+        sql.append("select \n"
+                + "A.nu_ann,\n"
+                + "A.nu_emi,\n"
+                + "A.nu_des,\n"
+                + "B.nu_ane,\n"
+                + "NVL(B.de_det,'-1') de_det,\n"
+                + "NVL(B.de_rut_ori,'') de_rut_ori,\n"
+                + "B.co_use_cre,\n"
+                + "B.fe_use_cre,\n"
+                + "B.co_use_mod,\n"
+                + "B.fe_use_mod,\n"
+                + "nvl(B.req_firma,'0') req_firma,\n"
+                + "DECODE(A.TI_DES,\n"
+                + "'01', PK_SGD_DESCRIPCION.DE_DEPENDENCIA(A.CO_DEP_DES) ||'-'||PK_SGD_DESCRIPCION.DE_NOM_EMP (A.CO_EMP_DES),\n"
+                + "'02', PK_SGD_DESCRIPCION.DE_PROVEEDOR (A.NU_RUC_DES),\n"
+                + "'03', PK_SGD_DESCRIPCION.ANI_SIMIL (A.NU_DNI_DES),\n"
+                + "'04', PK_SGD_DESCRIPCION.OTRO_ORIGEN (A.CO_OTR_ORI_DES),\n"
+                + "'05', PK_SGD_DESCRIPCION.DE_DEPENDENCIA(A.CO_DEP_DES) ||'-'||PK_SGD_DESCRIPCION.DE_NOM_EMP (A.CO_EMP_DES)) deDestino,\n"
+                + "(SELECT DE_EST FROM TDTR_ESTADOS WHERE CO_EST=A.ES_DOC_REC AND DE_TAB='TD_MENSAJERIA') esDoc, \n"
+                + "(SELECT NVL(TI_ENV_MSJ,'0') FROM TDTV_REMITOS WHERE NU_ANN=A.NU_ANN AND NU_EMI=A.NU_EMI) tiEnv, \n"
+                + " (CASE WHEN B.DE_DET='CARGO_NOTIFICACION'||TO_CHAR(B.NU_DES)||'.pdf'  THEN '1' ELSE '0' END) esNotificado"
+                + " FROM tdtv_destinos A WITH(NOLOCK) LEFT JOIN tdtv_anexos B WITH(NOLOCK) \n"
+                + "ON A.nu_ann=B.nu_ann AND A.nu_emi=B.nu_emi AND A.nu_des=B.nu_des \n"
+                + "where A.nu_ann = ? \n"
+                + "and A.nu_emi = ? \n"
+                + "order by B.nu_ane ");
+
         List<DocumentoAnexoBean> list = new ArrayList<DocumentoAnexoBean>();
 //        System.out.println(sql);
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn,pnuEmi});
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return(list);
+        return (list);
     }
-    
+
     @Override
     public String verificaCargaDoc(String pnuAnn, String pnuEmi) {
-        
-        StringBuffer sql = new StringBuffer();
-        sql.append("select \n" +
-                    "A.NU_EMI \n" +
-                    "FROM TDTV_ARCHIVO_DOC A \n" +
-                    "where A.nu_ann = ? \n" +             
-                    "and A.nu_emi = ? \n"+
-                    "and BL_DOC is not null ");
-   
-        
+
+         StringBuilder sql = new StringBuilder();
+        sql.append("select \n"
+                + "A.NU_EMI \n"
+                + "FROM TDTV_ARCHIVO_DOC A WITH(NOLOCK)\n"
+                + "where A.nu_ann = ? \n"
+                + "and A.nu_emi = ? \n"
+                + "and BL_DOC is not null ");
+
         List<DocumentoAnexoBean> list = new ArrayList<DocumentoAnexoBean>();
 //        System.out.println(sql);
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn,pnuEmi});
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoAnexoBean.class), new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String bResult="0";
-        if(list.size()>0){
-        bResult="1";
+        String bResult = "0";
+        if (list.size() > 0) {
+            bResult = "1";
         }
-        return(bResult);
+        return (bResult);
     }
-    
-    
+
 }

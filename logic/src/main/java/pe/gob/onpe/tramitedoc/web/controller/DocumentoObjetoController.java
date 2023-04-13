@@ -1297,7 +1297,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaCargaDoc"})
   @ResponseBody
   private String goRutaCargaDoc(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
     
     String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
@@ -1345,7 +1345,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaFirmaDoc"})
   @ResponseBody
   private String goRutaFirmaDoc(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
     String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1399,7 +1399,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaCargaFirmaDoc"})
   @ResponseBody
   private String goRutaCargaFirmaDoc(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
     DocumentoVerBean docSession = Utilidades.getInstancia().loadDocFromSession(request);
@@ -1497,7 +1497,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaVoBoDoc"})
   @ResponseBody
   private String goRutaVoBoDoc(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
     String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1548,7 +1548,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaCargaVoBoDoc"})
   @ResponseBody
   private String goRutaCargaVoBoDoc(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
     DocumentoVerBean docSession = Utilidades.getInstancia().loadDocFromSession(request);
@@ -1606,7 +1606,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaFirmaDocAnexo"})
   @ResponseBody
   private String goRutaFirmaDocAnexo(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     String pNuAnn = ServletUtility.getInstancia().loadRequestParameter(request, "nuAnn");
     String pNuEmi = ServletUtility.getInstancia().loadRequestParameter(request, "nuEmi");
@@ -1655,7 +1655,7 @@ public class DocumentoObjetoController
   @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goRutaCargaFirmaDocAnexo"})
   @ResponseBody
   private String goRutaCargaFirmaDocAnexo(HttpServletRequest request, Model model) throws Exception {
-    StringBuffer retval = new StringBuffer();
+     StringBuilder retval = new StringBuilder();
     
     Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
     DocumentoVerBean docSession = Utilidades.getInstancia().loadDocFromSession(request);

@@ -41,7 +41,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
 
     @Override
     public DependenciaBean getDependenciaxCoDependencia(String coDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DependenciaBean dependenciaBean = null;
         sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA FROM IDOSGD.RHTM_DEPENDENCIA WHERE\n" +
         "CO_DEPENDENCIA=? AND IN_BAJA='0'");
@@ -57,7 +57,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
 
     @Override
     public DependenciaBean getDependenciaBasico(String coDepen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DependenciaBean dependenciaBean = null;
         sql.append("SELECT \n" +
                     "X.DE_DEPENDENCIA, \n" +
@@ -81,7 +81,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     @Override
     public List<RemitenteBean> getListRemitente(String coDepen){
         List<RemitenteBean> list = new ArrayList<RemitenteBean>();
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         sql.append("select D.DE_DEPENDENCIA descrip, D.CO_DEPENDENCIA cod_dep,D.DE_CORTA_DEPEN de_corta_depen from IDOSGD.RHTM_DEPENDENCIA D \n" +
                     "WHERE ? IN (CO_DEPENDENCIA,CO_DEPEN_PADRE) OR \n" +
                     "CO_DEPENDENCIA IN (SELECT co_dep_ref FROM IDOSGD.tdtx_referencia \n" +
@@ -185,7 +185,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public CiudadanoBean getCiudadano(String pnuDoc){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select I.NULEM NU_DOCUMENTO,substr(RTRIM(I.DEAPP)||' '||RTRIM(I.DEAPM)||' '||RTRIM(I.DENOM),1,200) NOMBRE \n"
                 + "from IDOSGD.IDTANIRS I \n"
                 + "where\n"
@@ -206,7 +206,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public ProveedorBean getProveedor(String pnuRuc){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CPRO_RUC NU_RUC, CPRO_RAZSOC DESCRIPCION FROM IDOSGD.LG_PRO_PROVEEDOR\n" +
                     "where CPRO_RUC=?");
 
@@ -224,7 +224,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public List<EmpleadoBean> getLsEmpleado(String coDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list;
         sql.append("SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP\n" +
             "FROM IDOSGD.RHTM_PER_EMPLEADOS e\n" +
@@ -245,7 +245,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public List<CargoFuncionBean> getLsEmpleo(){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<CargoFuncionBean> list;
         sql.append("SELECT CCAR_DESCAR DESCRIPCION, CCAR_CO_CARGO CODIGO\n" +
                     "FROM IDOSGD.RHTM_CARGOS\n" +
@@ -266,7 +266,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public List<DependenciaBean> getLsDepencia(){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<DependenciaBean> list;
         sql.append("SELECT DE_DEPENDENCIA,\n" +
                     "       CO_DEPENDENCIA,\n" +
@@ -291,7 +291,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     @Override
     public String[] getNroCorrLocalDependencia(){
         String vReturn = "ERROR|";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT coalesce( MAX( a.NU_CORRELATIVO) , 0)+1\n" +
                     "FROM IDOSGD.SITM_LOCAL_DEPENDENCIA a");
 
@@ -308,7 +308,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public List<EmpleadoBean> getLsEmpleadoIntitu(String deEmp){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list;
         sql.append("SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP\n" +
             "FROM IDOSGD.RHTM_PER_EMPLEADOS e\n" +
@@ -331,7 +331,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     @Override
     public String[] getCodigoMotivoDocRec(String nuAnn,String nuEmi,String nuDes){
         String vReturn = "ERROR|";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_MOT FROM IDOSGD.TDTV_DESTINOS\n" +
                     "WHERE NU_ANN=?\n" +
                     "AND NU_EMI=?\n" +
@@ -351,7 +351,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public EmpleadoBean getEmpJefeDep(String coDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select CO_EMPLEADO CEMP_CODEMP,idosgd.PK_SGD_DESCRIPCION_DE_NOM_EMP(CO_EMPLEADO) NOMBRE\n" +
                     "from idosgd.rhtm_dependencia\n" +
                     "where CO_DEPENDENCIA = ?\n" +
@@ -371,7 +371,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public List<EmpleadoBean> getLsEmpDepDesEmp(String deEmp,String coDep){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list;
         sql.append("SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP \n" +
                     "FROM IDOSGD.RHTM_PER_EMPLEADOS e, \n" +
@@ -428,7 +428,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
     @Override
     public String getInFirmaDoc(String pcoDep,String pcoTipoDoc){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append(" SELECT CASE \n" +
                             "WHEN es_obl_firma='0' THEN 'N'\n" +
@@ -451,7 +451,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     @Override
     public List<CiudadanoBean> getLstCiudadanos(String sDescCiudadano){
         List<CiudadanoBean> list = new ArrayList<CiudadanoBean>();
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select I.NULEM NU_DOCUMENTO,substr(RTRIM(I.DEAPP)||' '||RTRIM(I.DEAPM)||' '||RTRIM(I.DENOM),1,200) NOMBRE,\n"
                 + "NVL(UBDEP,'') ID_DEPARTAMENTO, NVL(UBPRV,'') ID_PROVINCIA, NVL(UBDIS,'') ID_DISTRITO, NVL(DEDOMICIL,'') DE_DIRECCION, NVL(DEEMAIL,'') DE_CORREO,NVL(DETELEFO,'') TELEFONO \n"
                 + "from IDTANIRS I \n"
@@ -473,7 +473,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     
          @Override
     public List<SiElementoBean> getLsDepenciaMensjeria(){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<SiElementoBean> list;
         sql.append("SELECT DE_DEPENDENCIA,\n" +
                     "       CO_DEPENDENCIA,\n" +
@@ -511,7 +511,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
         
         DatosInterBean datosInter=new DatosInterBean();
         
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("SELECT (CASE WHEN LENGTH(A.NU_RUC_DES)>0 THEN A.NU_RUC_DES ELSE '0' END) AS NU_RUC_DES,"+
                 "(CASE WHEN LENGTH(A.DE_NOM_DES)>0 THEN a.DE_NOM_DES ELSE \n" +
@@ -545,7 +545,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
    //YUAL
   @Override
   public List<TablaMaestraBean> getLsContenidoTabla(String vTabla){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<TablaMaestraBean> list;
 
         sql.append("SELECT VB.CO_EMP_VB CO_EMPLEADO,(SELECT CEMP_APEPAT || ' ' || CEMP_APEMAT || ' ' || CEMP_DENOM FROM RHTM_PER_EMPLEADOS WHERE CEMP_CODEMP = VB.CO_EMP_VB) NOMBRE,\n" +
@@ -569,7 +569,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
   //YUAL
      @Override
     public List<CargoFuncionBean> getCargoBusqList(CargoFuncionBean cargo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         
         sql.append("SELECT  CCAR_CO_CARGO AS codigo, ");
@@ -609,7 +609,7 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     @Override
     public String insCargo(CargoFuncionBean cargo, String codusuario) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String genCoCargo = "";
         
          if (cargo.getCodigo() != null && !cargo.getCodigo().equals("")) {          

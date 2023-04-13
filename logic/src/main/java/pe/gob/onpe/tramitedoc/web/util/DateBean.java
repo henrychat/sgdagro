@@ -279,7 +279,7 @@ public class DateBean
       if (p != -1) {
         String s = caps ? capitalize(diaesp[i]) : diaesp[i];
         s = may ? s.toUpperCase() : s;
-        fecha = new StringBuffer(fecha).replace(p, diaing[i].length(), 
+        fecha = new StringBuilder(fecha).replace(p, diaing[i].length(), 
           s).toString();
         break;
       }
@@ -289,7 +289,7 @@ public class DateBean
       if (p != -1) {
         String s = caps ? capitalize(mesesp[i]) : mesesp[i];
         s = may ? s.toUpperCase() : s;
-        fecha = new StringBuffer(fecha).replace(p, 
+        fecha = new StringBuilder(fecha).replace(p, 
           p + mesing[i].length(), s).toString();
         break;
       }

@@ -98,7 +98,7 @@ public class BusquedaTextual {
     }
 
     public static String getContextAvanzado(String [] vect ){
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         int tipoBusca = 0;  // 0:normal con parecidos y like; 1:Normal con Parecidos 2: Busqueda Exacta
         int ini = 1;
         

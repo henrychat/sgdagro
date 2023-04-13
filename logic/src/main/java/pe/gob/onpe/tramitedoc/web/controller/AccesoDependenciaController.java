@@ -29,7 +29,7 @@ public class AccesoDependenciaController {
     @RequestMapping(method = {RequestMethod.POST}, params = {"accion=goSeleccionaDep"})
     @ResponseBody
     public String goSeleccionaDep(Model model, HttpServletRequest request, HttpServletResponse response) {
-        StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
         String pcoUsuario = ServletUtility.getInstancia().loadRequestParameter(request, "pcoUsuario");
 
         if (pcoUsuario != null) {

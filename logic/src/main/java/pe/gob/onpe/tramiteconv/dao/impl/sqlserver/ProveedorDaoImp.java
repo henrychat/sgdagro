@@ -28,7 +28,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   private ApplicationProperties applicationProperties;
   
   public List<ProveedorBean> getProveedoresList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT A.* FROM ( ");
     sql.append("\tselect\tcpro_ruc nuRuc, ");
     sql.append("\t\tCONVERT(VARCHAR(10), dpro_fecins, 103) dpro_fecins, ");
@@ -63,7 +63,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   public List<ProveedorBean> getProveedoresBusqList(String busNroRuc, String busRazonSocial) {
     String sqlContains = "";
     Map<String, Object> objectParam = new HashMap<String, Object>();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT A.* FROM ( ");
     sql.append("\tselect\tcpro_ruc nuRuc, ");
     sql.append("\t\tCONVERT(VARCHAR(10), dpro_fecins, 103) dpro_fecins, ");
@@ -110,7 +110,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   }
   
   public List<UbigeoBean> getUbigeoBusqList(UbigeoBean ubigeo) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select  ubdep, ");
     sql.append("        ubprv, ");
     sql.append("        ubdis, ");
@@ -153,7 +153,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   
   public String insProveedor(ProveedorBean proveedor) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.LG_PRO_PROVEEDOR ");
     sql.append("(cpro_ruc, dpro_fecins ,cpro_razsoc, cpro_domicil, cubi_coddep, cubi_codpro, cubi_coddis , cpro_telefo,cpro_email) ");
     sql.append("values (?,CURRENT_TIMESTAMP,?,?,?,?,?,?,?) ");
@@ -180,7 +180,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   
   public ProveedorBean getProveedor(String codProveedor) {
     ProveedorBean proveedorBean = new ProveedorBean();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     
     sql.append("select  cpro_ruc nuRuc, ");
     sql.append("        CONVERT(VARCHAR(10), dpro_fecins, 103) dpro_fecins, ");
@@ -212,7 +212,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   public String updProveedor(ProveedorBean proveedor, String codProveedor) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.LG_PRO_PROVEEDOR set ");
     sql.append("cpro_ruc=?, cpro_razsoc=?, cpro_domicil=?, cubi_coddep=?, cubi_codpro = ?, cubi_coddis= ? , cpro_telefo =?, cpro_email=? ");
     sql.append("where cpro_ruc=? ");

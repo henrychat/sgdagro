@@ -24,7 +24,7 @@ public class EtiquetaDocumentoDaoImp extends SimpleJdbcDaoBase implements Etique
 
     @Override
     public List<EtiquetaBean> getListEtiquetas() {
-       StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select co_est,de_est from IDOSGD.tdtr_estados where de_tab = 'CO_ETIQUETA_REC'");
         List<EtiquetaBean> list = new ArrayList<EtiquetaBean>();
         try {

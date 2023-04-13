@@ -23,7 +23,7 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements DocumentoBasicoDao{
     @Override
     public RemitosResBean getRemitoResumen(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 //        sql.append("select \n" +
 //                    "nu_ann, \n" +
 //                    "nu_emi, \n" +
@@ -84,7 +84,7 @@ public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements Document
     
     @Override
     public DestinoResBen  getDestinoResumen(String pnuAnn, String pnuEmi, String pnuDes){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n" +
                     "b.de_ane, \n" +
                     "b.nu_ann, \n" +
@@ -122,7 +122,7 @@ public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements Document
     
     @Override
     public List<DestinoResBen>  getDestinoResumenList(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n" +
                     "b.nu_ann, \n" +
                     "b.nu_emi, \n" +
@@ -158,7 +158,7 @@ public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements Document
 
     @Override
     public List<DocumentoAnexoBean>  getAnexosList(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select  \n" +
                     "nu_ann,\n" +
                     "nu_emi,\n" +
@@ -198,7 +198,7 @@ public class DocumentoBasicoDaoImp extends SimpleJdbcDaoBase implements Document
     @Override
     public String verificaCargaDoc(String pnuAnn, String pnuEmi) {
         
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select \n" +
                     "A.NU_EMI,\n" +
                     "FROM TDTV_ARCHIVO_DOC A \n" +

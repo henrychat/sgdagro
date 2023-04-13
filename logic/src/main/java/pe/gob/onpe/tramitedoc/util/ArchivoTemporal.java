@@ -40,7 +40,7 @@ public abstract class ArchivoTemporal {
                 inLeerDoc=false;  
             }
             if (inLeerDoc){
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[Constantes.BUFFER_SIZE];
                 ous = new ByteArrayOutputStream();
                 ios = new FileInputStream(fileDoc);
                 int read = 0;

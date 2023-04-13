@@ -150,7 +150,7 @@ public class NotificacionDaoImp extends SimpleJdbcDaoBase implements Notificacio
     //YUAL
     @Override
     public String notificarVistoBueno(String nuEmi,String nuAnn){
-         StringBuffer sql = new StringBuffer();
+          StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list= null;
         sql.append("select R.CEMP_APEPAT||' '||R.CEMP_APEMAT||' '||R.CEMP_DENOM as cempDenom ,R.CEMP_EMAIL as compName,\n" +
                     "'<b>'||tip.CDOC_DESDOC||' '||rt.NU_DOC_EMI||'-'||(SELECT DE_PAR FROM TDTR_PARAMETROS WHERE CO_PAR='DE_INSTITUCION' and rownum=1)||'-'||rt.DE_DOC_SIG||'<br/>'||'FECHA:'||TO_CHAR(rt.FE_EMI, 'DD/MM/YYYY HH24:MI')||'</b><br/><p ><b>ASUNTO:</b> '||rt.DE_ASU||'</p>' as accionBD "+
@@ -182,7 +182,7 @@ public class NotificacionDaoImp extends SimpleJdbcDaoBase implements Notificacio
       //YUAL
     @Override
     public String getLsEmpleadoNotificar(String nuEmi,String nuAnn, String detalleDoc){
-         StringBuffer sql = new StringBuffer();
+          StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list= null;
         sql.append("select DISTINCT R.CEMP_APEPAT||' '||R.CEMP_APEMAT||' '||R.CEMP_DENOM as cempDenom ,R.CEMP_EMAIL as compName,\n" +
                     "'<b>EXP. '||(SELECT NU_EXPEDIENTE FROM TDTC_EXPEDIENTE WHERE NU_SEC_EXP=rt.NU_SEC_EXP and NU_ANN_EXP=rt.NU_ANN_EXP and rownum=1)||'<br/>'||tip.CDOC_DESDOC||' '||rt.NU_DOC_EMI||'-'||(SELECT DE_PAR FROM TDTR_PARAMETROS WHERE CO_PAR='DE_INSTITUCION' and rownum=1)||'-'||rt.DE_DOC_SIG||'<br/>'||'FECHA:'||TO_CHAR(rt.FE_EMI, 'DD/MM/YYYY HH24:MI')||'</b><br/><p ><b>ASUNTO:</b> '||rt.DE_ASU||'</p>' as accionBD "+
@@ -214,7 +214,7 @@ public class NotificacionDaoImp extends SimpleJdbcDaoBase implements Notificacio
     
     @Override
     public String getLsMesaVirtualNotificar(String nuEmi,String nuAnn, String detalleDoc){
-         StringBuffer sql = new StringBuffer();
+          StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list= null;
         sql.append("select DISTINCT 'Administrador' as cempDenom ,si.CELE_DESCOR as compName,\n" +
                     "'<b>EXP. '||(SELECT NU_EXPEDIENTE FROM TDTC_EXPEDIENTE WHERE NU_SEC_EXP=rt.NU_SEC_EXP and rownum=1)||'<br/>'||tip.CDOC_DESDOC||' '||rt.NU_DOC_EMI||'-'||(SELECT DE_PAR FROM TDTR_PARAMETROS WHERE CO_PAR='DE_INSTITUCION' and rownum=1)||'-'||rt.DE_DOC_SIG||'<br/>'||'FECHA:'||TO_CHAR(rt.FE_EMI, 'DD/MM/YYYY HH24:MI')||'</b><br/><p ><b>ASUNTO:</b> '||rt.DE_ASU||'</p>' as accionBD "+
@@ -246,7 +246,7 @@ public class NotificacionDaoImp extends SimpleJdbcDaoBase implements Notificacio
     
     @Override
     public String getLsTupaNotificar(String nuEmi,String nuAnn, String detalleDoc){
-         StringBuffer sql = new StringBuffer();
+          StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list= null;
         sql.append("select DISTINCT 'Administrador' as cempDenom ,si.CELE_DESCOR as compName,\n" +
                     "(select proc.de_nombre from tdtr_procesos_exp proc where proc.co_proceso=si.CELE_DESELE and rownum=1)||'<br/>'||'<b>EXP. '||ex.NU_EXPEDIENTE||'<br/>'||tip.CDOC_DESDOC||' '||rt.NU_DOC_EMI||'-'||(SELECT DE_PAR FROM TDTR_PARAMETROS WHERE CO_PAR='DE_INSTITUCION' and rownum=1)||'-'||rt.DE_DOC_SIG||'<br/>'||'FECHA:'||TO_CHAR(rt.FE_EMI, 'DD/MM/YYYY HH24:MI')||'</b><br/><p ><b>ASUNTO:</b> '||rt.DE_ASU||'</p>' as accionBD "+

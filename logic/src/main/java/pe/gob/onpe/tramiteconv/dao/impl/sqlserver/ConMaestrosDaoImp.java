@@ -25,7 +25,7 @@ public class ConMaestrosDaoImp
   implements ConMaestrosDao
 {
   public List<ConAnioBean> listConAnio() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CANO_ANOEJE CO_ANIO, CANO_ANOEJE DE_ANIO ");
     sql.append(" FROM IDOSGD.SI_MAE_ANO_EJECUCION ");
     sql.append("ORDER BY 2 DESC ");
@@ -42,7 +42,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConMesBean> listConMes() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT upper(CELE_DESELE) DE_MES, CELE_CODELE CO_MES FROM IDOSGD.SI_ELEMENTO ");
     sql.append("WHERE CTAB_CODTAB=(SELECT IDOSGD.PK_SGD_DESCRIPCION_FU_TI_MESES()) ");
     sql.append("AND CELE_CODELE != (SELECT IDOSGD.PK_SGD_DESCRIPCION_FU_TI_MES_APE()) ");
@@ -60,7 +60,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConDiaBean> listConDia() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CELE_DESELE DE_DIA, CELE_CODELE CO_DIA FROM IDOSGD.SI_ELEMENTO ");
     sql.append("WHERE CTAB_CODTAB=(SELECT IDOSGD.PK_SGD_DESCRIPCION_FU_TI_DIAS()) ");
     sql.append("AND CELE_CODELE <= (SELECT * FROM IDOSGD.PK_SGD_DESCRIPCION_FU_DIA_MES(GETDATE())) ");
@@ -79,7 +79,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConDestinatarioBean> listConDestinatarios(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA from IDOSGD.RHTM_DEPENDENCIA ");
     sql.append("WHERE  ? IN (CO_DEPENDENCIA,CO_DEPEN_PADRE) OR CO_DEPENDENCIA IN (select co_dep_ref from IDOSGD.tdtx_referencia ");
     sql.append("where co_dep_emi = ? and ti_emi = 'D' and es_ref = '1') ORDER BY 1 ");
@@ -97,7 +97,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConTipoRemitenteBean> listConTipoRemitente() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CELE_DESELE DE_TIPO_REMITENTE,CELE_CODELE CO_TIPO_REMITENTE  FROM IDOSGD.SI_ELEMENTO ");
     sql.append("WHERE CTAB_CODTAB='TIP_DESTINO' AND CELE_CODELE NOT IN ('05') ");
     sql.append("UNION SELECT '.:TODOS:.' CELE_DESELE,NULL CELE_CODELE FROM IDOSGD.DUAL ORDER BY 1 ");
@@ -115,7 +115,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConExpedienteBean> listConExpediente(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT de_exp,co_exp FROM IDOSGD.tdtr_expediente  WHERE ");
     sql.append("co_dep = ? ");
     sql.append("UNION SELECT '.: TODOS :.', NULL");
@@ -134,7 +134,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConRemitenteBean> listConRemitente(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA FROM IDOSGD.RHTM_DEPENDENCIA ");
     sql.append("WHERE CO_DEPENDENCIA IN (SELECT CO_DEP FROM IDOSGD.TDTX_RESUMEN_DEP WHERE CO_DEP_REF = ? AND TI_TAB = 'D' AND TI_EMI = '01') ");
     sql.append("union select '.:TODOS:.', null   ORDER BY 1 ");
@@ -152,7 +152,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConEstadoBean> listConEstado() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DE_EST,CO_EST FROM IDOSGD.TDTR_ESTADOS ");
     sql.append("WHERE DE_TAB='TDTV_DESTINOS' UNION SELECT '.: TODOS :.',NULL FROM DUAL ORDER BY CO_EST  ");
     
@@ -169,7 +169,7 @@ public class ConMaestrosDaoImp
   }
   
   public List<ConTipoDocumentoBean> listConTipoDocumento(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DE_TIP_DOC,CO_TIP_DOC FROM (\nSELECT DISTINCT\nA.CO_DEP CO_DEP_DES ,CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\nfrom IDOSGD.tdtx_resumen_doc A INNER JOIN IDOSGD.SI_MAE_TIPO_DOC B ON A.CO_DOC = B.CDOC_TIPDOC \nWHERE ti_tab = 'D'\n  ) TB ");
 
     sql.append("WHERE CO_DEP_DES =?  UNION SELECT '.:TODOS:.' DESCRI , ");

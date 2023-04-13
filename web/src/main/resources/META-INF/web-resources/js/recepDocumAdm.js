@@ -2219,7 +2219,7 @@ function fn_anexoArchivarDocumento()
 
 function fn_fileUploadArchivar(reemplazarDoc) {
     $("#progress").show();
-    var pFileSizeMax = 10000000;
+    var pFileSizeMax = 25000000;
 //    var rutactx = $("#rutactx").attr("value");
     var rutactx = pRutaContexto + "/" + pAppVersion;
     var numFiles = 0;

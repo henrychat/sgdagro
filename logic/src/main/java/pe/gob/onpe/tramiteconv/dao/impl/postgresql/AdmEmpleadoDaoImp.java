@@ -51,7 +51,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public AdmEmpleadoBean getAdmEmpleado(String codEmp) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         sql.append(this.sql_base).append(" WHERE E.CEMP_CODEMP = :pCoEmp");
         objectParam.put("pCoEmp", codEmp);
@@ -75,7 +75,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public AdmEmpleadoBean getAdmEmpleadoDesdeDni(String dni) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         sql.append(this.sql_base).append(" WHERE E.CEMP_NU_DNI=:pnuDNI");
         objectParam.put("pnuDNI", dni);
@@ -99,7 +99,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public int updAdmEmpleado(AdmEmpleadoBean empleado) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE IDOSGD.RHTM_PER_EMPLEADOS SET "
                 +" CEMP_NU_DNI=?,"
                 +" CEMP_APEPAT=?,"
@@ -145,7 +145,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
             AdmEmpleadoBean emp = this.jdbcTemplate.queryForObject(sql1, BeanPropertyRowMapper.newInstance(AdmEmpleadoBean.class));
             String coEmpleadoTmp = emp.getCoEmpleado();*/
 
-            StringBuffer sql = new StringBuffer();
+             StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO IDOSGD.RHTM_PER_EMPLEADOS (CEMP_CODEMP,CEMP_CO_EMP, "
                     +"CEMP_NU_DNI,CEMP_APEPAT,CEMP_APEMAT,CEMP_DENOM,"
                     +"CEMP_EMAIL,CEMP_EST_EMP,CEMP_INDBAJ, "
@@ -187,7 +187,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public AdmEmpleadoBean getPersonaDesdeDni(String dni) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT A.nulem dni, A.DEAPP apPaterno, A.DEAPM apMaterno, A.DENOM nombres, ");
         sql.append(" TO_DATE(A.FENAC,'YYYYMMDD') fechaNacimiento,A.INSEX sexo FROM  IDOSGD.idtanirs A ");
         sql.append(" WHERE A.nulem='").append(dni).append("' ");
@@ -213,7 +213,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public List<AdmEmpleadoBean> getBsqAdmEmpleado(String dni, String apPaterno, String apMaterno, String nombres, String usuario) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         sql.append(this.sql_base);
         if(dni.length()>0 || apPaterno.length()>0 || apMaterno.length()>0 || nombres.length()>0){
@@ -257,7 +257,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public List<DependenciaBean> getBsqDependencia(String criterio)throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         sql.append("SELECT CO_DEPENDENCIA coDependencia,DE_CORTA_DEPEN deCortaDepen, ");
         sql.append(" DE_DEPENDENCIA deDependencia  FROM IDOSGD.RHTM_DEPENDENCIA");
@@ -279,7 +279,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public List<AdmEmpleadoCargoBean> getLsCargo() throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CCAR_CO_CARGO coCargo,CCAR_DESCAR deCargo FROM IDOSGD.RHTM_CARGOS ORDER BY CCAR_CO_CARGO ASC");
         List<AdmEmpleadoCargoBean> list = new ArrayList<AdmEmpleadoCargoBean>();
         try {
@@ -298,7 +298,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public AdmEmpleadoAccesoBean getAcceso(String coEmpleado) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM IDOSGD.SEG_USUARIOS1 WHERE CEMP_CODEMP='"+coEmpleado+"'");
         AdmEmpleadoAccesoBean usuario = new AdmEmpleadoAccesoBean();
         try {
@@ -320,7 +320,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
      */
     @Override
     public List<AdmEmpleadoAccesoBean> getLsAcceso(AdmEmpleadoAccesoBean acceso) throws Exception{
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         //sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM SEG_USUARIOS1 WHERE COD_USER LIKE ''||:pcoUser||'%' ");
         sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM IDOSGD.SEG_USUARIOS1 WHERE COD_USER=:pcoUser");        
@@ -390,7 +390,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
     //YUAL          
     public String updAcceso(String coUser, String coEmp, String nuDni,String inAD)  {
         String vReturn = "NO_OK";
-        StringBuffer  sqlUpd = new StringBuffer();
+          StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update SEG_USUARIOS1 \n"
                 + "set IN_AD=?\n"
                 + "where\n"
@@ -417,7 +417,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
         try{
             if(acceso.getCoEmpleado()!=null && acceso.getCoEmpleado().length()>0){
                  //Obtiene el USERNAME del empleado 
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
                 sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM IDOSGD.SEG_USUARIOS1 WHERE CEMP_CODEMP='"+acceso.getCoEmpleado()+"'");
                 AdmEmpleadoAccesoBean acceso_tmp = new AdmEmpleadoAccesoBean();
                 try {
@@ -465,7 +465,7 @@ public class AdmEmpleadoDaoImp extends SimpleJdbcDaoBase implements AdmEmpleadoD
         try{
             if(acceso.getCoEmpleado()!=null && acceso.getCoEmpleado().length()>0){
                 // Obtiene el USERNAME del empleado 
-                StringBuffer sql = new StringBuffer();
+                 StringBuilder sql = new StringBuilder();
                 sql.append("SELECT COD_USER coUsuario,CDES_USER deUsuario FROM IDOSGD.SEG_USUARIOS1 WHERE CEMP_CODEMP='"+acceso.getCoEmpleado()+"'");
                 AdmEmpleadoAccesoBean acceso_tmp = new AdmEmpleadoAccesoBean();
                 try {

@@ -42,186 +42,185 @@ import pe.gob.onpe.tramitedoc.bean.VencimientoBean;
  * @author ECueva
  */
 @Repository("maestrosDao")
-public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
+public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao {
 
     @Override
-        public List<AnnioBean> listAnnioEjec() {
-        StringBuffer sql = new StringBuffer();
+    public List<AnnioBean> listAnnioEjec() {
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CANO_ANOEJE CANO, CANO_ANOEJE DE_ANIO ");
         sql.append("FROM SI_MAE_ANO_EJECUCION UNION SELECT '.:TODOS.:', ");
         sql.append("NULL FROM DUAL ORDER BY 1 DESC ");
-        
+
         List<AnnioBean> list = new ArrayList<AnnioBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(AnnioBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
     }
-    
+
     @Override
-        public List<EstadoDocumentoBean> listEstadosDocumento(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
+    public List<EstadoDocumentoBean> listEstadosDocumento(String nomTabla) {
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST,CO_EST ");
         sql.append("FROM TDTR_ESTADOS ");
         sql.append("WHERE DE_TAB = ? ");
         sql.append("UNION ");
         sql.append("SELECT '[TODOS]',NULL FROM DUAL ORDER BY CO_EST ");
-        
+
         List<EstadoDocumentoBean> list = new ArrayList<EstadoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(EstadoDocumentoBean.class),
                     new Object[]{nomTabla});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
     }
-    
+
     @Override
     public List<EstadoDocumentoBean> listEstMensajeria(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT '[TODOS]' as DE_EST,NULL as CO_EST FROM DUAL ");
         sql.append("UNION ");
         sql.append("SELECT DE_EST,CO_EST ");
         sql.append("FROM TDTR_ESTADOS ");
         sql.append("WHERE DE_TAB = ? ORDER BY CO_EST DESC");
-        
-                
+
         List<EstadoDocumentoBean> list = new ArrayList<EstadoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(EstadoDocumentoBean.class),
                     new Object[]{nomTabla});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
     }
-        
+
     @Override
-        public List<PrioridadDocumentoBean> listPrioridadDocumento() {
-        StringBuffer sql = new StringBuffer();
+    public List<PrioridadDocumentoBean> listPrioridadDocumento() {
+         StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT DE_PRI,CO_PRI ");
         sql.append("FROM TDTR_PRIORIDAD ");
         sql.append("UNION ");
         sql.append("SELECT '.:TODOS.:',NULL FROM DUAL ");
-        
+
         List<PrioridadDocumentoBean> list = new ArrayList<PrioridadDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(PrioridadDocumentoBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-
-        return list;
-    }    
-    
-    @Override
-        public List<TipoDocumentoBean> listTipoDocumento(String coDependencia) {
-        StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_TIP_DOC,CO_TIP_DOC ");
-        sql.append("FROM "
-                + "(\n" +
-                    "SELECT DISTINCT\n" +
-                    "A.CO_DEP CO_DEP_DES ,CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\n" +
-                    "from tdtx_resumen_doc A , SI_MAE_TIPO_DOC B\n" +
-                    "WHERE ti_tab = 'D'\n" +
-                    "AND A.CO_DOC = B.CDOC_TIPDOC)");
-        sql.append("WHERE CO_DEP_DES = ? "); 
-        sql.append("UNION "); 
-        sql.append("SELECT '.:TODOS:.' DESCRI ,NULL CODIGO FROM DUAL ORDER BY 1 "); 
-        
-        List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
     }
-    
+
     @Override
-        public List<TipoDocumentoBean> listTipoDocumentoEmi(String coDependencia) {
-        StringBuilder sql = new StringBuilder();        
-        sql.append("SELECT CDOC_DESDOC DE_TIP_DOC,CDOC_TIPDOC CO_TIP_DOC ");
+    public List<TipoDocumentoBean> listTipoDocumento(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_TIP_DOC,CO_TIP_DOC ");
         sql.append("FROM "
-                + "(SELECT  A.CDOC_TIPDOC, B.CO_DEP, UPPER(A.CDOC_DESDOC) CDOC_DESDOC,A.CDOC_GRUPO\n" +
-                    "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n" +
-                    "WHERE A.CDOC_INDBAJ ='0'\n" +
-                    "AND A.CDOC_TIPDOC = B.CO_TIP_DOC)");
-        sql.append(" WHERE CO_DEP = ? "); 
-        sql.append("UNION "); 
-        sql.append("SELECT '.:TODOS:.' DESCRI ,NULL CODIGO FROM DUAL ORDER BY 1 "); 
-        
+                + "(\n"
+                + "SELECT DISTINCT\n"
+                + "A.CO_DEP CO_DEP_DES ,CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\n"
+                + "from tdtx_resumen_doc A , SI_MAE_TIPO_DOC B\n"
+                + "WHERE ti_tab = 'D'\n"
+                + "AND A.CO_DOC = B.CDOC_TIPDOC)");
+        sql.append("WHERE CO_DEP_DES = ? ");
+        sql.append("UNION ");
+        sql.append("SELECT '.:TODOS:.' DESCRI ,NULL CODIGO FROM DUAL ORDER BY 1 ");
+
         List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
-    }    
-    
+    }
+
     @Override
-        public List<ExpedienteBean> listExpedientes(String coDependencia) {
-        StringBuffer sql = new StringBuffer();
-        
+    public List<TipoDocumentoBean> listTipoDocumentoEmi(String coDependencia) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT CDOC_DESDOC DE_TIP_DOC,CDOC_TIPDOC CO_TIP_DOC ");
+        sql.append("FROM "
+                + "(SELECT  A.CDOC_TIPDOC, B.CO_DEP, UPPER(A.CDOC_DESDOC) CDOC_DESDOC,A.CDOC_GRUPO\n"
+                + "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n"
+                + "WHERE A.CDOC_INDBAJ ='0'\n"
+                + "AND A.CDOC_TIPDOC = B.CO_TIP_DOC)");
+        sql.append(" WHERE CO_DEP = ? ");
+        sql.append("UNION ");
+        sql.append("SELECT '.:TODOS:.' DESCRI ,NULL CODIGO FROM DUAL ORDER BY 1 ");
+
+        List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<ExpedienteBean> listExpedientes(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+
         sql.append("SELECT DE_EXP, CO_EXP ");
         sql.append("FROM TDTR_EXPEDIENTE ");
         sql.append("WHERE CO_DEP = ? ");
         sql.append("UNION SELECT '.: TODOS :.', NULL FROM DUAL ");
         sql.append("UNION SELECT '.:SIN EXPEDIENTE:.', 'SINEX' FROM DUAL ORDER BY 1 ");
-        
+
         List<ExpedienteBean> list = new ArrayList<ExpedienteBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(ExpedienteBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
-    }    
+    }
 
     @Override
-        public List<RemitenteBean> listRemitente(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
-        
+    public List<RemitenteBean> listRemitente(String annio, UsuarioConfigBean usuarioConfigBean) {
+         StringBuilder sql = new StringBuilder();
+
         sql.append("select distinct   ");
         sql.append("	DE_DEPENDENCIA descrip,");
         sql.append("	CO_DEPENDENCIA cod_dep,");
@@ -257,27 +256,26 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         sql.append("  FROM dual");
         sql.append(" ORDER BY 1");
 
-        
         List<RemitenteBean> list = new ArrayList<RemitenteBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{annio,usuarioConfigBean.getCoDep(),
-            usuarioConfigBean.getTiAcceso(),usuarioConfigBean.getCempCodemp(),annio,usuarioConfigBean.getCoDep(),usuarioConfigBean.getTiAcceso(),usuarioConfigBean.getCempCodemp()});
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{annio, usuarioConfigBean.getCoDep(),
+                usuarioConfigBean.getTiAcceso(), usuarioConfigBean.getCempCodemp(), annio, usuarioConfigBean.getCoDep(), usuarioConfigBean.getTiAcceso(), usuarioConfigBean.getCempCodemp()});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
-    }        
+    }
 
     @Override
-        public List<DestinatarioBean> listDestinatario(String annio, String coDependencia,String ptiAcceso,String pcoEmpleado) {
-        StringBuffer sql = new StringBuffer();
-        boolean bquery=false;
-        
-        if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
+    public List<DestinatarioBean> listDestinatario(String annio, String coDependencia, String ptiAcceso, String pcoEmpleado) {
+         StringBuilder sql = new StringBuilder();
+        boolean bquery = false;
+
+        if (ptiAcceso != null && (ptiAcceso.equals("0") || ptiAcceso.equals("2"))) {
             sql.append("SELECT SUBSTR(PK_SGD_DESCRIPCION.DE_NOM_EMP(CO_EMP_RES),1,200) nombres , CO_EMP_RES CO_EMP_DES        ");
             sql.append("FROM ( select DISTINCT CO_EMP_RES ");
             sql.append("		 from TDTX_RESUMEN_DEP");
@@ -288,9 +286,9 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" SELECT ' [TODOS]',");
             sql.append("	   NULL");
             sql.append("  FROM dual");
-            sql.append(" ORDER BY 1"); 
-            bquery=true;
-        }else{//personal
+            sql.append(" ORDER BY 1");
+            bquery = true;
+        } else {//personal
             sql.append("SELECT SUBSTR(PK_SGD_DESCRIPCION.DE_NOM_EMP(CO_EMP_RES),1,200) nombres , CO_EMP_RES CO_EMP_DES        ");
             sql.append("FROM ( select DISTINCT CO_EMP_RES ");
             sql.append("		 from TDTX_RESUMEN_DEP");
@@ -302,21 +300,20 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" SELECT ' [TODOS]',");
             sql.append("	   NULL");
             sql.append("  FROM dual");
-            sql.append(" ORDER BY 1");              
+            sql.append(" ORDER BY 1");
         }
 
-        
         List<DestinatarioBean> list = new ArrayList<DestinatarioBean>();
 
         try {
-            if(bquery){
-                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioBean.class), new Object[]{coDependencia});    
-            }else{
-                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioBean.class), new Object[]{coDependencia,pcoEmpleado});
+            if (bquery) {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioBean.class), new Object[]{coDependencia});
+            } else {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioBean.class), new Object[]{coDependencia, pcoEmpleado});
             }
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
@@ -324,34 +321,34 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
     }
 
     @Override
-    public List<EmpleadoBean> listEmpleadoDependencia(String pcodDependencia){
-        StringBuffer sql = new StringBuffer();
-       
-        sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.CEMP_DENOM, e.CEMP_CODEMP\n" +
-        "FROM RHTM_PER_EMPLEADOS e\n" +
-        "where e.CEMP_EST_EMP = '1'\n" +
-        "and (CEMP_CO_DEPEND = ?\n" +
-        "or CO_DEPENDENCIA = ?\n" +
-        ")\n" +
-        "ORDER BY 1");
-        
+    public List<EmpleadoBean> listEmpleadoDependencia(String pcodDependencia) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.CEMP_DENOM, e.CEMP_CODEMP\n"
+                + "FROM RHTM_PER_EMPLEADOS e\n"
+                + "where e.CEMP_EST_EMP = '1'\n"
+                + "and (CEMP_CO_DEPEND = ?\n"
+                + "or CO_DEPENDENCIA = ?\n"
+                + ")\n"
+                + "ORDER BY 1");
+
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
-        
+
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia,pcodDependencia});
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia, pcodDependencia});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
-    
+
     @Override
-        public List<RemitenteBean> listReferenciaOrigen(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
-        
+    public List<RemitenteBean> listReferenciaOrigen(String annio, UsuarioConfigBean usuarioConfigBean) {
+         StringBuilder sql = new StringBuilder();
+
         sql.append(" select distinct   ");
         sql.append(" 	b.DE_DEPENDENCIA descrip,");
         sql.append(" 	b.CO_DEPENDENCIA cod_dep,");
@@ -385,25 +382,24 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         sql.append("   FROM dual");
         sql.append("  ORDER BY 1");
 
-        
         List<RemitenteBean> list = new ArrayList<RemitenteBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{annio,usuarioConfigBean.getCoDep(),
-            usuarioConfigBean.getTiAcceso(),usuarioConfigBean.getCempCodemp(),annio,usuarioConfigBean.getCoDep(),usuarioConfigBean.getTiAcceso(),usuarioConfigBean.getCempCodemp()});
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{annio, usuarioConfigBean.getCoDep(),
+                usuarioConfigBean.getTiAcceso(), usuarioConfigBean.getCempCodemp(), annio, usuarioConfigBean.getCoDep(), usuarioConfigBean.getTiAcceso(), usuarioConfigBean.getCempCodemp()});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-    
-        @Override
-        public List<DependenciaBean> listDestinatarioEmi(String annio, UsuarioConfigBean usuarioConfigBean) {
-        StringBuffer sql = new StringBuffer();
-        
+
+    @Override
+    public List<DependenciaBean> listDestinatarioEmi(String annio, UsuarioConfigBean usuarioConfigBean) {
+         StringBuilder sql = new StringBuilder();
+
         sql.append(" select distinct   ");
         sql.append(" 	b.DE_DEPENDENCIA deDependencia,");
         sql.append(" 	a.co_dep_ref coDependencia,");
@@ -437,27 +433,26 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
         sql.append("   FROM dual");
         sql.append("  ORDER BY 1");
 
-        
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{annio,usuarioConfigBean.getCoDep(),
-            usuarioConfigBean.getTiConsulta(),usuarioConfigBean.getCempCodemp(),annio,usuarioConfigBean.getCoDep(),usuarioConfigBean.getTiConsulta(),usuarioConfigBean.getCempCodemp()});
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{annio, usuarioConfigBean.getCoDep(),
+                usuarioConfigBean.getTiConsulta(), usuarioConfigBean.getCempCodemp(), annio, usuarioConfigBean.getCoDep(), usuarioConfigBean.getTiConsulta(), usuarioConfigBean.getCempCodemp()});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-        
+
     @Override
-    public List<EmpleadoBean> listEmpleadoElaboradoPor(String pcodDependencia,String ptiAcceso,String pcoEmpleado){
-        StringBuffer sql = new StringBuffer();
-        boolean bquery=false;
-       
-        if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
+    public List<EmpleadoBean> listEmpleadoElaboradoPor(String pcodDependencia, String ptiAcceso, String pcoEmpleado) {
+         StringBuilder sql = new StringBuilder();
+        boolean bquery = false;
+
+        if (ptiAcceso != null && (ptiAcceso.equals("0") || ptiAcceso.equals("2"))) {
             sql.append(" SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP");
             sql.append(" FROM RHTM_PER_EMPLEADOS e");
             sql.append(" where e.CEMP_EST_EMP = '1'");
@@ -471,9 +466,9 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" in ( select co_emp from tdtx_dependencia_empleado  where co_dep=?/*:global.VCOD_DEP*/ and es_emp='0')");
             sql.append(" UNION ");
             sql.append(" SELECT ' [TODOS]', NULL FROM DUAL");
-            sql.append(" ORDER BY 1");            
-            bquery=true;
-        }else{//personal
+            sql.append(" ORDER BY 1");
+            bquery = true;
+        } else {//personal
             sql.append(" SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP");
             sql.append(" FROM RHTM_PER_EMPLEADOS e");
             sql.append(" where e.CEMP_EST_EMP = '1'");
@@ -481,36 +476,35 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" OR CO_DEPENDENCIA =  ?/*:B_02.CO_DEP_EMI */) and e.CEMP_CODEMP=?");
             sql.append(" UNION ");
             sql.append(" SELECT ' [TODOS]', NULL FROM DUAL");
-            sql.append(" ORDER BY 1");              
+            sql.append(" ORDER BY 1");
         }
 
-        
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
-        
+
         try {
-            if(bquery){
-                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia,pcodDependencia,
-                                                                                                                    pcodDependencia,pcodDependencia});                
-            }else{
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia,pcodDependencia,
-                                                                                                                pcodDependencia,pcoEmpleado});                
+            if (bquery) {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia, pcodDependencia,
+                    pcodDependencia, pcodDependencia});
+            } else {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia, pcodDependencia,
+                    pcodDependencia, pcoEmpleado});
             }
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
-    
-        //YUAL
-        @Override
-        public List<EmpleadoBean> listEmpleadoDestino(String pcodDependencia,String ptiAcceso,String pcoEmpleado){
-         StringBuffer sql = new StringBuffer();
-        boolean bquery=false;
-       
-        if(ptiAcceso!=null&&(ptiAcceso.equals("0")||ptiAcceso.equals("2"))){
+
+    //YUAL
+    @Override
+    public List<EmpleadoBean> listEmpleadoDestino(String pcodDependencia, String ptiAcceso, String pcoEmpleado) {
+         StringBuilder sql = new StringBuilder();
+        boolean bquery = false;
+
+        if (ptiAcceso != null && (ptiAcceso.equals("0") || ptiAcceso.equals("2"))) {
             sql.append(" SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP");
             sql.append(" FROM RHTM_PER_EMPLEADOS e");
             sql.append(" where e.CEMP_EST_EMP = '1'");
@@ -524,9 +518,9 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" in ( select co_emp from tdtx_dependencia_empleado  where co_dep=? and es_emp='0')");
             sql.append(" UNION ");
             sql.append(" SELECT ' [TODOS]', NULL FROM DUAL");
-            sql.append(" ORDER BY 1");            
-            bquery=true;
-        }else{//personal
+            sql.append(" ORDER BY 1");
+            bquery = true;
+        } else {//personal
             sql.append(" SELECT e.cemp_apepat||' '||e.cemp_apemat||' '||e.cemp_denom nombre, e.CEMP_CODEMP");
             sql.append(" FROM RHTM_PER_EMPLEADOS e");
             sql.append(" where e.CEMP_EST_EMP = '1'");
@@ -534,390 +528,387 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             sql.append(" OR CO_DEPENDENCIA =  ?) and e.CEMP_CODEMP=?");
             sql.append(" UNION ");
             sql.append(" SELECT ' [TODOS]', NULL FROM DUAL");
-            sql.append(" ORDER BY 1");              
+            sql.append(" ORDER BY 1");
         }
 
-        
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
-        
+
         try {
-            if(bquery){
-                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia,pcodDependencia,
-                                                                                                                    pcodDependencia,pcodDependencia});                
-            }else{
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia,pcodDependencia,
-                                                                                                                pcodDependencia,pcoEmpleado});                
+            if (bquery) {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia, pcodDependencia,
+                    pcodDependencia, pcodDependencia});
+            } else {
+                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcodDependencia, pcodDependencia,
+                    pcodDependencia, pcoEmpleado});
             }
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;       
+        return list;
     }
-        
-        
-        @Override
-        public List<DependenciaBean> listDependenciaDestinatarioEmi(String coDepen, String deDepen) {
-        StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_DEPENDENCIA,\n" +
-        "       CO_DEPENDENCIA,\n" +
-        "       DE_CORTA_DEPEN\n" +
-        "  FROM RHTM_DEPENDENCIA\n" +
-        " WHERE co_nivel <> '6'\n" +
-        "   AND IN_BAJA = '0'\n" +
-        "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%' )\n" +
-        "UNION\n" +
-        "SELECT DE_DEPENDENCIA,\n" +
-        "       CO_DEPENDENCIA,\n" +
-        "       DE_CORTA_DEPEN\n" +
-        "  FROM RHTM_DEPENDENCIA\n" +
-        " WHERE co_nivel = '6'\n" +
-        "   AND IN_BAJA = '0'\n" +
-        "   AND (CO_DEPEN_PADRE in ( select CO_DEPEN_PADRE co_dep from RHTM_DEPENDENCIA where CO_DEPENDENCIA = ?)\n" +
-        "       OR ? IN (CO_DEPENDENCIA, CO_DEPEN_PADRE))\n" +
-        "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%')\n" +
-        " ORDER BY 1");
 
-        
+    @Override
+    public List<DependenciaBean> listDependenciaDestinatarioEmi(String coDepen, String deDepen) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_DEPENDENCIA,\n"
+                + "       CO_DEPENDENCIA,\n"
+                + "       DE_CORTA_DEPEN\n"
+                + "  FROM RHTM_DEPENDENCIA\n"
+                + " WHERE co_nivel <> '6'\n"
+                + "   AND IN_BAJA = '0'\n"
+                + "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%' )\n"
+                + "UNION\n"
+                + "SELECT DE_DEPENDENCIA,\n"
+                + "       CO_DEPENDENCIA,\n"
+                + "       DE_CORTA_DEPEN\n"
+                + "  FROM RHTM_DEPENDENCIA\n"
+                + " WHERE co_nivel = '6'\n"
+                + "   AND IN_BAJA = '0'\n"
+                + "   AND (CO_DEPEN_PADRE in ( select CO_DEPEN_PADRE co_dep from RHTM_DEPENDENCIA where CO_DEPENDENCIA = ?)\n"
+                + "       OR ? IN (CO_DEPENDENCIA, CO_DEPEN_PADRE))\n"
+                + "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%')\n"
+                + " ORDER BY 1");
+
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{deDepen,deDepen,
-            coDepen,coDepen,deDepen,deDepen});
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{deDepen, deDepen,
+                coDepen, coDepen, deDepen, deDepen});
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-        
+
     @Override
-    public List<TipoDocumentoBean> listTipDocXDependencia(String coDependencia){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC,CDOC_GRUPO \n" +
-            "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n" +
-            "WHERE A.CDOC_INDBAJ ='0'\n" +
-            "AND A.CDOC_TIPDOC = B.CO_TIP_DOC\n" +
-            "AND B.CO_DEP=?\n" +
-            "ORDER BY 1"); 
-        
+    public List<TipoDocumentoBean> listTipDocXDependencia(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC,CDOC_GRUPO \n"
+                + "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n"
+                + "WHERE A.CDOC_INDBAJ ='0'\n"
+                + "AND A.CDOC_TIPDOC = B.CO_TIP_DOC\n"
+                + "AND B.CO_DEP=?\n"
+                + "ORDER BY 1");
+
         List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-      @Override
-    public List<TipoDocumentoBean> listTipDocXDependenciaPersonal(String coDependencia){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC,CDOC_GRUPO \n" +
-            "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n" +
-            "WHERE A.CDOC_INDBAJ ='0'AND CDOC_GRUPO='02' \n" +
-            "AND A.CDOC_TIPDOC = B.CO_TIP_DOC\n" +
-            "AND B.CO_DEP=?\n" +
-            "ORDER BY 1"); 
-        
+
+    @Override
+    public List<TipoDocumentoBean> listTipDocXDependenciaPersonal(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT  UPPER(A.CDOC_DESDOC) DE_TIP_DOC, A.CDOC_TIPDOC CO_TIP_DOC,CDOC_GRUPO \n"
+                + "FROM SI_MAE_TIPO_DOC A,SITM_DOC_DEPENDENCIA B\n"
+                + "WHERE A.CDOC_INDBAJ ='0'AND CDOC_GRUPO='02' \n"
+                + "AND A.CDOC_TIPDOC = B.CO_TIP_DOC\n"
+                + "AND B.CO_DEP=?\n"
+                + "ORDER BY 1");
+
         List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
+
     @Override
     public List<PrioridadDocumentoBean> listPrioridadDocTblEmi() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT DE_PRI,CO_PRI ");
         sql.append("FROM TDTR_PRIORIDAD ");
-        
+
         List<PrioridadDocumentoBean> list = new ArrayList<PrioridadDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(PrioridadDocumentoBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
-        return list;        
-    }    
-    
+        return list;
+    }
+
     @Override
-    public List<TipoDocumentoBean> listTipDocReferencia(String coDependencia){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("select a.CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\n" +
-                    "from (\n" +
-                    "    select DISTINCT co_doc \n" +
-                    "    from tdtx_resumen_doc\n" +
-                    "    where CO_DEP = ?)a, SI_MAE_TIPO_DOC b\n" +
-                    "WHERE  A.CO_DOC = B.CDOC_TIPDOC\n" +
-                    "order by 2"); 
-        
+    public List<TipoDocumentoBean> listTipDocReferencia(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("select a.CO_DOC CO_TIP_DOC , B.CDOC_DESDOC DE_TIP_DOC\n"
+                + "from (\n"
+                + "    select DISTINCT co_doc \n"
+                + "    from tdtx_resumen_doc\n"
+                + "    where CO_DEP = ?)a, SI_MAE_TIPO_DOC b\n"
+                + "WHERE  A.CO_DOC = B.CDOC_TIPDOC\n"
+                + "order by 2");
+
         List<TipoDocumentoBean> list = new ArrayList<TipoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDocumentoBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-    
+
     @Override
-    public List<TipoDestinatarioEmiBean> listTipDestinatarioEmi(){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from SI_ELEMENTO WHERE CTAB_CODTAB='TIP_DESTINO' AND CELE_CODELE not in  ('05')"); 
-        
+    public List<TipoDestinatarioEmiBean> listTipDestinatarioEmi() {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from SI_ELEMENTO WHERE CTAB_CODTAB='TIP_DESTINO' AND CELE_CODELE not in  ('05')");
+
         List<TipoDestinatarioEmiBean> list = new ArrayList<TipoDestinatarioEmiBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDestinatarioEmiBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;        
-    }
-    
-    @Override
-    public List<GrupoDestinatarioBean> listGrupoDestinatario(String codDependencia){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_GRU_DES de_grupo,CO_GRU_DES co_grupo FROM TDTM_GRU_DES WHERE CO_DEP=? AND ES_GRU_DES='1' ORDER BY 2"); 
-        
-        List<GrupoDestinatarioBean> list = new ArrayList<GrupoDestinatarioBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(GrupoDestinatarioBean.class), new Object[]{codDependencia});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;           
-    }
-    
-    @Override
-    public List<MotivoBean> listMotivoDestinatario(String codDependencia, String coTipoDoc){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT a.de_mot, a.co_mot FROM tdtr_motivo a, tdtx_moti_docu_depe b WHERE a.co_mot = b.co_mot AND b.co_dep = ?/*:B_02.CO_DEP_EMI*/ AND b.co_tip_doc = ?/*:b_02.co_tip_doc_adm*/ UNION SELECT de_mot, co_mot FROM tdtr_motivo  where co_mot in ('0','1') ORDER BY 1"); 
-        
-        List<MotivoBean> list = new ArrayList<MotivoBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(MotivoBean.class), new Object[]{codDependencia,coTipoDoc});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;           
-    }
-    
-    @Override
-    public List<DependenciaBean> listDependenciaRemitenteEmi(String coDependencia){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA \n" +
-                    "FROM RHTM_DEPENDENCIA \n" +
-                    "where CO_DEPENDENCIA in (SELECT ? FROM DUAL \n" +
-                    "                        UNION SELECT co_dep_ref FROM tdtx_referencia  \n" +
-                    "                              WHERE co_dep_emi = ?\n" +
-                    "                              AND ti_emi = 'R' \n" +
-                    "                              AND es_ref = '1')"); 
-        
-        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{coDependencia,coDependencia});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;         
-    }
-    
-    @Override    
-    public List<LocalBean> listLocalRemitenteEmi(String coDependencia){
-        StringBuffer sql = new StringBuffer();
-        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL WHERE CCOD_LOCAL IN (SELECT CO_LOC FROM SITM_LOCAL_DEPENDENCIA WHERE CO_DEP = ?)"); 
-        
-        List<LocalBean> list = new ArrayList<LocalBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(LocalBean.class), new Object[]{coDependencia});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;          
-    }
-
-    @Override    
-    public List<LocalBean> listLocal(){
-        StringBuffer sql = new StringBuffer();
-        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL ORDER BY 2"); 
-        
-        List<LocalBean> list = new ArrayList<LocalBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(LocalBean.class));
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;          
-    }
-    
-    @Override
-    public List<RemitenteBean> listReferenciaOrigenPersonal(String sCoEmpEmi) {
-    StringBuffer sql = new StringBuffer();
-
-    sql.append("SELECT DECODE(c.ti_emi,\n" +
-                "              '01', d.de_dependencia,\n" +
-                "              '02', ' [PROVEEDORES]',\n" +
-                "              '03', ' [CIUDADANOS]',\n" +
-                "              '04', ' [OTROS]') descrip,\n" +
-                "       DECODE(c.ti_emi,\n" +
-                "              '01', c.co_dep_emi,\n" +
-                "              '02', 'P',\n" +
-                "              '03', 'C',\n" +
-                "              '04', 'O') cod_dep,\n" +
-                "              d.de_corta_depen\n" +
-                "  FROM tdtr_referencia a,\n" +
-                "       tdtv_remitos    b,\n" +
-                "       tdtv_remitos    c,\n" +
-                "       rhtm_dependencia  d\n" +
-                " WHERE b.es_eli = '0'\n" +
-                "   AND b.co_gru = '1'\n" +
-                "   AND a.nu_ann = b.nu_ann\n" +
-                "   AND a.nu_emi = b.nu_emi\n" +
-                "   AND a.nu_ann_ref = c.nu_ann\n" +
-                "   AND a.nu_emi_ref = c.nu_emi\n" +
-                "   AND c.co_dep_emi = d.co_dependencia\n" +
-                "   AND b.co_emp_emi = ?/*:GLOBAL.USER */\n" +
-                " GROUP BY c.ti_emi,\n" +
-                "          c.co_dep_emi,\n" +
-                "          d.de_dependencia,\n" +
-                "          d.de_corta_depen\n" +
-                " UNION\n" +
-                "SELECT ' [TODOS]',\n" +
-                "       NULL,\n" +
-                "       NULL\n" +
-                "  FROM dual\n" +
-                " ORDER BY 1");
-
-
-    List<RemitenteBean> list = new ArrayList<RemitenteBean>();
-
-    try {
-        list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{sCoEmpEmi});
-    }catch (EmptyResultDataAccessException e) {
-        list = null;
-    }catch (Exception e) {
-        list = null;
-        e.printStackTrace();
-    }
-    return list;
-}
-    
-        @Override
-        public List<DependenciaBean> listDestinatarioEmiPersonal(String sCoEmpEmi) {
-        StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DECODE(c.ti_des,\n" +
-                    "              '01', d.de_dependencia,\n" +
-                    "              '02', ' [PROVEEDORES]',\n" +
-                    "              '03', ' [CIUDADANOS]',\n" +
-                    "              '04', ' [OTROS]') deDependencia,\n" +
-                    "       DECODE(c.ti_des,\n" +
-                    "              '01', c.co_dep_des,\n" +
-                    "              '02', 'P',\n" +
-                    "              '03', 'C',\n" +
-                    "              '04', 'O') coDependencia,\n" +
-                    "       d.DE_CORTA_DEPEN\n" +
-                    "  FROM tdtv_remitos    b,\n" +
-                    "       tdtv_destinos   c,\n" +
-                    "       rhtm_dependencia  d\n" +
-                    " WHERE b.es_eli = '0'\n" +
-                    "   AND b.co_gru = '1'\n" +
-                    "   AND b.nu_ann = c.nu_ann\n" +
-                    "   AND b.nu_emi = c.nu_emi\n" +
-                    "   AND c.co_dep_des = d.co_dependencia (+)\n" +
-                    "   AND b.co_emp_emi = ? \n" +
-                    " GROUP BY c.ti_des,\n" +
-                    "          c.co_dep_des,\n" +
-                    "          d.de_dependencia,\n" +
-                    "          d.de_corta_depen\n" +
-                    " UNION\n" +
-                    "SELECT ' [TODOS]',\n" +
-                    "       NULL,\n" +
-                    "       NULL\n" +
-                    "  FROM dual\n" +
-                    " ORDER BY 1");
-
-        
-        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{sCoEmpEmi});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
-    }    
+    }
 
     @Override
-    public DependenciaBean getDatosDependencia(String codDependencia){
-        StringBuffer sql = new StringBuffer();
-        sql.append("select \n" +
-                    "co_dependencia,\n" +
-                    "co_empleado,\n" +
-                    "de_dependencia tituloDep,\n"+
-                    "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_empleado) de_dependencia,\n" +
-                    "de_sigla \n" +
-                    "from rhtm_dependencia \n" +
-                    "where co_dependencia = ?");
-        
+    public List<GrupoDestinatarioBean> listGrupoDestinatario(String codDependencia) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_GRU_DES de_grupo,CO_GRU_DES co_grupo FROM TDTM_GRU_DES WHERE CO_DEP=? AND ES_GRU_DES='1' ORDER BY 2");
+
+        List<GrupoDestinatarioBean> list = new ArrayList<GrupoDestinatarioBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(GrupoDestinatarioBean.class), new Object[]{codDependencia});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<MotivoBean> listMotivoDestinatario(String codDependencia, String coTipoDoc) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT a.de_mot, a.co_mot FROM tdtr_motivo a, tdtx_moti_docu_depe b WHERE a.co_mot = b.co_mot AND b.co_dep = ?/*:B_02.CO_DEP_EMI*/ AND b.co_tip_doc = ?/*:b_02.co_tip_doc_adm*/ UNION SELECT de_mot, co_mot FROM tdtr_motivo  where co_mot in ('0','1') ORDER BY 1");
+
+        List<MotivoBean> list = new ArrayList<MotivoBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(MotivoBean.class), new Object[]{codDependencia, coTipoDoc});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<DependenciaBean> listDependenciaRemitenteEmi(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA \n"
+                + "FROM RHTM_DEPENDENCIA \n"
+                + "where CO_DEPENDENCIA in (SELECT ? FROM DUAL \n"
+                + "                        UNION SELECT co_dep_ref FROM tdtx_referencia  \n"
+                + "                              WHERE co_dep_emi = ?\n"
+                + "                              AND ti_emi = 'R' \n"
+                + "                              AND es_ref = '1')");
+
+        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{coDependencia, coDependencia});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<LocalBean> listLocalRemitenteEmi(String coDependencia) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL WHERE CCOD_LOCAL IN (SELECT CO_LOC FROM SITM_LOCAL_DEPENDENCIA WHERE CO_DEP = ?)");
+
+        List<LocalBean> list = new ArrayList<LocalBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(LocalBean.class), new Object[]{coDependencia});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<LocalBean> listLocal() {
+         StringBuilder sql = new StringBuilder();
+        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL ORDER BY 2");
+
+        List<LocalBean> list = new ArrayList<LocalBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(LocalBean.class));
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<RemitenteBean> listReferenciaOrigenPersonal(String sCoEmpEmi) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DECODE(c.ti_emi,\n"
+                + "              '01', d.de_dependencia,\n"
+                + "              '02', ' [PROVEEDORES]',\n"
+                + "              '03', ' [CIUDADANOS]',\n"
+                + "              '04', ' [OTROS]') descrip,\n"
+                + "       DECODE(c.ti_emi,\n"
+                + "              '01', c.co_dep_emi,\n"
+                + "              '02', 'P',\n"
+                + "              '03', 'C',\n"
+                + "              '04', 'O') cod_dep,\n"
+                + "              d.de_corta_depen\n"
+                + "  FROM tdtr_referencia a  WITH(NOLOCK),\n"
+                + "       tdtv_remitos    b WITH(NOLOCK),\n"
+                + "       tdtv_remitos    c WITH(NOLOCK),\n"
+                + "       rhtm_dependencia  d WITH(NOLOCK)\n"
+                + " WHERE b.es_eli = '0'\n"
+                + "   AND b.co_gru = '1'\n"
+                + "   AND a.nu_ann = b.nu_ann\n"
+                + "   AND a.nu_emi = b.nu_emi\n"
+                + "   AND a.nu_ann_ref = c.nu_ann\n"
+                + "   AND a.nu_emi_ref = c.nu_emi\n"
+                + "   AND c.co_dep_emi = d.co_dependencia\n"
+                + "   AND b.co_emp_emi = ?/*:GLOBAL.USER */\n"
+                + " GROUP BY c.ti_emi,\n"
+                + "          c.co_dep_emi,\n"
+                + "          d.de_dependencia,\n"
+                + "          d.de_corta_depen\n"
+                + " UNION\n"
+                + "SELECT ' [TODOS]',\n"
+                + "       NULL,\n"
+                + "       NULL\n"
+                + "  FROM dual\n"
+                + " ORDER BY 1");
+
+        List<RemitenteBean> list = new ArrayList<RemitenteBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(RemitenteBean.class), new Object[]{sCoEmpEmi});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<DependenciaBean> listDestinatarioEmiPersonal(String sCoEmpEmi) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DECODE(c.ti_des,\n"
+                + "              '01', d.de_dependencia,\n"
+                + "              '02', ' [PROVEEDORES]',\n"
+                + "              '03', ' [CIUDADANOS]',\n"
+                + "              '04', ' [OTROS]') deDependencia,\n"
+                + "       DECODE(c.ti_des,\n"
+                + "              '01', c.co_dep_des,\n"
+                + "              '02', 'P',\n"
+                + "              '03', 'C',\n"
+                + "              '04', 'O') coDependencia,\n"
+                + "       d.DE_CORTA_DEPEN\n"
+                + "  FROM tdtv_remitos    b WITH(NOLOCK),\n"
+                + "       tdtv_destinos   c WITH(NOLOCK),\n"
+                + "       rhtm_dependencia  d WITH(NOLOCK)\n"
+                + " WHERE b.es_eli = '0'\n"
+                + "   AND b.co_gru = '1'\n"
+                + "   AND b.nu_ann = c.nu_ann\n"
+                + "   AND b.nu_emi = c.nu_emi\n"
+                + "   AND c.co_dep_des = d.co_dependencia (+)\n"
+                + "   AND b.co_emp_emi = ? \n"
+                + " GROUP BY c.ti_des,\n"
+                + "          c.co_dep_des,\n"
+                + "          d.de_dependencia,\n"
+                + "          d.de_corta_depen\n"
+                + " UNION\n"
+                + "SELECT ' [TODOS]',\n"
+                + "       NULL,\n"
+                + "       NULL\n"
+                + "  FROM dual\n"
+                + " ORDER BY 1");
+
+        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{sCoEmpEmi});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public DependenciaBean getDatosDependencia(String codDependencia) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("select \n"
+                + "co_dependencia,\n"
+                + "co_empleado,\n"
+                + "de_dependencia tituloDep,\n"
+                + "PK_SGD_DESCRIPCION.DE_NOM_EMP(co_empleado) de_dependencia,\n"
+                + "de_sigla \n"
+                + "from rhtm_dependencia WITH(NOLOCK) \n"
+                + "where co_dependencia = ?");
+
         DependenciaBean depEmi = new DependenciaBean();
-        
+
         try {
             depEmi = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{codDependencia});
         } catch (EmptyResultDataAccessException e) {
@@ -926,139 +917,139 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             depEmi = null;
             e.printStackTrace();
         }
-        
+
         return depEmi;
 
     }
-    
+
     @Override
-        public List<EstadoDocumentoBean> listEstadosDocumentoMP(String nomTabla) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT DE_EST_MP DE_EST,CO_EST \n" +
-                    "FROM TDTR_ESTADOS \n" +
-                    "WHERE DE_TAB=?\n" +
-                    "AND DE_EST_MP IS NOT NULL UNION SELECT '.: TODOS :.',NULL \n" +
-                    "FROM DUAL \n" +
-                    "ORDER BY CO_EST");
-        
+    public List<EstadoDocumentoBean> listEstadosDocumentoMP(String nomTabla) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT DE_EST_MP DE_EST,CO_EST \n"
+                + "FROM TDTR_ESTADOS WITH(NOLOCK) \n"
+                + "WHERE DE_TAB=?\n"
+                + "AND DE_EST_MP IS NOT NULL UNION SELECT '.: TODOS :.',NULL \n"
+                + "FROM DUAL \n"
+                + "ORDER BY CO_EST");
+
         List<EstadoDocumentoBean> list = new ArrayList<EstadoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(EstadoDocumentoBean.class),
                     new Object[]{nomTabla});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
 
         return list;
-    }    
+    }
 
     @Override
-    public List<TipoDestinatarioEmiBean> listTipEmisorDocExtRecep(){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from SI_ELEMENTO \n" +
-                    "WHERE CTAB_CODTAB='TIP_DESTINO' \n" +
-                    "AND CELE_CODELE NOT IN ('01','05')\n" +
-                    "UNION SELECT '.: TODOS :.',NULL\n" +
-                    "FROM DUAL\n" +
-                    "ORDER BY 2"); 
-        
+    public List<TipoDestinatarioEmiBean> listTipEmisorDocExtRecep() {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("select CELE_DESELE de_destinatario,CELE_CODELE co_destinatario from SI_ELEMENTO WITH(NOLOCK) \n"
+                + "WHERE CTAB_CODTAB='TIP_DESTINO' \n"
+                + "AND CELE_CODELE NOT IN ('01','05')\n"
+                + "UNION SELECT '.: TODOS :.',NULL\n"
+                + "FROM DUAL\n"
+                + "ORDER BY 2");
+
         List<TipoDestinatarioEmiBean> list = new ArrayList<TipoDestinatarioEmiBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TipoDestinatarioEmiBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
-    
+
     @Override
-    public List<TupaExpedienteBean> listTupaExpedienteNew(){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n" +
-                    "FROM TDTR_PROCESOS_EXP \n" +
-                    "WHERE TI_PROCESO = '1' \n" +
-                    "AND ES_ESTADO = '1'"+
-                    "UNION  \n" +
-                    "SELECT '[SIN TUPA]','0000' \n" +
-                    "FROM DUAL  \n" +
-                    "ORDER BY 2"); 
-        
+    public List<TupaExpedienteBean> listTupaExpedienteNew() {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n"
+                + "FROM TDTR_PROCESOS_EXP WITH(NOLOCK) \n"
+                + "WHERE TI_PROCESO = '1' \n"
+                + "AND ES_ESTADO = '1'"
+                + "UNION  \n"
+                + "SELECT '[SIN TUPA]','0000' \n"
+                + "FROM DUAL  \n"
+                + "ORDER BY 2");
+
         List<TupaExpedienteBean> list = new ArrayList<TupaExpedienteBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TupaExpedienteBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
-    }    
-    
+        return list;
+    }
+
     @Override
-    public List<TupaExpedienteBean> listTupaExpediente(){
-                StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n" +
-                    "FROM TDTR_PROCESOS_EXP \n" +
-                    "WHERE TI_PROCESO = '1' \n" +
-                    "UNION  \n" +
-                    "SELECT '[SIN TUPA]','0000' \n" +
-                    "FROM DUAL  \n" +
-                    "ORDER BY 2"); 
-        
+    public List<TupaExpedienteBean> listTupaExpediente() {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_NOMBRE DE_TUPA, CO_PROCESO CO_TUPA\n"
+                + "FROM TDTR_PROCESOS_EXP WITH(NOLOCK) \n"
+                + "WHERE TI_PROCESO = '1' \n"
+                + "UNION  \n"
+                + "SELECT '[SIN TUPA]','0000' \n"
+                + "FROM DUAL  \n"
+                + "ORDER BY 2");
+
         List<TupaExpedienteBean> list = new ArrayList<TupaExpedienteBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(TupaExpedienteBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
-    
+
     @Override
-    public List<LocalBean> lsLocal(){
-        StringBuffer sql = new StringBuffer();
-        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL \n" +
-                    "union\n" +
-                    "select ' [TODOS]' DE_LOCAL,NULL CO_LOCAL\n" +
-                    "from dual\n" +
-                    "ORDER BY 1"); 
+    public List<LocalBean> lsLocal() {
+         StringBuilder sql = new StringBuilder();
+        sql.append("select DE_NOMBRE_LOCAL DE_LOCAL,CCOD_LOCAL CO_LOCAL from SI_MAE_LOCAL WITH(NOLOCK) \n"
+                + "union\n"
+                + "select ' [TODOS]' DE_LOCAL,NULL CO_LOCAL\n"
+                + "from dual\n"
+                + "ORDER BY 1");
 
         List<LocalBean> list;
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(LocalBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;            
+        return list;
     }
-    
+
     @Override
     public List<EtiquetaBean> getEtiquetasList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("select co_est,de_est \n"
-                + "from tdtr_estados \n"
+                + "from tdtr_estados WITH(NOLOCK) \n"
                 + "where de_tab = 'CO_ETIQUETA_REC' \n"
                 + "UNION SELECT NULL,'.: TODOS :.' \n"
                 + "FROM DUAL\n");
@@ -1074,12 +1065,12 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
             e.printStackTrace();
         }
         return list;
-    }    
-    
+    }
+
     @Override
-    public List<DependenciaBean> getlsDestinatarioEmiDocExt(String annio,String coDep){
-        StringBuffer sql = new StringBuffer();
-        
+    public List<DependenciaBean> getlsDestinatarioEmiDocExt(String annio, String coDep) {
+         StringBuilder sql = new StringBuilder();
+
 //        sql.append(" select\n" +
 //                    "   b.DE_DEPENDENCIA deDependencia,\n" +
 //                    "   a.co_dep_ref coDependencia,\n" +
@@ -1096,57 +1087,57 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 //                    "      NULL\n" +
 //                    "   FROM dual\n" +
 //                    "  ORDER BY 1");
-        sql.append( "SELECT DE_DEPENDENCIA deDependencia,\n" +
-                    "       CO_DEPENDENCIA coDependencia,\n" +
-                    "       DE_CORTA_DEPEN\n" +
-                    "FROM RHTM_DEPENDENCIA\n" +
-                    "WHERE IN_BAJA = '0'\n" +
-                    "      order by 1"
+        sql.append("SELECT DE_DEPENDENCIA deDependencia,\n"
+                + "       CO_DEPENDENCIA coDependencia,\n"
+                + "       DE_CORTA_DEPEN\n"
+                + "FROM RHTM_DEPENDENCIA WITH(NOLOCK)\n"
+                + "WHERE IN_BAJA = '0'\n"
+                + "      order by 1"
         );
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
         try {
 //            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), 
 //                    new Object[]{annio,coDep});
-        list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class));
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class));
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
-    
+
     @Override
-    public List<DependenciaBean> getlsDestinatarioDocPendEntrega(String coDep){
-        StringBuffer sql = new StringBuffer();
-        
-        sql.append("SELECT DE_DEPENDENCIA , CO_DEPENDENCIA , DE_CORTA_DEPEN\n" +
-                "FROM RHTM_DEPENDENCIA \n" +
-                "where CO_DEPENDENCIA in \n" +
-                "(select CO_DEP from sitm_local_dependencia WHERE CO_LOC=?) UNION select ' [TODOS]',NULL,NULL  FROM DUAL  order by 1");
-        
+    public List<DependenciaBean> getlsDestinatarioDocPendEntrega(String coDep) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT DE_DEPENDENCIA , CO_DEPENDENCIA , DE_CORTA_DEPEN\n"
+                + "FROM RHTM_DEPENDENCIA WITH(NOLOCK) \n"
+                + "where CO_DEPENDENCIA in \n"
+                + "(select CO_DEP from sitm_local_dependencia WHERE CO_LOC=?) UNION select ' [TODOS]',NULL,NULL  FROM DUAL  order by 1");
+
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), 
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class),
                     new Object[]{coDep});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
-    }    
+        return list;
+    }
 
     @Override
     public List<VencimientoBean> getVencimientoList() {
-         StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
 
         sql.append("select co_est,de_est \n"
-                + "from tdtr_estados \n"
+                + "from tdtr_estados WITH(NOLOCK) \n"
                 + "where de_tab = 'VENCIMIENTO' \n"
                 + "UNION SELECT NULL,'.: TODOS :.' \n"
                 + "FROM DUAL\n");
@@ -1166,69 +1157,69 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
     @Override
     public List<EstadoDocumentoBean> listEstadosDocumentoEmiSegui(String tdtv_destinos) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST,CO_EST ");
-        sql.append("FROM TDTR_ESTADOS ");
+        sql.append("FROM TDTR_ESTADOS WITH(NOLOCK) ");
         sql.append("WHERE DE_TAB = ? ");
         sql.append("AND CO_EST NOT IN('5','9') ");
         sql.append("UNION ");
         sql.append("SELECT '.:TODOS.:',NULL FROM DUAL ORDER BY CO_EST ");
-        
+
         List<EstadoDocumentoBean> list = new ArrayList<EstadoDocumentoBean>();
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), ParameterizedBeanPropertyRowMapper.newInstance(EstadoDocumentoBean.class),
                     new Object[]{tdtv_destinos});
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-    
+
     @Override
-    public List<SiElementoBean> getLsSiElementoBean(String pctabCodtab){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR,BL_DOC as archivo \n" +
-            "FROM   SI_ELEMENTO\n" +
-            "WHERE  CTAB_CODTAB = ?");
+    public List<SiElementoBean> getLsSiElementoBean(String pctabCodtab) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR,BL_DOC as archivo \n"
+                + "FROM   SI_ELEMENTO WITH(NOLOCK)\n"
+                + "WHERE  CTAB_CODTAB = ?");
 
         List<SiElementoBean> list = null;
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(SiElementoBean.class),
                     new Object[]{pctabCodtab});
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-    
+
     @Override
-    public List<SiElementoBean> getLsSiElementoBeanOrder(String pctabCodtab){
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR,BL_DOC as archivo \n" +
-            "FROM   SI_ELEMENTO\n" +
-            "WHERE  CTAB_CODTAB = ?"+
-            " ORDER BY CELE_CODELE ");
+    public List<SiElementoBean> getLsSiElementoBeanOrder(String pctabCodtab) {
+         StringBuilder sql = new StringBuilder();
+        sql.append("SELECT CELE_CODELE,CELE_DESELE,NELE_NUMSEC,CELE_DESCOR,BL_DOC as archivo \n"
+                + "FROM   SI_ELEMENTO WITH(NOLOCK)\n"
+                + "WHERE  CTAB_CODTAB = ?"
+                + " ORDER BY CELE_CODELE ");
 
         List<SiElementoBean> list = null;
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(SiElementoBean.class),
                     new Object[]{pctabCodtab});
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-    
+
     @Override
-    public List<DepartamentoBean> listDepartamentos(){
-                StringBuffer sql = new StringBuffer();
+    public List<DepartamentoBean> listDepartamentos() {
+         StringBuilder sql = new StringBuilder();
 
         sql.append("select ubdep coDepartamento,nodep noDepartamento "
-                + "from idtubias "
+                + "from idtubias WITH(NOLOCK) "
                 + "where nodep != '               ' "
                 + "and nodep !='***************' "
                 + "group by ubdep,nodep order by 1");
@@ -1237,165 +1228,163 @@ public class MaestrosDaoImp extends SimpleJdbcDaoBase implements MaestrosDao{
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DepartamentoBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
-            list = null;
-            e.printStackTrace();
-        }
-        return list;        
-    }
-    
-    @Override
-        public List<DependenciaBean> listNewUpdDependenciaDestinatarioEmi(String coDepen, String deDepen) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM\n"+        
-        "(SELECT DE_DEPENDENCIA,\n" +
-        "       CO_DEPENDENCIA,\n" +
-        "       DE_CORTA_DEPEN\n" +
-        "  FROM RHTM_DEPENDENCIA\n" +
-        " WHERE co_nivel <> '6'\n" +
-        "   AND IN_BAJA = '0'\n" +
-        "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%' )\n" +
-        "UNION\n" +
-        "SELECT DE_DEPENDENCIA,\n" +
-        "       CO_DEPENDENCIA,\n" +
-        "       DE_CORTA_DEPEN\n" +
-        "  FROM RHTM_DEPENDENCIA\n" +
-        " WHERE co_nivel = '6'\n" +
-        "   AND IN_BAJA = '0'\n" +
-        "   AND (CO_DEPEN_PADRE in ( select CO_DEPEN_PADRE co_dep from RHTM_DEPENDENCIA where CO_DEPENDENCIA = ?)\n" +
-        "       OR ? IN (CO_DEPENDENCIA, CO_DEPEN_PADRE))\n" +
-        "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%')\n" +
-        "ORDER BY 1)\n" +
-        "UNION\n" +
-        "SELECT '[Elija Opción]','',''\n" +
-        "FROM DUAL");
-
-        
-        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
-
-        try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{deDepen,deDepen,
-            coDepen,coDepen,deDepen,deDepen});
-        }catch (EmptyResultDataAccessException e) {
-            list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
         return list;
     }
-        
-    @Override
-    public List<ProvinciaBean> listProvincia(String coDep){
-                StringBuffer sql = new StringBuffer();
 
-        sql.append("select ubprv coProvincia, noprv noProvincia from idtubias where ubdep=? and trim(noprv) is not null group by ubprv,noprv order by 2");
+    @Override
+    public List<DependenciaBean> listNewUpdDependenciaDestinatarioEmi(String coDepen, String deDepen) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM\n"
+                + "(SELECT DE_DEPENDENCIA,\n"
+                + "       CO_DEPENDENCIA,\n"
+                + "       DE_CORTA_DEPEN\n"
+                + "  FROM RHTM_DEPENDENCIA WITH(NOLOCK) \n"
+                + " WHERE co_nivel <> '6'\n"
+                + "   AND IN_BAJA = '0'\n"
+                + "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%' )\n"
+                + "UNION\n"
+                + "SELECT DE_DEPENDENCIA,\n"
+                + "       CO_DEPENDENCIA,\n"
+                + "       DE_CORTA_DEPEN\n"
+                + "  FROM RHTM_DEPENDENCIA  WITH(NOLOCK) \n"
+                + " WHERE co_nivel = '6'\n"
+                + "   AND IN_BAJA = '0'\n"
+                + "   AND (CO_DEPEN_PADRE in ( select CO_DEPEN_PADRE co_dep from RHTM_DEPENDENCIA where CO_DEPENDENCIA = ?)\n"
+                + "       OR ? IN (CO_DEPENDENCIA, CO_DEPEN_PADRE))\n"
+                + "   AND (DE_DEPENDENCIA LIKE '%' || ? || '%' OR DE_CORTA_DEPEN LIKE ? || '%')\n"
+                + "ORDER BY 1)\n"
+                + "UNION\n"
+                + "SELECT '[Elija Opción]','',''\n"
+                + "FROM DUAL");
+
+        List<DependenciaBean> list = new ArrayList<DependenciaBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DependenciaBean.class), new Object[]{deDepen, deDepen,
+                coDepen, coDepen, deDepen, deDepen});
+        } catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    public List<ProvinciaBean> listProvincia(String coDep) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("select ubprv coProvincia, noprv noProvincia from idtubias WITH(NOLOCK) where ubdep=? and trim(noprv) is not null group by ubprv,noprv order by 2");
 
         List<ProvinciaBean> list;
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(),new Object[]{coDep}, BeanPropertyRowMapper.newInstance(ProvinciaBean.class));
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), new Object[]{coDep}, BeanPropertyRowMapper.newInstance(ProvinciaBean.class));
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
-    }    
-    
-    @Override
-    public List<DistritoBean> listDistrito(String coDep,String coDis){
-                StringBuffer sql = new StringBuffer();
+        return list;
+    }
 
-        sql.append("select ubdis coDistrito, nodis noDistrito from idtubias where ubdep=? and ubprv=? and ubdis not in('00') and trim(nodis) is not null group by ubdis,nodis order by 2");
+    @Override
+    public List<DistritoBean> listDistrito(String coDep, String coDis) {
+         StringBuilder sql = new StringBuilder();
+
+        sql.append("select ubdis coDistrito, nodis noDistrito from idtubias WITH(NOLOCK) where ubdep=? and ubprv=? and ubdis not in('00') and trim(nodis) is not null group by ubdis,nodis order by 2");
         List<DistritoBean> list;
 
         try {
-            list = this.jdbcTemplate.query(sql.toString(),new Object[]{coDep,coDis}, BeanPropertyRowMapper.newInstance(DistritoBean.class));
-        }catch (EmptyResultDataAccessException e) {
+            list = this.jdbcTemplate.query(sql.toString(), new Object[]{coDep, coDis}, BeanPropertyRowMapper.newInstance(DistritoBean.class));
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;        
+        return list;
     }
 
-	@Override
-	public List<DependenciaBean> listDestinatarioEmiAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<DependenciaBean> listDestinatarioEmiAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String obtenerIndicarSalida(String coTipoDoc) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String obtenerIndicarSalida(String coTipoDoc) throws Exception {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<RemitenteBean> listRemitenteAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<RemitenteBean> listRemitenteAnio(Integer annio, UsuarioConfigBean usuarioConfigBean) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<DestinatarioBean> listDestinatarioAnio(Integer annio, String coDependencia, String ptiAcceso,
-			String pcoEmpleado) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<DestinatarioBean> listDestinatarioAnio(Integer annio, String coDependencia, String ptiAcceso,
+            String pcoEmpleado) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<DependenciaBean> getlsDestinatarioEmiDocExtAnio(Integer annio, String coDep) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<DependenciaBean> getlsDestinatarioEmiDocExtAnio(Integer annio, String coDep) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<TipoDocumentoBean> listTipDocXDependencia() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<TipoDocumentoBean> listTipDocXDependencia() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<TipoDocumentoBean> listTipoDocumentoEmiMesaPartes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<TipoDocumentoBean> listTipoDocumentoEmiMesaPartes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<EstadoDocumentoBean> listEstadosDocumentoEmitidos(String nomTabla) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<EmpleadoBean> listEmpleado() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<EmpleadoBean> listEmpleado() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<RemitenteBean> listReferenciaOrigenAnio(Integer annio) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<TipoDocumentoBean> listTipoDocumento() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<TipoDocumentoBean> listTipoDocumento() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-        
 }

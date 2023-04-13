@@ -2,7 +2,7 @@ function fn_buscaReferenciaOrigen() {
     var p = new Array();
     p[0] = "accion=goBuscaReferenciaOrigen";
     p[1] = "pnuAnn=" + jQuery('#sCoAnnio').val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaReferenciaOrigen(data);
     },
             'text', false, false, "POST");
@@ -24,7 +24,7 @@ function fn_buscaDestinatarioEmi() {
     var p = new Array();
     p[0] = "accion=goBuscaDestinatario";
     p[1] = "pnuAnn=" + jQuery('#sCoAnnio').val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDestinatarioEmi(data);
     },
             'text', false, false, "POST");
@@ -44,7 +44,7 @@ function fu_setDatoDestinatarioEmi(cod, desc) {
 
 function fn_buscaElaboradoPor() {
     var codDependencia = jQuery('#sCoDependencia').val();
-    ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaElaboradoPor&pcoDep=" + codDependencia, '', function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaElaboradoPor&pcoDep=" + codDependencia, '', function (data) {
         fn_rptaBuscaElaboradoPor(data);
     },
             'text', false, false, "POST");
@@ -59,8 +59,8 @@ function fn_rptaBuscaElaboradoPor(XML_AJAX) {
 
 function fn_buscaTrabDestino() {
     var codDependencia = jQuery('#sDestinatario').val();
-  
-    ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaTrabDestino&pcoDep=" + codDependencia, '', function(data) {
+
+    ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaTrabDestino&pcoDep=" + codDependencia, '', function (data) {
         fn_rptaBuscaTrabDestino(data);
     },
             'text', false, false, "POST");
@@ -97,7 +97,7 @@ function fu_eventoTablaEmiDocAdm() {
             "sZeroRecords": "No se encuentran registros.",
             "sInfo": "Registros: _TOTAL_ ",
             "sInfoEmpty": ""
-        },        
+        },
         "aoColumns": [
             {"bSortable": false},
             {"bSortable": false},
@@ -121,7 +121,7 @@ function fu_eventoTablaEmiDocAdm() {
         ]
     });
 
-    jQuery.fn.dataTableExt.oSort['fecha-asc'] = function(a, b) {
+    jQuery.fn.dataTableExt.oSort['fecha-asc'] = function (a, b) {
         var ukDatea = a.split('/');
         var ukDateb = b.split('/');
 
@@ -131,7 +131,7 @@ function fu_eventoTablaEmiDocAdm() {
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     };
 
-    jQuery.fn.dataTableExt.oSort['fecha-desc'] = function(a, b) {
+    jQuery.fn.dataTableExt.oSort['fecha-desc'] = function (a, b) {
         var ukDatea = a.split('/');
         var ukDateb = b.split('/');
 
@@ -156,33 +156,32 @@ function fu_eventoTablaEmiDocAdm() {
 
         return;
     }/*
-    $("#myTableFixed tbody td").hover(
-            function() {
-                $(this).attr('id', 'divtitlemostrar');
-                //console.log($(this).index());
-                var index = $(this).index();
-                if (index === 3 || index === 7 || index === 8 || index === 9) {
-                    showdivToolTip($('#divtitlemostrar').position(), $(this).html());
-                }
-            },
-            function() {
-                $('#divtitlemostrar').removeAttr('id');
-                $('#divflotante').hide();
-            }
-    );*/
-    $("#myTableFixed tbody tr").click(function(e) {
+     $("#myTableFixed tbody td").hover(
+     function() {
+     $(this).attr('id', 'divtitlemostrar');
+     //console.log($(this).index());
+     var index = $(this).index();
+     if (index === 3 || index === 7 || index === 8 || index === 9) {
+     showdivToolTip($('#divtitlemostrar').position(), $(this).html());
+     }
+     },
+     function() {
+     $('#divtitlemostrar').removeAttr('id');
+     $('#divflotante').hide();
+     }
+     );*/
+    $("#myTableFixed tbody tr").click(function (e) {
         if ($(this).hasClass('row_selected')) {
             //$(this).removeClass('row_selected');
             //jQuery('#txtpnuAnn').val("");
-        }
-        else {
+        } else {
             oTable.$('tr.row_selected').removeClass('row_selected');
             $(this).addClass('row_selected');
 
             /*obtiene datos*/
             //alert($(this).children('td')[12].innerHTML);
             //jQuery('#txtTextIndexSelect').val("0");
-            if (typeof($(this).children('td')[13]) !== "undefined") {
+            if (typeof ($(this).children('td')[13]) !== "undefined") {
                 jQuery('#txtpnuAnn').val($(this).children('td')[13].innerHTML);
                 jQuery('#txtpnuEmi').val($(this).children('td')[14].innerHTML);
                 jQuery('#txtpexisteDoc').val($(this).children('td')[17].innerHTML);
@@ -197,37 +196,37 @@ function fu_eventoTablaEmiDocAdm() {
 
         }
     });
-    if(jQuery('#myTableFixed >tbody >tr').length > 0){
+    if (jQuery('#myTableFixed >tbody >tr').length > 0) {
         //$('#myTableFixed >tbody >tr').eq(0).addClass('row_selected');
         //var pauxNumFilaSelect = typeof(pnumFilaSelect)!=="undefined"? pnumFilaSelect:0;
-        try{
-            if(jQuery('#myTableFixed >tbody >tr').eq(pnumFilaSelect).length === 1){
+        try {
+            if (jQuery('#myTableFixed >tbody >tr').eq(pnumFilaSelect).length === 1) {
                 jQuery('#myTableFixed >tbody >tr').eq(pnumFilaSelect).trigger("click");
                 jQuery('#myTableFixed >tbody >tr').eq(pnumFilaSelect).focus();
-            }else{
-                pnumFilaSelect=0;
+            } else {
+                pnumFilaSelect = 0;
             }
-        }catch(ex){
-            pnumFilaSelect=0;
+        } catch (ex) {
+            pnumFilaSelect = 0;
         }
     }
-    jQuery('#myTableFixed >tbody >tr').keydown(function(evento){
-       if(evento.which===38){//up
-            if (jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).prev('tr').length===0){
-                pnumFilaSelect=$("#myTableFixed >tbody >tr").length;
+    jQuery('#myTableFixed >tbody >tr').keydown(function (evento) {
+        if (evento.which === 38) {//up
+            if (jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).prev('tr').length === 0) {
+                pnumFilaSelect = $("#myTableFixed >tbody >tr").length;
             }
             pnumFilaSelect--;
             jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).trigger("click");
             jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).focus();
-       }else if(evento.which===40){//down
-            if ($("#myTableFixed >tbody >tr").eq(pnumFilaSelect).next('tr').length===0){
-                pnumFilaSelect=-1;
-            }           
+        } else if (evento.which === 40) {//down
+            if ($("#myTableFixed >tbody >tr").eq(pnumFilaSelect).next('tr').length === 0) {
+                pnumFilaSelect = -1;
+            }
             pnumFilaSelect++;
-            jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).trigger("click");               
-            jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).focus();           
-       }
-       evento.preventDefault();
+            jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).trigger("click");
+            jQuery("#myTableFixed >tbody >tr").eq(pnumFilaSelect).focus();
+        }
+        evento.preventDefault();
     });
 }
 
@@ -244,23 +243,23 @@ function changeTipoBusqEmiDocuAdm(tipo) {
 function submitAjaxFormEmiDocAdm(tipo) {
     var validaFiltro = fu_validaFiltroEmiDocAdm(tipo);
     if (validaFiltro === "1") {
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function (data) {
             refreshScript("divTablaEmiDocumenAdm", data);
         }, 'text', false, false, "POST");
-    }else if(validaFiltro === "2"){//buscar referencia
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaDocumentoEnReferencia", $('#buscarDocumentoEmiBean').serialize(), function(data) {
+    } else if (validaFiltro === "2") {//buscar referencia
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goBuscaDocumentoEnReferencia", $('#buscarDocumentoEmiBean').serialize(), function (data) {
             fu_rptaBuscaDocumentoEnReferencia(data);
-        }, 'text', false, false, "POST");        
+        }, 'text', false, false, "POST");
     }
     return false;
 }
 
-function fu_rptaBuscaDocumentoEnReferencia(data){
-    if(data!==null){
-        if(data==="0"){
-          alert_Info("Buscar Referencia", "No Existe Documento.");
-        }else{
-          refreshScript("divTablaEmiDocumenAdm", data);  
+function fu_rptaBuscaDocumentoEnReferencia(data) {
+    if (data !== null) {
+        if (data === "0") {
+            alert_Info("Buscar Referencia", "No Existe Documento.");
+        } else {
+            refreshScript("divTablaEmiDocumenAdm", data);
         }
     }
 }
@@ -268,162 +267,162 @@ function fu_rptaBuscaDocumentoEnReferencia(data){
 function fu_validaFiltroEmiDocAdm(tipo) {
     var valRetorno = "1";
     jQuery('#sFeEmiIni').val(jQuery('#sCoAnnio').parent('td').find('#fechaFiltro').attr('fini'));
-    jQuery('#sFeEmiFin').val(jQuery('#sCoAnnio').parent('td').find('#fechaFiltro').attr('ffin'));    
-    
-    
+    jQuery('#sFeEmiFin').val(jQuery('#sCoAnnio').parent('td').find('#fechaFiltro').attr('ffin'));
+
+
     //var pEsIncluyeFiltro = jQuery("esIncluyeFiltro1").is(':checked');
     var pEsIncluyeFiltro = $('#buscarDocumentoEmiBean').find('#esIncluyeFiltro1').is(':checked');
     //var pEsFiltroFecha = jQuery("#esFiltroFecha").val();
     var vFechaActual = jQuery('#txtFechaActual').val();
-    if(tipo==="0"){
-        valRetorno = fu_validaFiltroEmiDocAdmFiltrar(vFechaActual);     
-    }else if(tipo==="1"){
-      //verificar si se ingreso datos en los campos de busqueda de referencia
-      valRetorno = fu_validarBusquedaXReferencia(tipo);  
-      if(valRetorno==="1"){
-        valRetorno = fu_validaFiltroEmiDocAdmBuscar();  
-        if(valRetorno==="1"){
-            if(pEsIncluyeFiltro){
-               valRetorno = fu_validaFiltroEmiDocAdmFiltrar(vFechaActual); 
-            }else{
-               valRetorno = setAnnioNoIncludeFiltroEmi();
+    if (tipo === "0") {
+        valRetorno = fu_validaFiltroEmiDocAdmFiltrar(vFechaActual);
+    } else if (tipo === "1") {
+        //verificar si se ingreso datos en los campos de busqueda de referencia
+        valRetorno = fu_validarBusquedaXReferencia(tipo);
+        if (valRetorno === "1") {
+            valRetorno = fu_validaFiltroEmiDocAdmBuscar();
+            if (valRetorno === "1") {
+                if (pEsIncluyeFiltro) {
+                    valRetorno = fu_validaFiltroEmiDocAdmFiltrar(vFechaActual);
+                } else {
+                    valRetorno = setAnnioNoIncludeFiltroEmi();
+                }
             }
         }
-      }
-    }    
+    }
     return valRetorno;
 }
 
-function fu_validarBusquedaXReferencia(tipo){
-    var valRetorno="1";//no buscar por referencia
-    if(tipo === "1"){
+function fu_validarBusquedaXReferencia(tipo) {
+    var valRetorno = "1";//no buscar por referencia
+    if (tipo === "1") {
         var vBuscDestinatario = allTrim(jQuery('#sBuscDestinatario').val());
         var vDeTipoDocAdm = allTrim(jQuery('#sDeTipoDocAdm').val());
         var vCoAnnioBus = allTrim(jQuery('#sCoAnnioBus').val());
         var vNumDocRef = allTrim(jQuery('#sNumDocRef').val());
 
-        if((typeof(vBuscDestinatario)!=="undefined" && vBuscDestinatario!==null && vBuscDestinatario!=="") &&
-           (typeof(vDeTipoDocAdm)!=="undefined" && vDeTipoDocAdm!==null && vDeTipoDocAdm!=="") &&
-           (typeof(vCoAnnioBus)!=="undefined" && vCoAnnioBus!==null && vCoAnnioBus!=="") &&
-           (typeof(vNumDocRef)!=="undefined" && vNumDocRef!==null && vNumDocRef!=="")){
-           valRetorno = "2";//buscar por referencia
+        if ((typeof (vBuscDestinatario) !== "undefined" && vBuscDestinatario !== null && vBuscDestinatario !== "") &&
+                (typeof (vDeTipoDocAdm) !== "undefined" && vDeTipoDocAdm !== null && vDeTipoDocAdm !== "") &&
+                (typeof (vCoAnnioBus) !== "undefined" && vCoAnnioBus !== null && vCoAnnioBus !== "") &&
+                (typeof (vNumDocRef) !== "undefined" && vNumDocRef !== null && vNumDocRef !== "")) {
+            valRetorno = "2";//buscar por referencia
         }
-        
-    if(valRetorno==="2"){
-        if (vNumDocRef !== "" && vNumDocRef !== null) {
-            var vValidaNumero = fu_validaNumero(vNumDocRef);
-            if (vValidaNumero !== "OK") {
-               bootbox.alert("N° de Documento en referencia debe ser solo numeros.");
-                valRetorno = "0";
+
+        if (valRetorno === "2") {
+            if (vNumDocRef !== "" && vNumDocRef !== null) {
+                var vValidaNumero = fu_validaNumero(vNumDocRef);
+                if (vValidaNumero !== "OK") {
+                    bootbox.alert("N° de Documento en referencia debe ser solo numeros.");
+                    valRetorno = "0";
+                }
             }
         }
-    }        
     }
     return valRetorno;
 }
 
-function fu_validaFiltroEmiDocAdmFiltrar(vFechaActual){
+function fu_validaFiltroEmiDocAdmFiltrar(vFechaActual) {
     var valRetorno = "1";
-    if (valRetorno==="1") {
+    if (valRetorno === "1") {
         fu_obtenerEsFiltroFecha('buscarDocumentoEmiBean');
         var pEsFiltroFecha = jQuery('#buscarDocumentoEmiBean').find("#esFiltroFecha").val();//"2" solo año ,"3" año mes,"1" rango fechas
-        if(pEsFiltroFecha==="1" || pEsFiltroFecha==="2" || pEsFiltroFecha==="3"){
-           if(pEsFiltroFecha==="2" || pEsFiltroFecha==="3"){
+        if (pEsFiltroFecha === "1" || pEsFiltroFecha === "2" || pEsFiltroFecha === "3") {
+            if (pEsFiltroFecha === "2" || pEsFiltroFecha === "3") {
                 var pAnnio = jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val();
-                if(pAnnio!==null && pAnnio!=="null" && typeof(pAnnio)!=="undefined" && pAnnio!==""){
+                if (pAnnio !== null && pAnnio !== "null" && typeof (pAnnio) !== "undefined" && pAnnio !== "") {
                     var vValidaNumero = fu_validaNumero(pAnnio);
                     if (vValidaNumero !== "OK") {
-                       bootbox.alert("Año debe ser solo números.");
+                        bootbox.alert("Año debe ser solo números.");
                         valRetorno = "0";
-                    }                
-                }               
-           }   
-            
+                    }
+                }
+            }
+
             var vFeInicio = jQuery("#sFeEmiIni").val();
             var vFeFinal = jQuery("#sFeEmiFin").val();
-            if(valRetorno==="1" /*&& pEsFiltroFecha==="1"*/){
-              var pAnnioBusq = verificarAñoBusquedaFiltro(vFeInicio,vFeFinal);
-                if(pAnnioBusq!==null && pAnnioBusq!=="null" && typeof(pAnnioBusq)!=="undefined" && pAnnioBusq!==""){
+            if (valRetorno === "1" /*&& pEsFiltroFecha==="1"*/) {
+                var pAnnioBusq = verificarAñoBusquedaFiltro(vFeInicio, vFeFinal);
+                if (pAnnioBusq !== null && pAnnioBusq !== "null" && typeof (pAnnioBusq) !== "undefined" && pAnnioBusq !== "") {
                     var vValidaNumero = fu_validaNumero(pAnnioBusq);
                     if (vValidaNumero !== "OK") {
-                       bootbox.alert("Año debe ser solo números.");
+                        bootbox.alert("Año debe ser solo números.");
                         valRetorno = "0";
-                    }else if(vValidaNumero ==="OK"){
-                        jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(pAnnioBusq);                          
-                    }                
-                }               
-            }           
-                
-           if(pEsFiltroFecha==="1" /*|| pEsFiltroFecha==="3"*/){
-               //VALIDA FECHAS
-            
-               if (valRetorno==="1") {
-                    if (vFeInicio===""){
-                       bootbox.alert('Debe ingresar Fecha Del');
-                        valRetorno="0";
+                    } else if (vValidaNumero === "OK") {
+                        jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(pAnnioBusq);
+                    }
+                }
+            }
+
+            if (pEsFiltroFecha === "1" /*|| pEsFiltroFecha==="3"*/) {
+                //VALIDA FECHAS
+
+                if (valRetorno === "1") {
+                    if (vFeInicio === "") {
+                        bootbox.alert('Debe ingresar Fecha Del');
+                        valRetorno = "0";
                     } else {
-                        valRetorno=fu_validaFechaConsulta(vFeInicio,vFechaActual);
-                        if (valRetorno!=="1") {
-                           bootbox.alert("Error en Fecha Del : "+ valRetorno);
-                            valRetorno="0";
+                        valRetorno = fu_validaFechaConsulta(vFeInicio, vFechaActual);
+                        if (valRetorno !== "1") {
+                            bootbox.alert("Error en Fecha Del : " + valRetorno);
+                            valRetorno = "0";
                         }
                     }
-               }
+                }
 
-                if (valRetorno==="1") {
+                if (valRetorno === "1") {
                     //VALIDA FECHAS
-                    if (vFeFinal===""){
-                       bootbox.alert('Debe ingresar Fecha Al');
-                        valRetorno="0";
+                    if (vFeFinal === "") {
+                        bootbox.alert('Debe ingresar Fecha Al');
+                        valRetorno = "0";
                     } else {
-                        if(pEsFiltroFecha==="3"){
+                        if (pEsFiltroFecha === "3") {
                             vFechaActual = obtenerFechaUltimoDiaMes(vFechaActual);
                         }
-                        valRetorno=fu_validaFechaConsulta(vFeFinal,vFechaActual);
-                        if (valRetorno!=="1") {
-                           bootbox.alert("Error en Fecha Al : "+ valRetorno);
-                            valRetorno="0";
+                        valRetorno = fu_validaFechaConsulta(vFeFinal, vFechaActual);
+                        if (valRetorno !== "1") {
+                            bootbox.alert("Error en Fecha Al : " + valRetorno);
+                            valRetorno = "0";
                         }
                     }
                 }
                 //se verifica que fechas DEL sea mayor o igual que fecha AL
-                if (valRetorno==="1") {
-                    var vCantidadDias =  getNumeroDeDiasDiferencia(vFeInicio,vFeFinal);
-                    if (vCantidadDias < 0){
-                      bootbox.alert("La Fecha Del debe ser mayor o igual a Fecha Al");
-                       valRetorno="0";
-                    }   
+                if (valRetorno === "1") {
+                    var vCantidadDias = getNumeroDeDiasDiferencia(vFeInicio, vFeFinal);
+                    if (vCantidadDias < 0) {
+                        bootbox.alert("La Fecha Del debe ser mayor o igual a Fecha Al");
+                        valRetorno = "0";
+                    }
                 }
             }
         }
     }
-    return valRetorno;    
+    return valRetorno;
 }
 
 function fu_validaFiltroEmiDocAdmBuscar() {
     var valRetorno = "1";
-    
+
     upperCaseBuscarDocumentoEmiBean();
-    
+
     var vNroEmision = jQuery('#sNumCorEmision').val();
     var vNroDocumento = jQuery('#sNumDoc').val();
     var vNroExpediente = jQuery('#sBuscNroExpediente').val();
     var vAsunto = jQuery('#sDeAsuM').val();
-    
-    if((typeof(vNroEmision)==="undefined" || vNroEmision===null || vNroEmision==="") &&
-       (typeof(vNroDocumento)==="undefined" || vNroDocumento===null || vNroDocumento==="") &&
-       (typeof(vNroExpediente)==="undefined" || vNroExpediente===null || vNroExpediente==="") &&
-       (typeof(vAsunto)==="undefined" || vAsunto===null || vAsunto==="")){
-       alert_Warning("Buscar: ","Ingresar Algún parámetro de Búsqueda");
-       valRetorno = "0";
+
+    if ((typeof (vNroEmision) === "undefined" || vNroEmision === null || vNroEmision === "") &&
+            (typeof (vNroDocumento) === "undefined" || vNroDocumento === null || vNroDocumento === "") &&
+            (typeof (vNroExpediente) === "undefined" || vNroExpediente === null || vNroExpediente === "") &&
+            (typeof (vAsunto) === "undefined" || vAsunto === null || vAsunto === "")) {
+        alert_Warning("Buscar: ", "Ingresar Algún parámetro de Búsqueda");
+        valRetorno = "0";
     }
-    
-    if(valRetorno==="1"){
+
+    if (valRetorno === "1") {
         if (vNroEmision !== "" && vNroEmision !== null) {
             var vValidaNumero = fu_validaNumero(vNroEmision);
             if (vValidaNumero !== "OK") {
                 //alert("N° de Emisión debe ser solo numeros.");
-                alert_Warning("Buscar: ","N° de Emisión debe ser solo numeros.");
+                alert_Warning("Buscar: ", "N° de Emisión debe ser solo numeros.");
                 valRetorno = "0";
             }
         }
@@ -432,7 +431,7 @@ function fu_validaFiltroEmiDocAdmBuscar() {
 }
 
 function fu_cleanEmiDocAdm(tipo) {
-    if (tipo==="1") {
+    if (tipo === "1") {
         jQuery("#sNumDoc").val("");
         jQuery("#sNumDocRef").val("");
         jQuery("#sBuscNroExpediente").val("");
@@ -446,10 +445,10 @@ function fu_cleanEmiDocAdm(tipo) {
         jQuery("#sBuscDestinatario").val("");
 //        jQuery("#sBuscElaboraradoPor").val("");
         jQuery("#sNumCorEmision").val("");
-        jQuery("#esIncluyeFiltro1").prop('checked',false);
-        jQuery("#esIncluyeFiltro1").attr('checked',false);
+        jQuery("#esIncluyeFiltro1").prop('checked', false);
+        jQuery("#esIncluyeFiltro1").attr('checked', false);
         jQuery("#sCoAnnioBus").find('option:first').prop("selected", "selected");
-    } else if(tipo==="0"){
+    } else if (tipo === "0") {
         jQuery("#sEstadoDoc option[value=5]").prop("selected", "selected");
         jQuery("#sPrioridadDoc option[value=]").prop("selected", "selected");
         jQuery("#coTema option[value=]").prop("selected", "selected");
@@ -474,7 +473,7 @@ function fu_goNuevoEmisionDocAdm() {
 //jQuery('#sTipoBusqueda').val("1");
     validaFiltro = "1";/*fu_validaFiltroEmiDocAdm(tipo);*/
     if (validaFiltro === "1") {
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goNuevoDocumentoEmi", '', function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goNuevoDocumentoEmi", '', function (data) {
             jQuery('#divEmiDocumentoAdmin').hide();
             jQuery('#divNewEmiDocumAdmin').show();
             refreshScript("divNewEmiDocumAdmin", data);
@@ -484,14 +483,14 @@ function fu_goNuevoEmisionDocAdm() {
     return false;
 }
 
-function editarDocumentoEmiClick(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo) {
+function editarDocumentoEmiClick(pnuAnn, pnuEmi, pexisteDoc, pexisteAnexo) {
     if (pnuAnn !== "" && pnuEmi !== "") {
         var p = new Array();
         p[0] = "pnuAnn=" + pnuAnn;
         p[1] = "pnuEmi=" + pnuEmi;
         p[2] = "pexisteDoc=" + pexisteDoc;
         p[3] = "pexisteAnexo=" + pexisteAnexo;
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goEditDocumentoEmi", p.join("&"), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goEditDocumentoEmi", p.join("&"), function (data) {
             refreshScript("divNewEmiDocumAdmin", data);
             jQuery('#divEmiDocumentoAdmin').hide();
             jQuery('#divNewEmiDocumAdmin').show();
@@ -499,7 +498,7 @@ function editarDocumentoEmiClick(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo) {
             fn_cargaToolBarEmi();
         }, 'text', false, false, "POST");
     } else {
-       bootbox.alert("Seleccione una fila de la lista");
+        bootbox.alert("Seleccione una fila de la lista");
     }
 }
 
@@ -512,7 +511,7 @@ function editarDocumentoEmi() {
         p[2] = "pnuDes=" + jQuery('#txtpnuDes').val();
         p[3] = "pexisteDoc=" + jQuery('#txtpexisteDoc').val();
         p[4] = "pexisteAnexo=" + jQuery('#txtpexisteAnexo').val();
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goEditDocumentoEmi", p.join("&"), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goEditDocumentoEmi", p.join("&"), function (data) {
             refreshScript("divNewEmiDocumAdmin", data);
             jQuery('#divEmiDocumentoAdmin').hide();
             jQuery('#divNewEmiDocumAdmin').show();
@@ -542,36 +541,36 @@ function fn_eventEstDoc(sTipoDestEmi, sEstadoDocAdm) {
 //       }
 //   );
     $("[bt='true']").showBigTextBox({
-        pressAceptarEvent: function(data) {
+        pressAceptarEvent: function (data) {
             if (data.hasChangedText) {
                 changeAccionBDDocEmi(data.currentObject);
             }
-        },maxNumCar:600
+        }, maxNumCar: 600
     });
-    $("#txtIndicaciones").showBigTextBox({maxNumCar:600});
-    jQuery('#documentoEmiBean').find('#nuDiaAte').change(function() {
+    $("#txtIndicaciones").showBigTextBox({maxNumCar: 600});
+    jQuery('#documentoEmiBean').find('#nuDiaAte').change(function () {
         fu_changeDocumentoEmiBean();
     });
-    jQuery('#documentoEmiBean').find('#deDocSig').change(function() {
+    jQuery('#documentoEmiBean').find('#deDocSig').change(function () {
         fu_changeDocumentoEmiBean();
     });
-    jQuery('#documentoEmiBean').find('#coDepEmi').change(function() {
+    jQuery('#documentoEmiBean').find('#coDepEmi').change(function () {
         fu_changeRemitenteEmiBean();
     });
-    jQuery('#documentoEmiBean').find('#coLocEmi').change(function() {
+    jQuery('#documentoEmiBean').find('#coLocEmi').change(function () {
         fu_changeRemitenteEmiBean();
     });
 //    jQuery('#documentoEmiBean').find('#coTipDocAdm').change(function() {
 //        fu_changeDocumentoEmiBean();
 //    });
-    jQuery('#documentoEmiBean').find('#deAsu').change(function() {
+    jQuery('#documentoEmiBean').find('#deAsu').change(function () {
         fu_changeDocumentoEmiBean();
     });
-    jQuery('#documentoEmiBean').find('#deObsDoc').change(function() {
+    jQuery('#documentoEmiBean').find('#deObsDoc').change(function () {
         fu_changeDocumentoEmiBean();
     });
-    jQuery('#documentoEmiBean').find('#nuDocEmi').change(function() {
-	var noForm='#documentoEmiBean';
+    jQuery('#documentoEmiBean').find('#nuDocEmi').change(function () {
+        var noForm = '#documentoEmiBean';
         var pnuAnn = jQuery(noForm).find('#nuAnn').val();
         var pnuEmi = jQuery(noForm).find('#nuEmi').val();
         var ptiEmi = jQuery(noForm).find('#tiEmi').val();
@@ -579,22 +578,22 @@ function fn_eventEstDoc(sTipoDestEmi, sEstadoDocAdm) {
         var pcoDepEmi = jQuery(noForm).find('#coDepEmi').val();
         var pnuDocEmiAnn = jQuery(noForm).find('#txtnuDocEmiAn').val();
         var pnuDocEmi = allTrim(jQuery(noForm).find('#nuDocEmi').val());
-        if (!!pnuDocEmi&&!!pnuAnn&&!!pnuEmi){
+        if (!!pnuDocEmi && !!pnuAnn && !!pnuEmi) {
             var vValidaNumero = fu_validaNumero(pnuDocEmi);
-            if (vValidaNumero==="OK") {
+            if (vValidaNumero === "OK") {
                 pnuDocEmi = replicate(pnuDocEmi, 6);
-                if (pnuDocEmiAnn !== pnuDocEmi || (typeof(pnuDocEmiAnn) !== "undefined" && pnuDocEmiAnn === "")) {
+                if (pnuDocEmiAnn !== pnuDocEmi || (typeof (pnuDocEmiAnn) !== "undefined" && pnuDocEmiAnn === "")) {
                     fn_jsonVerificarNumeracionDocEmi(pnuDocEmiAnn, pnuAnn, pnuEmi, ptiEmi, pcoTipDocAdm, pcoDepEmi, pnuDocEmi);
                 } else {
                     jQuery(noForm).find('#nuDocEmi').val(pnuDocEmiAnn);
                     jQuery(noForm).find('#nuCorDoc').val("1");
                 }
-            }else{
-                bootbox.alert("<h5>Nro. Documento debe ser solo números.</h5>", function() {
+            } else {
+                bootbox.alert("<h5>Nro. Documento debe ser solo números.</h5>", function () {
                     bootbox.hideAll();
-                    jQuery(noForm).find('#nuDocEmi').focus();        
-                });   
-            }            
+                    jQuery(noForm).find('#nuDocEmi').focus();
+                });
+            }
         }
         fu_changeDocumentoEmiBean();
     });
@@ -619,26 +618,26 @@ var $objFilaReferencia;
 function fn_searchDocReferentbl(cell) {
     var p = new Array();
     p[0] = "accion=goBuscaDocumentotblReferencia";
-    (($(cell).parent()).parent()).children().each(function(index) {
+    (($(cell).parent()).parent()).children().each(function (index) {
         switch (index)
         {
             case 0:
                 p[1] = "pannio=" + $(this).find('select').val();
                 var valAnio = $(this).find('select').val();
-                $(this).find('select option[value="'+valAnio+'"]').attr("selected","selected");
+                $(this).find('select option[value="' + valAnio + '"]').attr("selected", "selected");
                 break;
             case 1:
                 p[2] = "ptiDoc=" + $(this).find('select').val();
                 var valTiDoc = $(this).find('select').val();
-                $(this).find('select option[value="'+valTiDoc+'"]').attr("selected","selected");
+                $(this).find('select option[value="' + valTiDoc + '"]').attr("selected", "selected");
                 break;
             case 2:
                 p[3] = "ptiBusqueda=" + $(this).find('input[type=radio]:checked').val();
                 var valTiBusqueda = $(this).find('input[type=radio]:checked').val();
                 $(this).find("input[type=radio]").removeAttr('checked');
                 $(this).find("input[type=radio]").removeProp('checked');
-                $(this).find("input[type=radio][value='"+valTiBusqueda+"']").attr('checked',true);
-                $(this).find("input[type=radio][value='"+valTiBusqueda+"']").prop('checked',true);
+                $(this).find("input[type=radio][value='" + valTiBusqueda + "']").attr('checked', true);
+                $(this).find("input[type=radio][value='" + valTiBusqueda + "']").prop('checked', true);
                 break;
             case 3:
                 p[4] = "pnuDoc=" + $(this).find('input[type=text]').val();
@@ -647,12 +646,12 @@ function fn_searchDocReferentbl(cell) {
                 break;
         }
     });
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDocumentoReferencia(data);
         jQuery('#txtTblRefEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
         jQuery('#txtTblRefEmiColWhereButton').val(($(cell).parent()).index());
-        $objFilaReferencia = ($(cell).parent()).parent().clone();       
-    },'text', false, false, "POST");
+        $objFilaReferencia = ($(cell).parent()).parent().clone();
+    }, 'text', false, false, "POST");
 }
 
 function fn_rptaBuscaDocumentoReferencia(XML_AJAX) {
@@ -661,12 +660,12 @@ function fn_rptaBuscaDocumentoReferencia(XML_AJAX) {
     }
 }
 
-function fn_seleccionarFila(objeto, event){
+function fn_seleccionarFila(objeto, event) {
     if (event.target.type !== 'checkbox') {
-      $(objeto).find(":checkbox").click();
+        $(objeto).find(":checkbox").click();
     }
 }
-$(document).on("change","#tlbDocumentoRefEmi input[type='checkbox']",function(e){
+$(document).on("change", "#tlbDocumentoRefEmi input[type='checkbox']", function (e) {
     if ($(this).is(":checked")) {
         $(this).closest('tr').addClass("row_selected");
     } else {
@@ -675,56 +674,56 @@ $(document).on("change","#tlbDocumentoRefEmi input[type='checkbox']",function(e)
 });
 
 
-function fn_agregarReferenciasEmi(){
+function fn_agregarReferenciasEmi() {
     var count = 0;
     var posFila = parseInt($('#txtTblRefEmiFilaWhereButton').val());
     var filaIni = posFila;
-     $('#tlbDocumentoRefEmi .row_selected').each(function(i, obj) {
-         var pnuAnn= $(this).find("td:eq(8)").text();
-        var pnuEmi= $(this).find("td:eq(9)").text();
-        var pnuDes= $(this).find("td:eq(10)").text();
-        var pnuAnnExp= $(this).find("td:eq(11)").text();
-        var pnuSecExp= $(this).find("td:eq(12)").text();
-        var pnuExpediente= $(this).find("td:eq(13)").text();
-        var pnuDoc= $(this).find("td:eq(2)").text();
-        var pfeEmi= $(this).find("td:eq(3)").text();
-        
-        if(count===0){
-            fu_setDatoDocumentoRefEmi(pnuAnn,pnuEmi,pnuDes,pnuDoc,pfeEmi,pnuAnnExp,pnuSecExp,pnuExpediente);
-            
-        }else{
-            var maxNum='0';
-            $('#tblRefEmiDocAdm tbody input[type="radio"]').each(function()  { 
+    $('#tlbDocumentoRefEmi .row_selected').each(function (i, obj) {
+        var pnuAnn = $(this).find("td:eq(8)").text();
+        var pnuEmi = $(this).find("td:eq(9)").text();
+        var pnuDes = $(this).find("td:eq(10)").text();
+        var pnuAnnExp = $(this).find("td:eq(11)").text();
+        var pnuSecExp = $(this).find("td:eq(12)").text();
+        var pnuExpediente = $(this).find("td:eq(13)").text();
+        var pnuDoc = $(this).find("td:eq(2)").text();
+        var pfeEmi = $(this).find("td:eq(3)").text();
+
+        if (count === 0) {
+            fu_setDatoDocumentoRefEmi(pnuAnn, pnuEmi, pnuDes, pnuDoc, pfeEmi, pnuAnnExp, pnuSecExp, pnuExpediente);
+
+        } else {
+            var maxNum = '0';
+            $('#tblRefEmiDocAdm tbody input[type="radio"]').each(function () {
                 var rbGrupo = $(this).attr('name');
-                var idGrupo = rbGrupo.replace('group','');            
-                if(idGrupo>maxNum){
-                    maxNum=idGrupo;
+                var idGrupo = rbGrupo.replace('group', '');
+                if (idGrupo > maxNum) {
+                    maxNum = idGrupo;
                 }
             });
-            $objFilaReferencia.find('input[type=radio]').attr('name', 'group' + (parseInt(maxNum)+1));
-            $("#tblRefEmiDocAdm tbody tr:eq("+(posFila-1)+")").after("<tr>"+$objFilaReferencia.html()+"</tr>"); 
+            $objFilaReferencia.find('input[type=radio]').attr('name', 'group' + (parseInt(maxNum) + 1));
+            $("#tblRefEmiDocAdm tbody tr:eq(" + (posFila - 1) + ")").after("<tr>" + $objFilaReferencia.html() + "</tr>");
             $('#txtTblRefEmiFilaWhereButton').val(posFila);
-            fu_setDatoDocumentoRefEmi(pnuAnn,pnuEmi,pnuDes,pnuDoc,pfeEmi,pnuAnnExp,pnuSecExp,pnuExpediente);
+            fu_setDatoDocumentoRefEmi(pnuAnn, pnuEmi, pnuDes, pnuDoc, pfeEmi, pnuAnnExp, pnuSecExp, pnuExpediente);
         }
-        count++; 
+        count++;
         posFila++;
-     });
-     
-     $('#tblRefEmiDocAdm tbody tr').each(function(i, obj){
-            if(i!="0"&&i!=filaIni){   
-               var isOk = $(this).find("td").last().text();
-               if(isOk==="0"){
-                   $(this).remove();
-               }
-           }
-        });
+    });
+
+    $('#tblRefEmiDocAdm tbody tr').each(function (i, obj) {
+        if (i != "0" && i != filaIni) {
+            var isOk = $(this).find("td").last().text();
+            if (isOk === "0") {
+                $(this).remove();
+            }
+        }
+    });
 }
 
 function fn_buscaDependenciaDestEmitbl(cell) {
     var p = new Array();
     p[0] = "accion=goBuscaDependenciaDestinatario";
     p[1] = "pdeDepen=" + fu_getValorUpperCase(($(cell).parent()).find('input[type=text]').val());
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDependenciaDestinatario(data);
         jQuery('#txtTblDestEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
         jQuery('#txtTblDestEmiColWhereButton').val(($(cell).parent()).index());
@@ -757,7 +756,7 @@ function fn_changeReferenciaIncorrecta(pnroFila) {
 function fn_addDestintarioEmiDoc(idTabla) {
     if ($('#' + idTabla + ' >tbody >tr').length === 1 || $("#" + idTabla + " tbody tr td").last().html() === "1") {
         var found = true;
-        $("#" + idTabla + " tbody tr").each(function(index, row) {
+        $("#" + idTabla + " tbody tr").each(function (index, row) {
             if (index > 0) {
                 if ($(row).find('td').last().html() !== "1") {
                     found = false;
@@ -770,25 +769,25 @@ function fn_addDestintarioEmiDoc(idTabla) {
             $("#" + idTabla + " tbody tr:eq(" + indexAux + ")").click();
             ($("#" + idTabla + " tbody tr:eq(" + indexAux + ")").children().first()).children().first().focus();
             $("[bt='true']").showBigTextBox({
-                pressAceptarEvent: function(data) {
+                pressAceptarEvent: function (data) {
                     if (data.hasChangedText) {
                         changeAccionBDDocEmi(data.currentObject);
                     }
-                },maxNumCar:600
+                }, maxNumCar: 600
             });
         } else {
-           bootbox.alert("Corregir Destinatario");
+            bootbox.alert("Corregir Destinatario");
         }
     } else {
-       bootbox.alert("Corregir Destinatario");
+        bootbox.alert("Corregir Destinatario");
     }
 }
 
 function fn_addDestintarioEmi() {
     fn_addDestintarioEmiDoc('tblDestEmiDocAdm');
     //YUAL
-    if($('#cmbPrdAllDestino').val()>1){
-    fn_setPrioridadFilaTblDestIntitu('tblDestEmiDocAdm', $('#cmbPrdAllDestino').val())
+    if ($('#cmbPrdAllDestino').val() > 1) {
+        fn_setPrioridadFilaTblDestIntitu('tblDestEmiDocAdm', $('#cmbPrdAllDestino').val())
     }
 }
 
@@ -807,7 +806,7 @@ function fn_addDestintarioEmiPersJuri() {
 function fn_addReferenciaEmi() {
     if ($('#tblRefEmiDocAdm >tbody >tr').length === 1 || $("#tblRefEmiDocAdm tbody tr td").last().html() === "1") {
         var found = true;
-        $("#tblRefEmiDocAdm tbody tr").each(function(index, row) {
+        $("#tblRefEmiDocAdm tbody tr").each(function (index, row) {
             if (index > 0) {
                 if ($(row).find('td').last().html() !== "1") {
                     found = false;
@@ -819,15 +818,15 @@ function fn_addReferenciaEmi() {
             $("#tblRefEmiDocAdm tbody tr:eq(" + indexAux + ")").click();
             ($("#tblRefEmiDocAdm tbody tr:eq(" + indexAux + ")").children().first()).children().first().focus();
             var numFilaRefEmi = $("#tblRefEmiDocAdm tbody tr").length - 1;
-            $("#tblRefEmiDocAdm tbody tr").last().each(function() {
+            $("#tblRefEmiDocAdm tbody tr").last().each(function () {
                 $(this).find('input[type=radio]').attr('name', 'group' + numFilaRefEmi);
                 $(this).find('input[type=radio]').last().prop('checked', 'true');
             });
         } else {
-           bootbox.alert("Corregir Referencia");
+            bootbox.alert("Corregir Referencia");
         }
     } else {
-       bootbox.alert("Corregir Referencia");
+        bootbox.alert("Corregir Referencia");
     }
 }
 
@@ -847,14 +846,14 @@ function fn_removeDestintarioEmiDoc(indexAccionBD, idTabla, indexFilaRemove) {
 //            } else {
 //                return;
 //            }
-            
+
             bootbox.dialog({
                 message: " <h5>¿ Esta Seguro de Quitar Destinatario ?</h5>",
                 buttons: {
                     SI: {
                         label: "SI",
                         className: "btn-primary",
-                        callback: function() {
+                        callback: function () {
                             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ")").addClass('oculto');
@@ -862,14 +861,14 @@ function fn_removeDestintarioEmiDoc(indexAccionBD, idTabla, indexFilaRemove) {
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ")").remove();
                             }
                             $('#' + indexFilaRemove).val("-1");
-                        }                        
+                        }
                     },
                     NO: {
                         label: "NO",
                         className: "btn-default"
                     }
                 }
-            });                
+            });
         } else {
             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
@@ -881,7 +880,7 @@ function fn_removeDestintarioEmiDoc(indexAccionBD, idTabla, indexFilaRemove) {
             $('#' + indexFilaRemove).val("-1");
         }
     } else {
-       bootbox.alert("Seleccione Destinatario");
+        bootbox.alert("Seleccione Destinatario");
     }
 }
 
@@ -918,14 +917,14 @@ function fn_removeReferenciaEmi() {
 //            } else {
 //                return;
 //            }
-            
+
             bootbox.dialog({
                 message: " <h5>¿ Esta Seguro de Quitar Referencia ?</h5>",
                 buttons: {
                     SI: {
                         label: "SI",
                         className: "btn-primary",
-                        callback: function() {
+                        callback: function () {
                             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                                 $("#tblRefEmiDocAdm tbody tr:eq(" + pindexFilaRefEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
                                 $("#tblRefEmiDocAdm tbody tr:eq(" + pindexFilaRefEmiDoc + ")").addClass('oculto');
@@ -933,14 +932,14 @@ function fn_removeReferenciaEmi() {
                                 $("#tblRefEmiDocAdm tbody tr:eq(" + pindexFilaRefEmiDoc + ")").remove();
                             }
                             $('#txtIndexFilaRefEmiDoc').val("-1");
-                        }                        
+                        }
                     },
                     NO: {
                         label: "NO",
                         className: "btn-default"
                     }
                 }
-            });               
+            });
         } else {
             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                 $("#tblRefEmiDocAdm tbody tr:eq(" + pindexFilaRefEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
@@ -952,7 +951,7 @@ function fn_removeReferenciaEmi() {
             $('#txtIndexFilaRefEmiDoc').val("-1");
         }
     } else {
-       bootbox.alert("Seleccione Referencia");
+        bootbox.alert("Seleccione Referencia");
     }
 }
 
@@ -980,7 +979,7 @@ function fn_changeDestinatarioIncorrecto(pnroFila) {
 
 function fn_eventTblSeleccionGuardaIndex(idTabla, idIndexFilaSelec) {
     var indexFilaClick = -1;
-    $("#" + idTabla + " tbody").delegate('tr', 'click', function(e) {
+    $("#" + idTabla + " tbody").delegate('tr', 'click', function (e) {
         if (indexFilaClick !== -1) {
             if ($("#" + idTabla + " tbody tr:eq(" + indexFilaClick + ")").hasClass('row_selected')) {
                 $("#" + idTabla + " tbody tr:eq(" + indexFilaClick + ")").removeClass('row_selected');
@@ -988,8 +987,7 @@ function fn_eventTblSeleccionGuardaIndex(idTabla, idIndexFilaSelec) {
         }
         if ($(this).hasClass('row_selected')) {
             $(this).removeClass('row_selected');
-        }
-        else {
+        } else {
             $(this).addClass('row_selected');
             indexFilaClick = $(this).index();
             $('#' + idIndexFilaSelec).val(indexFilaClick);
@@ -1033,22 +1031,22 @@ function fn_tblRefEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, es
     var json = '[';
     var otArr = [];
     var count = 0;
-    $('#' + idTable + ' tr').each(function(i) {
+    $('#' + idTable + ' tr').each(function (i) {
         if (count >= iniFila) {
             var x = $(this).children();
             var itArr = [];
             if ($(this).find("td").eq(colEstadoActivo - 1).text() === estadoActivo && $(this).find("td").eq(colAccionBD - 1).text() !== accionBD) {
-                x.each(function(index) {
+                x.each(function (index) {
                     for (var i = 0; i < colMostrar.length; i++) {
                         var auxArrColMostrar = colMostrar[i].split("=");
                         if (auxArrColMostrar[1] * 1 === index + 1) {
                             var campoBean = auxArrColMostrar[0];
                             var valCampoBean = "";
-                            if (typeof($(this).find('input[type=text]').val()) !== "undefined") {
+                            if (typeof ($(this).find('input[type=text]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=text]').val();
-                            } else if (typeof($(this).find('select').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('select').val()) !== "undefined") {
                                 valCampoBean = $(this).find('select').val();
-                            } else if (typeof($(this).find('input[type=radio]').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('input[type=radio]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=radio]:checked').val();
                             } else {
                                 valCampoBean = $(this).text();
@@ -1080,37 +1078,37 @@ function fn_tblRefEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, es
 function fn_tblDestEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, estadoActivo, colAccionBD, accionBD) {
     //var json = '[';
     var otArr = [];
-    var count = 0;      
-    $('#' + idTable + ' tr').each(function(i) {
+    var count = 0;
+    $('#' + idTable + ' tr').each(function (i) {
         if (count >= iniFila) {
             var x = $(this).children();
             var itArr = [];
-            
+
             if ($(this).find("td").eq(colEstadoActivo - 1).text() === estadoActivo && $(this).find("td").eq(colAccionBD - 1).text() !== accionBD) {
-                x.each(function(index) {                   
+                x.each(function (index) {
                     for (var i = 0; i < colMostrar.length; i++) {
                         var auxArrColMostrar = colMostrar[i].split("=");
                         if (auxArrColMostrar[1] * 1 === index + 1) {
                             var campoBean = auxArrColMostrar[0];
                             var valCampoBean = "";
-                            if (typeof($(this).find('input[type=text]').val()) !== "undefined") {
+                            if (typeof ($(this).find('input[type=text]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=text]').val();
-                            } else if (typeof($(this).find('textarea').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('textarea').val()) !== "undefined") {
                                 valCampoBean = $(this).find('textarea').val();
-                            } else if (typeof($(this).find('select').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('select').val()) !== "undefined") {
                                 valCampoBean = $(this).find('select').val();
-                            } else if (typeof($(this).find('input[type=radio]').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('input[type=radio]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=radio]:checked').val();
-                            } else if (typeof($(this).find('input[type=checkbox]').val()) !== "undefined") {
-                                valCampoBean = $(this).find('input[type=checkbox]').is(':checked')?'1':'0';
+                            } else if (typeof ($(this).find('input[type=checkbox]').val()) !== "undefined") {
+                                valCampoBean = $(this).find('input[type=checkbox]').is(':checked') ? '1' : '0';
                             } else {
                                 valCampoBean = $(this).text();
                             }
-                            if (typeof($(this).find('span').html()) !== "undefined") {
+                            if (typeof ($(this).find('span').html()) !== "undefined") {
                                 valCampoBean = $(this).find('span').html();
-                            }                            
-                            if (typeof($(this).find('input[id=txtCodigoUbigeoOtro]').val()) !== "undefined") {
-                                valCampoBean = $(this).find('input[id=txtCodigoUbigeoOtro]').val();                                  
+                            }
+                            if (typeof ($(this).find('input[id=txtCodigoUbigeoOtro]').val()) !== "undefined") {
+                                valCampoBean = $(this).find('input[id=txtCodigoUbigeoOtro]').val();
                             }
                             itArr.push('"' + campoBean + '":' + JSON.stringify(valCampoBean));
                         }
@@ -1177,12 +1175,12 @@ function fn_tblDestOtroEmiDocAdmToJson() {
     arrColMostrar[3] = "coOtroOrigen=2";
     arrColMostrar[4] = "coPrioridad=17";
     arrColMostrar[5] = "envMesaPartes=16";
-    
+
     arrColMostrar[6] = "ccodDpto=11";
     arrColMostrar[7] = "cdirRemite=12";
     arrColMostrar[8] = "cexpCorreoe=13";
-    arrColMostrar[9] = "cTelefono=14";    
-    arrColMostrar[10] = "cargo=15";    
+    arrColMostrar[9] = "cTelefono=14";
+    arrColMostrar[10] = "cargo=15";
     return fn_tblDestEmihtml2json('tblDestEmiDocAdmOtro', 1, arrColMostrar, 19, "1", 5, "BD");
 }
 
@@ -1194,11 +1192,11 @@ function fn_tblDestCiudadanoEmiDocAdmToJson() {
     arrColMostrar[3] = "nuDni=1";
     arrColMostrar[4] = "coPrioridad=14";
     arrColMostrar[5] = "envMesaPartes=13";
-    
+
     arrColMostrar[6] = "ccodDpto=9";
     arrColMostrar[7] = "cdirRemite=10";
     arrColMostrar[8] = "cexpCorreoe=11";
-    arrColMostrar[9] = "cTelefono=12";    
+    arrColMostrar[9] = "cTelefono=12";
     return fn_tblDestEmihtml2json('tblDestEmiDocAdmCiudadano', 1, arrColMostrar, 16, "1", 4, "BD");
 }
 
@@ -1234,41 +1232,41 @@ function fn_tblDestProveedorEmiDocAdmToJson() {
 function fn_tblDestEmihtml2Proveedorjson(idTable, iniFila, colMostrar, colEstadoActivo, estadoActivo, colAccionBD, accionBD) {
     //var json = '[';
     var otArr = [];
-    var count = 0;  
-    $('#' + idTable + ' tr').each(function(i) {
+    var count = 0;
+    $('#' + idTable + ' tr').each(function (i) {
         if (count >= iniFila) {
             var x = $(this).children();
             var itArr = [];
-            
+
             if ($(this).find("td").eq(colEstadoActivo - 1).text() === estadoActivo && $(this).find("td").eq(colAccionBD - 1).text() !== accionBD) {
-                x.each(function(index) {
-                   
+                x.each(function (index) {
+
                     for (var i = 0; i < colMostrar.length; i++) {
                         var auxArrColMostrar = colMostrar[i].split("=");
                         if (auxArrColMostrar[1] * 1 === index + 1) {
                             var campoBean = auxArrColMostrar[0];
                             var valCampoBean = "";
-                            if (typeof($(this).find('input[type=text]').val()) !== "undefined") {
+                            if (typeof ($(this).find('input[type=text]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=text]').val();
-                            } else if (typeof($(this).find('textarea').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('textarea').val()) !== "undefined") {
                                 valCampoBean = $(this).find('textarea').val();
-                            } else if (typeof($(this).find('select').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('select').val()) !== "undefined") {
                                 valCampoBean = $(this).find('select').val();
-                            } else if (typeof($(this).find('input[type=radio]').val()) !== "undefined") {
+                            } else if (typeof ($(this).find('input[type=radio]').val()) !== "undefined") {
                                 valCampoBean = $(this).find('input[type=radio]:checked').val();
-                            } else if (typeof($(this).find('input[type=checkbox]').val()) !== "undefined") {
-                                valCampoBean = $(this).find('input[type=checkbox]').is(':checked')?'1':'0';
+                            } else if (typeof ($(this).find('input[type=checkbox]').val()) !== "undefined") {
+                                valCampoBean = $(this).find('input[type=checkbox]').is(':checked') ? '1' : '0';
                             } else {
                                 valCampoBean = $(this).text();
                             }
-                            if (typeof($(this).find('span').html()) !== "undefined") {
+                            if (typeof ($(this).find('span').html()) !== "undefined") {
                                 valCampoBean = $(this).find('span').html();
-                            }                           
-                            if (typeof($(this).find('input[id=txtCodigoRemitente]').val()) !== "undefined") {
-                                valCampoBean = $(this).find('input[id=txtCodigoRemitente]').val();                                  
                             }
-                            if (typeof($(this).find('input[id=txtCodigoUbigeoOtro]').val()) !== "undefined") {
-                                valCampoBean = $(this).find('input[id=txtCodigoUbigeoOtro]').val();                                  
+                            if (typeof ($(this).find('input[id=txtCodigoRemitente]').val()) !== "undefined") {
+                                valCampoBean = $(this).find('input[id=txtCodigoRemitente]').val();
+                            }
+                            if (typeof ($(this).find('input[id=txtCodigoUbigeoOtro]').val()) !== "undefined") {
+                                valCampoBean = $(this).find('input[id=txtCodigoUbigeoOtro]').val();
                             }
                             if (campoBean == "remiTiEmi") {
                                 valCampoBean = $(this).find('select').val();
@@ -1306,7 +1304,7 @@ function fn_buscaPersonalDestEmitbl(cell) {
     var p = new Array();
     p[0] = "accion=goBuscaPersonalDestinatario";
     p[1] = "pcoDepen=" + (($(cell).parent()).parent()).children().get(1).innerHTML;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDependenciaDestinatario(data);
         jQuery('#txtTblDestEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
         jQuery('#txtTblDestEmiColWhereButton').val(($(cell).parent()).index());
@@ -1318,7 +1316,7 @@ function fn_buscaAccionTipDocDestEmitbl(cell) {
     var p = new Array();
     p[0] = "accion=goBuscaAccionDestinatario";
     p[1] = "pcoTipDoc=" + jQuery("#coTipDocAdm").val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDependenciaDestinatario(data);
         jQuery('#txtTblDestEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
         jQuery('#txtTblDestEmiColWhereButton').val(($(cell).parent()).index());
@@ -1335,16 +1333,16 @@ function fn_rptaBuscaDependenciaDestinatario(XML_AJAX) {
 function fn_verificarCreacionExpediente() {
     if (jQuery("#nuAnnExp").val() === "" && jQuery("#nuSecExp").val() === "" && jQuery("#esDocEmi").val() === "5" && jQuery("#txtEsNuevoDocAdm").val() === '1') {
         bootbox.confirm({
-        message: "¿Desea Crear Expediente?",
-        buttons: {
-            confirm: {
-                label: 'Aceptar'
+            message: "¿Desea Crear Expediente?",
+            buttons: {
+                confirm: {
+                    label: 'Aceptar'
+                },
+                cancel: {
+                    label: 'Cancelar'
+                }
             },
-            cancel: {
-                label: 'Cancelar'
-            }
-        },
-        callback: function (result) {
+            callback: function (result) {
                 if (result) {
                     fn_grabaDocumEmiAdmin("1");
                 } else {
@@ -1367,7 +1365,7 @@ function fn_beforeGrabarDocumEmiAdmin(vchangeEsDocEmi) {
                 var rpta = fn_validarToDespacho("0");
                 var nrpta = rpta.substr(0, 1);
                 if (nrpta === "1" || nrpta === "E") {
-                     bootbox.confirm({
+                    bootbox.confirm({
                         message: "¿Seguro de Guardar los Cambios?",
                         buttons: {
                             confirm: {
@@ -1386,15 +1384,15 @@ function fn_beforeGrabarDocumEmiAdmin(vchangeEsDocEmi) {
                         }
                     });
                 } else {
-                   bootbox.alert(rpta);
+                    bootbox.alert(rpta);
                 }
             }
         } else {
-           bootbox.alert("EL ASUNTO NO DEBE SER VACIO!!");
+            bootbox.alert("EL ASUNTO NO DEBE SER VACIO!!");
             jQuery("#deAsu").focus();
         }
     } else {
-       bootbox.alert("EL TIPO DE DOCUMENTO NO DEBE SER VACIO!!");
+        bootbox.alert("EL TIPO DE DOCUMENTO NO DEBE SER VACIO!!");
         jQuery("#coTipDocAdm").focus();
     }
 }
@@ -1406,7 +1404,7 @@ function fn_grabaDocumEmiAdmin(sCrearExpediente) {
     var rpta = fn_validarEnvioGrabaDocEmiAdm(new Function('return ' + cadenaJson)());
     var nrpta = rpta.substr(0, 1);
     if (nrpta === "1") {
-        ajaxCallSendJson("/srDocumentoAdmEmision.do?accion=goGrabaDocumentoEmi&pcrearExpediente=" + sCrearExpediente, cadenaJson, function(data) {
+        ajaxCallSendJson("/srDocumentoAdmEmision.do?accion=goGrabaDocumentoEmi&pcrearExpediente=" + sCrearExpediente, cadenaJson, function (data) {
             fn_rptaGrabaDocumEmiAdmin(data, sCrearExpediente);
         },
                 'json', false, false, "POST");
@@ -1432,12 +1430,12 @@ function fu_validaFiltroGrabaDocEmiAdm() {
     if (pnuDiaAte !== null && pnuDiaAte !== "") {
         vValidaNumero = fu_validaNumero(pnuDiaAte);
         if (vValidaNumero !== "OK") {
-           bootbox.alert("Días de Atención debe ser solo números.");
+            bootbox.alert("Días de Atención debe ser solo números.");
             jQuery("#nuDiaAte").focus();
             valRetorno = "0";
         }
     } else {
-       bootbox.alert("Especifique días de Atención.");
+        bootbox.alert("Especifique días de Atención.");
         jQuery("#nuDiaAte").focus();
         valRetorno = "0";
     }
@@ -1445,23 +1443,23 @@ function fu_validaFiltroGrabaDocEmiAdm() {
     if (pnuAnn !== null && pnuAnn !== "") {
         vValidaNumero = fu_validaNumero(pnuAnn);
         if (vValidaNumero !== "OK") {
-           bootbox.alert("Año de Documento solo números.");
+            bootbox.alert("Año de Documento solo números.");
             valRetorno = "0";
         }
     } else {
-       bootbox.alert("Especifique Año de Documento.");
+        bootbox.alert("Especifique Año de Documento.");
         valRetorno = "0";
     }
 
     if (pdeDocSig !== null && pdeDocSig !== "") {
         var rptValida = validaCaracteres(pdeDocSig, "1");
         if (rptValida !== "OK") {
-           bootbox.alert(rptValida);
+            bootbox.alert(rptValida);
             jQuery("#deDocSig").focus();
             valRetorno = "0";
         }
     } else {
-       bootbox.alert("Especifique siglas del Documento");
+        bootbox.alert("Especifique siglas del Documento");
         jQuery("#deDocSig").focus();
         valRetorno = "0";
     }
@@ -1469,13 +1467,13 @@ function fu_validaFiltroGrabaDocEmiAdm() {
     if (valRetorno === "1") {
         //VALIDA FECHAS
         if (pfeEmiCorta === "") {
-           bootbox.alert('Especifique Fecha de Documento.');
+            bootbox.alert('Especifique Fecha de Documento.');
             valRetorno = "0";
             //valRetorno="1";
         } else {
             valRetorno = fu_validaFechaConsulta(pfeEmiCorta, pfeActual);
             if (valRetorno !== "1") {
-               bootbox.alert("Error Fecha De Documento" + valRetorno);
+                bootbox.alert("Error Fecha De Documento" + valRetorno);
                 valRetorno = "0";
             }
         }
@@ -1484,7 +1482,7 @@ function fu_validaFiltroGrabaDocEmiAdm() {
     /*if (valRetorno=="1") {
      vCantidadDias =  getNumeroDeDiasDiferencia(vFeInicio,vFeFinal);
      if (vCantidadDias > 5 || vCantidadDias < 0){
-    bootbox.alert("Diferencia entre fechas debe ser maximo de 5 dias");
+     bootbox.alert("Diferencia entre fechas debe ser maximo de 5 dias");
      valRetorno="0";
      }
      }*/
@@ -1492,22 +1490,24 @@ function fu_validaFiltroGrabaDocEmiAdm() {
 }
 
 function fn_rptaGrabaDocumEmiAdmin(data, sCrearExpediente) {
-      
+
     var strCadena = '';
     if (data !== null) {
-               //YUAL
+        //YUAL
 
-        if($('#bFirmaProveido').val()=='1' && !!data.nuEmi && data.nuEmi!==null && data.nuEmi!=='null' ){
-                jQuery('#txtNuEmiProveido').val(data.nuEmi);
-                if($('#bFirmaProveido').val()=='1')
-                 {fn_firmarDocumentoEmiProveido();}
-       }   
-   
-        
+        if ($('#bFirmaProveido').val() == '1' && !!data.nuEmi && data.nuEmi !== null && data.nuEmi !== 'null') {
+            jQuery('#txtNuEmiProveido').val(data.nuEmi);
+            if ($('#bFirmaProveido').val() == '1')
+            {
+                fn_firmarDocumentoEmiProveido();
+            }
+        }
+
+
         if (data.coRespuesta === "1") {
             if (jQuery('#txtEsNuevoDocAdm').val() === "1") {
                 jQuery('#txtEsNuevoDocAdm').val("0");
-               
+
 //                jQuery("#nuCorEmi").val(data.nuCorEmi);
                 if (sCrearExpediente === "1") {
                     jQuery("#nuAnnExp").val(data.nuAnnExp);
@@ -1515,7 +1515,7 @@ function fn_rptaGrabaDocumEmiAdmin(data, sCrearExpediente) {
                     jQuery("#nuExpediente").val(data.nuExpediente);
                     jQuery("#feExpCorta").val(data.feExp);
                     strCadena = 'con expediente.';
-                }else{
+                } else {
                     strCadena = 'sin expediente.';
                 }
             }
@@ -1523,20 +1523,20 @@ function fn_rptaGrabaDocumEmiAdmin(data, sCrearExpediente) {
             if (jQuery("#nuCorEmi").val() === "") {
                 jQuery("#nuCorEmi").val(data.nuCorEmi);
             }
-            if(!!data.nuDocEmi&&data.nuDocEmi!==null&&data.nuDocEmi!=='null'){
+            if (!!data.nuDocEmi && data.nuDocEmi !== null && data.nuDocEmi !== 'null') {
                 jQuery('#nuDocEmi').val(data.nuDocEmi);
-            }            
+            }
             fn_seteaCamposDocumentoEmi();            //resetear variables del documento
             fn_setTblPersonalVoBo();//setter tabla personal VB.
             fu_cargaEdicionDocAdm("00", jQuery('#esDocEmi').val());
             //alert("Datos Guardados.");
-            alert_Sucess("Éxito!", "Documento grabado correctamente "+strCadena);
+            alert_Sucess("Éxito!", "Documento grabado correctamente " + strCadena);
         } else {
             //alert_Info("Emisión :", data.deRespuesta);
             alert_Danger("Emisión :", data.deRespuesta);
         }
-        
-      
+
+
     }
 }
 
@@ -1548,25 +1548,25 @@ function fu_setDatoDependenciaDestEmi(cod, desc) {
     $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(desc);
     $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 1) + ")").text(cod);
     removeDomId('windowConsultaDependenciaDestEmi');
-    var pcoTipoDoc = jQuery('#documentoEmiBean').find('#coTipDocAdm').length === 0 ? 
-                            jQuery('#documentoPersonalEmiBean').find('#coTipDocAdm').length === 0 ? 
-                                "": 
-                                jQuery('#documentoPersonalEmiBean').find('#coTipDocAdm').val() :
-                            jQuery('#documentoEmiBean').find('#coTipDocAdm').val();
+    var pcoTipoDoc = jQuery('#documentoEmiBean').find('#coTipDocAdm').length === 0 ?
+            jQuery('#documentoPersonalEmiBean').find('#coTipDocAdm').length === 0 ?
+            "" :
+            jQuery('#documentoPersonalEmiBean').find('#coTipDocAdm').val() :
+            jQuery('#documentoEmiBean').find('#coTipDocAdm').val();
     var p = new Array();
     p[0] = "accion=goBuscaEmpleadoLocaltblDestinatario";
     p[1] = "pcoDepen=" + cod;
     p[2] = "pcoTipoDoc=" + pcoTipoDoc;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         if (data !== null && allTrim(data.coRespuesta) === "1") {
             var arrCampo = new Array();
             arrCampo[0] = (pcol * 1 + 1) + "=" + cod;//codDependencia
             arrCampo[1] = "5=" + data.coEmpleado;//codEmpleado
-            var bResult = fn_validaDestinatarioIntituDuplicado(idTabla, arrCampo, true, pfila*1);
+            var bResult = fn_validaDestinatarioIntituDuplicado(idTabla, arrCampo, true, pfila * 1);
             var esPrimero = $("#" + idTabla + " tbody tr").siblings().not('.oculto').length;
-            var bDestinOk=true;
+            var bDestinOk = true;
             p = new Array();
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function(index) {
+            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function (index) {
                 switch (index)
                 {
                     case 2:
@@ -1578,24 +1578,23 @@ function fu_setDatoDependenciaDestEmi(cod, desc) {
                         $(this).text(data.coLocal);
                         break;
                     case 4:
-                        var deEmp=data.deEmpleado;
-                        if(deEmp!==null && deEmp!=="null" && allTrim(deEmp)!==""){
+                        var deEmp = data.deEmpleado;
+                        if (deEmp !== null && deEmp !== "null" && allTrim(deEmp) !== "") {
                             $(this).find('input[type=text]').val(deEmp);
                             p[2] = allTrim(deEmp);
-                        }else{
-                            bDestinOk=false;
+                        } else {
+                            bDestinOk = false;
                         }
 //                        $(this).find('input[type=text]').val(data.deEmpleado);
 //                        p[2] = allTrim(data.deEmpleado);
                         break;
                     case 5:
-                        var coEmp=data.coEmpleado;
-                        if(coEmp!==null && coEmp!=="null" && allTrim(coEmp)!==""){
+                        var coEmp = data.coEmpleado;
+                        if (coEmp !== null && coEmp !== "null" && allTrim(coEmp) !== "") {
                             $(this).text(coEmp);
+                        } else {
+                            bDestinOk = false;
                         }
-                        else{
-                            bDestinOk=false;
-                        }                          
 //                        $(this).text(data.coEmpleado);
                         break;
                     case 6:
@@ -1623,8 +1622,8 @@ function fu_setDatoDependenciaDestEmi(cod, desc) {
                 $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(11)").text("UPD");
             }
             if (bResult) {
-                destinatarioDuplicado=false;
-                if(bDestinOk){
+                destinatarioDuplicado = false;
+                if (bDestinOk) {
                     fn_changeDestinatarioCorrecto(pfila);
 //                    jQuery("#"+idTabla).parents(':eq(4)').find('td').first().find('button').first().focus();
 //                }else{
@@ -1636,7 +1635,7 @@ function fu_setDatoDependenciaDestEmi(cod, desc) {
 //                $("#"+idTabla+" tbody tr:eq("+pfila+") td:eq("+pcol+")").find('input[type=text]').val(desc);
 //                $("#"+idTabla+" tbody tr:eq("+pfila+") td:eq("+(pcol * 1 + 1)+")").text(cod);                     
         } else {
-           bootbox.alert(data.deRespuesta);
+            bootbox.alert(data.deRespuesta);
         }
     },
             'json', false, false, "POST");
@@ -1666,15 +1665,15 @@ function fu_setEmpleadoDestinoEmitlb(cod, desc) {
     arrCampo[0] = (pcol * 1 - 3) + "=" + $("#tblDestEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 - 3) + ")").text();//codDependencia
     arrCampo[1] = "5=" + cod;//codEmpleado
 //    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, false, '');
-    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, true, pfila*1);
+    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, true, pfila * 1);
     if (bResult) {
-        destinatarioDuplicado=false;
+        destinatarioDuplicado = false;
         fu_setArrAsignaDestinOK(2, cod, desc);
         removeDomId('windowConsultaEmpl');
     } else {
-        destinatarioDuplicado=true;
+        destinatarioDuplicado = true;
         removeDomId('windowConsultaEmpl');
-       bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
+        bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
     }
 }
 
@@ -1685,12 +1684,12 @@ function fu_setTramiteDestinoEmitlb(cod, desc) {
     arrCampo[0] = (pcol * 1 - 5) + "=" + $("#tblDestEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 - 5) + ")").text();//codDependencia
     arrCampo[1] = "5=" + $("#tblDestEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(5)").text();//codEmpleado
 //    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, false, '');
-    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, true, pfila*1);
+    var bResult = fn_validaDestinatarioIntituDuplicado('tblDestEmiDocAdm', arrCampo, true, pfila * 1);
     if (bResult) {
-        destinatarioDuplicado=false;
+        destinatarioDuplicado = false;
     } else {
-        destinatarioDuplicado=true;
-    }    
+        destinatarioDuplicado = true;
+    }
     fu_setArrAsignaDestinOK(3, cod, desc);
     removeDomId('windowConsultaMoti');
 }
@@ -1724,13 +1723,13 @@ function fn_evalDestinatarioCorrectotblEmi(indexFila) {
     //var arrIndexCompara=[0,2,4,6];
     for (var i = 0; i < arrInputAnt.length; i++)
     {
-        var found=true;
-        $("#tblDestEmiDocAdm tbody tr:eq(" + indexFila + ") td").each(function(index) {
+        var found = true;
+        $("#tblDestEmiDocAdm tbody tr:eq(" + indexFila + ") td").each(function (index) {
             if (index in {0: 1, 2: 1, 4: 1, 6: 1}) {
                 var valInput = allTrim(fu_getValorUpperCase($(this).find('input[type=text]').val()));
                 if (arrInputAnt[i] === valInput) {
-                    if(found){
-                        found=false;                    
+                    if (found) {
+                        found = false;
                         countFound++;
                     }
                 }
@@ -1750,14 +1749,14 @@ function fn_evalReferenciaCorrectatblEmi(indexFila) {
     var countFound = 0;
     for (var i = 0; i < arrInputAnt.length; i++)
     {
-        $("#tblRefEmiDocAdm tbody tr:eq(" + indexFila + ") td").each(function(index) {
+        $("#tblRefEmiDocAdm tbody tr:eq(" + indexFila + ") td").each(function (index) {
             if (index in {0: 1, 1: 1, 2: 1, 3: 1, 4: 1}) {
                 var valInput = "";
-                if (typeof($(this).find('input[type=text]').val()) !== "undefined") {
+                if (typeof ($(this).find('input[type=text]').val()) !== "undefined") {
                     valInput = allTrim(fu_getValorUpperCase($(this).find('input[type=text]').val()));
-                } else if (typeof($(this).find('select').val()) !== "undefined") {
+                } else if (typeof ($(this).find('select').val()) !== "undefined") {
                     valInput = $(this).find('select').val();
-                } else if (typeof($(this).find('input[type=radio]').val()) !== "undefined") {
+                } else if (typeof ($(this).find('input[type=radio]').val()) !== "undefined") {
                     valInput = $(this).find('input[type=radio]:checked').val();
                 }
                 if (arrInputAnt[i] === valInput) {
@@ -1796,35 +1795,35 @@ function fn_buildSendJsontoServerDocuEmi() {
     return result + "}";
 }
 
-function sortDelFirst(lsDestinoJson){
-    var vResult='[]';
-    var lsObjDestinos=new Function('return ' + lsDestinoJson)();
-    if(!!lsObjDestinos){
-        var lsObjDestinosAux=[];
-        var lsDestinoDel=[];
-        lsObjDestinos.forEach(function(objDes,index) {
-            if(!!objDes){
-                var accion=objDes.accionBD;
-                if(!!accion&&accion==="DEL"){
+function sortDelFirst(lsDestinoJson) {
+    var vResult = '[]';
+    var lsObjDestinos = new Function('return ' + lsDestinoJson)();
+    if (!!lsObjDestinos) {
+        var lsObjDestinosAux = [];
+        var lsDestinoDel = [];
+        lsObjDestinos.forEach(function (objDes, index) {
+            if (!!objDes) {
+                var accion = objDes.accionBD;
+                if (!!accion && accion === "DEL") {
                     //lsObjDestinos.splice(index,1);
                     lsDestinoDel.push(objDes);
-                }else{
-                   lsObjDestinosAux.push(objDes);
+                } else {
+                    lsObjDestinosAux.push(objDes);
                 }
             }
         });
-        vResult=JSON.stringify(lsDestinoDel.concat(lsObjDestinosAux));
+        vResult = JSON.stringify(lsDestinoDel.concat(lsObjDestinosAux));
     }
     return vResult;
 }
 
 
-(function($) {
-    $.fn.serializeFormJSON = function() {
+(function ($) {
+    $.fn.serializeFormJSON = function () {
         var o = {};
         var a = this.serializeArray();
         var count = 0;
-        $.each(a, function() {
+        $.each(a, function () {
             if (count < 14) {
                 if (o[this.name]) {
                     if (!o[this.name].push) {
@@ -1845,13 +1844,13 @@ function fu_setDatoDocumentoRefEmi(pnuAnn, pnuEmi, pnuDes, pnuDoc, pfeEmi, pnuAn
     var pfila = jQuery('#txtTblRefEmiFilaWhereButton').val();
     var pcol = jQuery('#txtTblRefEmiColWhereButton').val();
     //verificar si ya esta referenciado el documento
-    var sResult = fn_validaDocumentoRefLista(pfila*1,pcol, pnuAnn, pnuEmi, pnuDes);
+    var sResult = fn_validaDocumentoRefLista(pfila * 1, pcol, pnuAnn, pnuEmi, pnuDes);
     if (sResult) {
         $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 - 1) + ")").find('input[type=text]').val(pfeEmi);
         $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 - 2) + ")").find('input[type=text]').val(pnuDoc);
         removeDomId('windowConsultaDocumentoRefEmi');
         var p = new Array();
-        $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td").each(function(index) {
+        $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td").each(function (index) {
             switch (index)
             {
                 case 0:
@@ -1877,35 +1876,35 @@ function fu_setDatoDocumentoRefEmi(pnuAnn, pnuEmi, pnuDes, pnuDoc, pfeEmi, pnuAn
             $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 5) + ")").text("UPD");
         }
         fn_changeReferenciaCorrecta(pfila);
-        var pnuAnnExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuAnnExp').length===0 ? "0NP3":jQuery('#documentoEmiBean').find('#nuAnnExp').val());
-        var pnuSecExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuSecExp').length===0 ? "0NP3":jQuery('#documentoEmiBean').find('#nuSecExp').val());
+        var pnuAnnExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuAnnExp').length === 0 ? "0NP3" : jQuery('#documentoEmiBean').find('#nuAnnExp').val());
+        var pnuSecExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuSecExp').length === 0 ? "0NP3" : jQuery('#documentoEmiBean').find('#nuSecExp').val());
 //        if (pnuAnnExpBean === "" && pnuSecExpBean === "") {
-            if (pnuAnnExp !== "" && pnuSecExp !== "") {
+        if (pnuAnnExp !== "" && pnuSecExp !== "") {
 //                if (confirm('El documento pertenece al Expediente:\n'
 //                        + pnuExpediente + '\nAdicionar este documento?')) {
 //                    fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp);
 //                }
-                bootbox.dialog({
-                    message: " <h5>El documento pertenece al Expediente: <strong>" + pnuExpediente + "</strong> Adicionar este documento?</h5>",
-                    buttons: {
-                        SI: {
-                            label: "SI",
-                            className: "btn-primary",
-                            callback: function() {
-                                fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp);
-                            }                        
-                        },
-                        NO: {
-                            label: "NO",
-                            className: "btn-default"
+            bootbox.dialog({
+                message: " <h5>El documento pertenece al Expediente: <strong>" + pnuExpediente + "</strong> Adicionar este documento?</h5>",
+                buttons: {
+                    SI: {
+                        label: "SI",
+                        className: "btn-primary",
+                        callback: function () {
+                            fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp);
                         }
+                    },
+                    NO: {
+                        label: "NO",
+                        className: "btn-default"
                     }
-                });                   
-            }
+                }
+            });
+        }
 //        }
     } else {
         removeDomId('windowConsultaDocumentoRefEmi');
-       bootbox.alert("DOCUMENTO YA SE ENCUENTRA REFERENCIADO.");
+        bootbox.alert("DOCUMENTO YA SE ENCUENTRA REFERENCIADO.");
     }
     return false;
 }
@@ -1922,13 +1921,13 @@ function fn_verDocumentoRefEmi(cell) {
     }
 }
 
-function continueRegresarEmitDocumAdm(){
+function continueRegresarEmitDocumAdm() {
     if (jQuery('#divRecepDocumentoAdmin').length === 0) {
-        jQuery('#divEmiDocumentoAdmin').toggle();                                
-        jQuery('#divNewEmiDocumAdmin').toggle(); 
+        jQuery('#divEmiDocumentoAdmin').toggle();
+        jQuery('#divNewEmiDocumAdmin').toggle();
         submitAjaxFormEmiDocAdm(jQuery('#buscarDocumentoEmiBean').find('#sTipoBusqueda').val());
         jQuery('#btn-buscar').click();
-        jQuery('#divNewEmiDocumAdmin').html("");        
+        jQuery('#divNewEmiDocumAdmin').html("");
         //mostrarOcultarDivBusqFiltro2();
     } else {
         var pnuAnn = jQuery('#txtpnuAnn').val();
@@ -1938,51 +1937,57 @@ function continueRegresarEmitDocumAdm(){
             p[1] = "pnuEmi=" + jQuery('#txtpnuEmi').val();
             p[2] = "pnuDes=" + jQuery('#txtpnuDes').val();
             p[3] = "pcoPri=" + jQuery('#txtpcoPri').val();
-            ajaxCall("/srDocumentoAdmRecepcion.do?accion=goEditarDocumento", p.join("&"), function(data) {
+            ajaxCall("/srDocumentoAdmRecepcion.do?accion=goEditarDocumento", p.join("&"), function (data) {
                 refreshScript("divWorkPlaceRecepDocumAdmin", data);
                 fn_cargaToolBarRec();
             }, 'text', false, false, "POST");
         } else {
             alert_Info("Emisión :", "Seleccione una fila de la lista");
         }
-    }    
+    }
 }
 
 function regresarEmitDocumAdm(pclickBtn) {
     if (pclickBtn === "1") {
         var vEsDocEmi = jQuery('#documentoEmiBean').find('#esDocEmi').val();
-        if(vEsDocEmi==="5" || vEsDocEmi==="7"){
+        if (vEsDocEmi === "5" || vEsDocEmi === "7") {
             var rpta = fu_verificarChangeDocumentoEmiAdm();
             var nrpta = rpta.substr(0, 1);
             if (nrpta === "1") {
                 bootbox.dialog({
-                  message: " <h5>Existen Cambios en el Documento.\n" +
+                    message: " <h5>Existen Cambios en el Documento.\n" +
                             "¿ Desea cerrar el Documento ?</h5>",
-                  buttons: {
-                    SI: {
-                      label: "SI",
-                      className: "btn-default",
-                      callback: function() {
-                        animacionventanaRecepDoc();
-                        setTimeout(function(){continueRegresarEmitDocumAdm();}, 300);
-                      }                      
-                    },                          
-                    NO: {
-                      label: "NO",
-                      className: "btn-primary"
+                    buttons: {
+                        SI: {
+                            label: "SI",
+                            className: "btn-default",
+                            callback: function () {
+                                animacionventanaRecepDoc();
+                                setTimeout(function () {
+                                    continueRegresarEmitDocumAdm();
+                                }, 300);
+                            }
+                        },
+                        NO: {
+                            label: "NO",
+                            className: "btn-primary"
+                        }
                     }
-                  }
                 });
-            }else{
+            } else {
                 animacionventanaRecepDoc();
-                setTimeout(function(){continueRegresarEmitDocumAdm();}, 300);
+                setTimeout(function () {
+                    continueRegresarEmitDocumAdm();
+                }, 300);
             }
-        }else{
+        } else {
             animacionventanaRecepDoc();
-            setTimeout(function(){continueRegresarEmitDocumAdm();}, 300);
+            setTimeout(function () {
+                continueRegresarEmitDocumAdm();
+            }, 300);
         }
-    }else{
-      continueRegresarEmitDocumAdm();
+    } else {
+        continueRegresarEmitDocumAdm();
     }
 }
 
@@ -1994,7 +1999,7 @@ function getJsonFormExpedienteEmiBean() {
     arrCampoBean[3] = "feExp";
     var o = {};
     var a = $('#documentoEmiBean').serializeArray();
-    $.each(a, function() {
+    $.each(a, function () {
         for (var i = 0; i < arrCampoBean.length; i++) {
             if (this.name === arrCampoBean[i]) {
                 if (o[this.name]) {
@@ -2019,7 +2024,7 @@ function getJsonFormRemitenteEmiBean() {
     arrCampoBean[3] = "coEmpElabora=coEmpRes";
     var o = {};
     var a = $('#documentoEmiBean').serializeArray();
-    $.each(a, function() {
+    $.each(a, function () {
         for (var i = 0; i < arrCampoBean.length; i++) {
             var arrcampoBeanAux = arrCampoBean[i].split("=");
             if (this.name === arrcampoBeanAux[1]) {
@@ -2060,7 +2065,7 @@ function getJsonFormDocumentoEmiBean() {
     arrCampoBean[18] = "deObsDoc";
     var o = {};
     var a = $('#documentoEmiBean').serializeArray();
-    $.each(a, function() {
+    $.each(a, function () {
         for (var i = 0; i < arrCampoBean.length; i++) {
             if (this.name === arrCampoBean[i]) {
                 if (o[this.name]) {
@@ -2099,7 +2104,7 @@ function fn_seteaCamposDocumentoEmi() {
     p[1] = "pnuAnn=" + $("#nuAnn").val();
     p[2] = "pnuEmi=" + $("#nuEmi").val();
     //p[3] = "pcoDependencia=" + $("#coDepEmi").val();        
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_updateTblsEmisioDocAdm(data);
     },
             'text', false, true, "POST");
@@ -2118,21 +2123,21 @@ function fn_cambiaComboDepEmi() {
     var p = new Array();
     p[0] = "accion=goCambiaDepEmi";
     p[1] = "pcoDepEmi=" + jQuery("#coDepEmi").val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         if (data !== null && data.retval === "OK") {
-            jQuery('#documentoEmiBean').find('#coEmpEmi').val(data.coEmpEmi );
-            jQuery('#documentoEmiBean').find('#deEmpEmi').val(data.deEmpEmi );
-            jQuery('#documentoEmiBean').find('#deDocSig').val(data.deSigla );
+            jQuery('#documentoEmiBean').find('#coEmpEmi').val(data.coEmpEmi);
+            jQuery('#documentoEmiBean').find('#deEmpEmi').val(data.deEmpEmi);
+            jQuery('#documentoEmiBean').find('#deDocSig').val(data.deSigla);
             jQuery('#documentoEmiBean').find('#nuCorEmi').val("");
             jQuery('#documentoEmiBean').find('#nuCorDoc').val("");
             jQuery('#documentoEmiBean').find('#nuDocEmi').val("");
-            jQuery('#documentoEmiBean').find("#nuDocEmi").trigger("change");            
+            jQuery('#documentoEmiBean').find("#nuDocEmi").trigger("change");
         }
     }, 'json', false, true, "POST");
 }
 
-function fn_changeTipoDestinatarioDocuEmiAdm(sTipoDestEmi){
-    fn_changeTipoDestinatarioDocuEmi(sTipoDestEmi,jQuery('#documentoEmiBean').find('#esDocEmi').val());
+function fn_changeTipoDestinatarioDocuEmiAdm(sTipoDestEmi) {
+    fn_changeTipoDestinatarioDocuEmi(sTipoDestEmi, jQuery('#documentoEmiBean').find('#esDocEmi').val());
 }
 
 function fn_changeTipoDestinatarioDocuEmi(sTipoDestEmi, sEstadoDocAdm) {
@@ -2141,35 +2146,35 @@ function fn_changeTipoDestinatarioDocuEmi(sTipoDestEmi, sEstadoDocAdm) {
     $("#divtablaDestEmiDocAdmPersJuri").hide();
     $("#divtablaDestEmiDocAdmCiudadano").hide();
     $("#divtablaDestEmiDocAdmOtro").hide();
-    
-     
+
+
     /*segdi mvaldera*/
     $("#divGrupoSalida").hide();
     if ((sEstadoDocAdm === "5" || sEstadoDocAdm === "7") && (sTipoDestEmi === "02" || sTipoDestEmi === "03")) // || sTipoDestEmi === "04"))
-        {
-            
-            var p = new Array();
-            p[0] = "accion=goListaGruposDestinosExter";
-            p[1] = "vcoTipo=" + jQuery('#sTipoDestinatario').val();
-            
-            ajaxCall("/srTablaConfiguracion.do", p.join("&"), function(data) {  
-                console.log(data);
-                    refreshScript("divDetalleGrupoDestino", data);
-                }, 'text', false, false, "POST");
-    
-           $("#divGrupoSalida").show();
-        }    
-    
+    {
+
+        var p = new Array();
+        p[0] = "accion=goListaGruposDestinosExter";
+        p[1] = "vcoTipo=" + jQuery('#sTipoDestinatario').val();
+
+        ajaxCall("/srTablaConfiguracion.do", p.join("&"), function (data) {
+            console.log(data);
+            refreshScript("divDetalleGrupoDestino", data);
+        }, 'text', false, false, "POST");
+
+        $("#divGrupoSalida").show();
+    }
+
     /*segdi mvaldera*/
-    
+
     if (sTipoDestEmi === "02") {
         $("#divtablaDestEmiDocAdmPersJuri").show();
     } else if (sTipoDestEmi === "03") {
         $("#divtablaDestEmiDocAdmCiudadano").show();
     } else if (sTipoDestEmi === "04") {
-        $("#divtablaDestEmiDocAdmOtro").show();   
+        $("#divtablaDestEmiDocAdmOtro").show();
     } else {
-        $("#divtablaDestEmiDocAdmIntitu").show(); 
+        $("#divtablaDestEmiDocAdmIntitu").show();
         $("#divGrupoSalida").hide(); /*segdi mvaldera*/
         if (sEstadoDocAdm === "5" || sEstadoDocAdm === "7") {
             $("#divMuestraOpcInstitu").show();
@@ -2177,83 +2182,83 @@ function fn_changeTipoDestinatarioDocuEmi(sTipoDestEmi, sEstadoDocAdm) {
     }
 }
 
-function fn_setDestinoEmitlbOtroOrigen(desDest, tipDocInden, nroDocInden, codDest,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis) {
+function fn_setDestinoEmitlbOtroOrigen(desDest, tipDocInden, nroDocInden, codDest, cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis) {
     var pfila = jQuery('#txtTblDestOtroEmiFilaWhereButton').val();
     var pcol = jQuery('#txtTblDestEmiOtroColWhereButton').val();
     var arrCampo = new Array();
     arrCampo[0] = "1=" + codDest;//codDestOtro
     var bResult = fn_validaDestinatarioOtroDuplicado('tblDestEmiDocAdmOtro', arrCampo);
     //YUAL
-    
+
     if (!bResult) {
-         bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
+        bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
     }
-        var ubigeo=cubiCoddep+','+cubiCodpro+','+cubiCoddis;
-        var nom=noDep+'/'+noPrv+'/'+noDis;
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(desDest);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 1) + ")").text(codDest);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 2) + ")").find('input[type=text]').val(tipDocInden);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 3) + ")").find('input[type=text]').val(nroDocInden);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(5)").text(desDest);
-        
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(10)").find('input[id=txtUbigeoOtro]').val(nom=="//"?"":nom);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(10)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo==",,"?"":ubigeo);
-         
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(11)").find('textarea').val(cproDomicil);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(12)").find('input[type=text]').val(cproEmail);
-        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(13)").find('input[type=text]').val(cproTelefo);
-        
-        
-        if ($("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(4)").text() === "BD") {
-            $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(4)").text("UPD");
-        }
-        removeDomId('windowConsultaOtroOri');
-        fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmOtro', pfila);
- 
+    var ubigeo = cubiCoddep + ',' + cubiCodpro + ',' + cubiCoddis;
+    var nom = noDep + '/' + noPrv + '/' + noDis;
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(desDest);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 1) + ")").text(codDest);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 2) + ")").find('input[type=text]').val(tipDocInden);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 3) + ")").find('input[type=text]').val(nroDocInden);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(5)").text(desDest);
+
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(10)").find('input[id=txtUbigeoOtro]').val(nom == "//" ? "" : nom);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(10)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo == ",," ? "" : ubigeo);
+
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(11)").find('textarea').val(cproDomicil);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(12)").find('input[type=text]').val(cproEmail);
+    $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(13)").find('input[type=text]').val(cproTelefo);
+
+
+    if ($("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(4)").text() === "BD") {
+        $("#tblDestEmiDocAdmOtro tbody tr:eq(" + pfila + ") td:eq(4)").text("UPD");
+    }
+    removeDomId('windowConsultaOtroOri');
+    fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmOtro', pfila);
+
 }
 
 function fn_buscaDestOtroOrigenAgregatbl(cell) {
     var snoOtroOrigen = allTrim(fu_getValorUpperCase(($(cell).parent()).find('input[type=text]').val()));
-    snoOtroOrigen=($(cell).parent()).find('input[type=text]').val(fn_getCleanTextLenGreathree(fn_getCleanTextExpReg(snoOtroOrigen))).val();            
-    if(allTrim(snoOtroOrigen).length >= 0 && allTrim(snoOtroOrigen).length <= 3){  //El texto es entre 1 y 3 caracteres
-        bootbox.alert("<h5>Debe ingresar como mínimo 4 caracteres.</h5>", function() {
+    snoOtroOrigen = ($(cell).parent()).find('input[type=text]').val(fn_getCleanTextLenGreathree(fn_getCleanTextExpReg(snoOtroOrigen))).val();
+    if (allTrim(snoOtroOrigen).length >= 0 && allTrim(snoOtroOrigen).length <= 3) {  //El texto es entre 1 y 3 caracteres
+        bootbox.alert("<h5>Debe ingresar como mínimo 4 caracteres.</h5>", function () {
             bootbox.hideAll();
             //($(cell).parent()).find('input[type=text]').focus();
-        });  
+        });
         return;
-    }    
-        
+    }
+
     if (snoOtroOrigen !== "") {
         var rptValida = validaCaracteres(snoOtroOrigen, "2");
         if (rptValida === "OK") {
             // Expresion regular
 //            var cadena ="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\' ]+$";
-            var cadena ="^[A-Z0-9ÑÁÉÍÓÚ ]+$";
+            var cadena = "^[A-Z0-9ÑÁÉÍÓÚ ]+$";
             var re = new RegExp(cadena);
-            if(snoOtroOrigen.match(re)){
+            if (snoOtroOrigen.match(re)) {
                 var p = new Array();
                 p[0] = "accion=goBuscaDestOtroOrigenAgrega";
                 p[1] = "pnoOtroOrigen=" + snoOtroOrigen;
-                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                     fn_rptaBuscaDestOtroOrigenAgregatbl(data);
                     jQuery('#txtTblDestOtroEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
                     jQuery('#txtTblDestEmiOtroColWhereButton').val(($(cell).parent()).index());
                 },
                         'text', false, false, "POST");
-            }else{
-                bootbox.alert("<h5>Los caracteres ingresados deben contener solo números y letras.</h5>", function() {
+            } else {
+                bootbox.alert("<h5>Los caracteres ingresados deben contener solo números y letras.</h5>", function () {
                     ($(cell).parent()).find('input[type=text]').focus();
-                });                
-            }        
+                });
+            }
         } else {
-            bootbox.alert("<h5>"+rptValida+".</h5>", function() {
+            bootbox.alert("<h5>" + rptValida + ".</h5>", function () {
                 ($(cell).parent()).find('input[type=text]').focus();
-            });              
+            });
         }
     } else {
-        bootbox.alert("<h5>Debe ingresar datos en Nombre Destinatario.</h5>", function() {
+        bootbox.alert("<h5>Debe ingresar datos en Nombre Destinatario.</h5>", function () {
             ($(cell).parent()).find('input[type=text]').focus();
-        });                      
+        });
     }
     return false;
 }
@@ -2297,7 +2302,7 @@ function fn_evalDestinatarioCorrectotblEmiOtro(idTabla, indexFila, indexColDatos
     var countFound = 0;
     for (var i = 0; i < arrInputAnt.length; i++)
     {
-        $("#" + idTabla + " tbody tr:eq(" + indexFila + ") td").each(function(index) {
+        $("#" + idTabla + " tbody tr:eq(" + indexFila + ") td").each(function (index) {
             for (var j = 0; j < arrIndexCompara.length; j++) {
                 if (arrIndexCompara[j] === index) {
                     var valInput = fu_getValorUpperCase($(this).find('input[type=text]').val());
@@ -2327,12 +2332,12 @@ function fn_buscaCiudadanoDestNombreEmi(dni, pvalidKeys) {
             var p = new Array();
             p[0] = "accion=goBuscaCiudadano";
             p[1] = "pnuDoc=" + nuDni;
-            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                 fn_rptaBuscaCiudadanoDestEmi(data, dni);
             },
                     'json', false, false, "POST");
         } else {
-           bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
+            bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
         }
     }
     return false;
@@ -2348,12 +2353,12 @@ function fn_buscaCiudadanoDestEmi(dni, pvalidKeys) {
             var p = new Array();
             p[0] = "accion=goBuscaCiudadano";
             p[1] = "pnuDoc=" + nuDni;
-            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                 fn_rptaBuscaCiudadanoDestEmi(data, dni);
             },
                     'json', false, false, "POST");
         } else {
-           bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
+            bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
         }
     }
     return false;
@@ -2362,8 +2367,8 @@ function fn_buscaCiudadanoDestEmi(dni, pvalidKeys) {
 //YUAL
 function fn_buscaCiudadanoNuDestEmi() {
 
-  //     var pfila2 = jQuery('#txtIndexFilaDestCiudadanoEmiDoc').val();
- // $("#tblDestEmiDocAdmCiudadano tbody tr:eq(" + pfila2 + ") td:eq(2)").find('#txtDNICiudadano').click();  
+    //     var pfila2 = jQuery('#txtIndexFilaDestCiudadanoEmiDoc').val();
+    // $("#tblDestEmiDocAdmCiudadano tbody tr:eq(" + pfila2 + ") td:eq(2)").find('#txtDNICiudadano').click();  
 
 }
 
@@ -2373,7 +2378,7 @@ function fn_rptaBuscaCiudadanoDestEmi(data, cell) {
         var coRespuesta = data.coRespuesta;
         var ciudadano = data.ciudadano;
         if (coRespuesta === "1") {
-            (($(cell).parent()).parent()).children().each(function(index) {
+            (($(cell).parent()).parent()).children().each(function (index) {
                 switch (index)
                 {
                     case 0:
@@ -2388,16 +2393,16 @@ function fn_rptaBuscaCiudadanoDestEmi(data, cell) {
                         break;
                     case 8:
                         $(this).find('input[id=txtUbigeoOtro]').val(ciudadano.ubigeo);
-                        $(this).find('input[id=txtCodigoUbigeoOtro]').val(ciudadano.ubdep+','+ciudadano.ubprv+','+ciudadano.ubdis);
+                        $(this).find('input[id=txtCodigoUbigeoOtro]').val(ciudadano.ubdep + ',' + ciudadano.ubprv + ',' + ciudadano.ubdis);
                         break;
                     case 9:
-                        $(this).find('textarea').val(ciudadano.dedomicil=="null"?"":ciudadano.dedomicil);
+                        $(this).find('textarea').val(ciudadano.dedomicil == "null" ? "" : ciudadano.dedomicil);
                         break;
                     case 10:
-                        $(this).find('input[type=text]').val(ciudadano.deemail=="null"?"":ciudadano.deemail);
+                        $(this).find('input[type=text]').val(ciudadano.deemail == "null" ? "" : ciudadano.deemail);
                         break;
                     case 11:
-                        $(this).find('input[type=text]').val(ciudadano.detelefo=="null"?"":ciudadano.detelefo);
+                        $(this).find('input[type=text]').val(ciudadano.detelefo == "null" ? "" : ciudadano.detelefo);
                         break;
                     default:
                         break;
@@ -2409,7 +2414,7 @@ function fn_rptaBuscaCiudadanoDestEmi(data, cell) {
             }
             fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmCiudadano', (($(cell).parent()).parent()).index());
         } else {
-            bootbox.alert("<h5>No se encuentra ciudadano en la base de datos de la Institución.</h5>");                           
+            bootbox.alert("<h5>No se encuentra ciudadano en la base de datos de la Institución.</h5>");
         }
     }
 }
@@ -2423,43 +2428,43 @@ function fu_cambioTxtEmiDocCiudadano(input) {
 function fn_buscaDestProveedorAgregatbl(cell) {
     var snoRazonSocial = allTrim(fu_getValorUpperCase(($(cell).parent()).find('input[type=text]').val()));
     //snoRazonSocial=($(cell).parent()).find('input[type=text]').val(fn_getCleanTextLenGreathree(fn_getCleanTextExpReg(snoRazonSocial))).val();            
-    if(allTrim(snoRazonSocial).length >= 0 && allTrim(snoRazonSocial).length <= 3){  //El texto es entre 1 y 3 caracteres
-        bootbox.alert("<h5>Debe ingresar como mínimo 4 caracteres.</h5>", function() {
+    if (allTrim(snoRazonSocial).length >= 0 && allTrim(snoRazonSocial).length <= 3) {  //El texto es entre 1 y 3 caracteres
+        bootbox.alert("<h5>Debe ingresar como mínimo 4 caracteres.</h5>", function () {
             bootbox.hideAll();
             //($(cell).parent()).find('input[type=text]').focus();
-        });  
+        });
         return;
-    }        
+    }
     if (snoRazonSocial !== "") {
         var rptValida = validaCaracteres(snoRazonSocial, "2");
         if (rptValida === "OK") {
             // Expresion regular
-            var cadena ="^[A-Z0-9ÑÁÉÍÓÚ ]+$";
+            var cadena = "^[A-Z0-9ÑÁÉÍÓÚ ]+$";
             var re = new RegExp(cadena);
-            if(snoRazonSocial.match(re)){            
+            if (snoRazonSocial.match(re)) {
                 var p = new Array();
                 p[0] = "accion=goBuscaDestProveedorAgrega";
                 p[1] = "prazonSocial=" + snoRazonSocial;
-                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                     fn_rptaBuscaDestProveedorAgregatbl(data);
                     jQuery('#txtTblDestProveedorEmiFilaWhereButton').val((($(cell).parent()).parent()).index());
                     jQuery('#txtTblDestEmiProveedorColWhereButton').val(($(cell).parent()).index());
                 },
                         'text', false, false, "POST");
-            }else{
-                bootbox.alert("<h5>Los caracteres ingresados deben contener solo números y letras.</h5>", function() {
+            } else {
+                bootbox.alert("<h5>Los caracteres ingresados deben contener solo números y letras.</h5>", function () {
                     ($(cell).parent()).find('input[type=text]').focus();
-                });                  
-            }                     
+                });
+            }
         } else {
-            bootbox.alert("<h5>"+rptValida+".</h5>", function() {
+            bootbox.alert("<h5>" + rptValida + ".</h5>", function () {
                 ($(cell).parent()).find('input[type=text]').focus();
-            });            
+            });
         }
     } else {
-        bootbox.alert("<h5>Debe ingresar datos en Nombre Destinatario.</h5>", function() {
+        bootbox.alert("<h5>Debe ingresar datos en Nombre Destinatario.</h5>", function () {
             ($(cell).parent()).find('input[type=text]').focus();
-        });                    
+        });
     }
     return false;
 }
@@ -2470,38 +2475,38 @@ function fn_rptaBuscaDestProveedorAgregatbl(XML_AJAX) {
     }
 }
 
-function fn_setDestinoEmitlbProveedor(prazonSocial, pnuRuc,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis) {
+function fn_setDestinoEmitlbProveedor(prazonSocial, pnuRuc, cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis) {
     var arrCampo = new Array();
     arrCampo[0] = "7=" + pnuRuc;
     var bResult = fn_validaDestinatarioOtroDuplicado('tblDestEmiDocAdmPersJuri', arrCampo);
     if (bResult) {
-        
+
         var pfila = jQuery('#txtTblDestProveedorEmiFilaWhereButton').val();
         var pcol = jQuery('#txtTblDestEmiProveedorColWhereButton').val();
-        var ubigeo=cubiCoddep+','+cubiCodpro+','+cubiCoddis;
-        var nom=noDep+'/'+noPrv+'/'+noDis;
-        
+        var ubigeo = cubiCoddep + ',' + cubiCodpro + ',' + cubiCoddis;
+        var nom = noDep + '/' + noPrv + '/' + noDis;
+
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(7)").text(pnuRuc);
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(prazonSocial);
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 2) + ")").find('input[type=text]').val(pnuRuc);
-        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtUbigeoOtro]').val(nom=="//"?"":nom);
-        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo==",,"?"":ubigeo);
+        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtUbigeoOtro]').val(nom == "//" ? "" : nom);
+        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo == ",," ? "" : ubigeo);
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(10)").find('textarea').val(cproDomicil);
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(11)").find('input[type=text]').val(cproEmail);
         $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(12)").find('input[type=text]').val(cproTelefo);
-        
-        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(4)").text(prazonSocial);        
+
+        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(4)").text(prazonSocial);
         if ($("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(3)").text() === "BD") {
             $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(3)").text("UPD");
         }
-       
+
         removeDomId('windowConsultaProveedor');
         fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmPersJuri', pfila);
-             } else {
+    } else {
         removeDomId('windowConsultaProveedor');
-       bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
+        bootbox.alert("DESTINATARIO YA SE ENCUENTRA EN LISTA..");
     }
-    
+
 }
 
 function fu_cambioTxtEmiNomProveedor(input) {
@@ -2519,7 +2524,7 @@ function fn_updateTblsEmisioDocAdm(XML_AJAX) {
         p[1] = "pnuAnn=" + $("#nuAnn").val();
         p[2] = "pnuEmi=" + $("#nuEmi").val();
         p[3] = "pcoDependencia=" + $("#coDepEmi").val();
-        ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
             if (data !== null) {
                 refreshScript("divtablaRefEmiDocAdm", data);
                 $("#txtIndexFilaRefEmiDoc").val("-1");
@@ -2534,11 +2539,11 @@ function fn_updateTblsEmisioDocAdm(XML_AJAX) {
     }
 }
 
-function fn_validaDocumentoRefLista(pfila,pcol, pnuAnn, pnuEmi, pnuDes) {
+function fn_validaDocumentoRefLista(pfila, pcol, pnuAnn, pnuEmi, pnuDes) {
     var countFound = 0;
-    $("#tblRefEmiDocAdm tbody tr").each(function(index, row) {
+    $("#tblRefEmiDocAdm tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
-            if(index !== pfila){
+            if (index !== pfila) {
                 var pnuAnnRef = $(row).find("td:eq(" + (pcol * 1 + 2) + ")").text();
                 var pnuEmiRef = $(row).find("td:eq(" + (pcol * 1 + 3) + ")").text();
                 //var pnuDesRef = $(row).find("td:eq(" + (pcol * 1 + 4) + ")").text();
@@ -2563,7 +2568,7 @@ function fn_validaDestinatarioIntituDuplicado(idTabla, arrCamposCompara, bcomFil
     auxArrCamposCompara = arrCamposCompara[1].split("=");
     var indexColEmpleado = auxArrCamposCompara[0] * 1;
     var coEmple = auxArrCamposCompara[1];
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
             if (bcomFilaActual) {
                 if (index !== indexFilaActual) {
@@ -2587,7 +2592,7 @@ function fn_validaDestinatarioIntituDuplicado(idTabla, arrCamposCompara, bcomFil
 
 function fn_validaDestinatarioOtroDuplicado(idTabla, arrCamposCompara) {
     var countFound = 0;
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
             for (var i = 0; i < arrCamposCompara.length; i++) {
                 var auxArrCamposCompara = arrCamposCompara[i].split("=");
@@ -2611,137 +2616,136 @@ function fn_cargaDocEmi() {
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     var pesDocEmi = jQuery('#documentoEmiBean').find('#esDocEmi').val();
     $('#inCargar').val("N");
-   
+
     /*if (pesDocEmi === "7") {
-        ptiOpe = "4";
-    }*/
+     ptiOpe = "4";
+     }*/
     if (pesDocEmi != "7") {
-     //   ptiOpe = "4";
-      var ptiOpe = "3";
-    
-    var resulCarga = "ERROR";
-    var docs;
-    if (!!pnuAnn&&!!pnuEmi) {
-        if(fu_existeVistoBuenoDocAdm()){ 
-            alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");            
-        }else{
-            /* Obteniendo la ruta de Carga*/
-            var p = new Array();
-            p[0] = "accion=goRutaCargaDoc";
-            p[1] = "nuAnn=" + pnuAnn;
-            p[2] = "nuEmi=" + pnuEmi;
-            p[3] = "tiOpe=" + ptiOpe;
-            ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                eval("docs=" + data);
-                console.log('docs:'+docs);
-                console.log('data:'+data);
-                
-                if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
-                    //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
-                    fn_cargaDocDesktop(docs.noUrl, docs.noDoc,function(data){
-                    resulCarga=data;
-                    console.log('Cargando WORD'+docs.noDoc);
-                    console.log(resulCarga);
-                        if (resulCarga !== "ERROR" && resulCarga !== "NO") {
-                            var p = new Array();
-                            p[0] = "accion=goCargarDocEmi";
-                            p[1] = "nuAnn=" + pnuAnn;
-                            p[2] = "nuEmi=" + pnuEmi;
-                            p[3] = "tiOpe=" + ptiOpe;
-                            p[4] = "nuSec=" + resulCarga;
-                            p[5] = "noDoc=" + docs.noDoc;
-                            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-                                var rpta;
-                                try {
-                                    eval("var rptaOb=" + data);
-                                    rpta = rptaOb;
-                                } catch (e) {
-                                   bootbox.alert(data);
-                                   return;
-                                }
-                                if (typeof (rpta) !== "undefined" && typeof (rpta.coRespuesta) !== 'undefined' && rpta.coRespuesta !== "") {
-                                    if (rpta.coRespuesta === "1") {
-                                        alert_Sucess("Repositorio: ", rpta.deRespuesta);
-                                        
-                                        cargarPDF(pnuAnn,pnuEmi,pesDocEmi);
-                                        
+        //   ptiOpe = "4";
+        var ptiOpe = "3";
+
+        var resulCarga = "ERROR";
+        var docs;
+        if (!!pnuAnn && !!pnuEmi) {
+            if (fu_existeVistoBuenoDocAdm()) {
+                alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");
+            } else {
+                /* Obteniendo la ruta de Carga*/
+                var p = new Array();
+                p[0] = "accion=goRutaCargaDoc";
+                p[1] = "nuAnn=" + pnuAnn;
+                p[2] = "nuEmi=" + pnuEmi;
+                p[3] = "tiOpe=" + ptiOpe;
+                ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+                    eval("docs=" + data);
+                    console.log('docs:' + docs);
+                    console.log('data:' + data);
+
+                    if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                        //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
+                        fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function (data) {
+                            resulCarga = data;
+                            console.log('Cargando WORD' + docs.noDoc);
+                            console.log(resulCarga);
+                            if (resulCarga !== "ERROR" && resulCarga !== "NO") {
+                                var p = new Array();
+                                p[0] = "accion=goCargarDocEmi";
+                                p[1] = "nuAnn=" + pnuAnn;
+                                p[2] = "nuEmi=" + pnuEmi;
+                                p[3] = "tiOpe=" + ptiOpe;
+                                p[4] = "nuSec=" + resulCarga;
+                                p[5] = "noDoc=" + docs.noDoc;
+                                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
+                                    var rpta;
+                                    try {
+                                        eval("var rptaOb=" + data);
+                                        rpta = rptaOb;
+                                    } catch (e) {
+                                        bootbox.alert(data);
+                                        return;
                                     }
-                                    else {
-                                        alert_Danger("Repositorio: ", rpta.deRespuesta);
+                                    if (typeof (rpta) !== "undefined" && typeof (rpta.coRespuesta) !== 'undefined' && rpta.coRespuesta !== "") {
+                                        if (rpta.coRespuesta === "1") {
+                                            alert_Sucess("Repositorio: ", rpta.deRespuesta);
+
+                                            cargarPDF(pnuAnn, pnuEmi, pesDocEmi);
+
+                                        } else {
+                                            alert_Danger("Repositorio: ", rpta.deRespuesta);
+                                        }
                                     }
-                                }
-                            }, 'text', false, false, "POST");
-                        } else {
-                            alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente.");
-                        }
-                    });
-                }
-            }, 'text', true, false, "POST");
-            
-       
-            
-            /* */            
+                                }, 'text', false, false, "POST");
+                            } else {
+                                alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente.");
+                            }
+                        });
+                    }
+                }, 'text', true, false, "POST");
+
+
+
+                /* */
+            }
+        } else {
+            alert_Warning("Emisión :", "Necesita grabar los cambios.");
         }
-    } else {
-        alert_Warning("Emisión :", "Necesita grabar los cambios.");
-    }
-    
+
     }
 }
 
-function cargarPDF(pnuAnn,pnuEmi,pesDocEmi)
-{    var resulCarga = "ERROR";
-           var  ptiOpe = "4";
-              /* Obteniendo la ruta de Carga*/
-            var p = new Array();
-                var docs;
-            p[0] = "accion=goRutaCargaDoc";
-            p[1] = "nuAnn=" + pnuAnn;
-            p[2] = "nuEmi=" + pnuEmi;
-            p[3] = "tiOpe=" + ptiOpe;
-            ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                eval("docs=" + data);
-                console.log(docs);
-                if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
-                    //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
-                    fn_cargaDocDesktop(docs.noUrl, docs.noDoc,function(data){
-                    resulCarga=data;
-                    console.log('Cargando WORD'+docs.noDoc);
-                    console.log(resulCarga);
-                        if (resulCarga !== "ERROR" && resulCarga !== "NO") {
-                            var p = new Array();
-                            p[0] = "accion=goCargarDocEmi";
-                            p[1] = "nuAnn=" + pnuAnn;
-                            p[2] = "nuEmi=" + pnuEmi;
-                            p[3] = "tiOpe=" + ptiOpe;
-                            p[4] = "nuSec=" + resulCarga;
-                            p[5] = "noDoc=" + docs.noDoc;
-                            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-                                var rpta;
-                                try {
-                                    eval("var rptaOb=" + data);
-                                    rpta = rptaOb;
-                                } catch (e) {
-                                   bootbox.alert(data);
-                                   return;
-                                }
-                                if (typeof (rpta) !== "undefined" && typeof (rpta.coRespuesta) !== 'undefined' && rpta.coRespuesta !== "") {
-                                    if (rpta.coRespuesta === "1") {
-                                        alert_Sucess("Repositorio: ", rpta.deRespuesta);
-                                    }
-                                    else {
-                                        alert_Danger("Repositorio: ", rpta.deRespuesta);
-                                    }
-                                }
-                            }, 'text', false, false, "POST");
-                        } else {
-                            alert_Danger("Repositorio: ", "Error al cargar documento PDF, intente nuevamente.");
+function cargarPDF(pnuAnn, pnuEmi, pesDocEmi)
+{
+    var resulCarga = "ERROR";
+    var ptiOpe = "4";
+    /* Obteniendo la ruta de Carga*/
+    var p = new Array();
+    var docs;
+    p[0] = "accion=goRutaCargaDoc";
+    p[1] = "nuAnn=" + pnuAnn;
+    p[2] = "nuEmi=" + pnuEmi;
+    p[3] = "tiOpe=" + ptiOpe;
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+        eval("docs=" + data);
+        console.log(docs);
+        if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+            //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
+            fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function (data) {
+                resulCarga = data;
+                console.log('Cargando WORD' + docs.noDoc);
+                console.log(resulCarga);
+                if (resulCarga !== "ERROR" && resulCarga !== "NO") {
+                    var p = new Array();
+                    p[0] = "accion=goCargarDocEmi";
+                    p[1] = "nuAnn=" + pnuAnn;
+                    p[2] = "nuEmi=" + pnuEmi;
+                    p[3] = "tiOpe=" + ptiOpe;
+                    p[4] = "nuSec=" + resulCarga;
+                    p[5] = "noDoc=" + docs.noDoc;
+                    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
+                        var rpta;
+                        try {
+                            eval("var rptaOb=" + data);
+                            rpta = rptaOb;
+                        } catch (e) {
+                            bootbox.alert(data);
+                            return;
                         }
-                    });
+                        if (typeof (rpta) !== "undefined" && typeof (rpta.coRespuesta) !== 'undefined' && rpta.coRespuesta !== "") {
+                            if (rpta.coRespuesta === "1") {
+                                alert_Sucess("Repositorio: ", rpta.deRespuesta);
+                            } else {
+                                alert_Danger("Repositorio: ", rpta.deRespuesta);
+                            }
+                        }
+                    }, 'text', false, false, "POST");
+                } else {
+                    alert_Danger("Repositorio: ", "Error al cargar documento PDF, intente nuevamente.");
                 }
-            }, 'text', true, false, "POST");
-    
-    
+            });
+        }
+    }, 'text', true, false, "POST");
+
+
 }
 
 function fn_cargaDocEmiPase() {
@@ -2754,22 +2758,22 @@ function fn_cargaDocEmiPase() {
     }
     var resulCarga = "ERROR";
     var docs;
-    if (!!pnuAnn&&!!pnuEmi) {
-        if(fu_existeVistoBuenoDocAdm()){ 
-            alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");            
-        }else{
+    if (!!pnuAnn && !!pnuEmi) {
+        if (fu_existeVistoBuenoDocAdm()) {
+            alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");
+        } else {
             /* Obteniendo la ruta de Carga*/
             var p = new Array();
             p[0] = "accion=goRutaCargaDoc";
             p[1] = "nuAnn=" + pnuAnn;
             p[2] = "nuEmi=" + pnuEmi;
             p[3] = "tiOpe=" + ptiOpe;
-            ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+            ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
                 eval("docs=" + data);
-                if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
                     //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
-                    fn_cargaDocDesktop(docs.noUrl, docs.noDoc,function(data){
-                    resulCarga=data;
+                    fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function (data) {
+                        resulCarga = data;
                         if (resulCarga !== "ERROR" && resulCarga !== "NO") {
                             var p = new Array();
                             p[0] = "accion=goCargarDocEmi";
@@ -2778,20 +2782,19 @@ function fn_cargaDocEmiPase() {
                             p[3] = "tiOpe=" + ptiOpe;
                             p[4] = "nuSec=" + resulCarga;
                             p[5] = "noDoc=" + docs.noDoc;
-                            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                                 var rpta;
                                 try {
                                     eval("var rptaOb=" + data);
                                     rpta = rptaOb;
                                 } catch (e) {
-                                   bootbox.alert(data);
+                                    bootbox.alert(data);
 //                                   return;
                                 }
                                 if (typeof (rpta) !== "undefined" && typeof (rpta.coRespuesta) !== 'undefined' && rpta.coRespuesta !== "") {
                                     if (rpta.coRespuesta === "1") {
                                         alert_Sucess("Repositorio: ", rpta.deRespuesta);
-                                    }
-                                    else {
+                                    } else {
                                         alert_Danger("Repositorio: ", rpta.deRespuesta);
                                     }
                                 }
@@ -2802,7 +2805,7 @@ function fn_cargaDocEmiPase() {
                     });
                 }
             }, 'text', true, false, "POST");
-            /* */            
+            /* */
         }
     } else {
         alert_Warning("Emisión :", "Necesita grabar los cambios.");
@@ -2826,19 +2829,19 @@ function fn_eliminarDocEmiAdm() {
                 SI: {
                     label: "SI",
                     className: "btn-primary",
-                    callback: function() {
+                    callback: function () {
                         $('#documentoEmiBean').find('select').removeProp('disabled');
-                        ajaxCall("/srDocumentoAdmEmision.do?accion=goEliminarDocEmiAdm", $('#documentoEmiBean').serialize(), function(data) {
+                        ajaxCall("/srDocumentoAdmEmision.do?accion=goEliminarDocEmiAdm", $('#documentoEmiBean').serialize(), function (data) {
                             fn_rptEliminarDocEmiAdm(data);
                         }, 'json', false, false, "POST");
-                    }                        
+                    }
                 },
                 NO: {
                     label: "NO",
                     className: "btn-default"
                 }
             }
-        });           
+        });
     }
     return false;
 }
@@ -2860,9 +2863,9 @@ function fn_anularDocEmiAdm() {
     if (nrpta === "1") {
         alert_Warning("Emisión :", "Necesita grabar los cambios.");
     } else {
-        if(fu_existeVistoBuenoDocAdm()){ 
-            alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");            
-        }else{
+        if (fu_existeVistoBuenoDocAdm()) {
+            alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");
+        } else {
             var pesDocEmi = jQuery('#documentoEmiBean').find('#esDocEmi').val();
             if (pesDocEmi !== null && (pesDocEmi === "0" || pesDocEmi === "5" || pesDocEmi === "7")) {
                 bootbox.dialog({
@@ -2871,23 +2874,23 @@ function fn_anularDocEmiAdm() {
                         SI: {
                             label: "SI",
                             className: "btn-primary",
-                            callback: function() {
+                            callback: function () {
                                 $('#documentoEmiBean').find('select').removeProp('disabled');
-                                ajaxCall("/srDocumentoAdmEmision.do?accion=goAnularDocEmiAdm", $('#documentoEmiBean').serialize(), function(data) {
+                                ajaxCall("/srDocumentoAdmEmision.do?accion=goAnularDocEmiAdm", $('#documentoEmiBean').serialize(), function (data) {
                                     fn_rptAnularDocEmiAdm(data);
                                 }, 'json', false, false, "POST");
-                            }                        
+                            }
                         },
                         NO: {
                             label: "NO",
                             className: "btn-default"
                         }
                     }
-                });               
+                });
             } else {
                 //alert("Documento ya fue leido por los Destinatarios!!");
                 alert_Warning("Emisión :", "Documento ya fue leido por los Destinatarios.");
-            }            
+            }
         }
     }
     return false;
@@ -2898,7 +2901,7 @@ function fn_rptAnularDocEmiAdm(data) {
         if (data.coRespuesta === "1") {
             regresarEmitDocumAdm('0');
         } else {
-           bootbox.alert(data.deRespuesta);
+            bootbox.alert(data.deRespuesta);
         }
     }
 }
@@ -2931,30 +2934,30 @@ function fn_validarToDespacho(stipo) {
 }
 
 function fn_verificarExisteDestinatario(idTabla) {
-    var limCaracter=false;
+    var limCaracter = false;
     var found = false;
     var nroFilas = 0;
     var vResult;
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto') && !found) {
             nroFilas++;
             if ($(row).find('td').last().html() !== "1") {
                 found = true;
                 return false;
             }
-            if(!found){
-                $(row).find('textarea').each(function(index,txtArea){
-                    if(!found){
+            if (!found) {
+                $(row).find('textarea').each(function (index, txtArea) {
+                    if (!found) {
                         var maxLengthIndica = $(this).attr('maxlength');
-                        if(!!maxLengthIndica){
-                          var pdeIndica = $(this).val();  
-                          var nrolinesDeIndica = (pdeIndica.match(/\n/g) || []).length;
-                          if(pdeIndica.length+nrolinesDeIndica > maxLengthIndica){
-                              found = true;
-                              limCaracter=true;
-                              $(this).focus();
-                              return false;
-                          }                  
+                        if (!!maxLengthIndica) {
+                            var pdeIndica = $(this).val();
+                            var nrolinesDeIndica = (pdeIndica.match(/\n/g) || []).length;
+                            if (pdeIndica.length + nrolinesDeIndica > maxLengthIndica) {
+                                found = true;
+                                limCaracter = true;
+                                $(this).focus();
+                                return false;
+                            }
                         }
                     }
                 });
@@ -2962,9 +2965,9 @@ function fn_verificarExisteDestinatario(idTabla) {
         }
     });
     if (found) {
-        if(limCaracter){
-          vResult = "0La Indicación Excede el límite de 600 caracteres";  
-        }else{
+        if (limCaracter) {
+            vResult = "0La Indicación Excede el límite de 600 caracteres";
+        } else {
             vResult = "0Corregir";
         }
     } else {
@@ -2978,16 +2981,16 @@ function fn_verificarExisteDestinatario(idTabla) {
 }
 
 function fn_verificarExisteFila(idTabla) {
-   
+
     var found = false;
     var nroFilas = 0;
-    
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto') && !found) {
-                nroFilas++;
- 
-            }
-        
+            nroFilas++;
+
+        }
+
     });
 
     return nroFilas;
@@ -2997,12 +3000,12 @@ function fn_verificarExisteFila(idTabla) {
 function fn_validarEnvioGrabaDocEmiAdm(objTrxDocumentoEmiBean) {
     console.log(objTrxDocumentoEmiBean);
     var vReturn = "0EL DOCUMENTO ES EL MISMO.";
-    if (objTrxDocumentoEmiBean !== null && typeof(objTrxDocumentoEmiBean) !== "undefined") {
-        if (typeof(objTrxDocumentoEmiBean.documentoEmiBean) !== "undefined" || typeof(objTrxDocumentoEmiBean.expedienteEmiBean) !== "undefined" ||
-                typeof(objTrxDocumentoEmiBean.remitenteEmiBean) !== "undefined") {
+    if (objTrxDocumentoEmiBean !== null && typeof (objTrxDocumentoEmiBean) !== "undefined") {
+        if (typeof (objTrxDocumentoEmiBean.documentoEmiBean) !== "undefined" || typeof (objTrxDocumentoEmiBean.expedienteEmiBean) !== "undefined" ||
+                typeof (objTrxDocumentoEmiBean.remitenteEmiBean) !== "undefined") {
             vReturn = "1A GRABAR";
-        } else if (typeof(objTrxDocumentoEmiBean.lstReferencia) !== "undefined" || typeof(objTrxDocumentoEmiBean.lstDestinatario) !== "undefined" ||
-                typeof(objTrxDocumentoEmiBean.lstEmpVoBo) !== "undefined") {//add vobo
+        } else if (typeof (objTrxDocumentoEmiBean.lstReferencia) !== "undefined" || typeof (objTrxDocumentoEmiBean.lstDestinatario) !== "undefined" ||
+                typeof (objTrxDocumentoEmiBean.lstEmpVoBo) !== "undefined") {//add vobo
             if (objTrxDocumentoEmiBean.lstReferencia.length > 0 || objTrxDocumentoEmiBean.lstDestinatario.length > 0 || objTrxDocumentoEmiBean.lstEmpVoBo.length > 0) {
                 vReturn = "1A GRABAR";
             }
@@ -3020,20 +3023,20 @@ function fn_abrirDocumentoEmi() {
     if (!!pnuAnn && !!pnuEmi) {
         var p = new Array();
         //p[0] = "accion=goDocRutaAbrirEmi";
-        p[0] = "accion=goDocRutaAbrirEmiReporte";        
+        p[0] = "accion=goDocRutaAbrirEmiReporte";
         p[1] = "nuAnn=" + pnuAnn;
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "tiOpe=" + ptiOpe;
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
-            if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+            if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
                 if (docs.retval === "OK") {
                     //result = fn_abrirDocApplet(docs.noUrl, docs.noDoc);
-                    var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc};
+                    var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
                     //runApplet(appletsTramiteDoc.abrirDocumento,param,function(data){
-                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data){
-                        result=data;
+                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function (data) {
+                        result = data;
                     });
                 } else {
                     //Error en Documento
@@ -3053,10 +3056,10 @@ function fn_abrirDocumentoFromPC() {
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     var ptiOpe = "3";
 
-    if (!!pnuAnn&&!!pnuEmi) {
+    if (!!pnuAnn && !!pnuEmi) {
         fn_verDocumentosFromPC(pnuAnn, pnuEmi, ptiOpe);
     } else {
-        alert_Warning("Emisión :", "Necesita grabar los cambios.");        
+        alert_Warning("Emisión :", "Necesita grabar los cambios.");
     }
 
 }
@@ -3067,10 +3070,10 @@ function fn_verDocumentoEmi() {
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     var ptiOpe = "0";
 
-    if (!!pnuAnn&&!!pnuEmi) {
+    if (!!pnuAnn && !!pnuEmi) {
         fn_verDocumentosObj(pnuAnn, pnuEmi, ptiOpe);
     } else {
-        alert_Warning("Emisión :", "Necesita grabar los cambios.");        
+        alert_Warning("Emisión :", "Necesita grabar los cambios.");
     }
 
 }
@@ -3088,29 +3091,29 @@ function fn_agregarDestinatarioIntitucionGrupo() {
             p[0] = "accion=goAgregarDestinatarioIntitucion";
             p[1] = "pcogrupo=" + vcmbGrupo;
             p[2] = "pcoTipDoc=" + jQuery('#documentoEmiBean').find('#coTipDocAdm').val();
-            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                 fn_rptagregarDestinatarioIntitucionGrupo(data, idTabla);
-                   
-                    //YUAL
-                    if($('#cmbPrdAllDestino').val()>1){
+
+                //YUAL
+                if ($('#cmbPrdAllDestino').val() > 1) {
                     fn_setPrioridadFilaTblDestIntitu('tblDestEmiDocAdm', $('#cmbPrdAllDestino').val())
-                    }
+                }
             }, 'json', false, false, "POST");
         }
         //}
     }/*else{
-    bootbox.alert("Seleccionar Grupo.."); 
+     bootbox.alert("Seleccionar Grupo.."); 
      jQuery("#cmbGrupo").focus();
      }*/
- 
-    
+
+
     return false;
 }
 
 function fn_rptagregarDestinatarioIntitucionGrupo(data, idTabla) {
     if (data !== null) {
         if (data.coRespuesta === "1") {
-            $.each(data.lsDestInstitu, function(i, item) {
+            $.each(data.lsDestInstitu, function (i, item) {
                 var arrCampo = new Array();
                 arrCampo[0] = "1=" + item.coDependencia;
                 arrCampo[1] = "5=" + item.coEmpleado;
@@ -3120,7 +3123,7 @@ function fn_rptagregarDestinatarioIntitucionGrupo(data, idTabla) {
                 }
             });
         } else {
-           bootbox.alert(data.deRespuesta);
+            bootbox.alert(data.deRespuesta);
         }
     }
     return false;
@@ -3129,7 +3132,7 @@ function fn_rptagregarDestinatarioIntitucionGrupo(data, idTabla) {
 function fn_verificarLstDestinatarioCorrecto(idTabla) {
     if ($('#' + idTabla + ' >tbody >tr').length === 1 || $("#" + idTabla + " tbody tr td").last().html() === "1") {
         var found = true;
-        $("#" + idTabla + " tbody tr").each(function(index, row) {
+        $("#" + idTabla + " tbody tr").each(function (index, row) {
             if (index > 0) {
                 if ($(row).find('td').last().html() !== "1") {
                     found = false;
@@ -3139,11 +3142,11 @@ function fn_verificarLstDestinatarioCorrecto(idTabla) {
         if (found) {
             return found;
         } else {
-           bootbox.alert("Corregir Destinatario");
+            bootbox.alert("Corregir Destinatario");
             return false;
         }
     } else {
-       bootbox.alert("Corregir Destinatario");
+        bootbox.alert("Corregir Destinatario");
         return false;
     }
 }
@@ -3152,15 +3155,15 @@ function fn_addDestintarioEmiDocGrupo(idTabla, objDes) {
     var esPrimero = $("#" + idTabla + " tbody tr").last().hasClass('oculto');
     var pfila = $("#" + idTabla + " tbody tr:eq(0)").clone().removeClass('oculto').appendTo("#" + idTabla + " tbody").index();
     $("[bt='true']").showBigTextBox({
-        pressAceptarEvent: function(data) {
+        pressAceptarEvent: function (data) {
             if (data.hasChangedText) {
                 changeAccionBDDocEmi(data.currentObject);
             }
-        },maxNumCar:600
+        }, maxNumCar: 600
     });
-    var bDestinOk=true;
+    var bDestinOk = true;
     var p = new Array();
-    $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function(index) {
+    $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function (index) {
         switch (index)
         {
             case 0:
@@ -3178,25 +3181,23 @@ function fn_addDestintarioEmiDocGrupo(idTabla, objDes) {
                 $(this).text(objDes.coLocal);
                 break;
             case 4:
-                var deEmp=objDes.deEmpleado;
-                if(deEmp!==null && allTrim(deEmp)!==""){
+                var deEmp = objDes.deEmpleado;
+                if (deEmp !== null && allTrim(deEmp) !== "") {
                     $(this).find('input[type=text]').val(deEmp);
                     p[2] = allTrim(deEmp);
+                } else {
+                    bDestinOk = false;
                 }
-                else{
-                    bDestinOk=false;
-                }        
 //                $(this).find('input[type=text]').val(objDes.deEmpleado);
 //                p[2] = allTrim(objDes.deEmpleado);
                 break;
             case 5:
-                var coEmp=objDes.coEmpleado;
-                if(coEmp!==null && allTrim(coEmp)!==""){
+                var coEmp = objDes.coEmpleado;
+                if (coEmp !== null && allTrim(coEmp) !== "") {
                     $(this).text(coEmp);
+                } else {
+                    bDestinOk = false;
                 }
-                else{
-                    bDestinOk=false;
-                }                 
                 //$(this).text(objDes.coEmpleado);
                 break;
             case 6:
@@ -3220,7 +3221,7 @@ function fn_addDestintarioEmiDocGrupo(idTabla, objDes) {
         }
     });
     $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(12)").text(p.join("$#"));
-    if(bDestinOk){
+    if (bDestinOk) {
         fn_changeDestinatarioCorrecto(pfila);
     }
 }
@@ -3243,9 +3244,9 @@ function fn_setTramiteTblDestIntitu() {
 }
 
 function fn_setTramiteFilaTblDestIntitu(idTabla, cotramite, detramite) {
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
-            $(row).children('td').each(function(indexx) {
+            $(row).children('td').each(function (indexx) {
                 switch (indexx)
                 {
                     case 6:
@@ -3275,27 +3276,27 @@ function fn_setTramiteFilaTblDestIntitu(idTabla, cotramite, detramite) {
 }
 
 function fn_setIndicacionesTblDestIntitu() {
-    var valRetorno="1";
+    var valRetorno = "1";
     var sindica = allTrim(jQuery("#txtIndicaciones").val());
     if (!!sindica) {
         var maxLengthDeIndica = jQuery("#txtIndicaciones").attr('maxlength');
-        if(!!maxLengthDeIndica){
+        if (!!maxLengthDeIndica) {
             var nrolinesDeIndica = (sindica.match(/\n/g) || []).length;
-            if(sindica.length+nrolinesDeIndica > maxLengthDeIndica){
-                valRetorno="0";
-                bootbox.alert("<h5>La Indicación Excede el límite de "+maxLengthDeIndica+" caracteres.</h5>", function() {
+            if (sindica.length + nrolinesDeIndica > maxLengthDeIndica) {
+                valRetorno = "0";
+                bootbox.alert("<h5>La Indicación Excede el límite de " + maxLengthDeIndica + " caracteres.</h5>", function () {
                     jQuery("#txtIndicaciones").focus();
                 });
                 jQuery("#txtIndicaciones").focus();
-            }             
+            }
         }
-        if(valRetorno==="1"){
+        if (valRetorno === "1") {
             var idTabla = 'tblDestEmiDocAdm';
             var rpta = fn_verificarLstDestinatarioCorrecto(idTabla);
             if (rpta) {
-                $("#" + idTabla + " tbody tr").each(function(index, row) {
+                $("#" + idTabla + " tbody tr").each(function (index, row) {
                     if (index > 0 && !$(row).hasClass('oculto')) {
-                        $(row).children('td').each(function(indexx) {
+                        $(row).children('td').each(function (indexx) {
                             switch (indexx)
                             {
                                 case 8:
@@ -3398,12 +3399,12 @@ function fn_cargarDocumentosAnexos() {
     if (nrpta === "1") {
         alert_Warning("Emisión :", "Necesita grabar los cambios");
     } else {
-        if (!!pnuAnn&&!!pnuEmi) {
-            if(fu_existeVistoBuenoDocAdm()){ 
+        if (!!pnuAnn && !!pnuEmi) {
+            if (fu_existeVistoBuenoDocAdm()) {
                 fn_verAnexoEmiEdit();
                 //alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
-            }else{
-                fn_cargarDocumentosAnexosObj(pnuAnn, pnuEmi);                                
+            } else {
+                fn_cargarDocumentosAnexosObj(pnuAnn, pnuEmi);
             }
         } else {
             //alert("Seleccione una fila de la lista");
@@ -3423,7 +3424,7 @@ function fn_jsonVerificarNumeracionDocEmi(/*ptipoCmb,*/pnuDocEmiAnn, pnuAnn, pnu
     p[5] = "coTipDocAdm=" + pcoTipDocAdm;
     p[6] = "coDepEmi=" + pcoDepEmi;
     p[7] = "nuDocEmi=" + pnuDocEmi;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaJsonVerificarNumeracionDocEmi(data, pnuDocEmiAnn/*,ptipoCmb*/, pcoTipDocAdm);
     }, 'json', false, false, "POST");
 }
@@ -3456,7 +3457,7 @@ function fn_buscarFirmadoPor() {
     var p = new Array();
     p[0] = "accion=goBuscaFirmadoPorEdit";
     p[1] = "pcoDep=" + jQuery('#documentoEmiBean').find('#coDepEmi').val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaEmpleado(data);
     },
             'text', false, false, "POST");
@@ -3466,7 +3467,7 @@ function fn_buscarElaboradoPorEdit() {
     var p = new Array();
     p[0] = "accion=goBuscaElaboradoPorEdit";
     p[1] = "pcoDep=" + jQuery('#documentoEmiBean').find('#coDepEmi').val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaEmpleado(data);
     },
             'text', false, false, "POST");
@@ -3486,107 +3487,106 @@ function fu_setDatoFirmadoPorEdit(cod, desc) {
     removeDomId('windowConsultaElaboradoPor');
 }
 //EJHM
-function fu_sePuedeRevertirDocumento(){
-	 var noForm='#documentoEmiBean';
-	if (jQuery(noForm).find('#txtesDocEmi').val()=="0" &&
-      	  jQuery(noForm).find('#tiEnvMsj').val()=="1" ){
-		  alert_Danger("No puede revertir :", "Documento ha sido derivado a Mensajeria ");
-		   return false;
-	}
-      	  
-      if (jQuery(noForm).find('#txtesDocEmi').val()=="0" &&
-      	  jQuery(noForm).find('#tiEnvMsj').val()=="2" ){
-    	  alert_Danger("No puede revertir:", "Documento ha sido derivado a Mesa de Partes Virtual");
-    	  return false;
-    	  
-      }
-      	
-      return true; 
-	
+function fu_sePuedeRevertirDocumento() {
+    var noForm = '#documentoEmiBean';
+    if (jQuery(noForm).find('#txtesDocEmi').val() == "0" &&
+            jQuery(noForm).find('#tiEnvMsj').val() == "1") {
+        alert_Danger("No puede revertir :", "Documento ha sido derivado a Mensajeria ");
+        return false;
+    }
+
+    if (jQuery(noForm).find('#txtesDocEmi').val() == "0" &&
+            jQuery(noForm).find('#tiEnvMsj').val() == "2") {
+        alert_Danger("No puede revertir:", "Documento ha sido derivado a Mesa de Partes Virtual");
+        return false;
+
+    }
+
+    return true;
+
 }
 function fu_changeEstadoDocEmiAdm(pEstadoDoc) {
-    var pcoFirma=jQuery('#documentoEmiBean').find('#coFirma').val();
-    
-    var grabadoFir="0";
-    
-    if (pEstadoDoc==="5"&&pcoFirma==="S")
+    var pcoFirma = jQuery('#documentoEmiBean').find('#coFirma').val();
+
+    var grabadoFir = "0";
+
+    if (pEstadoDoc === "5" && pcoFirma === "S")
     {
         fn_grabarDocumentoEmiAdm();
-        grabadoFir= "1";
+        grabadoFir = "1";
     }
-    
+
 
     var validaFiltro = fu_verificarCamposDocEmiAdm('1', pEstadoDoc);
 
-    
-    
+
+
     if (validaFiltro === "1") {
         //verificar si necesita grabar el documento.
         var rpta = fu_verificarChangeDocumentoEmiAdm();
         var nrpta = rpta.substr(0, 1);
-        if (nrpta === "1"&&grabadoFir!=="1") {
+        if (nrpta === "1" && grabadoFir !== "1") {
             alert_Warning("Emisión :", "Necesita grabar los cambios");
         } else {
             if (pEstadoDoc === "5") {//a proyecto
-            	if(fu_sePuedeRevertirDocumento()){
-            		  
+                if (fu_sePuedeRevertirDocumento()) {
+
                     bootbox.dialog({
                         message: " <h5>¿ Seguro de Guardar los Cambios ?</h5>",
                         buttons: {
                             SI: {
                                 label: "SI",
                                 className: "btn-primary",
-                                callback: function() {
+                                callback: function () {
                                     fn_changeToProyectoDocEmiAdm();//cambiar a proyecto
-                                    if(grabadoFir==="1")
+                                    if (grabadoFir === "1")
                                     {
                                         regresarEmitDocumAdm('7');
                                     }
-                                }                        
+                                }
                             },
                             NO: {
                                 label: "NO",
                                 className: "btn-default"
                             }
                         }
-                    }); 
-            		
-            	}
-            	
-            	                       
+                    });
+
+                }
+
+
             } else if (pEstadoDoc === "7" && jQuery("#txtEsNuevoDocAdm").val() === "0") {//a Despacho
 //                if(fu_existeVistoBuenoDocAdm()){ 
 //                    alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
 //                }else{                      
-                    rpta = fu_verificarDestinatario("1");
+                rpta = fu_verificarDestinatario("1");
+                nrpta = rpta.substr(0, 1);
+                if (nrpta === "1") {
+                    rpta = fu_verificarReferencia();
                     nrpta = rpta.substr(0, 1);
                     if (nrpta === "1") {
-                        rpta = fu_verificarReferencia();
-                        nrpta = rpta.substr(0, 1);                    
-                        if(nrpta === "1"){
-                            rpta = fu_verificarEmpVoBo();//add vobo
-                            nrpta = rpta.substr(0, 1);            
-                            if(nrpta === "1"){
-                                fn_changeToDespachoDocEmiAdm();//cambiar a Despacho                                           
-                            }else{
-                                alert_Info("Emisión :", rpta);
-                            }                        
-                        }else{
+                        rpta = fu_verificarEmpVoBo();//add vobo
+                        nrpta = rpta.substr(0, 1);
+                        if (nrpta === "1") {
+                            fn_changeToDespachoDocEmiAdm();//cambiar a Despacho                                           
+                        } else {
                             alert_Info("Emisión :", rpta);
                         }
                     } else {
                         alert_Info("Emisión :", rpta);
                     }
+                } else {
+                    alert_Info("Emisión :", rpta);
+                }
 //                }
             } else if (pEstadoDoc === "0") {//Emitir
                 rpta = fn_validarEstadoDocEmiAdm(pEstadoDoc);
                 if (rpta === "1") {
                     fn_changeToEmitidoDocEmiAdm();//cambiar a Emitido
                 }
-            }           
+            }
         }
-    }
-    else
+    } else
     {
         alert_Warning("Emisión de Proveido:", "Necesita grabar los cambios");
     }
@@ -3601,7 +3601,7 @@ function fn_validarEstadoDocEmiAdm(pEstadoDoc) {
             vResult = "1";
         }
         var pnuDocEmi = allTrim(jQuery('#documentoEmiBean').find('#nuDocEmi').val());
-        if (typeof(pnuDocEmi) !== "undefined" && pnuDocEmi !== "") {
+        if (typeof (pnuDocEmi) !== "undefined" && pnuDocEmi !== "") {
             vResult = "1";
         } else {
             vResult = "0";
@@ -3613,7 +3613,7 @@ function fn_validarEstadoDocEmiAdm(pEstadoDoc) {
 }
 
 function fn_grabarDocumentoEmiAdm() {
-   
+
     var validaFiltro = fu_verificarCamposDocEmiAdm('0', '');
     if (validaFiltro === "1") {
         var pesDocEmi = jQuery('#documentoEmiBean').find('#esDocEmi').val();
@@ -3631,11 +3631,11 @@ function fn_grabarDocumentoEmiAdm() {
         }
         if (vResult === "1") {
             rpta = fu_verificarReferencia();
-            nrpta = rpta.substr(0, 1);            
-            if(nrpta === "1"){
+            nrpta = rpta.substr(0, 1);
+            if (nrpta === "1") {
                 rpta = fu_verificarEmpVoBo();//add vobo
-                nrpta = rpta.substr(0, 1);            
-                if(nrpta === "1"){
+                nrpta = rpta.substr(0, 1);
+                if (nrpta === "1") {
                     //verificar si necesita grabar el documento.
                     rpta = fu_verificarChangeDocumentoEmiAdm();
                     nrpta = rpta.substr(0, 1);
@@ -3643,11 +3643,11 @@ function fn_grabarDocumentoEmiAdm() {
                         fn_goGrabarDocumentoEmiAdm();//grabar Documento
                     } else {
                         alert_Info("Emisión :", rpta);
-                    }                    
-                }else{
+                    }
+                } else {
                     alert_Info("Emisión :", rpta);
                 }
-            }else{
+            } else {
                 alert_Info("Emisión :", rpta);
             }
         } else {
@@ -3659,19 +3659,18 @@ function fn_grabarDocumentoEmiAdm() {
 
 
 function fn_grabarDocumentoEmiAdmProveido() {
-    
+
     var validaFiltro = fu_verificarCamposDocEmiAdm('0', '');
     if (validaFiltro === "1") {
-              fn_goGrabarDocumentoEmiAdm();//grabar Documento                   
-                    
-    }
-    else
+        fn_goGrabarDocumentoEmiAdm();//grabar Documento                   
+
+    } else
     {
-         alert_Info("Emisión Proveido: Campos no verificados ", rpta);
+        alert_Info("Emisión Proveido: Campos no verificados ", rpta);
     }
-    
-    
-                    
+
+
+
     return false;
 }
 
@@ -3684,48 +3683,48 @@ function fn_goGrabarDocumentoEmiAdm() {
     var pesnuevoDocEmiAdm = jQuery("#txtEsNuevoDocAdm").val();
     if (pesnuevoDocEmiAdm === "1" && jQuery("#nuAnnExp").val() === "" && jQuery("#nuSecExp").val() === "") {
         /*bootbox.dialog({
-            message: " <h5>¿ Desea crear expediente para este documento ?</h5>",
-            buttons: {
-                SI: {
-                    label: "SI",
-                    className: "btn-primary",
-                    callback: function() {
-                        pcrearExpediente = "1";
-                        fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
-                    }                        
-                },
-                NO: {
-                    label: "NO",
-                    className: "btn-default",
-                    callback: function() {
-                        fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
-                    }                      
-                }
-            }
-        });   */
+         message: " <h5>¿ Desea crear expediente para este documento ?</h5>",
+         buttons: {
+         SI: {
+         label: "SI",
+         className: "btn-primary",
+         callback: function() {
+         pcrearExpediente = "1";
+         fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
+         }                        
+         },
+         NO: {
+         label: "NO",
+         className: "btn-default",
+         callback: function() {
+         fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
+         }                      
+         }
+         }
+         });   */
         var inCreaExpediente = jQuery("#inCreaExpediente").val();
-        if(inCreaExpediente==='SI'){
+        if (inCreaExpediente === 'SI') {
             pcrearExpediente = "1";
-            fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
-    }else{
+            fn_submitGrabarDocumentoEmiAdm(cadenaJson, pcrearExpediente);
+        } else {
             pcrearExpediente = "0";
-       fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
+            fn_submitGrabarDocumentoEmiAdm(cadenaJson, pcrearExpediente);
+        }
+    } else {
+        fn_submitGrabarDocumentoEmiAdm(cadenaJson, pcrearExpediente);
     }
-    }else{
-       fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente); 
-}
 }
 
-function fn_submitGrabarDocumentoEmiAdm(cadenaJson,pcrearExpediente){
+function fn_submitGrabarDocumentoEmiAdm(cadenaJson, pcrearExpediente) {
     jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
-    ajaxCallSendJson("/srDocumentoAdmEmision.do?accion=goGrabaDocumentoEmi&pcrearExpediente=" + pcrearExpediente, cadenaJson, function(data) {
+    ajaxCallSendJson("/srDocumentoAdmEmision.do?accion=goGrabaDocumentoEmi&pcrearExpediente=" + pcrearExpediente, cadenaJson, function (data) {
         fn_rptaGrabaDocumEmiAdmin(data, pcrearExpediente);
     },
-    'json', false, false, "POST");    
+            'json', false, false, "POST");
 }
 
 function fn_changeToProyectoDocEmiAdm() {
-    ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToProyecto", $('#documentoEmiBean').serialize(), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToProyecto", $('#documentoEmiBean').serialize(), function (data) {
         fn_rptaChangeToProyectoDocEmiAdm(data);
     },
             'json', false, false, "POST");
@@ -3739,10 +3738,10 @@ function fn_rptaChangeToProyectoDocEmiAdm(data) {
             fu_cargaEdicionDocAdm("00", jQuery('#documentoEmiBean').find('#esDocEmi').val());
             alert_Sucess("Éxito!", "Transacción completada.");
             jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
-            fn_cargaToolBarEmi();  
+            fn_cargaToolBarEmi();
             $('#divEmitirMensajeria').hide();
         } else {
-            alert_Danger("Emisión :",data.deRespuesta);
+            alert_Danger("Emisión :", data.deRespuesta);
         }
     }
 }
@@ -3751,116 +3750,116 @@ function fn_changeToDespachoDocEmiAdm() {
     var pnuAnn = jQuery('#documentoEmiBean').find('#nuAnn').val();
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val("");
-    
+
     //yual
-    var pCarga="0"; // $('#inCargar').val();
-     var r = new Array();
+    var pCarga = "0"; // $('#inCargar').val();
+    var r = new Array();
     r[0] = "accion=goVerificaCargaDoc";
     r[1] = "pnuAnn=" + pnuAnn;
     r[2] = "pnuEmi=" + pnuEmi;
-    
-    ajaxCall("/srDocObjeto.do", r.join("&"), function(data) {
-        
-       pCarga=data.bCargaDoc;
 
-    
-    var pcoDoc=$('#coTipDocAdm').val();
-    if (pCarga=="0" && pcoDoc !== "232" && pcoDoc !== "304")
-    {
-        alert_Warning("Para Despacho!: ", "Necesita volver a cargar el documento");
-        retval = "ERROR";
-        return;
-    }
-    if (!!pnuAnn && !!pnuEmi) {
-        // Obteniendo la ruta de Carga
-        
+    ajaxCall("/srDocObjeto.do", r.join("&"), function (data) {
+
+        pCarga = data.bCargaDoc;
+
+
+        var pcoDoc = $('#coTipDocAdm').val();
+        if (pCarga == "0" && pcoDoc !== "232" && pcoDoc !== "304")
+        {
+            alert_Warning("Para Despacho!: ", "Necesita volver a cargar el documento");
+            retval = "ERROR";
+            return;
+        }
+        if (!!pnuAnn && !!pnuEmi) {
+            // Obteniendo la ruta de Carga
+
 //        fn_cargaDocEmiPase();
-        
+
 //        console.log("carga word");
-        var p = new Array();
-        p[0] = "accion=goRutaCargaDoc";
-        p[1] = "nuAnn=" + pnuAnn;
-        p[2] = "nuEmi=" + pnuEmi;
-        p[3] = "tiOpe=4";
-        p[4] = "inFor=1";
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(dataRuta) {
-            var retval = "ERROR";
-            var docs;
-            eval("docs=" + dataRuta);
-            if (typeof (docs) !== "undefined" && typeof (docs.retval) !== 'undefined') {
-                if (docs.retval === "OK"){
-                    //Para el caso de Proveido
-                    if (!!docs.coDoc && (docs.coDoc === "232" || docs.coDoc === "304")) {
-                        retval = "OK";
-                        grabarCambioADespacho(retval);
-                        return;
-                        
-                    } else {
-                        if (!!docs.noDoc) {
+            var p = new Array();
+            p[0] = "accion=goRutaCargaDoc";
+            p[1] = "nuAnn=" + pnuAnn;
+            p[2] = "nuEmi=" + pnuEmi;
+            p[3] = "tiOpe=4";
+            p[4] = "inFor=1";
+            ajaxCall("/srDocObjeto.do", p.join("&"), function (dataRuta) {
+                var retval = "ERROR";
+                var docs;
+                eval("docs=" + dataRuta);
+                if (typeof (docs) !== "undefined" && typeof (docs.retval) !== 'undefined') {
+                    if (docs.retval === "OK") {
+                        //Para el caso de Proveido
+                        if (!!docs.coDoc && (docs.coDoc === "232" || docs.coDoc === "304")) {
+                            retval = "OK";
+                            grabarCambioADespacho(retval);
+                            return;
+
+                        } else {
+                            if (!!docs.noDoc) {
 //                            console.log("AQUI1");
-                            var param={rutaDoc:docs.noDoc};
-                            //runApplet(appletsTramiteDoc.verificaSiExisteDoc,param,function(data){
-                            
-                            runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function(data){
-                                retval = data;
-                                if (retval === "SI") {
+                                var param = {rutaDoc: docs.noDoc};
+                                //runApplet(appletsTramiteDoc.verificaSiExisteDoc,param,function(data){
+
+                                runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function (data) {
+                                    retval = data;
+                                    if (retval === "SI") {
 //                                    console.log("AQUI2");
-                                    //var appletObj = jQuery('#firmarDocumento');
-                                    try {
-                                        var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc};
-                                        //runApplet(appletsTramiteDoc.cargarDocumento,param,function(data){
-                                        runOnDesktop(accionOnDesktopTramiteDoc.cargarDocumento, param, function(data){    
-                                            retval = data;
-                                            /*if (retval !== "ERROR" && retval !== "NO") {
-                                                jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(retval);
-                                                retval = "OK";
-                                            }*/
-                                            if(retval.error==="0"){
-                                                jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(retval.message);
-                                                retval = "OK";
-                                            }
-                                            grabarCambioADespacho(retval);
-                                            return;
-                                        });
-                                        
-                                    } catch (ex) {
-                                        alert_Danger("Para Despacho!: ", "Fallo en subir documento al servidor");
-                                        retval = "ERROR";
-                                    }
-                                } else {
-                                    if (!!docs.inFor && docs.inFor === "PDF") {
-                                        retval = "OK";
+                                        //var appletObj = jQuery('#firmarDocumento');
+                                        try {
+                                            var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
+                                            //runApplet(appletsTramiteDoc.cargarDocumento,param,function(data){
+                                            runOnDesktop(accionOnDesktopTramiteDoc.cargarDocumento, param, function (data) {
+                                                retval = data;
+                                                /*if (retval !== "ERROR" && retval !== "NO") {
+                                                 jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(retval);
+                                                 retval = "OK";
+                                                 }*/
+                                                if (retval.error === "0") {
+                                                    jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(retval.message);
+                                                    retval = "OK";
+                                                }
+                                                grabarCambioADespacho(retval);
+                                                return;
+                                            });
+
+                                        } catch (ex) {
+                                            alert_Danger("Para Despacho!: ", "Fallo en subir documento al servidor");
+                                            retval = "ERROR";
+                                        }
                                     } else {
-                                        
-                                        alert_Danger("Para Despacho!: ", "El Documento tiene que estar en PDF");
-                                        retval = "ERROR";
-                                    }
+                                        if (!!docs.inFor && docs.inFor === "PDF") {
+                                            retval = "OK";
+                                        } else {
+
+                                            alert_Danger("Para Despacho!: ", "El Documento tiene que estar en PDF");
+                                            retval = "ERROR";
+                                        }
 //                                    console.log("AQUI3");
-                                    grabarCambioADespacho(retval);
-                                    return;                                    
-                                }
-                                
-                            });
+                                        grabarCambioADespacho(retval);
+                                        return;
+                                    }
+
+                                });
+                            }
+
                         }
-                        
+                    } else {
+                        alert_Danger("Para Despacho!: ", docs.retval);
+                        retval = "ERROR";
                     }
-                } else {
-                    alert_Danger("Para Despacho!: ", docs.retval);
-                    retval = "ERROR";
                 }
-            }
 
-        }, 'text', false, false, "POST");
+            }, 'text', false, false, "POST");
 
-    }   
-       
+        }
+
     }, 'json', false, false, "POST");
-    
-   
+
+
 }
-function grabarCambioADespacho(retval){
+function grabarCambioADespacho(retval) {
     if (retval === "OK") {
-        ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToDespacho", $('#documentoEmiBean').serialize(), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToDespacho", $('#documentoEmiBean').serialize(), function (data) {
             fn_rptaChangeToDespachoDocEmiAdm(data);
         },
                 'json', false, false, "POST");
@@ -3871,19 +3870,18 @@ function grabarCambioADespacho(retval){
 function fn_rptaChangeToDespachoDocEmiAdm(data) {
     if (data !== null) {
         if (data.coRespuesta === "1") {
-            var pcoFirma=jQuery('#documentoEmiBean').find('#coFirma').val();
-            
+            var pcoFirma = jQuery('#documentoEmiBean').find('#coFirma').val();
+
             //console.log("dasasdasd1="+pcoFirma);
-            if(pcoFirma==="S")
+            if (pcoFirma === "S")
             {
-                var pnuAnn=jQuery('#documentoEmiBean').find('#nuAnn').val();
-                var pnuEmi=jQuery('#documentoEmiBean').find('#nuEmi').val();
-                
+                var pnuAnn = jQuery('#documentoEmiBean').find('#nuAnn').val();
+                var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
+
                 /*console.log("dasasdasd2="+pnuAnn);
-                console.log("dasasdasd2="+pnuEmi);*/
-                editarDocumentoEmiClick(pnuAnn, pnuEmi,'1','0');
-            }
-            else
+                 console.log("dasasdasd2="+pnuEmi);*/
+                editarDocumentoEmiClick(pnuAnn, pnuEmi, '1', '0');
+            } else
             {
                 jQuery('#documentoEmiBean').find('#esDocEmi').val("7");
                 fn_seteaCamposDocumentoEmi();//resetear variables del documento
@@ -3895,13 +3893,13 @@ function fn_rptaChangeToDespachoDocEmiAdm(data) {
             }
 
         } else {
-            alert_Danger("Para Despacho!: ",data.deRespuesta);
+            alert_Danger("Para Despacho!: ", data.deRespuesta);
         }
     }
 }
 
-function fn_cargaDocFirmaApplet(pnoDoc,callback) {
-    
+function fn_cargaDocFirmaApplet(pnoDoc, callback) {
+
     var pnuAnn = jQuery('#documentoEmiBean').find('#nuAnn').val();
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     var pnuSecFirmaEmi = jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val();
@@ -3916,19 +3914,21 @@ function fn_cargaDocFirmaApplet(pnoDoc,callback) {
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "tiOpe=" + ptiOpe;
         p[4] = "nuSecFirma=" + pnuSecFirmaEmi;
-        p[5] = "tipoDocumento="+$("#coTipDocAdm").val();
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        p[5] = "tipoDocumento=" + $("#coTipDocAdm").val();
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             eval("docs=" + data);
-            if (typeof(docs) !== "undefined" && typeof(docs.retval) !== 'undefined') {
-               
+            if (typeof (docs) !== "undefined" && typeof (docs.retval) !== 'undefined') {
+
                 if (docs.retval === "OK") {
                     var retval = "";
                     try {
                         //retval = appletObj[0].cargarDocumento(docs.noUrl, pnoDoc);
-                        if($("#txtpdNoFirmaProveido").val()=="1"){pnoDoc=docs.noFirma+".pdf";}
+                        if ($("#txtpdNoFirmaProveido").val() == "1") {
+                            pnoDoc = docs.noFirma + ".pdf";
+                        }
                         var param = {urlDoc: docs.noUrl, rutaDoc: pnoDoc};
                         //runApplet(appletsTramiteDoc.cargarDocumento, param, function(data) {
-                        runOnDesktop(accionOnDesktopTramiteDoc.cargarDocumento, param, function(data){
+                        runOnDesktop(accionOnDesktopTramiteDoc.cargarDocumento, param, function (data) {
                             retval = data;
                             callback(retval);
                             return;
@@ -3948,9 +3948,9 @@ function fn_cargaDocFirmaApplet(pnoDoc,callback) {
                 }
             }
         }, 'text', true, false, "POST");
-        
+
     }
-    
+
 }
 
 function fn_firmarDocumentoEmi() {
@@ -3959,7 +3959,7 @@ function fn_firmarDocumentoEmi() {
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
     jQuery("#rutaDocFirma").val("");
-    
+
     var ptiOpe = "5";
 
     var rpta = fu_verificarChangeDocumentoEmiAdm();
@@ -3967,22 +3967,22 @@ function fn_firmarDocumentoEmi() {
     if (nrpta === "1") {
         alert_Warning("Emisión :", "Necesita grabar los cambios");
     } else {
-        if (!!pnuAnn&&!!pnuEmi) {
+        if (!!pnuAnn && !!pnuEmi) {
             /*if(fu_existeVistoBuenoDocAdm()){
-                alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
-            }else{*/
-            var param={pnuAnn:pnuAnn,pnuEmi:pnuEmi};
-            ajaxCall("/srDocumentoAdmEmision.do?accion=goVerificarVistoBuenoPendiente", param, function(data) {
-                if(data.coRespuesta==="1"){
+             alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
+             }else{*/
+            var param = {pnuAnn: pnuAnn, pnuEmi: pnuEmi};
+            ajaxCall("/srDocumentoAdmEmision.do?accion=goVerificarVistoBuenoPendiente", param, function (data) {
+                if (data.coRespuesta === "1") {
                     var p = new Array();
                     p[0] = "accion=goRutaFirmaDocReporte";
                     p[1] = "nuAnn=" + pnuAnn;
                     p[2] = "nuEmi=" + pnuEmi;
                     p[3] = "tiOpe=" + ptiOpe;
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+                    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
                         var result;
                         eval("var docs=" + data);
-                        if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                        if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
                             if (docs.retval === "OK") {
                                 jQuery('#documentoEmiBean').find("#txtnuDocEmiAn").val(docs.numeroDoc);
                                 jQuery('#documentoEmiBean').find("#nuDocEmi").val(docs.numeroDoc);
@@ -3997,31 +3997,31 @@ function fn_firmarDocumentoEmi() {
                                 //result = fn_firmarDocApplet(docs.noUrl, docs.noDoc);
                                 var inTSA = "0";//indicador timestampin(servidor de tiempo) inactivo.
                                 var cargoEmp = docs.cargoEmpleado;
-                                var cargoEmpInTSA = "$"+inTSA+"$"+cargoEmp;
+                                var cargoEmpInTSA = "$" + inTSA + "$" + cargoEmp;
                                 //var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1"};
-                                var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1" + cargoEmpInTSA};
+                                var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc, tipoFirma: "1" + cargoEmpInTSA};
                                 //runApplet(appletsTramiteDoc.ejecutaFirma,param,function(data){
-                                
-                                runOnDesktop(accionOnDesktopTramiteDoc.ejecutaFirma, param, function(data){
-                                    result=data;
+
+                                runOnDesktop(accionOnDesktopTramiteDoc.ejecutaFirma, param, function (data) {
+                                    result = data;
                                 });
                             } else {
                                 //Error en Documento
                                 alert_Danger("!Repositorio : ", docs.retval);
                             }
                         } else {
-                        	
-                        	  alert_Danger("!Repositorio : ", docs.retval);
+
+                            alert_Danger("!Repositorio : ", docs.retval);
                         }
 
-                    }, 'text', false, false, "POST");                                    
-                }else{
+                    }, 'text', false, false, "POST");
+                } else {
                     alert_Danger("!Emisión : ", data.deRespuesta);
                 }
-            },'json', false, false, "POST");              
+            }, 'json', false, false, "POST");
             /*}*/
         } else {
-           bootbox.alert("Documento no encontrado");
+            bootbox.alert("Documento no encontrado");
         }
     }
 }
@@ -4033,99 +4033,99 @@ function fn_firmarDocumentoEmiProveido() {
     var pnuEmi = jQuery('#txtNuEmiProveido').val();
     jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
     jQuery("#rutaDocFirma").val("");
-    
+
     var ptiOpe = "5";
-/*
-    var rpta = fu_verificarChangeDocumentoEmiAdm();
-    var nrpta = rpta.substr(0, 1);
-    if (nrpta === "1") {
-        alert_Warning("Emisión :", "Necesita grabar los cambios");
-    } else {*/
-        if (!!pnuAnn&&!!pnuEmi) {
-            /*if(fu_existeVistoBuenoDocAdm()){
-                alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
-            }else{*/
-            var param={pnuAnn:pnuAnn,pnuEmi:pnuEmi};
-            ajaxCall("/srDocumentoAdmEmision.do?accion=goVerificarVistoBuenoPendiente", param, function(data) {
-                if(data.coRespuesta==="1"){
-                    var p = new Array();
-                    p[0] = "accion=goRutaFirmaDocReporte";
-                    p[1] = "nuAnn=" + pnuAnn;
-                    p[2] = "nuEmi=" + pnuEmi;
-                    p[3] = "tiOpe=" + ptiOpe;
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                        var result;
-                        eval("var docs=" + data);
-                        if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
-                            if (docs.retval === "OK") {
-                                jQuery('#documentoEmiBean').find("#txtnuDocEmiAn").val(docs.numeroDoc);
-                                jQuery('#documentoEmiBean').find("#nuDocEmi").val(docs.numeroDoc);
-                                jQuery('#esActualizadoNuDocEmi').val("1");
-                                jQuery('#documentoEmiBean').find("#feEmiCorta").val(docs.fechaFirma);
-                                jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val(docs.nuSecFirma);
-                                jQuery("#noPrefijo").val(docs.noPrefijo);
-                                jQuery("#rutaDocFirma").val(docs.noDoc);
-                                jQuery("#inFirmaEmi").val(docs.inFirma);
-                                showBtnEnviarDocAdm();
+    /*
+     var rpta = fu_verificarChangeDocumentoEmiAdm();
+     var nrpta = rpta.substr(0, 1);
+     if (nrpta === "1") {
+     alert_Warning("Emisión :", "Necesita grabar los cambios");
+     } else {*/
+    if (!!pnuAnn && !!pnuEmi) {
+        /*if(fu_existeVistoBuenoDocAdm()){
+         alert_Warning("Emisión : ", "Doc. con Visto Bueno u Observado.");                
+         }else{*/
+        var param = {pnuAnn: pnuAnn, pnuEmi: pnuEmi};
+        ajaxCall("/srDocumentoAdmEmision.do?accion=goVerificarVistoBuenoPendiente", param, function (data) {
+            if (data.coRespuesta === "1") {
+                var p = new Array();
+                p[0] = "accion=goRutaFirmaDocReporte";
+                p[1] = "nuAnn=" + pnuAnn;
+                p[2] = "nuEmi=" + pnuEmi;
+                p[3] = "tiOpe=" + ptiOpe;
+                ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+                    var result;
+                    eval("var docs=" + data);
+                    if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                        if (docs.retval === "OK") {
+                            jQuery('#documentoEmiBean').find("#txtnuDocEmiAn").val(docs.numeroDoc);
+                            jQuery('#documentoEmiBean').find("#nuDocEmi").val(docs.numeroDoc);
+                            jQuery('#esActualizadoNuDocEmi').val("1");
+                            jQuery('#documentoEmiBean').find("#feEmiCorta").val(docs.fechaFirma);
+                            jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val(docs.nuSecFirma);
+                            jQuery("#noPrefijo").val(docs.noPrefijo);
+                            jQuery("#rutaDocFirma").val(docs.noDoc);
+                            jQuery("#inFirmaEmi").val(docs.inFirma);
+                            showBtnEnviarDocAdm();
 
-                                //result = fn_firmarDocApplet(docs.noUrl, docs.noDoc);
-                                var inTSA = "0";//indicador timestampin(servidor de tiempo) inactivo.
-                                var cargoEmp = docs.cargoEmpleado;
-                                var cargoEmpInTSA = "$"+inTSA+"$"+cargoEmp;
-                                //var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1"};
-                                var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1" + cargoEmpInTSA};
-                                //runApplet(appletsTramiteDoc.ejecutaFirma,param,function(data){
-                                runOnDesktop(accionOnDesktopTramiteDoc.ejecutaFirma, param, function(data){
-                                    result=data;
-                                });
-                            } else {
-                                //Error en Documento
-                                alert_Danger("!Repositorio : ", docs.retval);
-                            }
+                            //result = fn_firmarDocApplet(docs.noUrl, docs.noDoc);
+                            var inTSA = "0";//indicador timestampin(servidor de tiempo) inactivo.
+                            var cargoEmp = docs.cargoEmpleado;
+                            var cargoEmpInTSA = "$" + inTSA + "$" + cargoEmp;
+                            //var param={urlDoc:docs.noUrl,rutaDoc:docs.noDoc,tipoFirma:"1"};
+                            var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc, tipoFirma: "1" + cargoEmpInTSA};
+                            //runApplet(appletsTramiteDoc.ejecutaFirma,param,function(data){
+                            runOnDesktop(accionOnDesktopTramiteDoc.ejecutaFirma, param, function (data) {
+                                result = data;
+                            });
+                        } else {
+                            //Error en Documento
+                            alert_Danger("!Repositorio : ", docs.retval);
                         }
+                    }
 
-                    }, 'text', false, false, "POST");                                    
-                }else{
-                    alert_Danger("!Emisión : ", data.deRespuesta);
-                }
-            },'json', false, false, "POST");              
-            /*}*/
-        } else {
-           bootbox.alert("Documento no encontrado");
-        }
+                }, 'text', false, false, "POST");
+            } else {
+                alert_Danger("!Emisión : ", data.deRespuesta);
+            }
+        }, 'json', false, false, "POST");
+        /*}*/
+    } else {
+        bootbox.alert("Documento no encontrado");
+    }
     //}
 }
 
 
-function fn_grabarEmisionDocumento(valDoc,vnoDoc){
-    
+function fn_grabarEmisionDocumento(valDoc, vnoDoc) {
+
     if (valDoc === "SI") {
-        fn_cargaDocFirmaApplet(vnoDoc, function(data) {
+        fn_cargaDocFirmaApplet(vnoDoc, function (data) {
             var resulCarga = data;
             /*if (resulCarga !== "ERROR" && resulCarga !== "NO") {
-                jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(resulCarga);
+             jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(resulCarga);
              
-                
-                ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToEmitido", $('#documentoEmiBean').serialize(), function(data) {
-                   fn_rptaChangeToEmitidoDocEmiAdm(data);                                       
-                },'json', false, false, "POST");       
-                
-                //add yual      
-                //regresarEmitDocumAdm('1');
-                //$('#sEstadoDoc').val('0');
-                //changeTipoBusqEmiDocuAdm('0');
+             
+             ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToEmitido", $('#documentoEmiBean').serialize(), function(data) {
+             fn_rptaChangeToEmitidoDocEmiAdm(data);                                       
+             },'json', false, false, "POST");       
+             
+             //add yual      
+             //regresarEmitDocumAdm('1');
+             //$('#sEstadoDoc').val('0');
+             //changeTipoBusqEmiDocuAdm('0');
+             
+             
+             }*/
 
-                
-            }*/
-          
-            if(resulCarga.error==="0" ){    
-       
+            if (resulCarga.error === "0") {
+
                 jQuery('#documentoEmiBean').find('#nuSecuenciaFirma').val(resulCarga.message);
-                ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToEmitido", $('#documentoEmiBean').serialize(), function(data) {
-                   fn_rptaChangeToEmitidoDocEmiAdm(data);                                       
-                },'json', false, false, "POST");
+                ajaxCall("/srDocumentoAdmEmision.do?accion=goChangeToEmitido", $('#documentoEmiBean').serialize(), function (data) {
+                    fn_rptaChangeToEmitidoDocEmiAdm(data);
+                }, 'json', false, false, "POST");
             }
-        
+
         });
     } else {
         alert_Danger("Firma!", "El Documento no esta Firmado.");
@@ -4133,33 +4133,33 @@ function fn_grabarEmisionDocumento(valDoc,vnoDoc){
 }
 function fn_changeToEmitidoDocEmiAdm() {
     var vnuSecFirma = jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val();
-    var vnoDoc="";
-    if (!!vnuSecFirma && typeof(vnuSecFirma) !== "undefined" && vnuSecFirma !== "") {
+    var vnoDoc = "";
+    if (!!vnuSecFirma && typeof (vnuSecFirma) !== "undefined" && vnuSecFirma !== "") {
         var rutaDocFirma = jQuery("#rutaDocFirma").val();
         var vinFirma = jQuery('#inFirmaEmi').val();
-        if (vinFirma===null || typeof(vinFirma) === "undefined" || vinFirma === ""){
+        if (vinFirma === null || typeof (vinFirma) === "undefined" || vinFirma === "") {
             vinFirma = "F";
         }
         var valDoc = "NO";
         if (!!rutaDocFirma) {
-            
+
             var vnoPrefijo = jQuery("#noPrefijo").val();
-            if (vnoPrefijo==="[NF]"){
-                vnoDoc = rutaDocFirma.substring(0, rutaDocFirma.length - 4) + vnoPrefijo+".pdf";
-            }else{
-                vnoDoc = rutaDocFirma.substring(0, rutaDocFirma.length - 5) +"N"+ vnoPrefijo+".pdf";
+            if (vnoPrefijo === "[NF]") {
+                vnoDoc = rutaDocFirma.substring(0, rutaDocFirma.length - 4) + vnoPrefijo + ".pdf";
+            } else {
+                vnoDoc = rutaDocFirma.substring(0, rutaDocFirma.length - 5) + "N" + vnoPrefijo + ".pdf";
             }
             var param = {rutaDoc: vnoDoc};
             //runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function(data) {
-            runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function(data){                
-                valDoc=data;
-                if($("#txtpdNoFirmaProveido").val()=="1"){
+            runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function (data) {
+                valDoc = data;
+                if ($("#txtpdNoFirmaProveido").val() == "1") {
                     valDoc = "SI";
-                    fn_grabarEmisionDocumento(valDoc,vnoDoc);
+                    fn_grabarEmisionDocumento(valDoc, vnoDoc);
                     return;
                 }
                 if (valDoc === "SI") {
-                    fn_grabarEmisionDocumento(valDoc,vnoDoc);
+                    fn_grabarEmisionDocumento(valDoc, vnoDoc);
                     return;
                 }
                 if (vinFirma === "N" && valDoc !== "SI") {
@@ -4167,12 +4167,12 @@ function fn_changeToEmitidoDocEmiAdm() {
                     //valDoc = fn_verificaSiExisteDoc(vnoDoc);
                     var param = {rutaDoc: vnoDoc};
                     //runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function(data) {
-                    runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function(data){
+                    runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function (data) {
                         valDoc = data;
                         fn_grabarEmisionDocumento(valDoc, vnoDoc);
                         return;
                     });
-                }else{
+                } else {
                     alert_Danger("Firma!", "El Documento no esta Firmado.");
                 }
             });
@@ -4192,102 +4192,101 @@ function fn_rptaChangeToEmitidoDocEmiAdm(data) {
             fu_cargaEdicionDocAdm("00", jQuery('#documentoEmiBean').find('#esDocEmi').val());
             alert_Sucess("Éxito!", "Transacción completada.");
             jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
-            
-            if($('#bFirmaProveido').val()=='1')
+
+            if ($('#bFirmaProveido').val() == '1')
             {
-            fn_cargaToolBarEmiProveido();
-            }
-            else{
+                fn_cargaToolBarEmiProveido();
+            } else {
                 fn_cargaToolBarEmi();
             }
-            
-            
-             var pcoFirma=jQuery('#documentoEmiBean').find('#coFirma').val();
-             if(pcoFirma!='S'){
-              ValidarMensajeria();
-                }   
-            
-            
+
+
+            var pcoFirma = jQuery('#documentoEmiBean').find('#coFirma').val();
+            if (pcoFirma != 'S') {
+                ValidarMensajeria();
+            }
+
+
         } else {
-            
-            alert_Danger("Emisión!",data.deRespuesta);
+
+            alert_Danger("Emisión!", data.deRespuesta);
         }
     }
 }
-function ValidarMensajeria(){
+function ValidarMensajeria() {
     var tblDestEmiDocAdmPersJuri = $('#tblDestEmiDocAdmPersJuri tr').length;
     var tblDestEmiDocAdmOtro = $('#tblDestEmiDocAdmOtro tr').length;
     var tblDestEmiDocAdmCiudadano = $('#tblDestEmiDocAdmCiudadano tr').length;
-   
-    if(tblDestEmiDocAdmPersJuri>1 || tblDestEmiDocAdmOtro>1 || tblDestEmiDocAdmCiudadano>1){
-        
-        var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);  
-        btnEmitirMensajeria.setAttribute("style","color: #ac2925");
+
+    if (tblDestEmiDocAdmPersJuri > 1 || tblDestEmiDocAdmOtro > 1 || tblDestEmiDocAdmCiudadano > 1) {
+
+        var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);
+        btnEmitirMensajeria.setAttribute("style", "color: #ac2925");
         btnEmitirMensajeria.removeAttribute('onclick');
-        btnEmitirMensajeria.setAttribute('onclick','fn_EnviarNotificacion_NEW();');
+        btnEmitirMensajeria.setAttribute('onclick', 'fn_EnviarNotificacion_NEW();');
         $('#divEmitirMensajeria').show();
         fn_EnviarNotificacion_NEW();
     }
 }
-function EnvioOkMensajeria(){     
-        var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);  
-        btnEmitirMensajeria.setAttribute("style","color: #468847");
+function EnvioOkMensajeria() {
+    var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);
+    btnEmitirMensajeria.setAttribute("style", "color: #468847");
+    btnEmitirMensajeria.removeAttribute('onclick');
+    btnEmitirMensajeria.setAttribute('onclick', 'fn_EnviarNotificacion_NEW();');
+    $('#divEmitirMensajeria').show();
+}
+function fn_EnviarNotificacion_NEW() {
+
+    var snuAnn = $("#nuAnn").val() + "";
+    var snuEmi = $("#nuEmi").val() + "";
+    /*interoperabilidad*/
+    var tiEnvMsj = $("#tiEnvMsj").val() + "";
+    var docEstadoMsj = $("#docEstadoMsj").val();
+    /*interoperabilidad*/
+    fn_EnviarNotificacion(snuAnn, snuEmi, tiEnvMsj, '', '', 'NEW', docEstadoMsj);
+    return false;
+
+}
+function LoadMensajeria() {
+    var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);
+    $('#divEmitirMensajeria').hide();
+    $("#divEmitirMensajeria").find("button").attr("style", "");
+    if ($("#docEstadoMsj").val() === "-1" && ($("#txtesDocEmi").val() === "0" || $("#txtesDocEmi").val() === "1") && $("#tiDest").val() != "01")
+    {
+        btnEmitirMensajeria.setAttribute("style", "color: #ac2925");
         btnEmitirMensajeria.removeAttribute('onclick');
-        btnEmitirMensajeria.setAttribute('onclick','fn_EnviarNotificacion_NEW();');
-        $('#divEmitirMensajeria').show();    
+        btnEmitirMensajeria.setAttribute('onclick', 'fn_EnviarNotificacion_edit();');
+        $('#divEmitirMensajeria').show();
+
+    }
+    if ($("#docEstadoMsj").val() === "0" && ($("#txtesDocEmi").val() === "0" || $("#txtesDocEmi").val() === "1") && $("#tiDest").val() != "01")
+    {
+        btnEmitirMensajeria.setAttribute("style", "color: #468847");
+        btnEmitirMensajeria.removeAttribute('onclick');
+        btnEmitirMensajeria.setAttribute('onclick', 'fn_EnviarNotificacion_edit();');
+        $('#divEmitirMensajeria').show();
+
+    }
+    return false;
 }
- function fn_EnviarNotificacion_NEW (){
-     
-             var snuAnn=$("#nuAnn").val()+"";
-             var snuEmi=$("#nuEmi").val()+"";
-             /*interoperabilidad*/
-             var tiEnvMsj=$("#tiEnvMsj").val()+"";
-             var docEstadoMsj=$("#docEstadoMsj").val();
-             /*interoperabilidad*/
-             fn_EnviarNotificacion(snuAnn,snuEmi,tiEnvMsj,'','','NEW',docEstadoMsj);
-             return false;
-            
-         } 
-function LoadMensajeria(){
-    var btnEmitirMensajeria = jQuery('#divEmitirMensajeria').find('button').get(0);               
-            $('#divEmitirMensajeria').hide();
-            $("#divEmitirMensajeria").find("button").attr("style","");
-            if($("#docEstadoMsj").val()==="-1" && ($("#txtesDocEmi").val()==="0" || $("#txtesDocEmi").val()==="1") && $("#tiDest").val()!="01")
-            { 
-                 btnEmitirMensajeria.setAttribute("style","color: #ac2925");
-                 btnEmitirMensajeria.removeAttribute('onclick');
-                 btnEmitirMensajeria.setAttribute('onclick','fn_EnviarNotificacion_edit();');
-                $('#divEmitirMensajeria').show();
-                
-            }
-            if($("#docEstadoMsj").val()==="0" && ($("#txtesDocEmi").val()==="0" || $("#txtesDocEmi").val()==="1") && $("#tiDest").val()!="01")
-            { 
-                 btnEmitirMensajeria.setAttribute("style","color: #468847");
-                 btnEmitirMensajeria.removeAttribute('onclick');
-                 btnEmitirMensajeria.setAttribute('onclick','fn_EnviarNotificacion_edit();');
-                $('#divEmitirMensajeria').show();
-                
-            }
-            return false;
+function fn_EnviarNotificacion_edit() {
+    var snuAnn = $("#nuAnn").val() + "";
+    var snuEmi = $("#nuEmi").val() + "";
+    var tiEnvMsj = $("#tiEnvMsj").val() + "";
+    var sexisteDoc = $("#sexisteDoc").val() + "";
+    var sexisteAnexo = $("#sexisteAnexo").val() + "";
+    /*interoperabilidad*/
+    var docEstadoMsj = $("#docEstadoMsj").val();
+    /*interoperabilidad*/
+    fn_EnviarNotificacion(snuAnn, snuEmi, tiEnvMsj, sexisteDoc, sexisteAnexo, 'EDIT', docEstadoMsj);
 }
- function fn_EnviarNotificacion_edit (){
-             var snuAnn=$("#nuAnn").val()+"";
-             var snuEmi=$("#nuEmi").val()+"";
-             var tiEnvMsj=$("#tiEnvMsj").val()+"";
-             var sexisteDoc=$("#sexisteDoc").val()+"";
-             var sexisteAnexo=$("#sexisteAnexo").val()+"";
-             /*interoperabilidad*/
-             var docEstadoMsj=$("#docEstadoMsj").val();
-             /*interoperabilidad*/             
-             fn_EnviarNotificacion(snuAnn,snuEmi,tiEnvMsj,sexisteDoc,sexisteAnexo,'EDIT',docEstadoMsj);
-         }                                                    
-         
+
 function fu_verificarChangeDocumentoEmiAdm() {//si es "1" necesita grabar el documento.
     jQuery('#documentoEmiBean').find('select').removeProp('disabled');
     var cadenaJson = fn_buildSendJsontoServerDocuEmi();
     var rpta = fn_validarEnvioGrabaDocEmiAdm(new Function('return ' + cadenaJson)());
     var nrpta = rpta.substr(0, 1);
-    if (nrpta === "1"||!(!!jQuery('#documentoEmiBean').find('#nuEmi').val()&&!!jQuery('#documentoEmiBean').find('#nuAnn').val())) {
+    if (nrpta === "1" || !(!!jQuery('#documentoEmiBean').find('#nuEmi').val() && !!jQuery('#documentoEmiBean').find('#nuAnn').val())) {
         return "1";
     } else {
         //alert_Info("",rpta.substr(1));
@@ -4300,8 +4299,8 @@ function fu_verificarDestinatario(pverificarRef) {
     var vtabla = ["tblDestEmiDocAdmOtro= destinatario Otros", "tblDestEmiDocAdmCiudadano= destinatario Ciudadano", "tblDestEmiDocAdmPersJuri= destinatario Persona Jurídica", "tblDestEmiDocAdm= destinatario Institución"];
     //var ltabla = vtabla.length;
     /*if (pverificarRef === "1") {
-        vtabla.push("tblRefEmiDocAdm= Referencia");
-    }*/
+     vtabla.push("tblRefEmiDocAdm= Referencia");
+     }*/
     var countEmpty = 0;
     for (var i = 0; i < vtabla.length; i++) {
         var vauxTabla = vtabla[i].split("=");
@@ -4321,26 +4320,26 @@ function fu_verificarDestinatario(pverificarRef) {
             vResult = rpta.substr(0, 1);
         }
     }
-    
+
     var nFilasO = fn_verificarExisteFila("tblDestEmiDocAdmOtro");
     var nFilasC = fn_verificarExisteFila("tblDestEmiDocAdmCiudadano");
     var nFilasJ = fn_verificarExisteFila("tblDestEmiDocAdmPersJuri");
     var nFilasI = fn_verificarExisteFila("tblDestEmiDocAdm");
-    
-    
-    if (nFilasO>=1 || nFilasC>=1 || nFilasJ>=1  )
+
+
+    if (nFilasO >= 1 || nFilasC >= 1 || nFilasJ >= 1)
     {
-        if (nFilasI>=1)
+        if (nFilasI >= 1)
         {
             vResult = "Quitar destinatario(s) Institución";
         }
     }
-  
+
     return vResult;
 }
 
 function fu_verificarReferencia() {
-    var vResult = " referencia";   
+    var vResult = " referencia";
     var vtabla = ["tblRefEmiDocAdm= Referencia"];
     for (var i = 0; i < vtabla.length; i++) {
         var vauxTabla = vtabla[i].split("=");
@@ -4349,18 +4348,18 @@ function fu_verificarReferencia() {
         if (nrpta === "0") {
             vResult = rpta.substr(1) + vauxTabla[1];
             break;
-        }else if(nrpta === "2"){
+        } else if (nrpta === "2") {
             vResult = "1";
-        }else {
+        } else {
             vResult = rpta.substr(0, 1);
         }
     }
-   
-    return vResult;    
+
+    return vResult;
 }
 //EJHM
 function fu_verificarCamposDocEmiAdm(sOrigenBtn, pEstadoDoc) {
-    var noForm='#documentoEmiBean';
+    var noForm = '#documentoEmiBean';
     var pnuDiaAte = jQuery(noForm).find('#nuDiaAte').val();
     var pnuAnn = jQuery(noForm).find('#nuAnn').val();
     jQuery(noForm).find('#deDocSig').val(allTrim(fu_getValorUpperCase(jQuery(noForm).find('#deDocSig').val())));
@@ -4379,54 +4378,54 @@ function fu_verificarCamposDocEmiAdm(sOrigenBtn, pEstadoDoc) {
     var maxLengthDeAsu = jQuery(noForm).find('#deAsu').attr('maxlength');
     var pesDocEmi = jQuery(noForm).find('#esDocEmi').val();
     jQuery(noForm).find('#nuDocEmi').val(replicate(allTrim(jQuery(noForm).find('#nuDocEmi').val()), 6));
-    var pnuDocEmi=jQuery(noForm).find('#nuDocEmi').val();
+    var pnuDocEmi = jQuery(noForm).find('#nuDocEmi').val();
 
     var valRetorno = "1";
     var vValidaNumero = "";
-    
+
     if (!(pfirmadoPor !== null && pfirmadoPor !== "")) {
         valRetorno = "0";
-        bootbox.alert("<h5>Indicar Quien Firmará el Documento.</h5>", function() {
+        bootbox.alert("<h5>Indicar Quien Firmará el Documento.</h5>", function () {
             jQuery(noForm).find('#deEmpEmi').focus();
         });
         jQuery(noForm).find('#deEmpEmi').focus();
     }
-    
+
     if (valRetorno === "1") {
         if (!(pelaboradoPor !== null && pelaboradoPor !== "")) {
             valRetorno = "0";
-            bootbox.alert("<h5>Indicar Quien Elabora el Documento.</h5>", function() {
+            bootbox.alert("<h5>Indicar Quien Elabora el Documento.</h5>", function () {
                 jQuery(noForm).find('#coTipDocAdm').focus();
             });
             jQuery(noForm).find('#coTipDocAdm').focus();
-        }    
-    }    
+        }
+    }
 
     if (valRetorno === "1") {
         if (!(pcoTipDocAdm !== null && pcoTipDocAdm !== "-1")) {
             valRetorno = "0";
             //alert("Elija tipo de documento!!");
-            bootbox.alert("<h5>Seleccione tipo de Documento.</h5>", function() {
+            bootbox.alert("<h5>Seleccione tipo de Documento.</h5>", function () {
                 jQuery(noForm).find('#coTipDocAdm').focus();
             });
             jQuery(noForm).find('#coTipDocAdm').focus();
-        }    
+        }
     }
 
     if (valRetorno === "1") {
         if (!(pdeAsu !== null && pdeAsu !== "")) {
             valRetorno = "0";
             //alert("El asunto no debe ser vacio!!");
-            bootbox.alert("<h5>El asunto no debe ser vacio.</h5>", function() {
+            bootbox.alert("<h5>El asunto no debe ser vacio.</h5>", function () {
                 jQuery("#deAsu").focus();
-            });            
+            });
             jQuery("#deAsu").focus();
-        }else {
-            if(!!maxLengthDeAsu){
+        } else {
+            if (!!maxLengthDeAsu) {
                 var nrolinesDeAsu = (pdeAsu.match(/\n/g) || []).length;
-                if(pdeAsu.length+nrolinesDeAsu > maxLengthDeAsu){
+                if (pdeAsu.length + nrolinesDeAsu > maxLengthDeAsu) {
                     valRetorno = "0";
-                    bootbox.alert("<h5>El Asunto Excede el límite de "+maxLengthDeAsu+" caracteres.</h5>", function() {
+                    bootbox.alert("<h5>El Asunto Excede el límite de " + maxLengthDeAsu + " caracteres.</h5>", function () {
                         jQuery("#deAsu").focus();
                     });
                     jQuery("#deAsu").focus();
@@ -4434,89 +4433,89 @@ function fu_verificarCamposDocEmiAdm(sOrigenBtn, pEstadoDoc) {
             }
         }
     }
-    
+
     if (valRetorno === "1") {
-            if(!!maxLengthDeObsDoc){
-                var nrolinesDeObsDoc = (pdeObsDoc.match(/\n/g) || []).length;
-                if(pdeObsDoc.length+nrolinesDeObsDoc > maxLengthDeObsDoc){
-                    valRetorno = "0";
-                    bootbox.alert("<h5>La Observación del Documento Excede el límite de "+maxLengthDeObsDoc+" caracteres.</h5>", function() {
-                        jQuery("#deObsDoc").focus();
-                    });
+        if (!!maxLengthDeObsDoc) {
+            var nrolinesDeObsDoc = (pdeObsDoc.match(/\n/g) || []).length;
+            if (pdeObsDoc.length + nrolinesDeObsDoc > maxLengthDeObsDoc) {
+                valRetorno = "0";
+                bootbox.alert("<h5>La Observación del Documento Excede el límite de " + maxLengthDeObsDoc + " caracteres.</h5>", function () {
                     jQuery("#deObsDoc").focus();
-                }
+                });
+                jQuery("#deObsDoc").focus();
             }
+        }
     }
-    
+
     if (valRetorno === "1") {
         if (pnuDiaAte !== null && pnuDiaAte !== "") {
             vValidaNumero = fu_validaNumero(pnuDiaAte);
             if (vValidaNumero !== "OK") {
                 valRetorno = "0";
                 //alert("Días de Atención debe ser solo números.");
-                bootbox.alert("<h5>Días de Atención debe ser solo números.</h5>", function() {
-                    jQuery("#nuDiaAte").focus();        
-                });                
+                bootbox.alert("<h5>Días de Atención debe ser solo números.</h5>", function () {
+                    jQuery("#nuDiaAte").focus();
+                });
                 jQuery("#nuDiaAte").focus();
             }
         } else {
             valRetorno = "0";
             //alert("Especifique días de Atención.");
-            bootbox.alert("<h5>Especifique días de Atención.</h5>", function() {
-                jQuery("#nuDiaAte").focus();        
-            });              
+            bootbox.alert("<h5>Especifique días de Atención.</h5>", function () {
+                jQuery("#nuDiaAte").focus();
+            });
             jQuery("#nuDiaAte").focus();
         }
     }
-    
+
     if (valRetorno === "1") {
         if (pnuAnn !== null && pnuAnn !== "") {
             vValidaNumero = fu_validaNumero(pnuAnn);
             if (vValidaNumero !== "OK") {
                 valRetorno = "0";
-               bootbox.alert("Año de Documento solo números.");
+                bootbox.alert("Año de Documento solo números.");
             }
         } else {
             valRetorno = "0";
-           bootbox.alert("Especifique Año de Documento.");
+            bootbox.alert("Especifique Año de Documento.");
         }
     }
-    
+
     if (valRetorno === "1") {
         if (pdeDocSig !== null && pdeDocSig !== "") {
             var rptValida = validaCaracteres(pdeDocSig, "1");
             if (rptValida !== "OK") {
                 valRetorno = "0";
                 //alert(rptValida);
-                bootbox.alert("<h5>"+rptValida+"</h5>", function() {
-                    jQuery("#deDocSig").focus();        
-                });                 
+                bootbox.alert("<h5>" + rptValida + "</h5>", function () {
+                    jQuery("#deDocSig").focus();
+                });
                 jQuery("#deDocSig").focus();
             }
         } else {
-           valRetorno = "0";
+            valRetorno = "0";
             //alert("Especifique siglas del Documento");
-           bootbox.alert("<h5>Especifique siglas del Documento.</h5>", function() {
-               jQuery("#deDocSig").focus();        
-           });            
+            bootbox.alert("<h5>Especifique siglas del Documento.</h5>", function () {
+                jQuery("#deDocSig").focus();
+            });
             jQuery("#deDocSig").focus();
         }
     }
-    
+
     if (valRetorno === "1") {
         //VALIDA FECHAS
         if (pfeEmiCorta === "") {
             valRetorno = "0";
-           bootbox.alert('Especifique Fecha de Documento.');
+            bootbox.alert('Especifique Fecha de Documento.');
         } else {
             valRetorno = fu_validaFechaConsulta(pfeEmiCorta, pfeActual);
             if (valRetorno !== "1") {
                 valRetorno = "0";
-               bootbox.alert("Error Fecha De Documento" + valRetorno);
+                bootbox.alert("Error Fecha De Documento" + valRetorno);
             }
         }
     }
-    
+
     if (valRetorno === "1") {
         if (pesDocEmi !== "5" && pesDocEmi !== "7" && pesDocEmi !== "0") {
             valRetorno = "0";
@@ -4534,129 +4533,129 @@ function fu_verificarCamposDocEmiAdm(sOrigenBtn, pEstadoDoc) {
             }
         }
     }
-    
-    if(valRetorno==="1"){
-        if(!!pnuDocEmi){
-          vValidaNumero = fu_validaNumero(pnuDocEmi);  
-            if (vValidaNumero!=="OK") {
+
+    if (valRetorno === "1") {
+        if (!!pnuDocEmi) {
+            vValidaNumero = fu_validaNumero(pnuDocEmi);
+            if (vValidaNumero !== "OK") {
                 valRetorno = "0";
-                bootbox.alert("<h5>Nro. Documento debe ser solo números.</h5>", function() {
+                bootbox.alert("<h5>Nro. Documento debe ser solo números.</h5>", function () {
                     bootbox.hideAll();
-                    jQuery(noForm).find('#nuDocEmi').focus();        
-                });                
-            }          
+                    jQuery(noForm).find('#nuDocEmi').focus();
+                });
+            }
         }
     }
-    
-    if(valRetorno === "1"){
-        if((pEstadoDoc==="5"&& pesDocEmi==="7")||sOrigenBtn ==="0"){
-            if(jQuery('#esActualizadoNuDocEmi').val()==="1"){
+
+    if (valRetorno === "1") {
+        if ((pEstadoDoc === "5" && pesDocEmi === "7") || sOrigenBtn === "0") {
+            if (jQuery('#esActualizadoNuDocEmi').val() === "1") {
                 jQuery(noForm).find("#nuDocEmi").trigger("change");
                 jQuery('#esActualizadoNuDocEmi').val("0");
-            }            
+            }
         }
     }
-     
-    if(valRetorno === "1"){
-         var Detalle=fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmPersJuri","9","10"); 
-         if (Detalle!=="OK") {
-             valRetorno = "0";            
-         } 
-        
-    }
-    if(valRetorno === "1"){
-         var Detalle=fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmOtro","10","11"); 
-         if (Detalle!=="OK") {
-             valRetorno = "0";            
-        } 
-         
-    }
-    if(valRetorno === "1"){
-         var Detalle=fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmCiudadano","8","9"); 
-         if (Detalle!=="OK") {
-             valRetorno = "0";            
+
+    if (valRetorno === "1") {
+        var Detalle = fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmPersJuri", "9", "10");
+        if (Detalle !== "OK") {
+            valRetorno = "0";
         }
-   }
-    
+
+    }
+    if (valRetorno === "1") {
+        var Detalle = fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmOtro", "10", "11");
+        if (Detalle !== "OK") {
+            valRetorno = "0";
+        }
+
+    }
+    if (valRetorno === "1") {
+        var Detalle = fu_validaPersonaJuridaDetalle("tblDestEmiDocAdmCiudadano", "8", "9");
+        if (Detalle !== "OK") {
+            valRetorno = "0";
+        }
+    }
+
     return valRetorno;
 }
 
 //pcoTipDocAdm se retiro esto
-function fu_validaDocumentoPersonaJuridica(idTabla,tipoDoc,tipoMensaje){ 
-    var vRetorna="OK";  
-    var found = false; 
+function fu_validaDocumentoPersonaJuridica(idTabla, tipoDoc, tipoMensaje) {
+    var vRetorna = "OK";
+    var found = false;
 
-    
-    $("#"+idTabla+" tbody tr").each(function(index, row) {
-        if (index > 0 && !$(row).hasClass('oculto') && !found) {                      
-        		
-            if ( tipoDoc!='248' && tipoDoc!='011' && tipoDoc!='012' && tipoDoc!='343' && tipoDoc!='019') {
+
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
+        if (index > 0 && !$(row).hasClass('oculto') && !found) {
+
+            if (tipoDoc != '248' && tipoDoc != '011' && tipoDoc != '012' && tipoDoc != '343' && tipoDoc != '019') {
                 vRetorna = "NO_OK";
-                if(tipoMensaje=='PJ'){
-                	alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Persona Jurídica");	
+                if (tipoMensaje == 'PJ') {
+                    alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Persona Jurídica");
                 }
-                if(tipoMensaje=='CI'){
-                	alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Ciudadano");
+                if (tipoMensaje == 'CI') {
+                    alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Ciudadano");
                 }
-                if(tipoMensaje=='OT'){
-                	alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Otros");
+                if (tipoMensaje == 'OT') {
+                    alert_Danger("Alerta:", "Debe Seleccionar tipo de Documento Carta o Oficio para Destinatario Otros");
                 }
-                 
+
                 found = true;
                 return vRetorna;
             }
-           
+
         }
-    });    
-    return vRetorna; 
+    });
+    return vRetorna;
 }
-function fu_validaPersonaJuridaDetalle(idTabla,indexUbi,indexDir){ 
-    var vRetorna="OK";  
-    var found = false; 
-    var vDatosOblDesJur=$("#DatosOblDesJur").val();/*interoperabilidad*/
-    
-    $("#"+idTabla+" tbody tr").each(function(index, row) {
-        if (index > 0 && !$(row).hasClass('oculto') && !found) {                      
-        var codigo=$("#"+idTabla+" tbody tr:eq(" + index + ") td:eq(" + indexUbi + ")").find('input[id=txtCodigoUbigeoOtro]').val()+"";
-        var direccion =$("#"+idTabla+" tbody tr:eq(" + index + ") td:eq(" + indexDir + ")").find('textarea').val()+"";  
-            if ( codigo === "" || codigo === ",," || codigo === "null,null,null" ) {
+function fu_validaPersonaJuridaDetalle(idTabla, indexUbi, indexDir) {
+    var vRetorna = "OK";
+    var found = false;
+    var vDatosOblDesJur = $("#DatosOblDesJur").val();/*interoperabilidad*/
+
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
+        if (index > 0 && !$(row).hasClass('oculto') && !found) {
+            var codigo = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(" + indexUbi + ")").find('input[id=txtCodigoUbigeoOtro]').val() + "";
+            var direccion = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(" + indexDir + ")").find('textarea').val() + "";
+            if (codigo === "" || codigo === ",," || codigo === "null,null,null") {
                 vRetorna = "NO_OK";
-                 alert_Danger("Alerta:", "Debe Seleccionar alguna Ubicacion.");
+                alert_Danger("Alerta:", "Debe Seleccionar alguna Ubicacion.");
                 found = true;
                 return false;
             }
-            if ( direccion === "") {
+            if (direccion === "") {
                 vRetorna = "NO_OK";
                 found = true;
                 alert_Danger("Alerta:", "Debe Ingresar la Dirección.");
                 return false;
-            }  
+            }
             /*interoperabilidad*/
-        if (vDatosOblDesJur==="S")
+            if (vDatosOblDesJur === "S")
             {
-                console.log("tipo==>"+vDatosOblDesJur);
-                var nombreRemite=$("#"+idTabla+" tbody tr:eq(" + index + ") td:eq(13)").find('input[id=txtNombresPJCiudadano]').val()+"";
-                var cargoRemite =$("#"+idTabla+" tbody tr:eq(" + index + ") td:eq(14)").find('input[type=text]').val()+"";
-                console.log("nom==>"+nombreRemite);
-                console.log("car==>"+cargoRemite);
-                if ( nombreRemite === "") {
+                console.log("tipo==>" + vDatosOblDesJur);
+                var nombreRemite = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(13)").find('input[id=txtNombresPJCiudadano]').val() + "";
+                var cargoRemite = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(14)").find('input[type=text]').val() + "";
+                console.log("nom==>" + nombreRemite);
+                console.log("car==>" + cargoRemite);
+                if (nombreRemite === "") {
                     vRetorna = "NO_OK";
                     found = true;
                     alert_Danger("Alerta:", "Debe Ingresar Remitente.");
                     return false;
-                }  
-                
-                if ( cargoRemite === "") {
+                }
+
+                if (cargoRemite === "") {
                     vRetorna = "NO_OK";
                     found = true;
                     alert_Danger("Alerta:", "Debe Ingresar Cargo Remitente.");
                     return false;
-                } 
+                }
             }
             /*interoperabilidad*/
         }
-    });    
-    return vRetorna; 
+    });
+    return vRetorna;
 }
 
 function fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp) {
@@ -4664,7 +4663,7 @@ function fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp) {
     p[0] = "accion=goObtenerExpedienteBean";
     p[1] = "pnuAnnExp=" + pnuAnnExp;
     p[2] = "pnuSecExp=" + pnuSecExp;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         if (data !== null) {
             if (data.coRespuesta === "1") {
                 jQuery('#documentoEmiBean').find('#nuAnnExp').val(data.nuAnnExp);
@@ -4696,9 +4695,9 @@ function cerrarPantallaModuloEmisionDoc() {
                     SI: {
                         label: "SI",
                         className: "btn-default",
-                        callback: function() {
+                        callback: function () {
                             cerrarPantalla();
-                        }                        
+                        }
                     },
                     NO: {
                         label: "NO",
@@ -4716,11 +4715,11 @@ function cerrarPantallaModuloEmisionDoc() {
 
 function fn_iniUpdTblDestinos() {
     $("[bt='true']").showBigTextBox({
-        pressAceptarEvent: function(data) {
+        pressAceptarEvent: function (data) {
             if (data.hasChangedText) {
                 changeAccionBDDocEmi(data.currentObject);
             }
-        },maxNumCar:600
+        }, maxNumCar: 600
     });
 }
 
@@ -4735,7 +4734,7 @@ function fn_buscaDependenciaEmi() {
     var p = new Array();
     p[0] = "accion=goBuscaDependenciaEmite";
     p[1] = jQuery('#txtDepEmiteBus').val() === ' [TODOS]' ? "pdeDepEmite=" : "pdeDepEmite=" + fu_getValorUpperCase(jQuery('#txtDepEmiteBus').val());
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         fn_rptaBuscaDependenciaEmi(data);
     },
             'text', false, false, "POST");
@@ -4744,18 +4743,21 @@ function fn_buscaDependenciaEmi() {
 function fn_rptaBuscaDependenciaEmi(XML_AJAX) {
     if (XML_AJAX !== null) {
         var obj = null;
-        try{obj = jQuery.parseJSON(XML_AJAX);}catch(e){}
-        if(obj){
-            if(obj.coRespuesta==="1"){
+        try {
+            obj = jQuery.parseJSON(XML_AJAX);
+        } catch (e) {
+        }
+        if (obj) {
+            if (obj.coRespuesta === "1") {
                 jQuery('#sBuscDestinatario').val(obj.coDependencia);
                 jQuery('#txtDepEmiteBus').val(obj.deDependencia);
                 jQuery('#sDeTipoDocAdm').focus();
-            }else{
-               bootbox.alert(obj.deRespuesta);
+            } else {
+                bootbox.alert(obj.deRespuesta);
             }
-        }else{
+        } else {
             $("body").append(XML_AJAX);
-        }        
+        }
     }
 }
 
@@ -4776,18 +4778,18 @@ function fu_cambiarComponenteFiltro(btnCambiar) {
     if (countPressBtnChange === 0) {
         $("#fechaFiltro").showDatePicker({
             showDia: false,
-            selectTodosMeses:true,
-            pressAceptarEvent: function(data) {
+            selectTodosMeses: true,
+            pressAceptarEvent: function (data) {
 //                console.log(data.fIni);
 //                console.log(data.fFin);
 //                console.log(data.rbOp);
-                $("#fechaFiltro").val(data.fIni+"[]"+data.fFin);
-                
-                var numMes=moment(data.fIni, "DD/MM/YYYY").month();
+                $("#fechaFiltro").val(data.fIni + "[]" + data.fFin);
+
+                var numMes = moment(data.fIni, "DD/MM/YYYY").month();
 //                console.log(numMes);
 //                console.log(monthYearArray[numMes]);
-                
-                
+
+
             }
         });
     }
@@ -4835,90 +4837,90 @@ function fu_FiltrarTecladoCadenaPersJuri(evt, autoSubmit, pvalidKeys/*, sucessGo
     return false;
 }
 
-function fn_inicializaDocAdmEmi(sCoAnnio){
+function fn_inicializaDocAdmEmi(sCoAnnio) {
     //countPressBtnChange=0;
-	jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("1");//solo por fecha
-	//jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("2");//solo año
+    jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("1");//solo por fecha
+    //jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("2");//solo año
     //jQuery("#fechaFiltro").html("Año: "+sCoAnnio);
     /*jQuery("#fechaFiltro").showDatePicker({
-        showDia: false,
-        selectTodosMeses:true,
-        pressAceptarEvent: function(data) {
-            if(data.rbOp==="0"){
-                jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(data.anio);
-                if(data.mes==="" && data.anio!==""){
-                   jQuery("#fechaFiltro").html("Año: "+data.anio);
-                   jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("2");//solo año
-                }else{
-                   jQuery("#fechaFiltro").html("Año: "+data.anio+"  Mes: "+monthYearArray[data.mes * 1]);  
-                   jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("3");//año y mes
-                }
-            }else if(data.rbOp==="1"){
-                jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("1");//rango fecha
-                jQuery("#fechaFiltro").html("Del: "+data.fIni+"  Al: "+data.fFin); 
-            }
-        }
-    });*/
+     showDia: false,
+     selectTodosMeses:true,
+     pressAceptarEvent: function(data) {
+     if(data.rbOp==="0"){
+     jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(data.anio);
+     if(data.mes==="" && data.anio!==""){
+     jQuery("#fechaFiltro").html("Año: "+data.anio);
+     jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("2");//solo año
+     }else{
+     jQuery("#fechaFiltro").html("Año: "+data.anio+"  Mes: "+monthYearArray[data.mes * 1]);  
+     jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("3");//año y mes
+     }
+     }else if(data.rbOp==="1"){
+     jQuery('#buscarDocumentoEmiBean').find('#esFiltroFecha').val("1");//rango fecha
+     jQuery("#fechaFiltro").html("Del: "+data.fIni+"  Al: "+data.fFin); 
+     }
+     }
+     });*/
     jQuery('#buscarDocumentoEmiBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 9});    // reemplaza 5 por año    
-    jQuery('#buscarDocumentoEmiBean').find('#sNumDocRef').change(function() {
+    jQuery('#buscarDocumentoEmiBean').find('#sNumDocRef').change(function () {
         $(this).val(replicate($(this).val(), 6));
     });
-    jQuery('#buscarDocumentoEmiBean').find('#sNumDoc').change(function() {
+    jQuery('#buscarDocumentoEmiBean').find('#sNumDoc').change(function () {
         $(this).val(replicate($(this).val(), 6));
-    });    
+    });
     jQuery('#buscarDocumentoEmiBean').find('#sCoAnnioBus').find('option[value=""]').remove();
-    pnumFilaSelect=0;
+    pnumFilaSelect = 0;
     changeTipoBusqEmiDocuAdm("0");
 }
 
-function verificarAñoBusquedaFiltro(vFeInicio,vFeFinal){
+function verificarAñoBusquedaFiltro(vFeInicio, vFeFinal) {
     try {
-        var vReturn="A";
+        var vReturn = "A";
         var vAnioFini = vFeInicio.substr(6);
         var vAnioFfin = vFeFinal.substr(6);
         var lAnioFini = vAnioFini.length;
         var lAnioFfin = vAnioFfin.length;
-        if(lAnioFfin===4 && lAnioFini===4){
-            if(vAnioFini===vAnioFfin){
-                vReturn = vAnioFini; 
-            }else{
+        if (lAnioFfin === 4 && lAnioFini === 4) {
+            if (vAnioFini === vAnioFfin) {
+                vReturn = vAnioFini;
+            } else {
                 vReturn = "0";
             }
         }
-    } catch(vReturn) {
+    } catch (vReturn) {
     }
-    return vReturn;      
+    return vReturn;
 }
 
-function upperCaseBuscarDocumentoEmiBean(){
+function upperCaseBuscarDocumentoEmiBean() {
     jQuery('#buscarDocumentoEmiBean').find('#sNumDoc').val(fu_getValorUpperCase(jQuery('#buscarDocumentoEmiBean').find('#sNumDoc').val()));
     jQuery('#buscarDocumentoEmiBean').find('#sBuscNroExpediente').val(fu_getValorUpperCase(jQuery('#buscarDocumentoEmiBean').find('#sBuscNroExpediente').val()));
     jQuery('#buscarDocumentoEmiBean').find('#sDeAsuM').val(fu_getValorUpperCase(jQuery('#buscarDocumentoEmiBean').find('#sDeAsuM').val()));
 }
 
-function removeNotification(){
+function removeNotification() {
     jQuery(document).mouseup(function (e)
     {
         var searchcontainer = jQuery("#notificacion_proyect");
 
         if (!searchcontainer.is(e.target) // if the target of the click isn't the container...
-            && searchcontainer.has(e.target).length === 0) // ... nor a descendant of the container
+                && searchcontainer.has(e.target).length === 0) // ... nor a descendant of the container
         {
-            searchcontainer.fadeOut("slow",function(){
+            searchcontainer.fadeOut("slow", function () {
                 searchcontainer.remove();
             });
         }
     });
 }
 
-function fu_obtenerEsFiltroFecha(nameForm){
-    var opt = jQuery('#'+nameForm).find('#sCoAnnio').parent('td').find('#fechaFiltro').attr('optselected');
-    if(opt==="1"||opt==="2"||opt==="4"||opt==="8"){
-       jQuery('#'+nameForm).find("#esFiltroFecha").val("1"); 
-    }else if(opt==="5"||opt==="6"){
-       jQuery('#'+nameForm).find("#esFiltroFecha").val("2"); 
-    }else if(opt==="3"||opt==="7"){
-       jQuery('#'+nameForm).find("#esFiltroFecha").val("3"); 
+function fu_obtenerEsFiltroFecha(nameForm) {
+    var opt = jQuery('#' + nameForm).find('#sCoAnnio').parent('td').find('#fechaFiltro').attr('optselected');
+    if (opt === "1" || opt === "2" || opt === "4" || opt === "8") {
+        jQuery('#' + nameForm).find("#esFiltroFecha").val("1");
+    } else if (opt === "5" || opt === "6") {
+        jQuery('#' + nameForm).find("#esFiltroFecha").val("2");
+    } else if (opt === "3" || opt === "7") {
+        jQuery('#' + nameForm).find("#esFiltroFecha").val("3");
     }
 }
 
@@ -4935,287 +4937,303 @@ function fu_FiltrarTecladoCadenaFunParamGeneral(evt, autoSubmit, pvalidKeys, cal
     return false;
 }
 
-function setAnnioNoIncludeFiltroEmi(){
+function setAnnioNoIncludeFiltroEmi() {
     var valRetorno = "1";
     fu_obtenerEsFiltroFecha('buscarDocumentoEmiBean');
     var pEsFiltroFecha = jQuery('#buscarDocumentoEmiBean').find("#esFiltroFecha").val();//"2" solo año ,"3" año mes,"1" rango fechas
-    if(pEsFiltroFecha==="1" || pEsFiltroFecha==="2" || pEsFiltroFecha==="3"){
-       if(pEsFiltroFecha==="2" || pEsFiltroFecha==="3"){
+    if (pEsFiltroFecha === "1" || pEsFiltroFecha === "2" || pEsFiltroFecha === "3") {
+        if (pEsFiltroFecha === "2" || pEsFiltroFecha === "3") {
             var pAnnio = jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val();
-            if(pAnnio!==null && pAnnio!=="null" && typeof(pAnnio)!=="undefined" && pAnnio!==""){
+            if (pAnnio !== null && pAnnio !== "null" && typeof (pAnnio) !== "undefined" && pAnnio !== "") {
                 var vValidaNumero = fu_validaNumero(pAnnio);
                 if (vValidaNumero !== "OK") {
-                   bootbox.alert("Año debe ser solo números.");
+                    bootbox.alert("Año debe ser solo números.");
                     valRetorno = "0";
-                }                
-            }               
-       }     
+                }
+            }
+        }
 
         var vFeInicio = jQuery("#sFeEmiIni").val();
         var vFeFinal = jQuery("#sFeEmiFin").val();
 
-        if(valRetorno==="1" /*&& pEsFiltroFecha==="1"*/){
-          var pAnnioBusq = obtenerAnioBusqueda(vFeInicio,vFeFinal);
-            if(pAnnioBusq!==null && pAnnioBusq!=="null" && typeof(pAnnioBusq)!=="undefined" && pAnnioBusq!==""){
+        if (valRetorno === "1" /*&& pEsFiltroFecha==="1"*/) {
+            var pAnnioBusq = obtenerAnioBusqueda(vFeInicio, vFeFinal);
+            if (pAnnioBusq !== null && pAnnioBusq !== "null" && typeof (pAnnioBusq) !== "undefined" && pAnnioBusq !== "") {
                 var vValidaNumero = fu_validaNumero(pAnnioBusq);
                 if (vValidaNumero !== "OK") {
-                   bootbox.alert("Año debe ser solo números.");
+                    bootbox.alert("Año debe ser solo números.");
                     valRetorno = "0";
-                }else if(vValidaNumero ==="OK"){
-                    jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(pAnnioBusq);                          
-                }                
-            }               
+                } else if (vValidaNumero === "OK") {
+                    jQuery('#buscarDocumentoEmiBean').find('#sCoAnnio').val(pAnnioBusq);
+                }
+            }
         }
     }
-    return valRetorno;       
+    return valRetorno;
 }
 
-function obtenerAnioBusqueda(vFeInicio,vFeFinal){
+function obtenerAnioBusqueda(vFeInicio, vFeFinal) {
     try {
-        var vReturn="A";
+        var vReturn = "A";
         var vAnioFini = vFeInicio.substr(6);
         var vAnioFfin = vFeFinal.substr(6);
         var lAnioFini = vAnioFini.length;
         var lAnioFfin = vAnioFfin.length;
-        if(lAnioFfin===4 && lAnioFini===4){
+        if (lAnioFfin === 4 && lAnioFini === 4) {
             /*if(vAnioFini===vAnioFfin){*/
-                vReturn = vAnioFini; 
+            vReturn = vAnioFini;
             /*}else{
-                vReturn = "0";
-            }*/
+             vReturn = "0";
+             }*/
         }
-    } catch(vReturn) {
+    } catch (vReturn) {
     }
-    return vReturn;      
+    return vReturn;
 }
 
-function fn_iniConsProveedorDestEmi(){
-    var nomTbl='#tblDestinatario';
-    var indexAux=-1;
+function fn_iniConsProveedorDestEmi() {
+    var nomTbl = '#tblDestinatario';
+    var indexAux = -1;
     var tableaux = $(nomTbl);
-    tableaux.find('tr').each(function(index, row) {
-        if(index == 0){
-            $(this).addClass('row_selected');                        
+    tableaux.find('tr').each(function (index, row) {
+        if (index == 0) {
+            $(this).addClass('row_selected');
             return false;
         }
     });
-    var searchOnTable = function(evento) {
-            var table = $(nomTbl);
-            var value = this.value;
-            //alert(evento.which);
-            var isFirst = false;
-            var indexSelect = -1;
-            table.find('tr').each(function(index, row) {
-                    if ( $(this).hasClass('row_selected') ) {
-                        $(this).removeClass('row_selected');
-                    }
-                    //var allCells = $(row).find('td');
-                    var allCells = $(row).find('td:eq(0)');
-                    if(allCells.length > 0) {
-                            var found = false;
-                            allCells.each(function(index, td) {
-                                    var regExp = new RegExp(value, 'i');
-                                    if(regExp.test($(td).text())) {
-                                            found = true;
-                                            return false;
-                                    }
-                            });
-                            if (found == true) {$(row).show(); if(!isFirst){$(this).addClass('row_selected'); isFirst = true; indexSelect = index;}}
-                            else {$(row).hide();}
-                    }
-            });
-            if(evento.which == 13){
-                if(isFirst){
-                    var prazonSocial= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(0)").html();
-                    var pnuRuc= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(1)").html();
-                    var cproDomicil= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(2)").html();
-                    var cproTelefo= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(3)").html();
-                    var cproEmail= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(4)").html();
-                    var cubiCoddep= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(5)").html();
-                    var cubiCodpro= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(6)").html();
-                    var cubiCoddis= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(7)").html();
-                    var noDep= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(8)").html();
-                    var noPrv= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(9)").html();
-                    var noDis= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(10)").html();
-                    fn_setDestinoEmitlbProveedor(prazonSocial,pnuRuc,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);
-                }
-            }else if(evento.which==38||evento.which==40){
-                //$('#txtConsultaFind').blur();
-                indexAux=-1;
-                $(nomTbl+' >tbody >tr:visible').first().focus(); 
+    var searchOnTable = function (evento) {
+        var table = $(nomTbl);
+        var value = this.value;
+        //alert(evento.which);
+        var isFirst = false;
+        var indexSelect = -1;
+        table.find('tr').each(function (index, row) {
+            if ($(this).hasClass('row_selected')) {
+                $(this).removeClass('row_selected');
             }
+            //var allCells = $(row).find('td');
+            var allCells = $(row).find('td:eq(0)');
+            if (allCells.length > 0) {
+                var found = false;
+                allCells.each(function (index, td) {
+                    var regExp = new RegExp(value, 'i');
+                    if (regExp.test($(td).text())) {
+                        found = true;
+                        return false;
+                    }
+                });
+                if (found == true) {
+                    $(row).show();
+                    if (!isFirst) {
+                        $(this).addClass('row_selected');
+                        isFirst = true;
+                        indexSelect = index;
+                    }
+                } else {
+                    $(row).hide();
+                }
+            }
+        });
+        if (evento.which == 13) {
+            if (isFirst) {
+                var prazonSocial = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(0)").html();
+                var pnuRuc = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(1)").html();
+                var cproDomicil = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(2)").html();
+                var cproTelefo = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(3)").html();
+                var cproEmail = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(4)").html();
+                var cubiCoddep = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(5)").html();
+                var cubiCodpro = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(6)").html();
+                var cubiCoddis = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(7)").html();
+                var noDep = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(8)").html();
+                var noPrv = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(9)").html();
+                var noDis = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(10)").html();
+                fn_setDestinoEmitlbProveedor(prazonSocial, pnuRuc, cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
+            }
+        } else if (evento.which == 38 || evento.which == 40) {
+            //$('#txtConsultaFind').blur();
+            indexAux = -1;
+            $(nomTbl + ' >tbody >tr:visible').first().focus();
+        }
     };
     $('#txtConsultaFind').keyup(searchOnTable);
-    $(nomTbl+" tbody tr").click(function(e) {
-        var prazonSocial= $(this).find("td:eq(0)").html();
-        var pnuRuc= $(this).find("td:eq(1)").html();
-        var cproDomicil= $(this).find("td:eq(2)").html();
-        var cproTelefo= $(this).find("td:eq(3)").html();
-        var cproEmail= $(this).find("td:eq(4)").html();
-        var cubiCoddep= $(this).find("td:eq(5)").html();
-        var cubiCodpro= $(this).find("td:eq(6)").html();
-        var cubiCoddis= $(this).find("td:eq(7)").html();
-        var noDep= $(this).find("td:eq(8)").html();
-        var noPrv= $(this).find("td:eq(9)").html();
-        var noDis= $(this).find("td:eq(10)").html();
-                             
-        fn_setDestinoEmitlbProveedor(prazonSocial,pnuRuc,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);
-    }); 
-    $(nomTbl+' >tbody >tr:visible').keydown(function(evento){
-        if(evento.which==38){//up
-            if ($(nomTbl+" tbody tr:visible").eq(indexAux).prev('tr').length == 0) {
-                indexAux=$(nomTbl+" tbody tr:visible").length;
+    $(nomTbl + " tbody tr").click(function (e) {
+        var prazonSocial = $(this).find("td:eq(0)").html();
+        var pnuRuc = $(this).find("td:eq(1)").html();
+        var cproDomicil = $(this).find("td:eq(2)").html();
+        var cproTelefo = $(this).find("td:eq(3)").html();
+        var cproEmail = $(this).find("td:eq(4)").html();
+        var cubiCoddep = $(this).find("td:eq(5)").html();
+        var cubiCodpro = $(this).find("td:eq(6)").html();
+        var cubiCoddis = $(this).find("td:eq(7)").html();
+        var noDep = $(this).find("td:eq(8)").html();
+        var noPrv = $(this).find("td:eq(9)").html();
+        var noDis = $(this).find("td:eq(10)").html();
+
+        fn_setDestinoEmitlbProveedor(prazonSocial, pnuRuc, cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
+    });
+    $(nomTbl + ' >tbody >tr:visible').keydown(function (evento) {
+        if (evento.which == 38) {//up
+            if ($(nomTbl + " tbody tr:visible").eq(indexAux).prev('tr').length == 0) {
+                indexAux = $(nomTbl + " tbody tr:visible").length;
             }
-            $(nomTbl+" tbody tr:visible").eq(indexAux).removeClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).removeClass('row_selected');
             indexAux--;
-            $(nomTbl+" tbody tr:visible").eq(indexAux).addClass('row_selected');
-            $(nomTbl+" tbody tr:visible").eq(indexAux).focus();
-        }else if(evento.which==40){//down
-            if ($(nomTbl+" tbody tr:visible").eq(indexAux).next('tr').length == 0){
-                indexAux=-1;
+            $(nomTbl + " tbody tr:visible").eq(indexAux).addClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).focus();
+        } else if (evento.which == 40) {//down
+            if ($(nomTbl + " tbody tr:visible").eq(indexAux).next('tr').length == 0) {
+                indexAux = -1;
             }
-            $(nomTbl+" tbody tr:visible").eq(indexAux).removeClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).removeClass('row_selected');
             indexAux++;
-            $(nomTbl+" tbody tr:visible").eq(indexAux).addClass('row_selected');                
-            $(nomTbl+" tbody tr:visible").eq(indexAux).focus();
-        }else if(evento.which==13){
-            var prazonSocial= $(this).find("td:eq(0)").html();
-            var pnuRuc= $(this).find("td:eq(1)").html();
-            var cproDomicil= $(this).find("td:eq(2)").html();
-            var cproTelefo= $(this).find("td:eq(3)").html();
-            var cproEmail= $(this).find("td:eq(4)").html();
-            var cubiCoddep= $(this).find("td:eq(5)").html();
-            var cubiCodpro= $(this).find("td:eq(6)").html();
-            var cubiCoddis= $(this).find("td:eq(7)").html();
-            var noDep= $(this).find("td:eq(8)").html();
-            var noPrv= $(this).find("td:eq(9)").html();
-            var noDis= $(this).find("td:eq(10)").html();
-            fn_setDestinoEmitlbProveedor(prazonSocial,pnuRuc,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);         
+            $(nomTbl + " tbody tr:visible").eq(indexAux).addClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).focus();
+        } else if (evento.which == 13) {
+            var prazonSocial = $(this).find("td:eq(0)").html();
+            var pnuRuc = $(this).find("td:eq(1)").html();
+            var cproDomicil = $(this).find("td:eq(2)").html();
+            var cproTelefo = $(this).find("td:eq(3)").html();
+            var cproEmail = $(this).find("td:eq(4)").html();
+            var cubiCoddep = $(this).find("td:eq(5)").html();
+            var cubiCodpro = $(this).find("td:eq(6)").html();
+            var cubiCoddis = $(this).find("td:eq(7)").html();
+            var noDep = $(this).find("td:eq(8)").html();
+            var noPrv = $(this).find("td:eq(9)").html();
+            var noDis = $(this).find("td:eq(10)").html();
+            fn_setDestinoEmitlbProveedor(prazonSocial, pnuRuc, cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
         }
         //console.log(indexAux);
         evento.preventDefault();
-    });    
+    });
 }
 
-function fn_iniConsOtroOrigenDestEmi(){
-    var nomTbl='#tblDestinatario';
-    var indexAux=-1;
+function fn_iniConsOtroOrigenDestEmi() {
+    var nomTbl = '#tblDestinatario';
+    var indexAux = -1;
     var tableaux = $(nomTbl);
-    tableaux.find('tr').each(function(index, row) {
-        if(index == 0){
-            $(this).addClass('row_selected');                        
+    tableaux.find('tr').each(function (index, row) {
+        if (index == 0) {
+            $(this).addClass('row_selected');
             return false;
         }
     });
-    var searchOnTable = function(evento) {
-            var table = $(nomTbl);
-            var value = this.value;
-            //alert(evento.which);
-            var isFirst = false;
-            var indexSelect = -1;
-            table.find('tr').each(function(index, row) {
-                    if ( $(this).hasClass('row_selected') ) {
-                        $(this).removeClass('row_selected');
+    var searchOnTable = function (evento) {
+        var table = $(nomTbl);
+        var value = this.value;
+        //alert(evento.which);
+        var isFirst = false;
+        var indexSelect = -1;
+        table.find('tr').each(function (index, row) {
+            if ($(this).hasClass('row_selected')) {
+                $(this).removeClass('row_selected');
+            }
+            //var allCells = $(row).find('td');
+            var allCells = $(row).find('td:eq(0)');
+            if (allCells.length > 0) {
+                var found = false;
+                allCells.each(function (index, td) {
+                    var regExp = new RegExp(value, 'i');
+                    if (regExp.test($(td).text())) {
+                        found = true;
+                        return false;
                     }
-                    //var allCells = $(row).find('td');
-                    var allCells = $(row).find('td:eq(0)');
-                    if(allCells.length > 0) {
-                            var found = false;
-                            allCells.each(function(index, td) {
-                                    var regExp = new RegExp(value, 'i');
-                                    if(regExp.test($(td).text())) {
-                                            found = true;
-                                            return false;
-                                    }
-                            });
-                            if (found == true) {$(row).show(); if(!isFirst){$(this).addClass('row_selected'); isFirst = true; indexSelect = index;}}
-                            else {$(row).hide();}
+                });
+                if (found == true) {
+                    $(row).show();
+                    if (!isFirst) {
+                        $(this).addClass('row_selected');
+                        isFirst = true;
+                        indexSelect = index;
                     }
-            });
-            if(evento.which == 13){
-                if(isFirst){
-                    var pdesDest= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(0)").html();
-                    var ptipDocInden= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(1)").html();
-                    var pnroDocInden= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(2)").html();
-                    var pcodDest= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(3)").html();
-                    
-                    var cproDomicil= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(4)").html();
-                    var cproTelefo= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(5)").html();
-                    var cproEmail= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(6)").html();
-                    var cubiCoddep= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(7)").html();
-                    var cubiCodpro= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(8)").html();
-                    var cubiCoddis= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(9)").html();
-                    var noDep= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(10)").html();
-                    var noPrv= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(11)").html();
-                    var noDis= $(nomTbl+" tbody tr:eq("+indexSelect+")").find("td:eq(12)").html();   
-                    fn_setDestinoEmitlbOtroOrigen(pdesDest,ptipDocInden,pnroDocInden,pcodDest
-                           ,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);
+                } else {
+                    $(row).hide();
                 }
-            }else if(evento.which==38||evento.which==40){
-                //$('#txtConsultaFind').blur();
-                indexAux=-1;
-                $(nomTbl+' >tbody >tr:visible').first().focus(); 
             }
-    };        
+        });
+        if (evento.which == 13) {
+            if (isFirst) {
+                var pdesDest = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(0)").html();
+                var ptipDocInden = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(1)").html();
+                var pnroDocInden = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(2)").html();
+                var pcodDest = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(3)").html();
+
+                var cproDomicil = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(4)").html();
+                var cproTelefo = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(5)").html();
+                var cproEmail = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(6)").html();
+                var cubiCoddep = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(7)").html();
+                var cubiCodpro = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(8)").html();
+                var cubiCoddis = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(9)").html();
+                var noDep = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(10)").html();
+                var noPrv = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(11)").html();
+                var noDis = $(nomTbl + " tbody tr:eq(" + indexSelect + ")").find("td:eq(12)").html();
+                fn_setDestinoEmitlbOtroOrigen(pdesDest, ptipDocInden, pnroDocInden, pcodDest
+                        , cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
+            }
+        } else if (evento.which == 38 || evento.which == 40) {
+            //$('#txtConsultaFind').blur();
+            indexAux = -1;
+            $(nomTbl + ' >tbody >tr:visible').first().focus();
+        }
+    };
     $('#txtConsultaFind').keyup(searchOnTable);
-    $(nomTbl+" tbody tr").click(function(e) {
-        var pdesDest= $(this).find("td:eq(0)").html();
-        var ptipDocInden= $(this).find("td:eq(1)").html();
-        var pnroDocInden= $(this).find("td:eq(2)").html();
-        var pcodDest= $(this).find("td:eq(3)").html();
-        
-         var cproDomicil= $(this).find("td:eq(4)").html();
-         var cproTelefo= $(this).find("td:eq(5)").html();
-         var cproEmail= $(this).find("td:eq(6)").html();
-         var cubiCoddep= $(this).find("td:eq(7)").html();
-         var cubiCodpro= $(this).find("td:eq(8)").html();
-         var cubiCoddis= $(this).find("td:eq(9)").html();
-         var noDep= $(this).find("td:eq(10)").html();
-         var noPrv= $(this).find("td:eq(11)").html();
-         var noDis= $(this).find("td:eq(12)").html();
-            
-        fn_setDestinoEmitlbOtroOrigen(pdesDest,ptipDocInden,pnroDocInden,pcodDest
-                ,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);
+    $(nomTbl + " tbody tr").click(function (e) {
+        var pdesDest = $(this).find("td:eq(0)").html();
+        var ptipDocInden = $(this).find("td:eq(1)").html();
+        var pnroDocInden = $(this).find("td:eq(2)").html();
+        var pcodDest = $(this).find("td:eq(3)").html();
+
+        var cproDomicil = $(this).find("td:eq(4)").html();
+        var cproTelefo = $(this).find("td:eq(5)").html();
+        var cproEmail = $(this).find("td:eq(6)").html();
+        var cubiCoddep = $(this).find("td:eq(7)").html();
+        var cubiCodpro = $(this).find("td:eq(8)").html();
+        var cubiCoddis = $(this).find("td:eq(9)").html();
+        var noDep = $(this).find("td:eq(10)").html();
+        var noPrv = $(this).find("td:eq(11)").html();
+        var noDis = $(this).find("td:eq(12)").html();
+
+        fn_setDestinoEmitlbOtroOrigen(pdesDest, ptipDocInden, pnroDocInden, pcodDest
+                , cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
     });
-    $(nomTbl+' >tbody >tr:visible').keydown(function(evento){
-        if(evento.which==38){//up
-            if ($(nomTbl+" tbody tr:visible").eq(indexAux).prev('tr').length == 0) {
-                indexAux=$(nomTbl+" tbody tr:visible").length;
+    $(nomTbl + ' >tbody >tr:visible').keydown(function (evento) {
+        if (evento.which == 38) {//up
+            if ($(nomTbl + " tbody tr:visible").eq(indexAux).prev('tr').length == 0) {
+                indexAux = $(nomTbl + " tbody tr:visible").length;
             }
-            $(nomTbl+" tbody tr:visible").eq(indexAux).removeClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).removeClass('row_selected');
             indexAux--;
-            $(nomTbl+" tbody tr:visible").eq(indexAux).addClass('row_selected');
-            $(nomTbl+" tbody tr:visible").eq(indexAux).focus();
-        }else if(evento.which==40){//down
-            if ($(nomTbl+" tbody tr:visible").eq(indexAux).next('tr').length == 0){
-                indexAux=-1;
+            $(nomTbl + " tbody tr:visible").eq(indexAux).addClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).focus();
+        } else if (evento.which == 40) {//down
+            if ($(nomTbl + " tbody tr:visible").eq(indexAux).next('tr').length == 0) {
+                indexAux = -1;
             }
-            $(nomTbl+" tbody tr:visible").eq(indexAux).removeClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).removeClass('row_selected');
             indexAux++;
-            $(nomTbl+" tbody tr:visible").eq(indexAux).addClass('row_selected');                
-            $(nomTbl+" tbody tr:visible").eq(indexAux).focus();
-        }else if(evento.which==13){
-            var pdesDest= $(this).find("td:eq(0)").html();
-            var ptipDocInden= $(this).find("td:eq(1)").html();
-            var pnroDocInden= $(this).find("td:eq(2)").html();
-            var pcodDest= $(this).find("td:eq(3)").html();
-            
-            var cproDomicil= $(this).find("td:eq(4)").html();
-            var cproTelefo= $(this).find("td:eq(5)").html();
-            var cproEmail= $(this).find("td:eq(6)").html();
-            var cubiCoddep= $(this).find("td:eq(7)").html();
-            var cubiCodpro= $(this).find("td:eq(8)").html();
-            var cubiCoddis= $(this).find("td:eq(9)").html();
-            var noDep= $(this).find("td:eq(10)").html();
-            var noPrv= $(this).find("td:eq(11)").html();
-            var noDis= $(this).find("td:eq(12)").html();
-         
-            fn_setDestinoEmitlbOtroOrigen(pdesDest,ptipDocInden,pnroDocInden,pcodDest
-                    ,cproDomicil,cproTelefo,cproEmail,cubiCoddep,cubiCodpro,cubiCoddis,noDep,noPrv,noDis);             
+            $(nomTbl + " tbody tr:visible").eq(indexAux).addClass('row_selected');
+            $(nomTbl + " tbody tr:visible").eq(indexAux).focus();
+        } else if (evento.which == 13) {
+            var pdesDest = $(this).find("td:eq(0)").html();
+            var ptipDocInden = $(this).find("td:eq(1)").html();
+            var pnroDocInden = $(this).find("td:eq(2)").html();
+            var pcodDest = $(this).find("td:eq(3)").html();
+
+            var cproDomicil = $(this).find("td:eq(4)").html();
+            var cproTelefo = $(this).find("td:eq(5)").html();
+            var cproEmail = $(this).find("td:eq(6)").html();
+            var cubiCoddep = $(this).find("td:eq(7)").html();
+            var cubiCodpro = $(this).find("td:eq(8)").html();
+            var cubiCoddis = $(this).find("td:eq(9)").html();
+            var noDep = $(this).find("td:eq(10)").html();
+            var noPrv = $(this).find("td:eq(11)").html();
+            var noDis = $(this).find("td:eq(12)").html();
+
+            fn_setDestinoEmitlbOtroOrigen(pdesDest, ptipDocInden, pnroDocInden, pcodDest
+                    , cproDomicil, cproTelefo, cproEmail, cubiCoddep, cubiCodpro, cubiCoddis, noDep, noPrv, noDis);
         }
         //console.log(indexAux);
         evento.preventDefault();
-    });    
+    });
 }
 
 function fn_limpiarNumeroDocEmi() {
@@ -5227,40 +5245,39 @@ function fn_llenaComboTramiteDocEmi() {
     var p = new Array();
     p[0] = "accion=goBuscaLstMotivoDocEmi";
     p[1] = "pcoTipDoc=" + jQuery("#coTipDocAdm").val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         $("#cmbTramiteDocEmi").find('option:not(:first)').remove();
         if (data !== null && data.coRespuesta === "1") {
-            $.each(data.lsMotivo, function(i, item) {
+            $.each(data.lsMotivo, function (i, item) {
                 $("#cmbTramiteDocEmi").append('<option value=' + item.value + '>' + item.label + '</option>');
             });
         }
-       
+
     }, 'json', false, true, "POST");
 }
 
-function fn_changeTipoDocEmiAdm(cmbTipoDoc){
-    var coTiDoc=jQuery(cmbTipoDoc).val();
-    var coTiDocLast=jQuery(cmbTipoDoc).find('option:last').val();
-    var coTiDocFirst=jQuery(cmbTipoDoc).find('option:first').val();
-    if(coTiDocLast==="-1"){
+function fn_changeTipoDocEmiAdm(cmbTipoDoc) {
+    var coTiDoc = jQuery(cmbTipoDoc).val();
+    var coTiDocLast = jQuery(cmbTipoDoc).find('option:last').val();
+    var coTiDocFirst = jQuery(cmbTipoDoc).find('option:first').val();
+    if (coTiDocLast === "-1") {
         jQuery(cmbTipoDoc).find('option:last').remove();
-    }else if(coTiDocFirst==="-1"){
+    } else if (coTiDocFirst === "-1") {
         jQuery(cmbTipoDoc).find('option:first').remove();
     }
-    
-    
-    if(jQuery('#inDepSalEsp').val()=='1' && (coTiDoc=='011' || coTiDoc=='012' || coTiDoc=='250'))
+
+
+    if (jQuery('#inDepSalEsp').val() == '1' && (coTiDoc == '011' || coTiDoc == '012' || coTiDoc == '250'))
     {
         jQuery('#divOrigenOficio').show();
-         jQuery('#ddlOrigenOficio').val("0");     
-       //  alert(jQuery('#ddlOrigenOficio').val());
-         fn_getEditOrigenOficio();
-    }
-    else
+        jQuery('#ddlOrigenOficio').val("0");
+        //  alert(jQuery('#ddlOrigenOficio').val());
+        fn_getEditOrigenOficio();
+    } else
     {
-        jQuery('#divOrigenOficio').hide();        
+        jQuery('#divOrigenOficio').hide();
     }
-    
+
     fn_limpiarNumeroDocEmi();
     fn_llenaComboTramiteDocEmi();
 //    fn_getNroDocumentoDocAdm(coTiDoc);
@@ -5268,291 +5285,295 @@ function fn_changeTipoDocEmiAdm(cmbTipoDoc){
 }
 
 //YUAL
-function fn_initOrigenEspecial(cmbTipoDoc){
-    var coTiDoc=jQuery(cmbTipoDoc).val();
-    var coTiDocLast=jQuery(cmbTipoDoc).find('option:last').val();
-    var coTiDocFirst=jQuery(cmbTipoDoc).find('option:first').val();
-    if(jQuery('#inDepSalEsp').val()=='1' && (coTiDoc=='011' || coTiDoc=='012' || coTiDoc=='250'))
+function fn_initOrigenEspecial(cmbTipoDoc) {
+    var coTiDoc = jQuery(cmbTipoDoc).val();
+    var coTiDocLast = jQuery(cmbTipoDoc).find('option:last').val();
+    var coTiDocFirst = jQuery(cmbTipoDoc).find('option:first').val();
+    if (jQuery('#inDepSalEsp').val() == '1' && (coTiDoc == '011' || coTiDoc == '012' || coTiDoc == '250'))
     {
-    if(coTiDocLast==="-1"){
-        jQuery(cmbTipoDoc).find('option:last').remove();
-    }else if(coTiDocFirst==="-1"){
-        jQuery(cmbTipoDoc).find('option:first').remove();
-    }
-    
-    
-    
+        if (coTiDocLast === "-1") {
+            jQuery(cmbTipoDoc).find('option:last').remove();
+        } else if (coTiDocFirst === "-1") {
+            jQuery(cmbTipoDoc).find('option:first').remove();
+        }
+
+
+
         jQuery('#divOrigenOficio').show();
-         jQuery('#ddlOrigenOficio').val("0");     
-       //  alert(jQuery('#ddlOrigenOficio').val());
-         fn_getEditOrigenOficio();
-   
-    
-    fn_limpiarNumeroDocEmi();
-    fn_llenaComboTramiteDocEmi();
+        jQuery('#ddlOrigenOficio').val("0");
+        //  alert(jQuery('#ddlOrigenOficio').val());
+        fn_getEditOrigenOficio();
+
+
+        fn_limpiarNumeroDocEmi();
+        fn_llenaComboTramiteDocEmi();
 //    fn_getNroDocumentoDocAdm(coTiDoc);
-    fu_changeDocumentoEmiBean();
-    
-     }
-    
+        fu_changeDocumentoEmiBean();
+
+    }
+
 }
 
 
 function fn_getEditOrigenOficio()
 {
-     //var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
-     var siglaDocumento=jQuery('#deDocSig').val();
-     var siglaOrigen=siglaDocumento.substring(siglaDocumento.indexOf("-")+1,siglaDocumento.length);
+    //var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
+    var siglaDocumento = jQuery('#deDocSig').val();
+    var siglaOrigen = siglaDocumento.substring(siglaDocumento.indexOf("-") + 1, siglaDocumento.length);
+
+    if (siglaOrigen != "" && siglaOrigen != "0")
+    {
+        jQuery('#ddlOrigenOficio').val(siglaOrigen);
+    } else
+    {
+        jQuery('#ddlOrigenOficio').val("0");
+    }
+    /*  var p = new Array();
+     p[0] = "accion=goBuscaSIGLADependencia";
+     p[1] = "pCodDep=" + cmbOrigenOficio;
+     ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+     console.log(data);
      
-     if(siglaOrigen!="" && siglaOrigen!="0")
-     {
-        jQuery('#ddlOrigenOficio').val(siglaOrigen);       
+     if (data !== null) {
+     
+     $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     
      }
      else
      {
-        jQuery('#ddlOrigenOficio').val("0"); 
+     $('#deDocSig').val(siglaOficina);
      }
-  /*  var p = new Array();
-    p[0] = "accion=goBuscaSIGLADependencia";
-    p[1] = "pCodDep=" + cmbOrigenOficio;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-        console.log(data);
-     
-         if (data !== null) {
-            
-            $('#deDocSig').val(siglaOficina+'-'+data.sigla);
-           
-        }
-        else
-        {
-            $('#deDocSig').val(siglaOficina);
-        }
-    }, 'json', false, true, "POST");
-*/
-    
+     }, 'json', false, true, "POST");
+     */
+
 }
 
 //YUAL
 function fn_changeOrigenOficio()
 {
-    var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
-     var siglaOficina=jQuery('#siglaDependencia').val();
-      if(cmbOrigenOficio.trim()!='' && cmbOrigenOficio.trim()!='0')
-      {
-       $('#deDocSig').val(siglaOficina+'-'+cmbOrigenOficio);
-      }
-      else{
-           $('#deDocSig').val(siglaOficina);          
-      }
+    var cmbOrigenOficio = jQuery('#ddlOrigenOficio').val();
+    var siglaOficina = jQuery('#siglaDependencia').val();
+    if (cmbOrigenOficio.trim() != '' && cmbOrigenOficio.trim() != '0')
+    {
+        $('#deDocSig').val(siglaOficina + '-' + cmbOrigenOficio);
+    } else {
+        $('#deDocSig').val(siglaOficina);
+    }
     /* var p = new Array();
-    p[0] = "accion=goBuscaSIGLADependencia";
-    p[1] = "pCodDep=" + cmbOrigenOficio;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-        console.log(data);
+     p[0] = "accion=goBuscaSIGLADependencia";
+     p[1] = "pCodDep=" + cmbOrigenOficio;
+     ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+     console.log(data);
      
-         if (data !== null) {
-             $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     if (data !== null) {
+     $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     
+     }
+     else
+     {
+     $('#deDocSig').val(siglaOficina);
+     }
+     }, 'json', false, true, "POST");*/
 
-        }
-        else
-        {
-            $('#deDocSig').val(siglaOficina);
-        }
-    }, 'json', false, true, "POST");*/
-    
 }
 
 //YUAL
 function fn_getEditOrigenOficio()
 {
-     //var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
-     var siglaDocumento=jQuery('#deDocSig').val();
-     var siglaOrigen=siglaDocumento.substring(siglaDocumento.indexOf("-")+1,siglaDocumento.length);
+    //var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
+    var siglaDocumento = jQuery('#deDocSig').val();
+    var siglaOrigen = siglaDocumento.substring(siglaDocumento.indexOf("-") + 1, siglaDocumento.length);
+
+    if (siglaOrigen != "" && siglaOrigen != "0")
+    {
+        jQuery('#ddlOrigenOficio').val(siglaOrigen);
+    } else
+    {
+        jQuery('#ddlOrigenOficio').val("0");
+    }
+    /*  var p = new Array();
+     p[0] = "accion=goBuscaSIGLADependencia";
+     p[1] = "pCodDep=" + cmbOrigenOficio;
+     ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+     console.log(data);
      
-     if(siglaOrigen!="" && siglaOrigen!="0")
-     {
-        jQuery('#ddlOrigenOficio').val(siglaOrigen);       
+     if (data !== null) {
+     
+     $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     
      }
      else
      {
-        jQuery('#ddlOrigenOficio').val("0"); 
+     $('#deDocSig').val(siglaOficina);
      }
-  /*  var p = new Array();
-    p[0] = "accion=goBuscaSIGLADependencia";
-    p[1] = "pCodDep=" + cmbOrigenOficio;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-        console.log(data);
-     
-         if (data !== null) {
-            
-            $('#deDocSig').val(siglaOficina+'-'+data.sigla);
-           
-        }
-        else
-        {
-            $('#deDocSig').val(siglaOficina);
-        }
-    }, 'json', false, true, "POST");
-*/
-    
+     }, 'json', false, true, "POST");
+     */
+
 }
 
 //YUAL
 function fn_changeOrigenOficio()
 {
-    var cmbOrigenOficio=jQuery('#ddlOrigenOficio').val();
-     var siglaOficina=jQuery('#siglaDependencia').val();
-      if(cmbOrigenOficio.trim()!='' && cmbOrigenOficio.trim()!='0')
-      {
-       $('#deDocSig').val(siglaOficina+'-'+cmbOrigenOficio);
-      }
-      else{
-           $('#deDocSig').val(siglaOficina);          
-      }
+    var cmbOrigenOficio = jQuery('#ddlOrigenOficio').val();
+    var siglaOficina = jQuery('#siglaDependencia').val();
+    if (cmbOrigenOficio.trim() != '' && cmbOrigenOficio.trim() != '0')
+    {
+        $('#deDocSig').val(siglaOficina + '-' + cmbOrigenOficio);
+    } else {
+        $('#deDocSig').val(siglaOficina);
+    }
     /* var p = new Array();
-    p[0] = "accion=goBuscaSIGLADependencia";
-    p[1] = "pCodDep=" + cmbOrigenOficio;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-        console.log(data);
+     p[0] = "accion=goBuscaSIGLADependencia";
+     p[1] = "pCodDep=" + cmbOrigenOficio;
+     ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+     console.log(data);
      
-         if (data !== null) {
-             $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     if (data !== null) {
+     $('#deDocSig').val(siglaOficina+'-'+data.sigla);
+     
+     }
+     else
+     {
+     $('#deDocSig').val(siglaOficina);
+     }
+     }, 'json', false, true, "POST");*/
 
-        }
-        else
-        {
-            $('#deDocSig').val(siglaOficina);
-        }
-    }, 'json', false, true, "POST");*/
-    
 }
 
-function fn_changeEnvMpOtros(chkEnvMesaPartes){
-    var tblOtros='tblDestEmiDocAdmOtro';
-    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(4).innerHTML==="BD") {
-        var chkEnvMpBD=jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(9).innerHTML==="1"?true:false;        
-        var chkEnvMp=jQuery(chkEnvMesaPartes).is(':checked');
-        if(chkEnvMpBD!==chkEnvMp){
-            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(4).innerHTML="UPD";            
+function fn_changeEnvMpOtros(chkEnvMesaPartes) {
+    var tblOtros = 'tblDestEmiDocAdmOtro';
+    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(4).innerHTML === "BD") {
+        var chkEnvMpBD = jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(9).innerHTML === "1" ? true : false;
+        var chkEnvMp = jQuery(chkEnvMesaPartes).is(':checked');
+        if (chkEnvMpBD !== chkEnvMp) {
+            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(4).innerHTML = "UPD";
         }
-    }    
+    }
 }
 
-function fn_changeEnvMpCiudadano(chkEnvMesaPartes){
-    var tblOtros='tblDestEmiDocAdmOtro';
-    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML==="BD") {
-        var chkEnvMpBD=jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(7).innerHTML==="1"?true:false;        
-        var chkEnvMp=jQuery(chkEnvMesaPartes).is(':checked');
-        if(chkEnvMpBD!==chkEnvMp){
-            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML="UPD";            
+function fn_changeEnvMpCiudadano(chkEnvMesaPartes) {
+    var tblOtros = 'tblDestEmiDocAdmOtro';
+    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML === "BD") {
+        var chkEnvMpBD = jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(7).innerHTML === "1" ? true : false;
+        var chkEnvMp = jQuery(chkEnvMesaPartes).is(':checked');
+        if (chkEnvMpBD !== chkEnvMp) {
+            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML = "UPD";
         }
-    }    
+    }
 }
 
-function fn_changeEnvMpProveedor(chkEnvMesaPartes){
-    var tblOtros='tblDestEmiDocAdmOtro';
-    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML==="BD") {
-        var chkEnvMpBD=jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(8).innerHTML==="1"?true:false;        
-        var chkEnvMp=jQuery(chkEnvMesaPartes).is(':checked');
-        if(chkEnvMpBD!==chkEnvMp){
-            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML="UPD";            
+function fn_changeEnvMpProveedor(chkEnvMesaPartes) {
+    var tblOtros = 'tblDestEmiDocAdmOtro';
+    if (jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML === "BD") {
+        var chkEnvMpBD = jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(8).innerHTML === "1" ? true : false;
+        var chkEnvMp = jQuery(chkEnvMesaPartes).is(':checked');
+        if (chkEnvMpBD !== chkEnvMp) {
+            jQuery(chkEnvMesaPartes).parents(':eq(1)').children().get(3).innerHTML = "UPD";
         }
-    }    
+    }
 }
 
-function showBtnEnviarDocAdm(){
+function showBtnEnviarDocAdm() {
     var btnEmitirDoc = jQuery('#divEmitirDoc').find('button').get(0);
     btnEmitirDoc.removeAttribute('onclick');
-    btnEmitirDoc.setAttribute('onclick','fu_changeEstadoDocEmiAdm(\'0\');');
+    btnEmitirDoc.setAttribute('onclick', 'fu_changeEstadoDocEmiAdm(\'0\');');
     jQuery('#divEmitirDoc').show();
-    
+
     //Fir
-  //  var btnEmitirDocFri = jQuery('#divEmitirDocFir').val();
-   // if (typeof (btnEmitirDocFri) != undefined && typeof (btnEmitirDocFri) != null && typeof (btnEmitirDocFri) != 'undefined') {
-        //console.log(btnEmitirDocFri);
-   // alert('existe');
+    //  var btnEmitirDocFri = jQuery('#divEmitirDocFir').val();
+    // if (typeof (btnEmitirDocFri) != undefined && typeof (btnEmitirDocFri) != null && typeof (btnEmitirDocFri) != 'undefined') {
+    //console.log(btnEmitirDocFri);
+    // alert('existe');
     /*btnEmitirDocFri.removeAttribute('onclick');
-    btnEmitirDocFri.setAttribute('onclick','fu_changeEstadoDocEmiAdm(\'0\');');*/
+     btnEmitirDocFri.setAttribute('onclick','fu_changeEstadoDocEmiAdm(\'0\');');*/
     $('#divEmitirDocFir').show();
-     //}
-    
+    //}
+
 }
 
-function fn_iniNewEmpVoBoDocAdm(){
+function fn_iniNewEmpVoBoDocAdm() {
     var tableaux = $('#tblElaboradoPor');
-    tableaux.find('tr').each(function(index, row) {
-        if(index === 0){
-            $(this).addClass('row_selected');                        
+    tableaux.find('tr').each(function (index, row) {
+        if (index === 0) {
+            $(this).addClass('row_selected');
             return false;
         }
     });
-    var searchOnTable = function(evento) {
-            var table = $('#tblElaboradoPor');
-            var value = this.value;
-            //alert(evento.which);
-            var isFirst = false;
-            var indexSelect = -1;
-            table.find('tr').each(function(index, row) {
-                    if ( $(this).hasClass('row_selected') ) {
-                        $(this).removeClass('row_selected');
+    var searchOnTable = function (evento) {
+        var table = $('#tblElaboradoPor');
+        var value = this.value;
+        //alert(evento.which);
+        var isFirst = false;
+        var indexSelect = -1;
+        table.find('tr').each(function (index, row) {
+            if ($(this).hasClass('row_selected')) {
+                $(this).removeClass('row_selected');
+            }
+            //var allCells = $(row).find('td');
+            var allCells = $(row).find('td:eq(0)');
+            if (allCells.length > 0) {
+                var found = false;
+                allCells.each(function (index, td) {
+                    var regExp = new RegExp(value, 'i');
+                    if (regExp.test($(td).text())) {
+                        found = true;
+                        return false;
                     }
-                    //var allCells = $(row).find('td');
-                    var allCells = $(row).find('td:eq(0)');
-                    if(allCells.length > 0) {
-                            var found = false;
-                            allCells.each(function(index, td) {
-                                    var regExp = new RegExp(value, 'i');
-                                    if(regExp.test($(td).text())) {
-                                            found = true;
-                                            return false;
-                                    }
-                            });
-                            if (found === true) {$(row).show(); if(!isFirst){$(this).addClass('row_selected'); isFirst = true; indexSelect = index;}}
-                            else {$(row).hide();}
+                });
+                if (found === true) {
+                    $(row).show();
+                    if (!isFirst) {
+                        $(this).addClass('row_selected');
+                        isFirst = true;
+                        indexSelect = index;
                     }
-            });
-            if(evento.which === 13){
-                if(isFirst){
-                    var pdesDest= $("#tblElaboradoPor tbody tr:eq("+indexSelect+")").find("td:eq(0)").html();
-                    var pcodDest= $("#tblElaboradoPor tbody tr:eq("+indexSelect+")").find("td:eq(1)").html();
-                    fu_setDatoEmpNewVoBoDocAdm(pcodDest,pdesDest);
+                } else {
+                    $(row).hide();
                 }
             }
-    };        
+        });
+        if (evento.which === 13) {
+            if (isFirst) {
+                var pdesDest = $("#tblElaboradoPor tbody tr:eq(" + indexSelect + ")").find("td:eq(0)").html();
+                var pcodDest = $("#tblElaboradoPor tbody tr:eq(" + indexSelect + ")").find("td:eq(1)").html();
+                fu_setDatoEmpNewVoBoDocAdm(pcodDest, pdesDest);
+            }
+        }
+    };
     $('#txtConsultaFind').keyup(searchOnTable);
-    $("#tblElaboradoPor tbody tr").click(function(e) {
-        var pdesDest= $(this).find("td:eq(0)").html();
-        var pcodDest= $(this).find("td:eq(1)").html();
-        fu_setDatoEmpNewVoBoDocAdm(pcodDest,pdesDest);            
-    });    
+    $("#tblElaboradoPor tbody tr").click(function (e) {
+        var pdesDest = $(this).find("td:eq(0)").html();
+        var pcodDest = $(this).find("td:eq(1)").html();
+        fu_setDatoEmpNewVoBoDocAdm(pcodDest, pdesDest);
+    });
 }
 
-function fu_setDatoEmpNewVoBoDocAdm(pcoEmp,pDeEmp){
+function fu_setDatoEmpNewVoBoDocAdm(pcoEmp, pDeEmp) {
     var pfila = jQuery('#txtTblPersVoBoFilaWhereButton').val();
-    var pcol = jQuery('#txtTblPersVoBoColWhereButton').val();    
+    var pcol = jQuery('#txtTblPersVoBoColWhereButton').val();
     var idTabla = "#tblPersVoBoDocAdm";
     removeDomId('windowConsultaElaboradoPor');
-    
+
     var arrCampo = new Array();
     arrCampo[0] = "1=" + jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(1)").text();//codDependencia
     arrCampo[1] = "3=" + pcoEmp;//codEmpleado
-    var bResult = fn_validaDestinatarioIntituDuplicado('tblPersVoBoDocAdm', arrCampo, true, pfila*1);
-    if(bResult){
-        if (jQuery(idTabla+" tbody tr:eq(" + pfila + ") td:eq(5)").text() === "BD") {
-            jQuery(idTabla+" tbody tr:eq(" + pfila + ") td:eq(5)").text("DEL");
+    var bResult = fn_validaDestinatarioIntituDuplicado('tblPersVoBoDocAdm', arrCampo, true, pfila * 1);
+    if (bResult) {
+        if (jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(5)").text() === "BD") {
+            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(5)").text("DEL");
             jQuery(idTabla + " tbody tr:eq(" + pfila + ")").clone().addClass('oculto').appendTo(idTabla + " tbody");
-            jQuery(idTabla+" tbody tr:eq(" + pfila + ") td:eq(5)").text("INS");
+            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(5)").text("INS");
         }
-        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol +")").find('input[type=text]').val(pDeEmp);
-        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(3)").text(pcoEmp);            
-        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(pDeEmp);             
-        fn_changeDestinatarioCorrectoOtro('tblPersVoBoDocAdm',pfila);
+        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(pDeEmp);
+        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(3)").text(pcoEmp);
+        jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(pDeEmp);
+        fn_changeDestinatarioCorrectoOtro('tblPersVoBoDocAdm', pfila);
         jQuery(idTabla + " tbody tr:eq(" + pfila + ")").find('#spanObsDocVoboAlert').remove();
-    }else{
-        bootbox.alert("<h5>Empleado ya esta en lista.</h5>", function() {
+    } else {
+        bootbox.alert("<h5>Empleado ya esta en lista.</h5>", function () {
             bootbox.hideAll();
             jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').focus();
-        });         
+        });
     }
 }
 
@@ -5565,63 +5586,63 @@ function fn_addEmpVoBoDocAdm() {
 }
 
 function fn_removeEmpVoBoDocAdm() {
-    var noTbl='#tblPersVoBoDocAdm';
-    var inVobo=jQuery(noTbl + " tbody tr:eq(" + jQuery('#txtIndexFilaPersVoBoDocAdm').val()*1 + ") td:eq(8)").text();
-    if(!!inVobo&&(inVobo==="7"||inVobo==="2"||inVobo==="0")){
-        fn_removeTblEmiDocAdm("5", "tblPersVoBoDocAdm", 'txtIndexFilaPersVoBoDocAdm','Empleado Visto Bueno');
+    var noTbl = '#tblPersVoBoDocAdm';
+    var inVobo = jQuery(noTbl + " tbody tr:eq(" + jQuery('#txtIndexFilaPersVoBoDocAdm').val() * 1 + ") td:eq(8)").text();
+    if (!!inVobo && (inVobo === "7" || inVobo === "2" || inVobo === "0")) {
+        fn_removeTblEmiDocAdm("5", "tblPersVoBoDocAdm", 'txtIndexFilaPersVoBoDocAdm', 'Empleado Visto Bueno');
     }
 }
 
-function fn_buscarEmpleadoVoBoDocAdm(kepPressUser,inputNomb){
-    var pnomEmp=jQuery(inputNomb).val(fu_getValorUpperCase(jQuery(inputNomb).val())).val();
-    var coDep=(($(inputNomb).parent()).parent()).children().get(1).innerHTML;
-    fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp,coDep,inputNomb);
+function fn_buscarEmpleadoVoBoDocAdm(kepPressUser, inputNomb) {
+    var pnomEmp = jQuery(inputNomb).val(fu_getValorUpperCase(jQuery(inputNomb).val())).val();
+    var coDep = (($(inputNomb).parent()).parent()).children().get(1).innerHTML;
+    fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp, coDep, inputNomb);
 }
 
-function fn_buscarEmpleadoVoBoDocAdmButton(objButton){
-    var inputNomb=(jQuery(objButton).parent()).find('input[type=text]');
-    var pnomEmp=allTrim(fu_getValorUpperCase(inputNomb.val()));
-    var coDep=(($(objButton).parent()).parent()).children().get(1).innerHTML;
-    fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp,coDep,inputNomb);
+function fn_buscarEmpleadoVoBoDocAdmButton(objButton) {
+    var inputNomb = (jQuery(objButton).parent()).find('input[type=text]');
+    var pnomEmp = allTrim(fu_getValorUpperCase(inputNomb.val()));
+    var coDep = (($(objButton).parent()).parent()).children().get(1).innerHTML;
+    fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp, coDep, inputNomb);
 }
 
-function fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp,pcoDep,inputNomb){
-    if(!!pcoDep&&allTrim(pcoDep).length>1){
+function fn_validarBusqEmpleadoVoBoDocAdm(pnomEmp, pcoDep, inputNomb) {
+    if (!!pcoDep && allTrim(pcoDep).length > 1) {
         var p = new Array();
         p[0] = "accion=goBuscaEmpVoBoDocAdm";
         p[1] = "pnomEmp=" /*+ pnomEmp*/;
         p[2] = "pcoDep=" + pcoDep;
-        ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+        ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
             fn_rptaBuscaDestinatarioFiltroConsulDocRecep(data);
             jQuery('#txtTblPersVoBoFilaWhereButton').val(((jQuery(inputNomb).parent()).parent()).index());
-            jQuery('#txtTblPersVoBoColWhereButton').val((jQuery(inputNomb).parent()).index());            
-        },'text', false, false, "POST");        
-    }else{
-        bootbox.alert("<h5>Ingrese Dependencia.</h5>", function() {
+            jQuery('#txtTblPersVoBoColWhereButton').val((jQuery(inputNomb).parent()).index());
+        }, 'text', false, false, "POST");
+    } else {
+        bootbox.alert("<h5>Ingrese Dependencia.</h5>", function () {
             bootbox.hideAll();
 //            jQuery(inputNomb).focus();
-        });        
+        });
     }
-    return false;     
+    return false;
 }
 
-function fn_accionTblPersVoBoDocAdm(accion,object){
-    var nomTbl1='#tblRemitenteNewDocAdm_1';
-    var nomTbl2='#tblRemitenteNewDocAdm_2';
-    var div1='#divtablaPersVoBoDocAdm';
-    var div2='#divTblPersVoBoDocAdm';
-    if(accion==="SHOW"){
-        jQuery(nomTbl2+' >tbody >tr').eq(0).toggle();
-        jQuery(nomTbl2+' >tbody >tr').eq(1).appendTo(nomTbl1+' >tbody');
-        jQuery(div1).appendTo(nomTbl2+' >tbody');
-        jQuery(object).attr('onclick','fn_accionTblPersVoBoDocAdm(\"HIDE\",this);');
+function fn_accionTblPersVoBoDocAdm(accion, object) {
+    var nomTbl1 = '#tblRemitenteNewDocAdm_1';
+    var nomTbl2 = '#tblRemitenteNewDocAdm_2';
+    var div1 = '#divtablaPersVoBoDocAdm';
+    var div2 = '#divTblPersVoBoDocAdm';
+    if (accion === "SHOW") {
+        jQuery(nomTbl2 + ' >tbody >tr').eq(0).toggle();
+        jQuery(nomTbl2 + ' >tbody >tr').eq(1).appendTo(nomTbl1 + ' >tbody');
+        jQuery(div1).appendTo(nomTbl2 + ' >tbody');
+        jQuery(object).attr('onclick', 'fn_accionTblPersVoBoDocAdm(\"HIDE\",this);');
         jQuery(object).find('span').removeClass();
         jQuery(object).find('span').addClass('glyphicon glyphicon-chevron-right');
-    }else if(accion==="HIDE"){
-        jQuery(nomTbl2+' >tbody >tr').eq(0).toggle();
-        jQuery(nomTbl1+' >tbody >tr').eq(2).appendTo(nomTbl2+' >tbody');
-        jQuery(div1).appendTo(div2);        
-        jQuery(object).attr('onclick','fn_accionTblPersVoBoDocAdm(\"SHOW\",this);');
+    } else if (accion === "HIDE") {
+        jQuery(nomTbl2 + ' >tbody >tr').eq(0).toggle();
+        jQuery(nomTbl1 + ' >tbody >tr').eq(2).appendTo(nomTbl2 + ' >tbody');
+        jQuery(div1).appendTo(div2);
+        jQuery(object).attr('onclick', 'fn_accionTblPersVoBoDocAdm(\"SHOW\",this);');
         jQuery(object).find('span').removeClass();
         jQuery(object).find('span').addClass('glyphicon glyphicon-chevron-left');
     }
@@ -5632,11 +5653,11 @@ function fn_tblEmpVoBoDocAdmToJson() {
     arrColMostrar[0] = "accionBD=6";
     arrColMostrar[1] = "coEmpleado=4";
     arrColMostrar[2] = "coDependencia=2";
-    return '['+fn_tblDestEmihtml2json('tblPersVoBoDocAdm', 1, arrColMostrar, 11, "1", 6, "BD")+']';
+    return '[' + fn_tblDestEmihtml2json('tblPersVoBoDocAdm', 1, arrColMostrar, 11, "1", 6, "BD") + ']';
 }
 
 function fu_verificarEmpVoBo() {
-    var vResult = " Visto Bueno";   
+    var vResult = " Visto Bueno";
     var vtabla = ["tblPersVoBoDocAdm= Visto Bueno"];
     for (var i = 0; i < vtabla.length; i++) {
         var vauxTabla = vtabla[i].split("=");
@@ -5645,153 +5666,161 @@ function fu_verificarEmpVoBo() {
         if (nrpta === "0") {
             vResult = rpta.substr(1) + vauxTabla[1];
             break;
-        }else if(nrpta === "2"){
+        } else if (nrpta === "2") {
             vResult = "1";
-        }else {
+        } else {
             vResult = rpta.substr(0, 1);
         }
     }
-    return vResult;    
+    return vResult;
 }
 
-function fn_setTblPersonalVoBo(){
-    var nomTbl='#tblPersVoBoDocAdm';
-    jQuery(nomTbl+" tbody tr").each(function(index, row) {
-        if (index > 0){
-            if($(row).hasClass('oculto')){
+function fn_setTblPersonalVoBo() {
+    var nomTbl = '#tblPersVoBoDocAdm';
+    jQuery(nomTbl + " tbody tr").each(function (index, row) {
+        if (index > 0) {
+            if ($(row).hasClass('oculto')) {
                 $(row).remove();
-            }else{
-                var accionBD=$(row).find('td:eq(5)').html();
-                if(accionBD!=="BD"){
-                   if(accionBD==="DEL"){
-                       $(row).remove();
-                   }else{
-                       $(row).find('td:eq(5)').html("BD");
-                   } 
+            } else {
+                var accionBD = $(row).find('td:eq(5)').html();
+                if (accionBD !== "BD") {
+                    if (accionBD === "DEL") {
+                        $(row).remove();
+                    } else {
+                        $(row).find('td:eq(5)').html("BD");
+                    }
                 }
-            }            
+            }
         }
     });
 }
 
-function fn_buscarDepVoBoDocAdmButton(objButton){
-    var inputNomb=(jQuery(objButton).parent()).find('input[type=text]');
-    var pnomDep=allTrim(fu_getValorUpperCase(inputNomb.val()));    
-    fn_validarBusqDependenciaVoBoDocAdm(pnomDep,inputNomb);    
+function fn_buscarDepVoBoDocAdmButton(objButton) {
+    var inputNomb = (jQuery(objButton).parent()).find('input[type=text]');
+    var pnomDep = allTrim(fu_getValorUpperCase(inputNomb.val()));
+    fn_validarBusqDependenciaVoBoDocAdm(pnomDep, inputNomb);
 }
 
-function fn_buscarDepVoBoDocAdm(kepPressUser,inputNomb){
-    var pnomDep=jQuery(inputNomb).val(fu_getValorUpperCase(jQuery(inputNomb).val())).val();
-    fn_validarBusqDependenciaVoBoDocAdm(pnomDep,inputNomb);    
+function fn_buscarDepVoBoDocAdm(kepPressUser, inputNomb) {
+    var pnomDep = jQuery(inputNomb).val(fu_getValorUpperCase(jQuery(inputNomb).val())).val();
+    fn_validarBusqDependenciaVoBoDocAdm(pnomDep, inputNomb);
 }
 
-function fn_validarBusqDependenciaVoBoDocAdm(pnomDep,inputNomb){
+function fn_validarBusqDependenciaVoBoDocAdm(pnomDep, inputNomb) {
 //    if(!!pnomDep&&allTrim(pnomDep).length>1){
-        var p = new Array();
-        p[0] = "accion=goBuscaDepVoBoDocAdm";
-        p[1] = "pdeDepen=" + pnomDep;
-        ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
-            fn_rptaBuscaDestinatarioFiltroConsulDocRecep(data);
-            jQuery('#txtTblPersVoBoFilaWhereButton').val(((jQuery(inputNomb).parent()).parent()).index());
-            jQuery('#txtTblPersVoBoColWhereButton').val((jQuery(inputNomb).parent()).index());            
-        },'text', false, false, "POST");        
+    var p = new Array();
+    p[0] = "accion=goBuscaDepVoBoDocAdm";
+    p[1] = "pdeDepen=" + pnomDep;
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
+        fn_rptaBuscaDestinatarioFiltroConsulDocRecep(data);
+        jQuery('#txtTblPersVoBoFilaWhereButton').val(((jQuery(inputNomb).parent()).parent()).index());
+        jQuery('#txtTblPersVoBoColWhereButton').val((jQuery(inputNomb).parent()).index());
+    }, 'text', false, false, "POST");
 //    }else{
 //        bootbox.alert("<h5>Ingrese Depedencia.</h5>", function() {
 //            bootbox.hideAll();
 //            jQuery(inputNomb).focus();
 //        });        
 //    }
-    return false;     
+    return false;
 }
 
-function fn_iniDepVoBoDocEmiAdm(){
-        var tableaux = $('#tlbDestinoEmi');
-        tableaux.find('tr').each(function(index, row) {
-            if(index == 0){
-                $(this).addClass('row_selected');                        
-                return false;
+function fn_iniDepVoBoDocEmiAdm() {
+    var tableaux = $('#tlbDestinoEmi');
+    tableaux.find('tr').each(function (index, row) {
+        if (index == 0) {
+            $(this).addClass('row_selected');
+            return false;
+        }
+    });
+    var searchOnTable = function (evento) {
+        var table = $('#tlbDestinoEmi');
+        var value = this.value;
+        //alert(evento.which);
+        var isFirst = false;
+        var indexSelect = -1;
+        table.find('tr').each(function (index, row) {
+            if ($(this).hasClass('row_selected')) {
+                $(this).removeClass('row_selected');
+            }
+            //var allCells = $(row).find('td');
+            var allCells = $(row).find('td');
+            if (allCells.length > 0) {
+                var found = false;
+                allCells.each(function (index, td) {
+                    var regExp = new RegExp(value, 'i');
+                    if (regExp.test($(td).text())) {
+                        found = true;
+                        return false;
+                    }
+                });
+                if (found == true) {
+                    $(row).show();
+                    if (!isFirst) {
+                        $(this).addClass('row_selected');
+                        isFirst = true;
+                        indexSelect = index;
+                    }
+                } else {
+                    $(row).hide();
+                }
             }
         });
-        var searchOnTable = function(evento) {
-                var table = $('#tlbDestinoEmi');
-                var value = this.value;
-                //alert(evento.which);
-                var isFirst = false;
-                var indexSelect = -1;
-                table.find('tr').each(function(index, row) {
-                        if ( $(this).hasClass('row_selected') ) {
-                            $(this).removeClass('row_selected');
-                        }
-                        //var allCells = $(row).find('td');
-                        var allCells = $(row).find('td');
-                        if(allCells.length > 0) {
-                                var found = false;
-                                allCells.each(function(index, td) {
-                                        var regExp = new RegExp(value, 'i');
-                                        if(regExp.test($(td).text())) {
-                                                found = true;
-                                                return false;
-                                        }
-                                });
-                                if (found == true) {$(row).show(); if(!isFirst){$(this).addClass('row_selected'); isFirst = true; indexSelect = index;}}
-                                else {$(row).hide();}
-                        }
-                });
-                if(evento.which == 13){
-                    if(isFirst){
-                        var pdesDest= $("#tlbDestinoEmi tbody tr:eq("+indexSelect+")").find("td:eq(0)").html();
-                        var pcodDest= $("#tlbDestinoEmi tbody tr:eq("+indexSelect+")").find("td:eq(2)").html();
-                        fu_setDatoDepVoBoDocEmiAdm(pcodDest,pdesDest);
-                    }
-                }
-        };        
-        $('#txtConsultaFind').keyup(searchOnTable);
-        $("#tlbDestinoEmi tbody tr").click(function(e) {
-            var pdesDest= $(this).find("td:eq(0)").html();
-            var pcodDest= $(this).find("td:eq(2)").html();
-            fu_setDatoDepVoBoDocEmiAdm(pcodDest,pdesDest);            
-        });      
+        if (evento.which == 13) {
+            if (isFirst) {
+                var pdesDest = $("#tlbDestinoEmi tbody tr:eq(" + indexSelect + ")").find("td:eq(0)").html();
+                var pcodDest = $("#tlbDestinoEmi tbody tr:eq(" + indexSelect + ")").find("td:eq(2)").html();
+                fu_setDatoDepVoBoDocEmiAdm(pcodDest, pdesDest);
+            }
+        }
+    };
+    $('#txtConsultaFind').keyup(searchOnTable);
+    $("#tlbDestinoEmi tbody tr").click(function (e) {
+        var pdesDest = $(this).find("td:eq(0)").html();
+        var pcodDest = $(this).find("td:eq(2)").html();
+        fu_setDatoDepVoBoDocEmiAdm(pcodDest, pdesDest);
+    });
 }
 
-function fu_setDatoDepVoBoDocEmiAdm(cod, desc){
+function fu_setDatoDepVoBoDocEmiAdm(cod, desc) {
     var pfila = jQuery('#txtTblPersVoBoFilaWhereButton').val();
-    var pcol = jQuery('#txtTblPersVoBoColWhereButton').val();    
+    var pcol = jQuery('#txtTblPersVoBoColWhereButton').val();
     var idTabla = "#tblPersVoBoDocAdm";
     removeDomId('windowConsultaDestinoEmi');
-    var filClone=jQuery(idTabla + " tbody tr:eq(" + pfila + ")").clone();
+    var filClone = jQuery(idTabla + " tbody tr:eq(" + pfila + ")").clone();
     jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol + ")").find('input[type=text]').val(desc);
-    jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(1)").text(cod);            
+    jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(1)").text(cod);
     var p = new Array();
     p[0] = "accion=goBuscaEmptblPersonalVoBo";
     p[1] = "pcoDepen=" + cod;
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         if (data !== null && allTrim(data.coRespuesta) === "1") {
             var arrCampo = new Array();
             arrCampo[0] = (pcol * 1 + 1) + "=" + cod;//codDependencia
             arrCampo[1] = "3=" + data.coEmpleado;//codEmpleado
-            var bResult = fn_validaDestinatarioIntituDuplicado('tblPersVoBoDocAdm', arrCampo, true, pfila*1);
-            if (jQuery(idTabla+" tbody tr:eq(" + pfila + ") td:eq(5)").text() === "BD") {
+            var bResult = fn_validaDestinatarioIntituDuplicado('tblPersVoBoDocAdm', arrCampo, true, pfila * 1);
+            if (jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(5)").text() === "BD") {
                 filClone.find('td:eq(5)').text("DEL");
                 filClone.addClass('oculto').appendTo(idTabla + " tbody");
-                jQuery(idTabla+" tbody tr:eq(" + pfila + ") td:eq(5)").text("INS");
-            }             
+                jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(5)").text("INS");
+            }
             if (bResult) {
-                fn_changeDestinatarioCorrectoOtro('tblPersVoBoDocAdm',pfila);
-            }else{
-                fn_changeDestinatarioIncorrectoOtro('tblPersVoBoDocAdm',pfila);
-            }            
-            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol*1+2 + ")").find('input[type=text]').val(data.deEmpleado);
-            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(3)").text(data.coEmpleado);            
+                fn_changeDestinatarioCorrectoOtro('tblPersVoBoDocAdm', pfila);
+            } else {
+                fn_changeDestinatarioIncorrectoOtro('tblPersVoBoDocAdm', pfila);
+            }
+            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(" + pcol * 1 + 2 + ")").find('input[type=text]').val(data.deEmpleado);
+            jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(3)").text(data.coEmpleado);
             jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(6)").text(desc);
             jQuery(idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(data.deEmpleado);
             jQuery(idTabla + " tbody tr:eq(" + pfila + ")").find('#spanObsDocVoboAlert').remove();
-        }else{
-           bootbox.alert(data.deRespuesta);
+        } else {
+            bootbox.alert(data.deRespuesta);
         }
-    },'json', false, false, "POST");
+    }, 'json', false, false, "POST");
 }
 
-function fn_removeTblEmiDocAdm(indexAccionBD, idTabla, indexFilaRemove,msg) {
+function fn_removeTblEmiDocAdm(indexAccionBD, idTabla, indexFilaRemove, msg) {
     var pindexFilaDesEmiDoc = $('#' + indexFilaRemove).val();
     if (pindexFilaDesEmiDoc !== "-1") {
         var sAccionBD = $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ") td:eq(" + indexAccionBD + ")").text();
@@ -5807,15 +5836,15 @@ function fn_removeTblEmiDocAdm(indexAccionBD, idTabla, indexFilaRemove,msg) {
 //            } else {
 //                return;
 //            }
-            
+
             bootbox.dialog({
-                
-                message: " <h5>¿ Esta Seguro de Quitar "+msg+" ?</h5>",
+
+                message: " <h5>¿ Esta Seguro de Quitar " + msg + " ?</h5>",
                 buttons: {
                     SI: {
                         label: "SI",
                         className: "btn-primary",
-                        callback: function() {
+                        callback: function () {
                             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ")").addClass('oculto');
@@ -5823,14 +5852,14 @@ function fn_removeTblEmiDocAdm(indexAccionBD, idTabla, indexFilaRemove,msg) {
                                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ")").remove();
                             }
                             $('#' + indexFilaRemove).val("-1");
-                        }                        
+                        }
                     },
                     NO: {
                         label: "NO",
                         className: "btn-default"
                     }
                 }
-            });                
+            });
         } else {
             if (sAccionBD === "BD" || sAccionBD === "UPD") {
                 $("#" + idTabla + " tbody tr:eq(" + pindexFilaDesEmiDoc + ") td:eq(" + indexAccionBD + ")").text("DEL");
@@ -5842,19 +5871,19 @@ function fn_removeTblEmiDocAdm(indexAccionBD, idTabla, indexFilaRemove,msg) {
             $('#' + indexFilaRemove).val("-1");
         }
     } else {
-       bootbox.alert("Seleccione "+msg+"");
+        bootbox.alert("Seleccione " + msg + "");
     }
 }
 
-function fu_existeVistoBuenoDocAdm(){
-    var tblPerVobo='#tblPersVoBoDocAdm';
-    var indexCol_inVobo=8;
-    var vResult=false;
-    jQuery(tblPerVobo+" tbody tr").each(function(index, row) {
+function fu_existeVistoBuenoDocAdm() {
+    var tblPerVobo = '#tblPersVoBoDocAdm';
+    var indexCol_inVobo = 8;
+    var vResult = false;
+    jQuery(tblPerVobo + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
-            var in_vb=jQuery(row).find("td:eq(" + indexCol_inVobo + ")").text();
-            if(in_vb==='2'||in_vb==='1'){
-                vResult=true;
+            var in_vb = jQuery(row).find("td:eq(" + indexCol_inVobo + ")").text();
+            if (in_vb === '2' || in_vb === '1') {
+                vResult = true;
             }
         }
     });
@@ -5867,14 +5896,14 @@ function fn_updateTblVoBoDocAdm() {
     p[1] = "pnuAnn=" + jQuery("#nuAnn").val();
     p[2] = "pnuEmi=" + jQuery("#nuEmi").val();
     //p[3] = "pcoDependencia=" + $("#coDepEmi").val();
-    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
         if (data !== null) {
             refreshScript("divtablaVoBoDocAdm", data);
             jQuery("#txtIndexFilaPersVoBoDocAdm").val("-1");
         } else {
             regresarEmitDocumAdm('0');
         }
-    },'text', false, true, "POST");
+    }, 'text', false, true, "POST");
 }
 
 function fn_AddPersVoboGrup() {
@@ -5889,7 +5918,7 @@ function fn_AddPersVoboGrup() {
             p[0] = "accion=goAgregarPersVoboGrupo";
             p[1] = "pcogrupo=" + vcmbGrupo;
             p[2] = "pcoTipDoc=";
-            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+            ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                 fn_rptagregarPersVoBoGrupo(data, idTabla);
             }, 'json', false, false, "POST");
         }
@@ -5900,7 +5929,7 @@ function fn_AddPersVoboGrup() {
 function fn_rptagregarPersVoBoGrupo(data, idTabla) {
     if (data !== null) {
         if (data.coRespuesta === "1") {
-            $.each(data.lsDestInstitu, function(i, item) {
+            $.each(data.lsDestInstitu, function (i, item) {
                 var arrCampo = new Array();
                 arrCampo[0] = "1=" + item.coDependencia;
                 arrCampo[1] = "3=" + item.coEmpleado;
@@ -5909,11 +5938,11 @@ function fn_rptagregarPersVoBoGrupo(data, idTabla) {
                     fn_addPersVoboGrupo(idTabla, item);
                 }
             });
-            if(!jQuery('#collapseOne').hasClass('in')){
-               jQuery('#accordion').find('a.myaccordion-1').click(); 
+            if (!jQuery('#collapseOne').hasClass('in')) {
+                jQuery('#accordion').find('a.myaccordion-1').click();
             }
         } else {
-           bootbox.alert(data.deRespuesta);
+            bootbox.alert(data.deRespuesta);
         }
     }
     return false;
@@ -5921,9 +5950,9 @@ function fn_rptagregarPersVoBoGrupo(data, idTabla) {
 
 function fn_addPersVoboGrupo(idTabla, objDes) {
     var pfila = $("#" + idTabla + " tbody tr:eq(0)").clone().removeClass('oculto').appendTo("#" + idTabla + " tbody").index();
-    var bDestinOk=true;
+    var bDestinOk = true;
     var p = new Array();
-    $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function(index) {
+    $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function (index) {
         switch (index)
         {
             case 0:
@@ -5934,23 +5963,21 @@ function fn_addPersVoboGrupo(idTabla, objDes) {
                 $(this).text(objDes.coDependencia);
                 break;
             case 2:
-                var deEmp=objDes.deEmpleado;
-                if(deEmp!==null && !!allTrim(deEmp)){
+                var deEmp = objDes.deEmpleado;
+                if (deEmp !== null && !!allTrim(deEmp)) {
                     $(this).find('input[type=text]').val(deEmp);
                     p[1] = allTrim(deEmp);
+                } else {
+                    bDestinOk = false;
                 }
-                else{
-                    bDestinOk=false;
-                }        
                 break;
             case 3:
-                var coEmp=objDes.coEmpleado;
-                if(coEmp!==null && !!allTrim(coEmp)){
+                var coEmp = objDes.coEmpleado;
+                if (coEmp !== null && !!allTrim(coEmp)) {
                     $(this).text(coEmp);
+                } else {
+                    bDestinOk = false;
                 }
-                else{
-                    bDestinOk=false;
-                }                 
                 break;
             default:
                 break;
@@ -5958,8 +5985,8 @@ function fn_addPersVoboGrupo(idTabla, objDes) {
     });
     $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(6)").text(p[0]);
     $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(p[1]);
-    if(bDestinOk){
-        fn_changeDestinatarioCorrectoOtro(idTabla,pfila);
+    if (bDestinOk) {
+        fn_changeDestinatarioCorrectoOtro(idTabla, pfila);
     }
 }
 
@@ -5969,13 +5996,13 @@ function onchangeCmbPerVoBoGrupo() {
 
 function fn_setPrioridadAllDestinoInstitu(cbmPrd) {
     var coPrioridad = cbmPrd.value;
-    var coTiPriLast=jQuery(cbmPrd).find('option:last').val();
-    var coTiPriFirst=jQuery(cbmPrd).find('option:first').val();
-    if(coTiPriLast==="-1"){
+    var coTiPriLast = jQuery(cbmPrd).find('option:last').val();
+    var coTiPriFirst = jQuery(cbmPrd).find('option:first').val();
+    if (coTiPriLast === "-1") {
         jQuery(cbmPrd).find('option:last').remove();
-    }else if(coTiPriFirst==="-1"){
+    } else if (coTiPriFirst === "-1") {
         jQuery(cbmPrd).find('option:first').remove();
-    }    
+    }
     if (coPrioridad !== "-1") {
         var idTabla = 'tblDestEmiDocAdm';
         var rpta = fn_verificarLstDestinatarioCorrecto(idTabla);
@@ -5988,9 +6015,9 @@ function fn_setPrioridadAllDestinoInstitu(cbmPrd) {
 
 
 function fn_setPrioridadFilaTblDestIntitu(idTabla, coPrioridad) {
-    $("#" + idTabla + " tbody tr").each(function(index, row) {
+    $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto')) {
-            $(row).children('td').each(function(indexx) {
+            $(row).children('td').each(function (indexx) {
                 switch (indexx)
                 {
                     case 10:
@@ -6017,7 +6044,7 @@ function fn_verDocumentosAnexosRef(cell) {
     if (isOk === "1") {
         var pnuAnn = ($(cell).parent()).parent().children().get(7).innerHTML;
         var pnuEmi = ($(cell).parent()).parent().children().get(8).innerHTML;
-        fn_verAnexosObj(pnuAnn,pnuEmi,"N");
+        fn_verAnexosObj(pnuAnn, pnuEmi, "N");
     } else {
         return;
     }
@@ -6027,54 +6054,54 @@ function fn_verDocumentosAnexosRef(cell) {
 function fn_agregarDestinatarioExternoGrupo() {
     var vcmbGrupo = jQuery("#codGrupoDestino").val();
     var ptiDes = jQuery("#sTipoDestinatario").val();
-    
+
     var vTxtValcmbGrupo = jQuery('#txtValcmbGrupo').val();
-    console.log("valgrupo"+vTxtValcmbGrupo);
-    console.log("ptiDes"+ptiDes);
-    console.log("vcmbGrupo"+vcmbGrupo);
+    console.log("valgrupo" + vTxtValcmbGrupo);
+    console.log("ptiDes" + ptiDes);
+    console.log("vcmbGrupo" + vcmbGrupo);
     if (vcmbGrupo !== "-1" && vTxtValcmbGrupo !== "-1" && vTxtValcmbGrupo === "1") {
         //if(vTxtValcmbGrupo === "1"){
-        
+
         jQuery('#txtValcmbGrupo').val("0");
         var p = new Array();
         p[0] = "accion=goAgregarDestinatarioExterno";
         p[1] = "pcogrupo=" + vcmbGrupo;
         p[2] = "pcoTipDoc=" + jQuery('#documentoEmiBean').find('#coTipDocAdm').val();
         p[3] = "ptiDes=" + ptiDes;
-        
-        
-        if (ptiDes==="02")
+
+
+        if (ptiDes === "02")
         {
             var idTabla = 'tblDestEmiDocAdmPersJuri';
             var rpta = fn_verificarLstDestinatarioCorrecto(idTabla);
-            console.log("rpta"+rpta);
+            console.log("rpta" + rpta);
             if (rpta) {
 
-                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                     fn_rptagregarDestinatarioExternoGrupo(data, idTabla);
                 }, 'json', false, false, "POST");
             }
         }
 
-        if (ptiDes==="03")
+        if (ptiDes === "03")
         {
             var idTabla = 'tblDestEmiDocAdmCiudadano';
             var rpta = fn_verificarLstDestinatarioCorrecto(idTabla);
             if (rpta) {
 
-                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                     fn_rptagregarDestinatarioExternoGrupo(data, idTabla);
                 }, 'json', false, false, "POST");
             }
         }
 
-        if (ptiDes==="04")
+        if (ptiDes === "04")
         {
             var idTabla = 'tblDestEmiDocAdmOtro';
             var rpta = fn_verificarLstDestinatarioCorrecto(idTabla);
             if (rpta) {
 
-                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function(data) {
+                ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
                     fn_rptagregarDestinatarioExternoGrupo(data, idTabla);
                 }, 'json', false, false, "POST");
             }
@@ -6082,7 +6109,7 @@ function fn_agregarDestinatarioExternoGrupo() {
 
         //}
     }/*else{
-    bootbox.alert("Seleccionar Grupo.."); 
+     bootbox.alert("Seleccionar Grupo.."); 
      jQuery("#cmbGrupo").focus();
      }*/
     return false;
@@ -6093,15 +6120,14 @@ function fn_agregarDestinatarioExternoGrupo() {
 function fn_rptagregarDestinatarioExternoGrupo(data, idTabla) {
     if (data !== null) {
         if (data.coRespuesta === "1") {
-            $.each(data.lsDestInstitu, function(i, item) {
+            $.each(data.lsDestInstitu, function (i, item) {
                 var arrCampo = new Array();
                 arrCampo[0] = "1=" + item.coDependencia;
                 arrCampo[1] = "5=" + item.coEmpleado;
-                var bResult  ;
-                if (idTabla==="tblDestEmiDocAdmPersJuri2"){
-                    bResult =true;
-                }
-                else {
+                var bResult;
+                if (idTabla === "tblDestEmiDocAdmPersJuri2") {
+                    bResult = true;
+                } else {
                     bResult = fn_validaDestinatarioOtroDuplicado(idTabla, arrCampo, false, 0);
                 }
                 if (bResult) {
@@ -6109,7 +6135,7 @@ function fn_rptagregarDestinatarioExternoGrupo(data, idTabla) {
                 }
             });
         } else {
-           bootbox.alert(data.deRespuesta);
+            bootbox.alert(data.deRespuesta);
         }
     }
     return false;
@@ -6118,7 +6144,7 @@ function fn_rptagregarDestinatarioExternoGrupo(data, idTabla) {
 function fn_verificarLstDestExternoCorrecto(idTabla) {
     if ($('#' + idTabla + ' >tbody >tr').length === 1 || $("#" + idTabla + " tbody tr td").last().html() === "1") {
         var found = true;
-        $("#" + idTabla + " tbody tr").each(function(index, row) {
+        $("#" + idTabla + " tbody tr").each(function (index, row) {
             if (index > 0) {
                 if ($(row).find('td').last().html() !== "1") {
                     found = false;
@@ -6128,135 +6154,135 @@ function fn_verificarLstDestExternoCorrecto(idTabla) {
         if (found) {
             return found;
         } else {
-           bootbox.alert("Corregir Destinatario");
+            bootbox.alert("Corregir Destinatario");
             return false;
         }
     } else {
-       bootbox.alert("Corregir Destinatario");
+        bootbox.alert("Corregir Destinatario");
         return false;
     }
 }
 
 function fn_addDestintarioExterEmiDocGrupo(idTabla, objDes) {
-    
-    
+
+
     var esPrimero = $("#" + idTabla + " tbody tr").last().hasClass('oculto');
     var pfila = $("#" + idTabla + " tbody tr:eq(0)").clone().removeClass('oculto').appendTo("#" + idTabla + " tbody").index();
     $("[bt='true']").showBigTextBox({
-        pressAceptarEvent: function(data) {
+        pressAceptarEvent: function (data) {
             if (data.hasChangedText) {
                 changeAccionBDDocEmi(data.currentObject);
             }
-        },maxNumCar:600
+        }, maxNumCar: 600
     });
-    
-    var bDestinOk=true;
+
+    var bDestinOk = true;
     var p = new Array();
-    
-    if (idTabla==="tblDestEmiDocAdmPersJuri")
-        {
- 
-    
-            var ubigeo=objDes.ccodDpto+','+objDes.ccodProv+','+objDes.ccodDist;
-            var nom=objDes.ubigeo;
+
+    if (idTabla === "tblDestEmiDocAdmPersJuri")
+    {
+
+
+        var ubigeo = objDes.ccodDpto + ',' + objDes.ccodProv + ',' + objDes.ccodDist;
+        var nom = objDes.ubigeo;
 
 //           if (allTrim(ubigeo).length===0)
 //                {
 //                    bDestinOk=false;
 //                }        
 
-           if (allTrim(objDes.deProveedor).length===0)
-                {
-                    bDestinOk=false;
-                } 
+        if (allTrim(objDes.deProveedor).length === 0)
+        {
+            bDestinOk = false;
+        }
 
 //           if (allTrim(objDes.cdirRemite).length===0)
 //                {
 //                    bDestinOk=false;
 //                }         
-        
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(objDes.nuRuc);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(0)").find('input[type=text]').val(objDes.deProveedor);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(2)").find('input[type=text]').val(objDes.nuRuc);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtUbigeoOtro]').val(nom=="//"?"":nom);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo==",,"?"":ubigeo);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(10)").find('textarea').val(objDes.cdirRemite);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(11)").find('input[type=text]').val(objDes.cexpCorreoe);
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(12)").find('input[type=text]').val(objDes.cTelefono);
 
-            $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(4)").text(objDes.deProveedor);
-            
-            if(bDestinOk){
-                fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmPersJuri', pfila);
-            }
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(7)").text(objDes.nuRuc);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(0)").find('input[type=text]').val(objDes.deProveedor);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(2)").find('input[type=text]').val(objDes.nuRuc);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtUbigeoOtro]').val(nom == "//" ? "" : nom);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(9)").find('input[id=txtCodigoUbigeoOtro]').val(ubigeo == ",," ? "" : ubigeo);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(10)").find('textarea').val(objDes.cdirRemite);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(11)").find('input[type=text]').val(objDes.cexpCorreoe);
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td:eq(12)").find('input[type=text]').val(objDes.cTelefono);
+
+        $("#tblDestEmiDocAdmPersJuri tbody tr:eq(" + pfila + ") td:eq(4)").text(objDes.deProveedor);
+
+        if (bDestinOk) {
+            fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmPersJuri', pfila);
         }
-    
-    bDestinOk=true;
-    
+    }
 
-    
-    if (idTabla==="tblDestEmiDocAdmCiudadano")
+    bDestinOk = true;
+
+
+
+    if (idTabla === "tblDestEmiDocAdmCiudadano")
+    {
+
+
+        var ubigeo = objDes.ccodDpto + ',' + objDes.ccodProv + ',' + objDes.ccodDist;
+        var nom = objDes.ubigeo;
+
+        if (allTrim(objDes.nuDni).length < 8)
         {
-
-            
-            var ubigeo=objDes.ccodDpto+','+objDes.ccodProv+','+objDes.ccodDist;
-            var nom=objDes.ubigeo;
-            
-            if (allTrim(objDes.nuDni).length<8)
-            {
-                bDestinOk=false;
-            }
-
-            if (allTrim(objDes.cdirRemite).length===0)
-            {
-                bDestinOk=false;
-            }            
-            
-            if (allTrim(ubigeo).length===0)
-            {
-                bDestinOk=false;
-            }            
-                        
-        
-            $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function(index) {
-                switch (index)
-                {
-                    case 0:
-                        $(this).find('input[type=text]').val(objDes.nuDni);
-                        jQuery('#txtNroDocumentoCiudadano').val(objDes.nuDni);
-                        break;
-                    case 2:
-                        $(this).find('input[type=text]').val(objDes.deCiudadano);
-                        break;
-                    case 4:
-                        $(this).html(objDes.nuDni);
-                        break;
-                    case 8:
-                        $(this).find('input[id=txtUbigeoOtro]').val(nom);
-                        $(this).find('input[id=txtCodigoUbigeoOtro]').val(ubigeo);
-                        break;
-                    case 9:
-                        $(this).find('textarea').val(objDes.cdirRemite=="null"?"":objDes.cdirRemite);
-                        break;
-                    case 10:
-                        $(this).find('input[type=text]').val(objDes.cexpCorreoe=="null"?"":objDes.cexpCorreoe);
-                        break;
-                    case 11:
-                        $(this).find('input[type=text]').val(objDes.cTelefono=="null"?"":objDes.cTelefono);
-                        break;
-                    default:
-                        break;
-                }
-            });
-            
-            if(bDestinOk){
-                fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmCiudadano', pfila);
-            }
-    
+            bDestinOk = false;
         }
 
-    
-    
+        if (allTrim(objDes.cdirRemite).length === 0)
+        {
+            bDestinOk = false;
+        }
+
+        if (allTrim(ubigeo).length === 0)
+        {
+            bDestinOk = false;
+        }
+
+
+        $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function (index) {
+            switch (index)
+            {
+                case 0:
+                    $(this).find('input[type=text]').val(objDes.nuDni);
+                    jQuery('#txtNroDocumentoCiudadano').val(objDes.nuDni);
+                    break;
+                case 2:
+                    $(this).find('input[type=text]').val(objDes.deCiudadano);
+                    break;
+                case 4:
+                    $(this).html(objDes.nuDni);
+                    break;
+                case 8:
+                    $(this).find('input[id=txtUbigeoOtro]').val(nom);
+                    $(this).find('input[id=txtCodigoUbigeoOtro]').val(ubigeo);
+                    break;
+                case 9:
+                    $(this).find('textarea').val(objDes.cdirRemite == "null" ? "" : objDes.cdirRemite);
+                    break;
+                case 10:
+                    $(this).find('input[type=text]').val(objDes.cexpCorreoe == "null" ? "" : objDes.cexpCorreoe);
+                    break;
+                case 11:
+                    $(this).find('input[type=text]').val(objDes.cTelefono == "null" ? "" : objDes.cTelefono);
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        if (bDestinOk) {
+            fn_changeDestinatarioCorrectoOtro('tblDestEmiDocAdmCiudadano', pfila);
+        }
+
+    }
+
+
+
 //    $("#" + idTabla + " tbody tr:eq(" + pfila + ") td").each(function(index) {
 //        if (idTabla==="tblDestEmiDocAdmPersJuri")
 //        {
@@ -6318,23 +6344,23 @@ function fn_addDestintarioExterEmiDocGrupo(idTabla, objDes) {
 
 function hideTableColumns(idTable, columnsIndexs)
 {
-	$("#" + idTable + " tr").each(function() {
-		for(var i = 0; i < columnsIndexs.length; i++)
-		{
-			var colIndex = columnsIndexs[i];
-			$($(this).find("td")[colIndex]).hide();
-		}
-	});
+    $("#" + idTable + " tr").each(function () {
+        for (var i = 0; i < columnsIndexs.length; i++)
+        {
+            var colIndex = columnsIndexs[i];
+            $($(this).find("td")[colIndex]).hide();
+        }
+    });
 }
-	function showTableColumns(idTable, columnsIndexs)
+function showTableColumns(idTable, columnsIndexs)
 {
-	$("#" + idTable + " tr").each(function() {
-		for(var i = 0; i < columnsIndexs.length; i++)
-		{
-			var colIndex = columnsIndexs[i];
-			$($(this).find("td")[colIndex]).show();
-		}
-	});
+    $("#" + idTable + " tr").each(function () {
+        for (var i = 0; i < columnsIndexs.length; i++)
+        {
+            var colIndex = columnsIndexs[i];
+            $($(this).find("td")[colIndex]).show();
+        }
+    });
 }
 
 

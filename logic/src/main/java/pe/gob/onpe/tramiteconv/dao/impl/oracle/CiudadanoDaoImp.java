@@ -17,18 +17,20 @@ import pe.gob.onpe.tramitedoc.dao.CiudadanoDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.segdi.pide.consultas.bean.ConsultaDniBean;
+
 /**
  *
  * @author RBerrocal
  */
 @Repository("ciudadanoDao")
 public class CiudadanoDaoImp extends SimpleJdbcDaoBase implements CiudadanoDao {
+
     @Autowired
-    private ApplicationProperties applicationProperties;  
-    
+    private ApplicationProperties applicationProperties;
+
     public List<CitizenBean> getCiudadanoList() {
-        StringBuffer sql = new StringBuffer();
-        
+        StringBuilder sql = new StringBuilder();
+
         sql.append("SELECT NULEM, UBDEP, UBPRV, UBDIS, DEAPP, DEAPM, DENOM, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_departamento (ubdep) NO_DEP, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_provincia (ubdep, ubprv) NO_PRV, ");
@@ -49,38 +51,36 @@ public class CiudadanoDaoImp extends SimpleJdbcDaoBase implements CiudadanoDao {
     }
 
     public List<CitizenBean> getCiudadanoBusqList(String busCiudDocumento, String busCiudApPaterno, String busCiudApMaterno, String busCiudNombres) {
-        
-        StringBuffer sql = new StringBuffer();
+
+        StringBuilder sql = new StringBuilder();
         Object[] objectParam = null;
-        
+
         sql.append("SELECT NULEM, UBDEP, UBPRV, UBDIS, DEAPP, DEAPM, DENOM, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_departamento (ubdep) NO_DEP, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_provincia (ubdep, ubprv) NO_PRV, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_distrito (ubdep,ubprv,ubdis) NO_DIS,DEDOMICIL,DEEMAIL,DETELEFO ");
         sql.append("FROM TDTX_ANI_SIMIL WHERE ROWNUM <= ").append(applicationProperties.getTopRegistrosConsultas());
-        
-        if (busCiudDocumento != null && !busCiudDocumento.equals("")){
+
+        if (busCiudDocumento != null && !busCiudDocumento.equals("")) {
             sql.append(" and UPPER(NULEM) like '%'||?||'%' ");
             objectParam = new Object[]{busCiudDocumento};
-            
-        }else if (busCiudApPaterno != null && !busCiudApPaterno.equals("")){
+
+        } else if (busCiudApPaterno != null && !busCiudApPaterno.equals("")) {
             sql.append(" and UPPER(DEAPP) like '%'||?||'%' ");
             objectParam = new Object[]{busCiudApPaterno};
-            
-        }
-        else if( busCiudApMaterno != null && !busCiudApMaterno.equals("")) {
-            sql.append(" and UPPER(DEAPM) like '%'||?||'%' "); 
+
+        } else if (busCiudApMaterno != null && !busCiudApMaterno.equals("")) {
+            sql.append(" and UPPER(DEAPM) like '%'||?||'%' ");
             objectParam = new Object[]{busCiudApMaterno};
-        }
-        else if( busCiudNombres != null && !busCiudNombres.equals("")) {
-            sql.append(" and UPPER(DENOM) like '%'||?||'%' "); 
+        } else if (busCiudNombres != null && !busCiudNombres.equals("")) {
+            sql.append(" and UPPER(DENOM) like '%'||?||'%' ");
             objectParam = new Object[]{busCiudNombres};
         }
-        
-        sql.append(" order by DEAPP"); 
+
+        sql.append(" order by DEAPP");
         List<CitizenBean> list = new ArrayList<CitizenBean>();
         try {
-            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(CitizenBean.class),objectParam);
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(CitizenBean.class), objectParam);
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -91,42 +91,42 @@ public class CiudadanoDaoImp extends SimpleJdbcDaoBase implements CiudadanoDao {
     }
 
     public String insCiudadano(CitizenBean ciudadano, String codUsuario) {
-        String vReturn      = "NO_OK";
-        StringBuffer sql    = new StringBuffer();
+        String vReturn = "NO_OK";
+        StringBuilder sql = new StringBuilder();
         String genCoProceso = "";
-        
+
         sql.append("insert into TDTX_ANI_SIMIL ");
         sql.append("(NULEM, UBDEP, UBPRV, UBDIS, DEAPP, DEAPM, DENOM, DEDOMICIL, DEEMAIL, DETELEFO) ");
         sql.append("values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        try {        
+        try {
             //El campo Estado no se incluye en el bloque del insert pq es un valor default en la tabla
             this.jdbcTemplate.update(sql.toString(), new Object[]{
-                ciudadano.getNuLem(), ciudadano.getUbDep(), ciudadano.getUbPrv(), ciudadano.getUbDis(), 
-                ciudadano.getDeApp(), ciudadano.getDeApm(),  ciudadano.getDeNom(),  ciudadano.getDeDomicil(),  ciudadano.getDeEmail(),  ciudadano.getDeTelefo()
+                ciudadano.getNuLem(), ciudadano.getUbDep(), ciudadano.getUbPrv(), ciudadano.getUbDis(),
+                ciudadano.getDeApp(), ciudadano.getDeApm(), ciudadano.getDeNom(), ciudadano.getDeDomicil(), ciudadano.getDeEmail(), ciudadano.getDeTelefo()
             });
-            
+
             vReturn = "OK";
-            
+
         } catch (DuplicateKeyException con) {
             vReturn = "Número de documento duplicado.";
             con.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return vReturn; 
+        return vReturn;
     }
 
     public CitizenBean getCiudadano(String codCiudadano) {
         CitizenBean ciudadanoBean = new CitizenBean();
-        StringBuffer sql = new StringBuffer();
-        
+        StringBuilder sql = new StringBuilder();
+
         sql.append("SELECT NULEM, UBDEP, UBPRV, UBDIS, DEAPP, DEAPM, DENOM, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_departamento (ubdep) NO_DEP, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_provincia (ubdep, ubprv) NO_PRV, ");
         sql.append("PK_SGD_DESCRIPCION.fu_get_distrito (ubdep,ubprv,ubdis) NO_DIS,DEDOMICIL,DEEMAIL,DETELEFO ");
         sql.append("FROM TDTX_ANI_SIMIL WHERE NULEM = ?");
-        
+
         try {
             ciudadanoBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(CitizenBean.class),
                     new Object[]{codCiudadano});
@@ -136,57 +136,56 @@ public class CiudadanoDaoImp extends SimpleJdbcDaoBase implements CiudadanoDao {
             ciudadanoBean = null;
             e.printStackTrace();
         }
-        
+
         return ciudadanoBean;
     }
 
     public String updCiudadano(CitizenBean ciudadano, String codUsuario) {
         String vReturn = "NO_OK";
-        
-        StringBuffer sql = new StringBuffer();
+
+        StringBuilder sql = new StringBuilder();
         sql.append("update TDTX_ANI_SIMIL set ");
         sql.append("UBDEP=?, UBPRV=?, UBDIS=?, DEAPP=?, DEAPM = ?, DENOM= ?, ");
-        sql.append("DEDOMICIL=?, DEEMAIL=?, DETELEFO=?");        
+        sql.append("DEDOMICIL=?, DEEMAIL=?, DETELEFO=?");
         sql.append("where NULEM=? ");
-        
+
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
-                ciudadano.getUbDep(), ciudadano.getUbPrv(), ciudadano.getUbDis(), ciudadano.getDeApp(), 
-                ciudadano.getDeApm(), ciudadano.getDeNom(), ciudadano.getDeDomicil(),  ciudadano.getDeEmail(),  ciudadano.getDeTelefo(), ciudadano.getNuLem()
+                ciudadano.getUbDep(), ciudadano.getUbPrv(), ciudadano.getUbDis(), ciudadano.getDeApp(),
+                ciudadano.getDeApm(), ciudadano.getDeNom(), ciudadano.getDeDomicil(), ciudadano.getDeEmail(), ciudadano.getDeTelefo(), ciudadano.getNuLem()
             });
             vReturn = "OK";
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return vReturn;
     }
 
     @Override
-    public String insPideCiudadano(ConsultaDniBean ciudadano,String nudni) {
-        String vReturn      = "NO_OK";
-        StringBuffer sql    = new StringBuffer();
-       
-        
+    public String insPideCiudadano(ConsultaDniBean ciudadano, String nudni) {
+        String vReturn = "NO_OK";
+        StringBuilder sql = new StringBuilder();
+
         sql.append("insert into TDTX_ANI_SIMIL ");
         sql.append("(NULEM, DEAPP, DEAPM, DENOM) ");
         sql.append("values (?, ?, ?, ?)");
 
-        try {        
+        try {
             //El campo Estado no se incluye en el bloque del insert pq es un valor default en la tabla
             this.jdbcTemplate.update(sql.toString(), new Object[]{
                 nudni, ciudadano.getApPrimer(), ciudadano.getApSegundo(), ciudadano.getPrenombres()
             });
-            
+
             vReturn = "OK";
-            
+
         } catch (DuplicateKeyException con) {
             vReturn = "Número de documento duplicado.";
             con.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return vReturn; 
+        return vReturn;
     }
-    
+
 }

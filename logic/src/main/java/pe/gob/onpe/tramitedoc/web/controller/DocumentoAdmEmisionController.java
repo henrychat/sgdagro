@@ -979,7 +979,7 @@ public class DocumentoAdmEmisionController {
        String pcoDepen = ServletUtility.getInstancia().loadRequestParameter(request, "pcoDepen");
        String pcoTipoDoc = ServletUtility.getInstancia().loadRequestParameter(request, "pcoTipoDoc");
        String coRespuesta = "";
-       StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
        EmpleadoBean empleadoBean  = null;
        try{
            empleadoBean = emiDocumentoAdmService.getEmpleadoLocaltblDestinatario(pcoDepen);
@@ -1859,7 +1859,7 @@ public class DocumentoAdmEmisionController {
 
     @RequestMapping(method = RequestMethod.POST, params = "accion=goCambiaDepEmi")
     private @ResponseBody String goCambiaDepEmi(HttpServletRequest request, Model model) throws Exception {
-        StringBuffer retval = new StringBuffer();
+         StringBuilder retval = new StringBuilder();
         String pcoDepEmi = ServletUtility.getInstancia().loadRequestParameter(request, "pcoDepEmi");
         DependenciaBean depEmi = emiDocumentoAdmService.cambiaDepEmi(pcoDepEmi);
         
@@ -1906,7 +1906,7 @@ public class DocumentoAdmEmisionController {
        String vRespuesta;
        String pcoDepen = ServletUtility.getInstancia().loadRequestParameter(request, "pcoDepen");
        String coRespuesta;
-       StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
        EmpleadoBean empleadoBean;
        try{
            empleadoBean = commonQryService.getEmpJefeDep(pcoDepen);

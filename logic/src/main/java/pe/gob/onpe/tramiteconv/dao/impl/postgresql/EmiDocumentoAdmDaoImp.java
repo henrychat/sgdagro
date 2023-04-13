@@ -50,24 +50,25 @@ import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 import pe.gob.onpe.tramitedoc.util.ProcessResult;
 
 /*interoperabilidad*/
-
 @Repository("emiDocumentoAdmDao")
 public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocumentoAdmDao {
-/*interoperabilidad*/
-private SimpleJdbcCall spInsMesaVirtual;
-/*interoperabilidad*/
+
+    /*interoperabilidad*/
+    private SimpleJdbcCall spInsMesaVirtual;
+
+    /*interoperabilidad*/
     @Override
     public List<DocumentoEmiBean> getDocumentosBuscaEmiAdm(BuscarDocumentoEmiBean buscarDocumentoEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
-        String sOrdenList="";
+        String sOrdenList = "";
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
         List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();
 
         sql.append("SELECT X.*,");
-        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_EMI_REF(X.NU_ANN, X.NU_EMI) DE_EMI_REF,");        
-        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");        
+        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_EMI_REF(X.NU_ANN, X.NU_EMI) DE_EMI_REF,");
+        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");
         //sql.append(" DECODE(X.NU_CANDES, 1, IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP(X.NU_ANN, X.NU_EMI),IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP_V(X.NU_ANN, X.NU_EMI)) DE_EMP_PRO,");
         sql.append("CASE\n"
                 + "WHEN X.NU_CANDES=1 THEN\n"
@@ -75,8 +76,8 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "ELSE\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP_V(X.NU_ANN, X.NU_EMI)\n"
                 + "END AS DE_EMP_PRO,");
-        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,");        
-        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI");        
+        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,");
+        sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI");
         //sql.append("row_number() over() as ROWNUM ");
         sql.append(" FROM ( ");
         sql.append(" SELECT ");
@@ -117,9 +118,9 @@ private SimpleJdbcCall spInsMesaVirtual;
         if (pTipoBusqueda.equals("1") && buscarDocumentoEmi.isEsIncluyeFiltro()) {
             bBusqFiltro = true;
         }
-        String auxTipoAcceso=buscarDocumentoEmi.getsTiAcceso();
-        String tiAcceso=auxTipoAcceso!=null&&(auxTipoAcceso.equals("0")||auxTipoAcceso.equals("1")||auxTipoAcceso.equals("2"))?auxTipoAcceso:"1";                
-        if (buscarDocumentoEmi.getsElaboradoPor()!=null&&buscarDocumentoEmi.getsElaboradoPor().trim().length()>0&&(pTipoBusqueda.equals("0")||bBusqFiltro)&&tiAcceso.equals("0")) {
+        String auxTipoAcceso = buscarDocumentoEmi.getsTiAcceso();
+        String tiAcceso = auxTipoAcceso != null && (auxTipoAcceso.equals("0") || auxTipoAcceso.equals("1") || auxTipoAcceso.equals("2")) ? auxTipoAcceso : "1";
+        if (buscarDocumentoEmi.getsElaboradoPor() != null && buscarDocumentoEmi.getsElaboradoPor().trim().length() > 0 && (pTipoBusqueda.equals("0") || bBusqFiltro) && tiAcceso.equals("0")) {
             sql.append(" AND A.CO_EMP_RES = :pcoEmpRes ");
             objectParam.put("pcoEmpRes", buscarDocumentoEmi.getsElaboradoPor());
         } else {
@@ -141,8 +142,8 @@ private SimpleJdbcCall spInsMesaVirtual;
             if (buscarDocumentoEmi.getsEstadoDoc() != null && buscarDocumentoEmi.getsEstadoDoc().trim().length() > 0) {
                 sql.append(" AND A.ES_DOC_EMI = :pEsDocEmi ");
                 objectParam.put("pEsDocEmi", buscarDocumentoEmi.getsEstadoDoc());
-            }else{
-                sOrdenList=" DESC";
+            } else {
+                sOrdenList = " DESC";
             }
             if (buscarDocumentoEmi.getsPrioridadDoc() != null && buscarDocumentoEmi.getsPrioridadDoc().trim().length() > 0) {
                 sql.append(" AND B.CO_PRIORIDAD = :pCoPrioridad ");
@@ -209,21 +210,21 @@ private SimpleJdbcCall spInsMesaVirtual;
         return list;
     }
 
-      @Override
-      public ProcessResult<List<DocumentoBean>> getDocumentosBuscaEmiAdmList(BuscarDocumentoEmiBean buscarDocumentoEmi,FiltroPaginate paginate) {
-        StringBuffer sql = new StringBuffer();
+    @Override
+    public ProcessResult<List<DocumentoBean>> getDocumentosBuscaEmiAdmList(BuscarDocumentoEmiBean buscarDocumentoEmi, FiltroPaginate paginate) {
+        StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
-        String sOrdenList="";
+        String sOrdenList = "";
         Map<String, Object> objectParam = new HashMap<String, Object>();
         ProcessResult<List<DocumentoBean>> Result = new ProcessResult<List<DocumentoBean>>();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
-       
+
         sql.append("SELECT X.*,");
-        sql.append(" PK_SGD_DESCRIPCION.DE_EMI_REF(X.NU_ANN, X.NU_EMI) DE_EMI_REF,");        
-        sql.append(" PK_SGD_DESCRIPCION.DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");        
+        sql.append(" PK_SGD_DESCRIPCION.DE_EMI_REF(X.NU_ANN, X.NU_EMI) DE_EMI_REF,");
+        sql.append(" PK_SGD_DESCRIPCION.DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");
         sql.append(" DECODE(X.NU_CANDES, 1, PK_SGD_DESCRIPCION.TI_DES_EMP(X.NU_ANN, X.NU_EMI),PK_SGD_DESCRIPCION.TI_DES_EMP_V(X.NU_ANN, X.NU_EMI)) DE_EMP_PRO,");
-        sql.append(" PK_SGD_DESCRIPCION.DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,");        
-        sql.append(" PK_SGD_DESCRIPCION.ESTADOS(X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");        
+        sql.append(" PK_SGD_DESCRIPCION.DE_NOM_EMP(X.CO_EMP_RES) DE_EMP_RES,");
+        sql.append(" PK_SGD_DESCRIPCION.ESTADOS(X.ES_DOC_EMI,'TDTV_REMITOS') DE_ES_DOC_EMI,");
         sql.append("ROWNUM");
         sql.append(" FROM ( ");
         sql.append(" SELECT ");
@@ -235,7 +236,7 @@ private SimpleJdbcCall spInsMesaVirtual;
         sql.append(" (SELECT MAX(C.TI_DES) FROM TDTV_DESTINOS C WHERE C.NU_EMI=A.NU_EMI AND C.NU_ANN=A.NU_ANN   ) as tiDest,NVL(A.TI_ENV_MSJ,-1) tiEnvMsj,");//ORDER BY C.TI_DES DESC INTEROPERABILIDAD
         sql.append(" CASE A.TI_ENV_MSJ WHEN '0' THEN 'MESA DE PARTES' WHEN '1' THEN 'ENVÍO DIRECTO' WHEN '2' THEN 'MESA VIRTUAL' END    recursoenvio");//interoperabilidad
         sql.append(" FROM TDTV_REMITOS A,TDTX_REMITOS_RESUMEN B");
-        
+
         sql.append(" WHERE");
         sql.append(" B.NU_ANN=A.NU_ANN");
         sql.append(" AND B.NU_EMI=A.NU_EMI");
@@ -258,9 +259,9 @@ private SimpleJdbcCall spInsMesaVirtual;
         if (pTipoBusqueda.equals("1") && buscarDocumentoEmi.isEsIncluyeFiltro()) {
             bBusqFiltro = true;
         }
-        String auxTipoAcceso=buscarDocumentoEmi.getsTiAcceso();
-        String tiAcceso=auxTipoAcceso!=null&&(auxTipoAcceso.equals("0")||auxTipoAcceso.equals("1")||auxTipoAcceso.equals("2"))?auxTipoAcceso:"1";                
-        if (buscarDocumentoEmi.getsElaboradoPor()!=null&&buscarDocumentoEmi.getsElaboradoPor().trim().length()>0&&(pTipoBusqueda.equals("0")||bBusqFiltro)&&tiAcceso.equals("0")) {
+        String auxTipoAcceso = buscarDocumentoEmi.getsTiAcceso();
+        String tiAcceso = auxTipoAcceso != null && (auxTipoAcceso.equals("0") || auxTipoAcceso.equals("1") || auxTipoAcceso.equals("2")) ? auxTipoAcceso : "1";
+        if (buscarDocumentoEmi.getsElaboradoPor() != null && buscarDocumentoEmi.getsElaboradoPor().trim().length() > 0 && (pTipoBusqueda.equals("0") || bBusqFiltro) && tiAcceso.equals("0")) {
             sql.append(" AND A.CO_EMP_RES = :pcoEmpRes ");
             objectParam.put("pcoEmpRes", buscarDocumentoEmi.getsElaboradoPor());
         } else {
@@ -275,7 +276,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
         //Filtro
         if (pTipoBusqueda.equals("0") || bBusqFiltro) {
-            if (buscarDocumentoEmi.getCoTema()!= null && buscarDocumentoEmi.getCoTema().trim().length() > 0) {
+            if (buscarDocumentoEmi.getCoTema() != null && buscarDocumentoEmi.getCoTema().trim().length() > 0) {
                 sql.append(" AND A.CO_TEMA = :pCoTema ");
                 objectParam.put("pCoTema", buscarDocumentoEmi.getCoTema());
             }
@@ -286,8 +287,8 @@ private SimpleJdbcCall spInsMesaVirtual;
             if (buscarDocumentoEmi.getsEstadoDoc() != null && buscarDocumentoEmi.getsEstadoDoc().trim().length() > 0) {
                 sql.append(" AND A.ES_DOC_EMI = :pEsDocEmi ");
                 objectParam.put("pEsDocEmi", buscarDocumentoEmi.getsEstadoDoc());
-            }else{
-                sOrdenList=" DESC";
+            } else {
+                sOrdenList = " DESC";
             }
             if (buscarDocumentoEmi.getsPrioridadDoc() != null && buscarDocumentoEmi.getsPrioridadDoc().trim().length() > 0) {
                 sql.append(" AND B.CO_PRIORIDAD = :pCoPrioridad ");
@@ -301,8 +302,8 @@ private SimpleJdbcCall spInsMesaVirtual;
                 sql.append(" AND INSTR(B.TI_EMI_DES, :pTiEmpPro) > 0 ");
                 objectParam.put("pTiEmpPro", buscarDocumentoEmi.getsDestinatario());
             }
-           //YUAL
-            if (buscarDocumentoEmi.getsTrabDestino()!= null && buscarDocumentoEmi.getsTrabDestino().trim().length() > 0) {
+            //YUAL
+            if (buscarDocumentoEmi.getsTrabDestino() != null && buscarDocumentoEmi.getsTrabDestino().trim().length() > 0) {
                 sql.append(" AND NVL((SELECT 1 FROM TDTV_DESTINOS C WHERE C.NU_EMI=A.NU_EMI AND C.NU_ANN=A.NU_ANN AND CO_EMP_DES=:pTiEmpDest and rownum = 1),0) > 0 ");
                 objectParam.put("pTiEmpDest", buscarDocumentoEmi.getsTrabDestino());
             }
@@ -317,13 +318,13 @@ private SimpleJdbcCall spInsMesaVirtual;
                     objectParam.put("pFeEmiFin", vFeEmiFin);
                 }
             }
-            
+
             //YUAL
-            if (buscarDocumentoEmi.getCoEstMensajeria()!= null && buscarDocumentoEmi.getCoEstMensajeria().trim().length()>0) {
+            if (buscarDocumentoEmi.getCoEstMensajeria() != null && buscarDocumentoEmi.getCoEstMensajeria().trim().length() > 0) {
                 sql.append(" AND CO_TIP_DOC_ADM in ('011','012') AND A.ES_DOC_EMI=0 AND  NVL((A.TI_ENV_MSJ),3)= :pcoEstMensajeria");
                 objectParam.put("pcoEstMensajeria", buscarDocumentoEmi.getCoEstMensajeria());
             }
-            
+
         }
 
         //Busqueda
@@ -354,36 +355,32 @@ private SimpleJdbcCall spInsMesaVirtual;
         sql.append(") X ");
         sql.append("WHERE ROWNUM < 101");
 
-      
-       // System.out.println("sql:"+sql);
-        
+        // System.out.println("sql:"+sql);
         try {
 
             list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, BeanPropertyRowMapper.newInstance(DocumentoBean.class));
-             Result.setResult(list);           
+            Result.setResult(list);
             Result.setIsSuccess(true);
             objectParam = new HashMap<String, Object>();
-            buscarDocumentoEmi= new BuscarDocumentoEmiBean();
+            buscarDocumentoEmi = new BuscarDocumentoEmiBean();
             list = new ArrayList<DocumentoBean>();
-            sql = new StringBuffer();
-            
-      } catch (EmptyResultDataAccessException e) {
+            sql = new StringBuilder();
+
+        } catch (EmptyResultDataAccessException e) {
             Result.setIsSuccess(false);
             Result.setMessage(e.getMessage());
-       } catch (Exception e) {
+        } catch (Exception e) {
             Result.setIsSuccess(false);
             Result.setMessage(e.getMessage());
-           e.printStackTrace();
-       }
+            e.printStackTrace();
+        }
         return Result;
     }
 
-    
-    
     @Override
     public DocumentoEmiBean getDocumentoEmitido(String pnuAnn, String pnuEmi) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n"
                 + "a.nu_ann, \n"
                 + "a.nu_emi, \n"
@@ -436,7 +433,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public DocumentoEmiBean getDocumentoEmiAdm(String pnuAnn, String pnuEmi) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select A.*,\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_EMI) DE_EMP_EMI,\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(A.CO_EMP_RES) DE_EMP_RES,\n"
@@ -461,7 +458,7 @@ private SimpleJdbcCall spInsMesaVirtual;
         } catch (EmptyResultDataAccessException e) {
             documentoEmiBean = null;
         } catch (Exception e) {
-            System.out.println("nu_ann="+pnuAnn+","+"nu_emi="+pnuEmi);
+            System.out.println("nu_ann=" + pnuAnn + "," + "nu_emi=" + pnuEmi);
             e.printStackTrace();
         }
         return documentoEmiBean;
@@ -470,7 +467,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public ExpedienteBean getExpDocumentoEmitido(String pnuAnnExp, String pnuSecExp) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select B.NU_EXPEDIENTE,B.FE_EXP,IDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(B.CO_PROCESO) DE_PROCESO,TO_CHAR(B.FE_EXP,'DD/MM/YYYY') FE_EXP_CORTA,\n"
                 + "B.NU_ANN_EXP,B.NU_SEC_EXP,B.CO_PROCESO\n"
                 + "from IDOSGD.TDTC_EXPEDIENTE B \n"
@@ -491,7 +488,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public EmpleadoBean getEmpleadoLocaltblDestinatario(String pcoDependencia) {
-        String sql="select "
+        String sql = "select "
                 + "A.CO_LOC CO_LOCAL,\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(A.CO_LOC) DE_LOCAL,\n"
                 + "B.CO_EMPLEADO CEMP_CODEMP,\n"
@@ -513,28 +510,27 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<EmpleadoBean> getPersonalDestinatario(String pcoDepen) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
 
-        sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.cemp_denom, e.CEMP_CODEMP \n" +
-                    "FROM IDOSGD.RHTM_PER_EMPLEADOS e, \n" +
-                    "( \n" +
-                    "SELECT CEMP_CODEMP \n" +
-                    "FROM IDOSGD.RHTM_PER_EMPLEADOS \n" +
-                    "where CEMP_EST_EMP = '1' \n" +
-                    "  and (CO_DEPENDENCIA=? or CEMP_CO_DEPEND=?) \n" +
-                    "union \n" +
-                    "select co_emp from IDOSGD.tdtx_dependencia_empleado  where co_dep=? and es_emp='0' \n" +
-                    "union \n" +
-                    "select co_empleado from IDOSGD.rhtm_dependencia where co_dependencia = ? \n" +
-                    ") a \n" +
-                    "where e.cemp_codemp = a.cemp_codemp\n" +
-                    "order by 1");
-
+        sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.cemp_denom, e.CEMP_CODEMP \n"
+                + "FROM IDOSGD.RHTM_PER_EMPLEADOS e, \n"
+                + "( \n"
+                + "SELECT CEMP_CODEMP \n"
+                + "FROM IDOSGD.RHTM_PER_EMPLEADOS \n"
+                + "where CEMP_EST_EMP = '1' \n"
+                + "  and (CO_DEPENDENCIA=? or CEMP_CO_DEPEND=?) \n"
+                + "union \n"
+                + "select co_emp from IDOSGD.tdtx_dependencia_empleado  where co_dep=? and es_emp='0' \n"
+                + "union \n"
+                + "select co_empleado from IDOSGD.rhtm_dependencia where co_dependencia = ? \n"
+                + ") a \n"
+                + "where e.cemp_codemp = a.cemp_codemp\n"
+                + "order by 1");
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class),
-                    new Object[]{pcoDepen, pcoDepen, pcoDepen,pcoDepen});
+                    new Object[]{pcoDepen, pcoDepen, pcoDepen, pcoDepen});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -547,7 +543,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public List<MotivoBean> getLstMotivoxTipoDocumento(String pcoDepen, String pcoTipDoc) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<MotivoBean> list = new ArrayList<MotivoBean>();
 
         sql.append("SELECT a.de_mot,\n"
@@ -564,7 +560,6 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "where co_mot in ('0','1')\n"
                 + " ORDER BY 1");
 
-
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(MotivoBean.class),
                     new Object[]{pcoDepen, pcoTipDoc});
@@ -579,18 +574,18 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DocumentoBean> getLstDocEmitidoRef(String pcoEmpEmi, String pcoDepen, String pannio, String ptiDoc, String pnuDoc) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
 
         sql.append("SELECT A.* ");
-        sql.append(" FROM ( ");        
-        
+        sql.append(" FROM ( ");
+
         sql.append("select *\n"
                 + "from("
                 + "select \n"
                 + "RE.fe_emi,\n"
                 + "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(RE.co_tip_doc_adm),1,100) DE_TIP_DOC_ADM,\n"
-                + "RR.NU_DOC,\n"                
+                + "RR.NU_DOC,\n"
                 + "to_char(RE.fe_emi,'DD/MM/YY') FE_EMI_CORTA,\n"
                 + "null FE_REC_DOC_CORTA,\n"
                 + "RE.NU_ANN,\n"
@@ -598,7 +593,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "NULL NU_DES,\n"
                 + "replace(ltrim(rtrim(RE.de_asu)),chr(10),' ') DE_ASU, \n"
                 + "RE.CO_TIP_DOC_ADM,  \n"
-                + "SUBSTR(RR.NU_EXPEDIENTE,1,20) NU_EXPEDIENTE,\n"                
+                + "SUBSTR(RR.NU_EXPEDIENTE,1,20) NU_EXPEDIENTE,\n"
                 + "RE.NU_ANN_EXP,\n"
                 + "RE.NU_SEC_EXP\n"
                 + "from IDOSGD.TDTV_REMITOS RE,IDOSGD.TDTX_REMITOS_RESUMEN RR\n"
@@ -617,13 +612,13 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "     AND ti_emi = 'D'\n"
                 + "     AND es_ref = '1')\n"
                 + "AND RE.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
-                if(pnuDoc!=null&&pnuDoc.trim().length()>0){
-                    pnuDoc=Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
-                    sql.append("AND (RE.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
-                }
-                sql.append("UNION\n"
+        if (pnuDoc != null && pnuDoc.trim().length() > 0) {
+            pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
+            sql.append("AND (RE.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
+        }
+        sql.append("UNION\n"
                 + "select \n"
-                + "RE.fe_emi,\n"                        
+                + "RE.fe_emi,\n"
                 + "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(RE.co_tip_doc_adm),1,100) TIPO,\n"
                 + "RR.NU_DOC numero,\n"
                 + "to_char(RE.fe_emi,'DD/MM/YY') fecha_emision,\n"
@@ -644,16 +639,16 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "and RE.es_doc_emi not in ('9','7','5')\n"
                 + "AND RE.CO_GRU = '2'\n"
                 + "AND RE.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
-                if(pnuDoc!=null&&pnuDoc.trim().length()>0){
-                    pnuDoc=Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
-                    sql.append("AND (RE.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
-                }
-                sql.append("and RE.co_emp_emi = ?/*:GLOBAL.USER*/\n"
+        if (pnuDoc != null && pnuDoc.trim().length() > 0) {
+            pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
+            sql.append("AND (RE.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
+        }
+        sql.append("and RE.co_emp_emi = ?/*:GLOBAL.USER*/\n"
                 + ") E\n"
                 + "order by 1 desc");
 
-	sql.append(") A ");
-        sql.append(" LIMIT 200");                            
+        sql.append(") A ");
+        sql.append(" LIMIT 200");
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoBean.class),
@@ -669,63 +664,63 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DocumentoBean> getLstDocRecepcionadoRef(String pcoDepen, String pannio, String ptiDoc, String pnuDoc) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
 
         sql.append("SELECT A.* ");
         sql.append(" FROM ( ");
-        
-    
-        sql.append("select *\n"+
-                    "from(\n"+
-                    "select\n"+
-                    "d.FE_REC_DOC,\n" +
-                    "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n" +
-                    "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n" +
-                    "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n" +
-                    "TO_CHAR(d.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n" +
-                    "r.nu_ann,\n" +
-                    "r.nu_emi,\n" +
-                    "d.nu_des,\n" +
-                    "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n" +
-                    "r.co_tip_doc_adm,\n" +
-                    "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(d.co_dep_des),1,200) de_dep_des,\n" +
-                    "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n" +
-                    "r.NU_ANN_EXP,\n" +
-                    "r.NU_SEC_EXP\n" +
-                    "from IDOSGD.TDTV_REMITOS R,IDOSGD.TDTV_DESTINOS D,IDOSGD.TDTX_REMITOS_RESUMEN RR\n" +
-                    "where\n" +
-                    "r.es_eli = '0'\n" +
-                    "AND d.es_eli = '0'\n" +
-                    "AND r.nu_ann = ?/*:b_03.NU_ANN_REF*/\n" +
-                    "and rr.nu_ann=r.nu_ann\n" +
-                    "AND rr.nu_emi = r.nu_emi\n" +
-                    "AND d.nu_ann = r.nu_ann\n" +
-                    "AND d.nu_emi = r.nu_emi\n" +
-                    "AND r.es_doc_emi NOT IN ('5', '9', '7')\n" +
-                    "and d.es_doc_rec <> '0'  \n" +
-                    "and d.co_dep_des in \n" +
-                    "(select ?/*:b_02.co_dep_emi*/ \n" +//from dual 
-                    "union \n" +
-                    "  SELECT co_dep_ref\n" +
-                    "    FROM IDOSGD.tdtx_referencia\n" +
-                    "   WHERE co_dep_emi = ?/*:b_02.co_dep_emi*/\n" +
-                    "     AND ti_emi = 'D'\n" +
-                    "     AND es_ref = '1')\n" +
-                    "AND r.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
-                    if(pnuDoc!=null&&pnuDoc.trim().length()>0){
-                        pnuDoc=Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
-                        sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
-                    }
-                    sql.append(") E\n"+
-                    "order by 1 desc");
-                    
-	sql.append(") A ");
-        sql.append(" LIMIT 200");    
+
+        sql.append("select *\n"
+                + "from(\n"
+                + "select\n"
+                + "d.FE_REC_DOC,\n"
+                + "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n"
+                + "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n"
+                + "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n"
+                + "TO_CHAR(d.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n"
+                + "r.nu_ann,\n"
+                + "r.nu_emi,\n"
+                + "d.nu_des,\n"
+                + "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n"
+                + "r.co_tip_doc_adm,\n"
+                + "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(d.co_dep_des),1,200) de_dep_des,\n"
+                + "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n"
+                + "r.NU_ANN_EXP,\n"
+                + "r.NU_SEC_EXP\n"
+                + "from IDOSGD.TDTV_REMITOS R,IDOSGD.TDTV_DESTINOS D,IDOSGD.TDTX_REMITOS_RESUMEN RR\n"
+                + "where\n"
+                + "r.es_eli = '0'\n"
+                + "AND d.es_eli = '0'\n"
+                + "AND r.nu_ann = ?/*:b_03.NU_ANN_REF*/\n"
+                + "and rr.nu_ann=r.nu_ann\n"
+                + "AND rr.nu_emi = r.nu_emi\n"
+                + "AND d.nu_ann = r.nu_ann\n"
+                + "AND d.nu_emi = r.nu_emi\n"
+                + "AND r.es_doc_emi NOT IN ('5', '9', '7')\n"
+                + "and d.es_doc_rec <> '0'  \n"
+                + "and d.co_dep_des in \n"
+                + "(select ?/*:b_02.co_dep_emi*/ \n"
+                +//from dual 
+                "union \n"
+                + "  SELECT co_dep_ref\n"
+                + "    FROM IDOSGD.tdtx_referencia\n"
+                + "   WHERE co_dep_emi = ?/*:b_02.co_dep_emi*/\n"
+                + "     AND ti_emi = 'D'\n"
+                + "     AND es_ref = '1')\n"
+                + "AND r.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
+        if (pnuDoc != null && pnuDoc.trim().length() > 0) {
+            pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
+            sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
+        }
+        sql.append(") E\n"
+                + "order by 1 desc");
+
+        sql.append(") A ");
+        sql.append(" LIMIT 200");
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoBean.class),
-                    new Object[]{pannio,pcoDepen, pcoDepen, ptiDoc});
+                    new Object[]{pannio, pcoDepen, pcoDepen, ptiDoc});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -737,7 +732,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     //@Override
     public List<DestinatarioDocumentoEmiBean> _getLstDestintariotlbEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local,substr(IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(a.co_loc_des), 1, 100) de_local,\n"
                 + "a.co_dep_des co_dependencia,substr(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_des), 1, 100) de_dependencia,\n"
@@ -764,7 +759,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DestinatarioDocumentoEmiBean> getLstDestintariotlbEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,"
                 + "a.co_loc_des co_local,"
@@ -806,7 +801,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "ELSE null\n"
                 + "END AS de_ciudadano,"
                 + "a.CO_OTR_ORI_DES co_otro_origen,\n"
-                +"CASE  WHEN a.CO_OTR_ORI_DES IS NOT NULL THEN\n"                
+                + "CASE  WHEN a.CO_OTR_ORI_DES IS NOT NULL THEN\n"
                 + "(SELECT C.DE_APE_PAT_OTR||' '||C.DE_APE_MAT_OTR||', '||C.DE_NOM_OTR || ' - ' ||\n"
                 + "     C.DE_RAZ_SOC_OTR ||'##'||\n"
                 + "     COALESCE(B.CELE_DESELE,'   ') ||'##'||\n"
@@ -840,7 +835,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<ReferenciaBean> getLstDocumReferenciatblEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<ReferenciaBean> list = new ArrayList<ReferenciaBean>();
         sql.append("SELECT \n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (a.co_tip_doc_adm) de_tipo_doc, \n"
@@ -848,10 +843,10 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig\n"
                 + "WHEN a.ti_emi='05' THEN\n"
                 + "a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig\n"
-                +" ELSE a.de_doc_sig\n"
+                + " ELSE a.de_doc_sig\n"
                 + " END AS li_nu_doc,"
-//                + "DECODE (a.ti_emi,'01', a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig,\n"
-//                + "         '05', a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig,a.de_doc_sig) li_nu_doc,\n"
+                //                + "DECODE (a.ti_emi,'01', a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig,\n"
+                //                + "         '05', a.nu_doc_emi || '-' || a.nu_ann || '-' || a.de_doc_sig,a.de_doc_sig) li_nu_doc,\n"
                 + "substr(IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep_emi), 1, 100) de_dep_emi, \n"
                 + "TO_CHAR(a.fe_emi,'DD/MM/YY') fe_emi_corta, \n"
                 + "b.nu_ann,\n"
@@ -888,7 +883,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public String getTipoDestinatarioEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String result = null;
 //        sql.append("SELECT COALESCE(MAX(ti_des),'01')\n" +
         sql.append("SELECT MAX(ti_des)\n"
@@ -911,7 +906,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String updDocumentoEmiBean(String nuAnn, String nuEmi, DocumentoEmiBean documentoEmiBean, ExpedienteBean expedienteBean, RemitenteEmiBean remitenteEmiBean, String pcoUserMod) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=?,");
         if (documentoEmiBean != null) {
@@ -927,12 +922,12 @@ private SimpleJdbcCall spInsMesaVirtual;
                     + ",ES_DOC_EMI=?\n"
                     + ",NU_DOC_EMI=?\n"
                     + ",DE_DOC_SIG=?\n"
-//                    + ",A.NU_COR_DOC=nvl2(?,?,(SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
-//                    + "FROM IDOSGD.tdtv_remitos\n"
-//                    + "WHERE nu_ann = ?\n"
-//                    + "AND co_dep_emi = ?\n"
-//                    + "AND co_tip_doc_adm = ?\n"
-//                    + "AND ti_emi = ?)),\n");
+                    //                    + ",A.NU_COR_DOC=nvl2(?,?,(SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
+                    //                    + "FROM IDOSGD.tdtv_remitos\n"
+                    //                    + "WHERE nu_ann = ?\n"
+                    //                    + "AND co_dep_emi = ?\n"
+                    //                    + "AND co_tip_doc_adm = ?\n"
+                    //                    + "AND ti_emi = ?)),\n");
                     + ",NU_COR_DOC=case when ? is not null then ? else (SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
                     + "FROM IDOSGD.tdtv_remitos\n"
                     + "WHERE nu_ann = ?\n"
@@ -976,9 +971,9 @@ private SimpleJdbcCall spInsMesaVirtual;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
         documentoEmiBean.setTiEmi("01");
-        StringBuffer sqlUpd = new StringBuffer();
-        StringBuffer sqlQry = new StringBuffer();
-        StringBuffer sqlQry1 = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
+        StringBuilder sqlQry = new StringBuilder();
+        StringBuilder sqlQry1 = new StringBuilder();
         sqlQry.append("select lpad(cast(nextval('IDOSGD.SEC_REMITOS_NU_EMI') as text),10,'0');");
         sqlQry1.append("SELECT COALESCE(MAX(nu_cor_emi), 0) + 1\n"
                 + "FROM IDOSGD.tdtv_remitos\n"
@@ -1016,7 +1011,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "VALUES(?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,'1',?,?,?,'03',?,\n"
                 + "?,?,?,?,1,\n"
                 + "'0',?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP)");
-        
+
         try {
             String snuEmi = this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class);
             long snuCorEmi = this.jdbcTemplate.queryForObject(sqlQry1.toString(), Long.class, new Object[]{documentoEmiBean.getNuAnn(), documentoEmiBean.getCoDepEmi()});
@@ -1026,9 +1021,9 @@ private SimpleJdbcCall spInsMesaVirtual;
 
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getNuAnn(), snuEmi, snuCorEmi,
                 documentoEmiBean.getCoLocEmi(), documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getCoEmpRes(),
-                documentoEmiBean.getTiEmi(), documentoEmiBean.getDeAsu(), documentoEmiBean.getEsDocEmi(), Integer.parseInt(documentoEmiBean.getNuDiaAte()),documentoEmiBean.getCoTipDocAdm(),
-                Integer.parseInt(documentoEmiBean.getNuCorDoc()), documentoEmiBean.getDeDocSig(),documentoEmiBean.getNuAnnExp(), documentoEmiBean.getNuSecExp(), 
-                documentoEmiBean.getNuDocEmi(),documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod()});
+                documentoEmiBean.getTiEmi(), documentoEmiBean.getDeAsu(), documentoEmiBean.getEsDocEmi(), Integer.parseInt(documentoEmiBean.getNuDiaAte()), documentoEmiBean.getCoTipDocAdm(),
+                Integer.parseInt(documentoEmiBean.getNuCorDoc()), documentoEmiBean.getDeDocSig(), documentoEmiBean.getNuAnnExp(), documentoEmiBean.getNuSecExp(),
+                documentoEmiBean.getNuDocEmi(), documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod()});
 
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
@@ -1046,7 +1041,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String insDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.TDTV_DESTINOS(\n"
                 + "NU_ANN,\n"
                 + "NU_EMI,\n"
@@ -1076,7 +1071,7 @@ private SimpleJdbcCall spInsMesaVirtual;
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{nuAnn, nuEmi, nuAnn, nuEmi, destinatarioDocumentoEmiBean.getCoLocal(), destinatarioDocumentoEmiBean.getCoDependencia(), destinatarioDocumentoEmiBean.getCoTipoDestino(),
                 destinatarioDocumentoEmiBean.getCoEmpleado(), destinatarioDocumentoEmiBean.getCoPrioridad(), destinatarioDocumentoEmiBean.getDeIndicaciones(), destinatarioDocumentoEmiBean.getCoTramite(),
                 destinatarioDocumentoEmiBean.getCoOtroOrigen(), destinatarioDocumentoEmiBean.getNuDni(), destinatarioDocumentoEmiBean.getNuRuc(),
-                destinatarioDocumentoEmiBean.getCoUseCre(), destinatarioDocumentoEmiBean.getCoUseCre(),destinatarioDocumentoEmiBean.getEnvMesaPartes()});
+                destinatarioDocumentoEmiBean.getCoUseCre(), destinatarioDocumentoEmiBean.getCoUseCre(), destinatarioDocumentoEmiBean.getEnvMesaPartes()});
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
             vReturn = "Datos Duplicado Destino.";
@@ -1093,7 +1088,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String updDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.TDTV_DESTINOS \n"
                 + "set CO_LOC_DES=?\n"
@@ -1133,7 +1128,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String delDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("delete from IDOSGD.TDTV_DESTINOS\n"
                 + "WHERE NU_ANN = ?\n"
                 + "AND NU_EMI = ?\n"
@@ -1163,33 +1158,32 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String insReferenciaDocumentoEmi(String nuAnn, String nuEmi, ReferenciaEmiDocBean referenciaEmiDocBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         try {
-            
-        String nu_des_ref=(referenciaEmiDocBean.getNuDes()!= null && !referenciaEmiDocBean.getNuDes().isEmpty())?referenciaEmiDocBean.getNuDes():"NULL";
-        sqlUpd.append("INSERT INTO IDOSGD.TDTR_REFERENCIA(\n"
-                + "NU_ANN,\n"
-                + "NU_EMI,\n"
-                + /*"NU_DES,\n" +*/ "CO_REF,\n"
-                + "NU_ANN_REF,\n"
-                + "NU_EMI_REF,\n"
-                + "NU_DES_REF,\n"
-                + "CO_USE_CRE,\n"
-                + "FE_USE_CRE)\n"
-                + //                    "VALUES(?,?,(SELECT lpad(SEC_REFERENCIA_CO_REF.NextVal, 10, '0')\n" +
-                //                    "FROM DUAL),?,?,'ADM',CURRENT_TIMESTAMP)");
-                " VALUES(?,?,lpad(cast(nextval('idosgd.sec_referencia_co_ref') as text), 10, '0'),?,?"+(nu_des_ref.equals("NULL")?",NULL":",?")+",?,CURRENT_TIMESTAMP)");
-        
-        
+
+            String nu_des_ref = (referenciaEmiDocBean.getNuDes() != null && !referenciaEmiDocBean.getNuDes().isEmpty()) ? referenciaEmiDocBean.getNuDes() : "NULL";
+            sqlUpd.append("INSERT INTO IDOSGD.TDTR_REFERENCIA(\n"
+                    + "NU_ANN,\n"
+                    + "NU_EMI,\n"
+                    + /*"NU_DES,\n" +*/ "CO_REF,\n"
+                    + "NU_ANN_REF,\n"
+                    + "NU_EMI_REF,\n"
+                    + "NU_DES_REF,\n"
+                    + "CO_USE_CRE,\n"
+                    + "FE_USE_CRE)\n"
+                    + //                    "VALUES(?,?,(SELECT lpad(SEC_REFERENCIA_CO_REF.NextVal, 10, '0')\n" +
+                    //                    "FROM DUAL),?,?,'ADM',CURRENT_TIMESTAMP)");
+                    " VALUES(?,?,lpad(cast(nextval('idosgd.sec_referencia_co_ref') as text), 10, '0'),?,?" + (nu_des_ref.equals("NULL") ? ",NULL" : ",?") + ",?,CURRENT_TIMESTAMP)");
+
             Object[] object;
-            if(nu_des_ref.equals("NULL")){
-                object= new Object[]{nuAnn, nuEmi, referenciaEmiDocBean.getNuAnn(), referenciaEmiDocBean.getNuEmi(),referenciaEmiDocBean.getCoUseCre()};
-            }else{
-                object= new Object[]{nuAnn, nuEmi, referenciaEmiDocBean.getNuAnn(), referenciaEmiDocBean.getNuEmi(),
-                Integer.parseInt(referenciaEmiDocBean.getNuDes()), referenciaEmiDocBean.getCoUseCre()};
+            if (nu_des_ref.equals("NULL")) {
+                object = new Object[]{nuAnn, nuEmi, referenciaEmiDocBean.getNuAnn(), referenciaEmiDocBean.getNuEmi(), referenciaEmiDocBean.getCoUseCre()};
+            } else {
+                object = new Object[]{nuAnn, nuEmi, referenciaEmiDocBean.getNuAnn(), referenciaEmiDocBean.getNuEmi(),
+                    Integer.parseInt(referenciaEmiDocBean.getNuDes()), referenciaEmiDocBean.getCoUseCre()};
             }
-            
-            this.jdbcTemplate.update(sqlUpd.toString(),object );
+
+            this.jdbcTemplate.update(sqlUpd.toString(), object);
             vReturn = "OK";
         } catch (Exception e) {
             e.printStackTrace();
@@ -1203,17 +1197,17 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String updReferenciaDocumentoEmi(String nuAnn, String nuEmi, ReferenciaEmiDocBean referenciaEmiDocBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
-        
+        StringBuilder sqlUpd = new StringBuilder();
+
         try {
-        String nu_des_ref=(referenciaEmiDocBean.getNuDes()!= null && !referenciaEmiDocBean.getNuDes().isEmpty())?referenciaEmiDocBean.getNuDes():"NULL";
-        sqlUpd.append("update IDOSGD.TDTR_REFERENCIA \n"
-                + "set NU_ANN_REF = ?,\n"
-                + "NU_EMI_REF = ?,\n"
-                + "NU_DES_REF = "+(nu_des_ref.equals("NULL")?"NULL":referenciaEmiDocBean.getNuDes())+" \n"
-                + " WHERE NU_ANN = ? AND NU_EMI = ? \n"
-                + "AND CO_REF = ?");
-        
+            String nu_des_ref = (referenciaEmiDocBean.getNuDes() != null && !referenciaEmiDocBean.getNuDes().isEmpty()) ? referenciaEmiDocBean.getNuDes() : "NULL";
+            sqlUpd.append("update IDOSGD.TDTR_REFERENCIA \n"
+                    + "set NU_ANN_REF = ?,\n"
+                    + "NU_EMI_REF = ?,\n"
+                    + "NU_DES_REF = " + (nu_des_ref.equals("NULL") ? "NULL" : referenciaEmiDocBean.getNuDes()) + " \n"
+                    + " WHERE NU_ANN = ? AND NU_EMI = ? \n"
+                    + "AND CO_REF = ?");
+
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{referenciaEmiDocBean.getNuAnn(), referenciaEmiDocBean.getNuEmi(), nuAnn, nuEmi, referenciaEmiDocBean.getCoRef()});
             vReturn = "OK";
         } catch (Exception e) {
@@ -1227,7 +1221,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String delReferenciaDocumentoEmi(String nuAnn, String nuEmi, ReferenciaEmiDocBean referenciaEmiDocBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlIns = new StringBuffer();
+        StringBuilder sqlIns = new StringBuilder();
         sqlIns.append("DELETE FROM IDOSGD.TDTR_REFERENCIA\n"
                 + "WHERE NU_ANN = ? AND NU_EMI = ? \n"
                 + "AND NU_ANN_REF = ? AND NU_EMI_REF = ?");
@@ -1244,7 +1238,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public DocumentoEmiBean getDocumentoEmiAdmNew(String sEstadoDocEmi, String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select IDOSGD.PK_SGD_DESCRIPCION_DE_SIGLA(?) de_doc_sig,\n"
                 + "CO_EMPLEADO co_emp_emi,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(CO_EMPLEADO) de_emp_emi,\n"
                 + "IDOSGD.PK_SGD_DESCRIPCION_ESTADOS (?,'TDTV_REMITOS') de_es_doc_emi,'0' existe_doc,'0' existe_anexo,\n"
@@ -1268,7 +1262,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String insExpedienteBean(ExpedienteBean expedienteBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlQry1 = new StringBuffer();
+        StringBuilder sqlQry1 = new StringBuilder();
         sqlQry1.append("select LPAD(TRIM(CAST((CAST(COALESCE(max(NU_CORR_EXP),'0')AS int)+1) AS text)),7,'0') nuCorrExp, \n"
                 + " substr(IDOSGD.PK_SGD_DESCRIPCION_DE_SIGLA_CORTA(?),1,6) deSiglaCorta\n"
                 + "from IDOSGD.tdtc_expediente\n"
@@ -1276,12 +1270,12 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "and co_dep_exp = ?\n"
                 + "and co_gru     = '1'");
 
-        StringBuffer sqlQry2 = new StringBuffer();
+        StringBuilder sqlQry2 = new StringBuilder();
         sqlQry2.append("select LPAD(TRIM(cast((cast(COALESCE(max(nu_sec_exp),'0')as int) +1) as text)),10,'0') \n"
                 + "from IDOSGD.tdtc_expediente\n"
                 + "where nu_ann_exp = ?");
 
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.TDTC_EXPEDIENTE(\n"
                 + "nu_ann_exp,\n"
                 + "nu_sec_exp,\n"
@@ -1323,8 +1317,8 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public String verificarDocumentoLeido(String pnuAnn, String pnuEmi) {
-        String vReturn = "NO_OK";        
-        StringBuffer sqlQry = new StringBuffer();
+        String vReturn = "NO_OK";
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT COALESCE(MAX(es_doc_rec),'0')\n"
                 + "FROM IDOSGD.TDTV_DESTINOS\n"
                 + "WHERE nu_ann = ?\n"
@@ -1343,7 +1337,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String anularDocumentoEmiAdm(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT COALESCE(MAX(nu_cor_doc), 1) + 1\n"
                 + "FROM IDOSGD.tdtv_remitos\n"
                 + "WHERE nu_ann         = ?\n"
@@ -1354,7 +1348,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "OR ? ='null'\n"
                 + ")");
 
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set es_doc_emi = ?,\n"
                 + "nu_cor_doc = ?,fe_use_mod=CURRENT_TIMESTAMP,co_use_mod=? \n"
@@ -1362,7 +1356,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "AND nu_emi = ?\n"
                 + "AND es_eli = '0'");
 
-        String nuDocEmi= (documentoEmiBean.getNuDocEmi()==null)?"null":documentoEmiBean.getNuDocEmi();
+        String nuDocEmi = (documentoEmiBean.getNuDocEmi() == null) ? "null" : documentoEmiBean.getNuDocEmi();
         try {
             String snuCorDoc = this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[]{documentoEmiBean.getNuAnn(), documentoEmiBean.getTiEmi(),
                 documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm(), nuDocEmi, nuDocEmi, nuDocEmi});
@@ -1378,8 +1372,8 @@ private SimpleJdbcCall spInsMesaVirtual;
     }
 
     @Override
-    public List<DestinatarioDocumentoEmiBean> getLstDestinatarioGrupo(String pcoGrupo,String pcoTipDoc) {
-        StringBuffer sql = new StringBuffer();
+    public List<DestinatarioDocumentoEmiBean> getLstDestinatarioGrupo(String pcoGrupo, String pcoTipDoc) {
+        StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();
 
 //        sql.append("SELECT a.co_dep co_dependencia,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep) de_dependencia,\n" +
@@ -1398,32 +1392,31 @@ private SimpleJdbcCall spInsMesaVirtual;
 //                    "WHERE a.co_dep = b.co_dependencia\n" +
 //                    "AND a.co_dep = c.co_dep \n"+
 //                    "order by a.rowid ");
-        
-        sql.append("SELECT a.co_dep co_dependencia,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep) de_dependencia,\n" +
-                    "    COALESCE(a.co_emp, b.co_empleado) co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(COALESCE(a.co_emp, b.co_empleado)) de_empleado,\n" +
-                    "    c.co_loc co_local,IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(c.co_loc) de_local,'1' co_prioridad,\n" +
-                    "    ? co_tramite_first, ? de_tramite_first, ? co_tramite_next, ? de_tramite_next \n" +
-                    "    FROM (   \n" +
-                    "      select y.oid,y.cemp_codemp co_emp,  x.co_dep\n" +
-                    "      from IDOSGD.rhtm_per_empleados y right join IDOSGD.tdtd_dep_gru x  on (y.cemp_codemp  = x.co_emp and y.cemp_est_emp='1') \n" +
-                    "      where \n" +
-                    "      x.co_gru_des= ?\n" +
-                    "      and x.es_dep_gru = '1'\n" +
-//                    "      --and y.cemp_codemp (+) = x.co_emp \n" +
-//                    "      --and y.cemp_est_emp(+) = '1'\n" +
-                    "      order by y.oid\n" +
-                    "    ) a , IDOSGD.rhtm_dependencia b, IDOSGD.sitm_local_dependencia c\n" +
-                    "    WHERE a.co_dep = b.co_dependencia\n" +
-                    "    AND a.co_dep = c.co_dep\n" +
-                    "    order by a.oid");
+        sql.append("SELECT a.co_dep co_dependencia,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(a.co_dep) de_dependencia,\n"
+                + "    COALESCE(a.co_emp, b.co_empleado) co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(COALESCE(a.co_emp, b.co_empleado)) de_empleado,\n"
+                + "    c.co_loc co_local,IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(c.co_loc) de_local,'1' co_prioridad,\n"
+                + "    ? co_tramite_first, ? de_tramite_first, ? co_tramite_next, ? de_tramite_next \n"
+                + "    FROM (   \n"
+                + "      select y.oid,y.cemp_codemp co_emp,  x.co_dep\n"
+                + "      from IDOSGD.rhtm_per_empleados y right join IDOSGD.tdtd_dep_gru x  on (y.cemp_codemp  = x.co_emp and y.cemp_est_emp='1') \n"
+                + "      where \n"
+                + "      x.co_gru_des= ?\n"
+                + "      and x.es_dep_gru = '1'\n"
+                + //                    "      --and y.cemp_codemp (+) = x.co_emp \n" +
+                //                    "      --and y.cemp_est_emp(+) = '1'\n" +
+                "      order by y.oid\n"
+                + "    ) a , IDOSGD.rhtm_dependencia b, IDOSGD.sitm_local_dependencia c\n"
+                + "    WHERE a.co_dep = b.co_dependencia\n"
+                + "    AND a.co_dep = c.co_dep\n"
+                + "    order by a.oid");
 
         try {
-            if(pcoTipDoc.equals("232")){
+            if (pcoTipDoc.equals("232")) {
                 list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class),
-                        new Object[]{Constantes.CO_TRAMITE_ATENDER, Constantes.DE_TRAMITE_ATENDER,Constantes.CO_TRAMITE_FINES, Constantes.DE_TRAMITE_FINES, pcoGrupo});                                
-            }else{
+                        new Object[]{Constantes.CO_TRAMITE_ATENDER, Constantes.DE_TRAMITE_ATENDER, Constantes.CO_TRAMITE_FINES, Constantes.DE_TRAMITE_FINES, pcoGrupo});
+            } else {
                 list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class),
-                        new Object[]{Constantes.CO_TRAMITE_ORIGINAL, Constantes.DE_TRAMITE_ORIGINAL,Constantes.CO_TRAMITE_COPIA, Constantes.DE_TRAMITE_COPIA, pcoGrupo});                
+                        new Object[]{Constantes.CO_TRAMITE_ORIGINAL, Constantes.DE_TRAMITE_ORIGINAL, Constantes.CO_TRAMITE_COPIA, Constantes.DE_TRAMITE_COPIA, pcoGrupo});
             }
         } catch (EmptyResultDataAccessException e) {
             list = null;
@@ -1452,10 +1445,9 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
 
         /**/
-
         final LobHandler lobhandler = new DefaultLobHandler();
         if (inInsert) {
-            StringBuffer sql = new StringBuffer();
+            StringBuilder sql = new StringBuilder();
             sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\n"
                     + "VALUES(?,?,?,?,'0',TO_CHAR(CURRENT_TIMESTAMP,'YYYYMMDD'))");
             try {
@@ -1474,7 +1466,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                 e.printStackTrace();
             }
         } else {
-            StringBuffer sql = new StringBuffer();
+            StringBuilder sql = new StringBuilder();
             sql.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET BL_DOC = ?, DE_RUTA_ORIGEN = ?, FEULA=TO_CHAR(CURRENT_TIMESTAMP,'YYYYMMDD')\n"
                     + "WHERE NU_ANN = ? \n"
                     + "AND NU_EMI = ? ");
@@ -1512,7 +1504,7 @@ private SimpleJdbcCall spInsMesaVirtual;
                     + "      AND tr.ti_emi = '01'\n"
                     + "      AND nu_cor_doc = 1\n"
                     + "      AND tr.es_doc_emi NOT IN ('9')", String.class, new Object[]{documentoEmiBean.getNuAnn(), documentoEmiBean.getCoDepEmi(),
-                documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getNuDocEmi()});
+                        documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getNuDocEmi()});
         } catch (Exception e) {
             e.printStackTrace();
             vReturn = e.getMessage();
@@ -1522,7 +1514,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<EmpleadoBean> getPersonalEditDocAdmEmision(String pcoDepEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
 
         sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.cemp_denom, e.CEMP_CODEMP\n"
@@ -1551,27 +1543,29 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return list;
     }
- @Override
+
+    @Override
     public String getUsuarioNofirmaProveido(String pcoEmpleado) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String listTotal = "0";
 
-        sql.append(" SELECT COUNT(*) TOTAL FROM IDOSGD.SI_ELEMENTO WHERE CTAB_CODTAB='NO_FIRMA_PROVEIDO' AND CELE_DESELE='"+pcoEmpleado+"' ");
+        sql.append(" SELECT COUNT(*) TOTAL FROM IDOSGD.SI_ELEMENTO WHERE CTAB_CODTAB='NO_FIRMA_PROVEIDO' AND CELE_DESELE='" + pcoEmpleado + "' ");
         try {
-             listTotal = this.jdbcTemplate.queryForObject(sql.toString(), String.class);  
-            
+            listTotal = this.jdbcTemplate.queryForObject(sql.toString(), String.class);
+
         } catch (EmptyResultDataAccessException e) {
-           
+
         } catch (Exception e) {
-             
+
             e.printStackTrace();
         }
         return listTotal;
     }
+
     @Override
     public String updEstadoDocumentoEmiAdm(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=?\n"
@@ -1595,7 +1589,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String updEstadoDocumentoEmitido(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=? \n"
@@ -1625,7 +1619,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String updDocumentoEmiAdmBean(String nuAnn, String nuEmi, DocumentoEmiBean documentoEmiBean, ExpedienteBean expedienteBean, RemitenteEmiBean remitenteEmiBean, String pcoUserMod) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=?,");
         if (documentoEmiBean != null) {
@@ -1636,25 +1630,25 @@ private SimpleJdbcCall spInsMesaVirtual;
                     + ",NU_DOC_EMI=?\n"
                     + ",DE_DOC_SIG=?\n"
                     + ",NU_COR_DOC=CAST(? AS INT),\n"
-                    /*(SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
+            /*(SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
                     + "FROM tdtv_remitos\n"
                     + "WHERE nu_ann = ?\n"
                     + "AND co_dep_emi = ?\n"
                     + "AND co_tip_doc_adm = ?\n"
                     + "AND ti_emi = ?)),\n"*/);
-            
+
             //para verificar numero correlativo de documento
-            if(documentoEmiBean.getNuDocEmi()==null || documentoEmiBean.getNuDocEmi().trim().equals("") ){
+            if (documentoEmiBean.getNuDocEmi() == null || documentoEmiBean.getNuDocEmi().trim().equals("")) {
                 String vnuCorDoc = getNroCorrelativoDocumento(documentoEmiBean);
                 documentoEmiBean.setNuCorDoc(vnuCorDoc);
             }
             //sqlUpd.append(",A.NU_COR_DOC=").append(documentoEmiBean.getNuCorDoc()).append(",\n");
-            
+
             //Para verificar si ya tiene un numero correlativo de emision
-            if (documentoEmiBean.getNuCorEmi()==null || documentoEmiBean.getNuCorEmi().trim().equals("") ){
+            if (documentoEmiBean.getNuCorEmi() == null || documentoEmiBean.getNuCorEmi().trim().equals("")) {
                 String vnuCorEmi = getNroCorrelativoEmision(documentoEmiBean);
                 documentoEmiBean.setNuCorEmi(vnuCorEmi);
-                sqlUpd.append("NU_COR_EMI=" + documentoEmiBean.getNuCorEmi()+ ",\n");
+                sqlUpd.append("NU_COR_EMI=" + documentoEmiBean.getNuCorEmi() + ",\n");
             }
         }
         if (expedienteBean != null) {
@@ -1675,7 +1669,7 @@ private SimpleJdbcCall spInsMesaVirtual;
             if (documentoEmiBean != null) {
                 this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{pcoUserMod, documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(),
                     documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getNuDocEmi(), documentoEmiBean.getDeDocSig(),
-                    /*documentoEmiBean.getNuDocEmi(), documentoEmiBean.getNuCorDoc(),*/documentoEmiBean.getNuCorDoc(),/*, nuAnn, documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm(),
+                    /*documentoEmiBean.getNuDocEmi(), documentoEmiBean.getNuCorDoc(),*/ documentoEmiBean.getNuCorDoc(),/*, nuAnn, documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm(),
                     documentoEmiBean.getTiEmi(),*/ nuAnn, nuEmi});
             } else {
                 this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{pcoUserMod, nuAnn, nuEmi});
@@ -1696,7 +1690,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String getNumeroDocSiguienteAdm(String pnuAnn, String pcoDepEmi, String pcoDoc) {
         String vReturn = "1";
         try {
-            StringBuffer sql = new StringBuffer();
+            StringBuilder sql = new StringBuilder();
             sql.append("         SELECT TRIM(CAST(COALESCE(MAX(cast (TR.nu_doc_emi as int)), 0) + 1 AS TEXT)) \n"
                     + "           FROM IDOSGD.tdtv_remitos tr\n"
                     + "          WHERE tr.nu_ann = ?\n"
@@ -1718,7 +1712,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public DocumentoObjBean getPropiedadesArchivo(String pnuAnn, String pnuEmi, String ptiCap) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select \n"
                 + "nu_ann, \n"
                 + "nu_emi, \n"
@@ -1728,7 +1722,6 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + "from IDOSGD.tdtv_archivo_doc \n"
                 + "where nu_ann = ?\n"
                 + "and nu_emi = ?");
-
 
         DocumentoObjBean docObjBean = new DocumentoObjBean();
 
@@ -1746,7 +1739,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String getNroCorrelativoDocumento(DocumentoEmiBean documentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT COALESCE(MAX(nu_cor_doc), 0) + 1\n"
                 + "FROM IDOSGD.tdtv_remitos\n"
                 + "WHERE nu_ann       = ?\n"
@@ -1765,12 +1758,12 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return vReturn;
     }
-    
+
     @Override
     public String getNroCorrelativoDocumentoDel(DocumentoEmiBean documentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT COALESCE(MAX(nu_cor_doc), 1) + 1\n"
                 + "FROM IDOSGD.tdtv_remitos\n"
                 + "WHERE nu_ann       = ?\n"
@@ -1788,13 +1781,13 @@ private SimpleJdbcCall spInsMesaVirtual;
 
         }
         return vReturn;
-    }    
+    }
 
     @Override
     public String delAllReferenciaDocumentoEmi(String nuAnn, String nuEmi) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("DELETE FROM IDOSGD.TDTR_REFERENCIA\n"
                 + "WHERE NU_ANN = ? AND NU_EMI = ?");
 
@@ -1812,7 +1805,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String delAllDestinatarioDocumentoEmi(String nuAnn, String nuEmi) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "NO_OK";
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("DELETE FROM IDOSGD.TDTV_DESTINOS\n"
                 + "WHERE NU_ANN = ? AND NU_EMI = ?");
 
@@ -1829,7 +1822,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String delDocumentoEmiAdm(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=?\n"
@@ -1853,7 +1846,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DependenciaBean> getListDestinatarioEmi(String pcoDepen, String pdeDepEmite) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
 
         boolean vfiltro = pdeDepEmite != null && !pdeDepEmite.trim().equals("") ? true : false;
 
@@ -1888,7 +1881,6 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         sql.append("  ORDER BY 1");
 
-
         List<DependenciaBean> list = new ArrayList<DependenciaBean>();
 
         try {
@@ -1909,7 +1901,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DestinoBean> getListaDestinosCodDepTipoDes(String nu_ann, String nu_emi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinoBean> list = new ArrayList<DestinoBean>();
         sql.append("SELECT DISTINCT co_dep_des, ti_des ");
         sql.append("FROM IDOSGD.TDTV_DESTINOS ");
@@ -1931,7 +1923,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DestinoBean> getListaDestinosOriTipoDes(String nu_ann, String nu_emi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinoBean> list = new ArrayList<DestinoBean>();
         sql.append(" SELECT ti_des,\n"
                 + "CASE \n"
@@ -1960,10 +1952,10 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return list;
     }
-    
+
     @Override
     public List<ReferenciaRemitoBean> getListaReferenciaRemitos(String nu_ann, String nu_emi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<ReferenciaRemitoBean> list = new ArrayList<ReferenciaRemitoBean>();
         sql.append("SELECT DISTINCT b.ti_emi, b.co_dep_emi ");
         sql.append("FROM   IDOSGD.TDTR_REFERENCIA a, IDOSGD.tdtv_remitos b ");
@@ -1983,24 +1975,24 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return list;
     }
-    
+
     @Override
     public List<ReferenciaRemitoBean> getOriReferenciaLista(String nu_ann, String nu_emi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<ReferenciaRemitoBean> list = new ArrayList<ReferenciaRemitoBean>();
-        sql.append(" SELECT b.ti_emi, \n" +
-//                    " decode(b.ti_emi,'02',IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(b.nu_ruc_emi),\n" +
-//                    "               '03',IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(b.nu_dni_emi),\n" +
-//                    "               '04',IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN(b.co_otr_ori_emi),' ' ) co_dep_emi\n" +
-                    " CASE WHEN b.ti_emi='02' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(b.nu_ruc_emi) \n" +
-                    " WHEN b.ti_emi='03' THEN IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(b.nu_dni_emi) \n" +
-                    " WHEN b.ti_emi='04' THEN IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN(b.co_otr_ori_emi) ELSE ' ' END AS co_dep_emi\n" +
-                    " FROM   IDOSGD.TDTR_REFERENCIA a, IDOSGD.tdtv_remitos b \n" +
-                    " WHERE  a.nu_ann_ref = b.nu_ann \n" +
-                    " AND    a.nu_emi_ref = b.nu_emi \n" +
-                    " AND    a.nu_ann = ? \n" +
-                    " AND    a.nu_emi = ? \n" +
-                    " ORDER  BY b.ti_emi");
+        sql.append(" SELECT b.ti_emi, \n"
+                + //                    " decode(b.ti_emi,'02',IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(b.nu_ruc_emi),\n" +
+                //                    "               '03',IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(b.nu_dni_emi),\n" +
+                //                    "               '04',IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN(b.co_otr_ori_emi),' ' ) co_dep_emi\n" +
+                " CASE WHEN b.ti_emi='02' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_PROVEEDOR(b.nu_ruc_emi) \n"
+                + " WHEN b.ti_emi='03' THEN IDOSGD.PK_SGD_DESCRIPCION_ANI_SIMIL(b.nu_dni_emi) \n"
+                + " WHEN b.ti_emi='04' THEN IDOSGD.PK_SGD_DESCRIPCION_OTRO_ORIGEN(b.co_otr_ori_emi) ELSE ' ' END AS co_dep_emi\n"
+                + " FROM   IDOSGD.TDTR_REFERENCIA a, IDOSGD.tdtv_remitos b \n"
+                + " WHERE  a.nu_ann_ref = b.nu_ann \n"
+                + " AND    a.nu_emi_ref = b.nu_emi \n"
+                + " AND    a.nu_ann = ? \n"
+                + " AND    a.nu_emi = ? \n"
+                + " ORDER  BY b.ti_emi");
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(ReferenciaRemitoBean.class),
                     new Object[]{nu_ann, nu_emi});
@@ -2015,7 +2007,7 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     @Override
     public List<DestinoBean> getListaDestinosCodPri(String nu_ann, String nu_emi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinoBean> list = new ArrayList<DestinoBean>();
         sql.append("SELECT co_pri ");
         sql.append("FROM IDOSGD.TDTV_DESTINOS ");
@@ -2039,7 +2031,7 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String getNumDestinos(String nu_ann, String nu_emi) {
         String vReturn = "0";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT count(nu_des) ");
         sqlQry.append("FROM IDOSGD.TDTV_DESTINOS ");
         sqlQry.append("WHERE nu_ann = ? ");
@@ -2056,23 +2048,22 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String updRemitoResumenDestinatario(String pnuAnn, String pnuEmi, String vti_des, String vco_pri, String vnu_cant_des, String vresOriDes) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET ");
         sqlUpd.append("TI_EMI_DES = ?,CO_PRIORIDAD = ?,nu_candes=CAST(? AS int) ");
         sqlUpd.append("WHERE NU_ANN = ? ");
         sqlUpd.append("AND NU_EMI = ? ");
 
-        StringBuffer sqlUpd2 = new StringBuffer();
-        sqlUpd2.append("UPDATE IDOSGD.TDTV_REMITOS SET DE_ORI_DES = ?\n" +
-                        "WHERE NU_ANN = ? \n" +
-                        "AND NU_EMI = ? ");
-        
-        
+        StringBuilder sqlUpd2 = new StringBuilder();
+        sqlUpd2.append("UPDATE IDOSGD.TDTV_REMITOS SET DE_ORI_DES = ?\n"
+                + "WHERE NU_ANN = ? \n"
+                + "AND NU_EMI = ? ");
+
         try {
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{
                 vti_des, vco_pri, vnu_cant_des, pnuAnn, pnuEmi
             });
-            
+
             this.jdbcTemplate.update(sqlUpd2.toString(), new Object[]{
                 vresOriDes, pnuAnn, pnuEmi
             });
@@ -2087,27 +2078,27 @@ private SimpleJdbcCall spInsMesaVirtual;
 
     public String updRemitoResumenReferencia(String pnuAnn, String pnuEmi, String vti_ori, String vdeOriEmi) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTX_REMITOS_RESUMEN SET ");
         sqlUpd.append("TI_EMI_REF = ? ");
         sqlUpd.append("WHERE NU_ANN = ? ");
         sqlUpd.append("AND NU_EMI = ?");
 
-        StringBuffer sqlUpd2 = new StringBuffer();
-        sqlUpd2.append("UPDATE IDOSGD.TDTV_REMITOS SET DE_ORI_EMI = ?\n" +
-                        "WHERE NU_ANN = ? \n" +
-                        "AND NU_EMI = ? ");
-        
+        StringBuilder sqlUpd2 = new StringBuilder();
+        sqlUpd2.append("UPDATE IDOSGD.TDTV_REMITOS SET DE_ORI_EMI = ?\n"
+                + "WHERE NU_ANN = ? \n"
+                + "AND NU_EMI = ? ");
+
         try {
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{
                 vti_ori, pnuAnn, pnuEmi
             });
-            
+
             // Actualizacion de de_ori_emi
             this.jdbcTemplate.update(sqlUpd2.toString(), new Object[]{
                 vdeOriEmi, pnuAnn, pnuEmi
             });
-            
+
             vReturn = "OK";
         } catch (Exception e) {
             e.printStackTrace();
@@ -2115,41 +2106,42 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return vReturn;
     }
+
     @Override
-    public DocumentoEmiBean existeDocumentoReferenciado(BuscarDocumentoEmiBean buscarDocumentoEmiBean){
-        StringBuffer sql = new StringBuffer();
+    public DocumentoEmiBean existeDocumentoReferenciado(BuscarDocumentoEmiBean buscarDocumentoEmiBean) {
+        StringBuilder sql = new StringBuilder();
         DocumentoEmiBean documentoEmiBean = null;
-        sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\n" +
-                    "WHERE A.NU_ANN=?\n" +
-                    "AND A.CO_DEP_EMI=?\n" +
-                    "AND A.TI_EMI='01'\n" +
-                    "AND A.CO_TIP_DOC_ADM=?\n" +
-                    "AND A.NU_DOC_EMI=?\n" +
-                    "AND A.ES_ELI='0'\n" +
-                    "AND A.ES_DOC_EMI NOT IN ('5','7','9')");        
-        
+        sql.append("SELECT A.NU_ANN,A.NU_EMI,A.NU_COR_DOC FROM IDOSGD.TDTV_REMITOS A\n"
+                + "WHERE A.NU_ANN=?\n"
+                + "AND A.CO_DEP_EMI=?\n"
+                + "AND A.TI_EMI='01'\n"
+                + "AND A.CO_TIP_DOC_ADM=?\n"
+                + "AND A.NU_DOC_EMI=?\n"
+                + "AND A.ES_ELI='0'\n"
+                + "AND A.ES_DOC_EMI NOT IN ('5','7','9')");
+
         try {
-             documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
-                    new Object[]{buscarDocumentoEmiBean.getsCoAnnioBus(),buscarDocumentoEmiBean.getsBuscDestinatario(),buscarDocumentoEmiBean.getsDeTipoDocAdm(),
-                    buscarDocumentoEmiBean.getsNumDocRef()});
-             documentoEmiBean.setMsjResult("OK");
+            documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
+                    new Object[]{buscarDocumentoEmiBean.getsCoAnnioBus(), buscarDocumentoEmiBean.getsBuscDestinatario(), buscarDocumentoEmiBean.getsDeTipoDocAdm(),
+                        buscarDocumentoEmiBean.getsNumDocRef()});
+            documentoEmiBean.setMsjResult("OK");
         } catch (EmptyResultDataAccessException e) {
             documentoEmiBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return documentoEmiBean;          
+        return documentoEmiBean;
     }
-    
+
     @Override
-    public List<DocumentoEmiBean> getDocumentosReferenciadoBusq(DocumentoEmiBean documentoEmiBean,String sTipoAcceso){       
-        StringBuffer sql = new StringBuffer(); 
+    public List<DocumentoEmiBean> getDocumentosReferenciadoBusq(DocumentoEmiBean documentoEmiBean, String sTipoAcceso) {
+        StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
-        List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();        
-        
+        List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();
+
         sql.append("SELECT A.* ");
-        sql.append(" FROM ( ");        
-        sql.append(" SELECT ");        
+        sql.append(" FROM ( ");
+        sql.append(" SELECT ");
         sql.append(" DISTINCT B.NU_COR_EMI,IDOSGD.PK_SGD_DESCRIPCION_DE_EMI_REF(B.NU_ANN, B.NU_EMI) DE_EMI_REF,B.FE_EMI,");
         sql.append(" TO_CHAR(B.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,");
         sql.append(" (SELECT CDOC_DESDOC FROM IDOSGD.SI_MAE_TIPO_DOC WHERE CDOC_TIPDOC = B.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");
@@ -2163,23 +2155,23 @@ private SimpleJdbcCall spInsMesaVirtual;
                 + " COALESCE(C.CO_PRIORIDAD,'1') CO_PRIORIDAD,");
         sql.append(" B.ES_DOC_EMI");
         sql.append(" FROM ( ");
-        sql.append("WITH RECURSIVE q AS ( \n" +
-            "    SELECT NU_ANN , NU_EMI \n" +
-            "      FROM IDOSGD.TDTR_ARBOL_SEG  po \n" +
-            "     WHERE po.PK_REF = :pCoAnio||:pNuEmi||'0' \n" +
-            "    UNION ALL\n" +
-            "    SELECT po.NU_ANN , po.NU_EMI \n" +
-            "      FROM IDOSGD.TDTR_ARBOL_SEG  po \n" +
-            "      JOIN IDOSGD.TDTR_ARBOL_SEG q ON q.PK_EMI=po.PK_REF \n" +
-            ") \n" +
-            "SELECT * FROM q \n" +
-            ") ");
+        sql.append("WITH RECURSIVE q AS ( \n"
+                + "    SELECT NU_ANN , NU_EMI \n"
+                + "      FROM IDOSGD.TDTR_ARBOL_SEG  po \n"
+                + "     WHERE po.PK_REF = :pCoAnio||:pNuEmi||'0' \n"
+                + "    UNION ALL\n"
+                + "    SELECT po.NU_ANN , po.NU_EMI \n"
+                + "      FROM IDOSGD.TDTR_ARBOL_SEG  po \n"
+                + "      JOIN IDOSGD.TDTR_ARBOL_SEG q ON q.PK_EMI=po.PK_REF \n"
+                + ") \n"
+                + "SELECT * FROM q \n"
+                + ") ");
 //        sql.append("  SELECT NU_ANN, NU_EMI ");
 //        sql.append("  FROM IDOSGD.TDTR_ARBOL_SEG ");
 //        sql.append("	 START WITH PK_REF = :pCoAnio||:pNuEmi||'0' ");
 //        sql.append("	CONNECT BY PRIOR PK_EMI = PK_REF");
 //        sql.append(" ) A , IDOSGD.TDTV_REMITOS B, IDOSGD.TDTX_REMITOS_RESUMEN C");
-        
+
         sql.append("A , IDOSGD.TDTV_REMITOS B, IDOSGD.TDTX_REMITOS_RESUMEN C ");
         sql.append(" WHERE A.NU_ANN = B.NU_ANN");
         sql.append(" AND A.NU_EMI = B.NU_EMI");
@@ -2188,92 +2180,91 @@ private SimpleJdbcCall spInsMesaVirtual;
         sql.append(" AND B.TI_EMI='01'");
         sql.append(" AND C.TI_EMI='01'");
         sql.append(" AND B.ES_ELI = '0'");
-        sql.append(" AND B.CO_DEP_EMI = :pCoDepEmi");        
-        if(sTipoAcceso.equals("1")){
-            sql.append(" AND B.CO_EMP_RES = :pcoEmpRes");      
-            objectParam.put("pcoEmpRes", documentoEmiBean.getCoEmpRes());           
+        sql.append(" AND B.CO_DEP_EMI = :pCoDepEmi");
+        if (sTipoAcceso.equals("1")) {
+            sql.append(" AND B.CO_EMP_RES = :pcoEmpRes");
+            objectParam.put("pcoEmpRes", documentoEmiBean.getCoEmpRes());
         }
-        objectParam.put("pCoAnio", documentoEmiBean.getNuAnn());           
-        objectParam.put("pNuEmi", documentoEmiBean.getNuEmi());   
-        objectParam.put("pCoDepEmi", documentoEmiBean.getCoDepEmi());   
-        
+        objectParam.put("pCoAnio", documentoEmiBean.getNuAnn());
+        objectParam.put("pNuEmi", documentoEmiBean.getNuEmi());
+        objectParam.put("pCoDepEmi", documentoEmiBean.getCoDepEmi());
+
         sql.append(" ORDER BY B.NU_COR_EMI DESC");
         sql.append(") A ");
-        sql.append("LIMIT 100");            
-        
+        sql.append("LIMIT 100");
+
         try {
             list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class));
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             list = null;
-        }catch (Exception e) {
+        } catch (Exception e) {
             list = null;
             e.printStackTrace();
         }
-        return list;          
+        return list;
     }
-    
+
     @Override
-    public TblRemitosBean getDatosDocumento(String pnuAnn,String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+    public TblRemitosBean getDatosDocumento(String pnuAnn, String pnuEmi) {
+        StringBuilder sql = new StringBuilder();
         TblRemitosBean tblRemitosBean = null;
-        sql.append("SELECT A.NU_ANN,A.NU_EMI,A.CO_DEP_EMI,A.FE_EMI FROM IDOSGD.TDTV_REMITOS A\n" +
-                   "WHERE A.NU_ANN=? AND A.NU_EMI=? AND A.ES_ELI='0'");        
-        
+        sql.append("SELECT A.NU_ANN,A.NU_EMI,A.CO_DEP_EMI,A.FE_EMI FROM IDOSGD.TDTV_REMITOS A\n"
+                + "WHERE A.NU_ANN=? AND A.NU_EMI=? AND A.ES_ELI='0'");
+
         try {
-             tblRemitosBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(TblRemitosBean.class),
-                    new Object[]{pnuAnn,pnuEmi});
-             tblRemitosBean.setMsgResult("OK");
+            tblRemitosBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(TblRemitosBean.class),
+                    new Object[]{pnuAnn, pnuEmi});
+            tblRemitosBean.setMsgResult("OK");
         } catch (EmptyResultDataAccessException e) {
             tblRemitosBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return tblRemitosBean;              
+        return tblRemitosBean;
     }
-    
+
     @Override
-    public String getCoEmplFirmoDocumento(String pnuAnn,String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+    public String getCoEmplFirmoDocumento(String pnuAnn, String pnuEmi) {
+        StringBuilder sql = new StringBuilder();
         String result = "NO_OK";
-        sql.append("SELECT CO_EMP_EMI\n" +
-                    "FROM IDOSGD.TDTV_REMITOS\n" +
-                    "WHERE nu_emi = ?\n" +
-                    "AND nu_ann = ?");
+        sql.append("SELECT CO_EMP_EMI\n"
+                + "FROM IDOSGD.TDTV_REMITOS\n"
+                + "WHERE nu_emi = ?\n"
+                + "AND nu_ann = ?");
 
         try {
             result = this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[]{pnuEmi, pnuAnn});
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;        
+        return result;
     }
-    
+
     @Override
-    public DocumentoEmiBean getEstadoDocumento(String pnuAnn,String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+    public DocumentoEmiBean getEstadoDocumento(String pnuAnn, String pnuEmi) {
+        StringBuilder sql = new StringBuilder();
         DocumentoEmiBean documentoEmiBean = null;
-        sql.append("SELECT CO_EMP_EMI,ES_DOC_EMI,NU_ANN,NU_EMI,TI_EMI,CO_DEP_EMI,CO_TIP_DOC_ADM,NU_DOC_EMI,CO_EMP_RES\n" +
-        "FROM IDOSGD.TDTV_REMITOS\n" +
-        "WHERE nu_ann = ?\n" +
-        "AND nu_emi = ? AND ES_ELI='0'");        
-        
+        sql.append("SELECT CO_EMP_EMI,ES_DOC_EMI,NU_ANN,NU_EMI,TI_EMI,CO_DEP_EMI,CO_TIP_DOC_ADM,NU_DOC_EMI,CO_EMP_RES\n"
+                + "FROM IDOSGD.TDTV_REMITOS\n"
+                + "WHERE nu_ann = ?\n"
+                + "AND nu_emi = ? AND ES_ELI='0'");
+
         try {
-             documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
-                    new Object[]{pnuAnn,pnuEmi});
+            documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
+                    new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             documentoEmiBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return documentoEmiBean;             
+        return documentoEmiBean;
     }
-    
-    
+
     @Override
     public String getNroCorrelativoEmision(DocumentoEmiBean documentoEmiBean) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String vReturn = "0";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT COALESCE(MAX(nu_cor_emi), 0) + 1\n"
                 + "FROM IDOSGD.tdtv_remitos\n"
                 + "WHERE nu_ann = ?\n"
@@ -2289,11 +2280,11 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return vReturn;
     }
-    
+
     @Override
     public String updChangeToDespacho(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.tdtv_remitos \n"
                 + "set CO_USE_MOD=?\n"
@@ -2314,98 +2305,98 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return vReturn;
     }
-    
+
     @Override
     public List<DocumentoBean> getLstDocRecepcionadoRefMp(String pcoDepen, String pannio, String ptiDoc, String pnuDoc) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
 
         sql.append("SELECT A.* ");
         sql.append(" FROM ( ");
-        
-    
-        sql.append("select *\n"+
-                    "from(\n"+
-                    "select\n"+
-                    "d.FE_REC_DOC,\n" +
-                    "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n" +
-                    "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n" +
-                    "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n" +
-                    "TO_CHAR(d.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n" +
-                    "r.nu_ann,\n" +
-                    "r.nu_emi,\n" +
-                    "d.nu_des,\n" +
-                    "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n" +
-                    "r.co_tip_doc_adm,\n" +
-                    "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(d.co_dep_des),1,200) de_dep_des,\n" +
-                    "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n" +
-                    "r.NU_ANN_EXP,\n" +
-                    "r.NU_SEC_EXP\n" +
-                    "from IDOSGD.TDTV_REMITOS R,IDOSGD.TDTV_DESTINOS D,IDOSGD.TDTX_REMITOS_RESUMEN RR\n" +
-                    "where\n" +
-                    "r.es_eli = '0'\n" +
-                    "AND d.es_eli = '0'\n" +
-                    "AND r.nu_ann = ?/*:b_03.NU_ANN_REF*/\n" +
-                    "and rr.nu_ann=r.nu_ann\n" +
-                    "AND rr.nu_emi = r.nu_emi\n" +
-                    "AND d.nu_ann = r.nu_ann\n" +
-                    "AND d.nu_emi = r.nu_emi\n" +
-                    "AND r.es_doc_emi NOT IN ('5', '9', '7')\n" +
-                    "and d.es_doc_rec <> '0'  \n" +
-                    "and d.co_dep_des in \n" +
-                    "(select ?/*:b_02.co_dep_emi*/ \n" +//from dual 
-                    "union \n" +
-                    "  SELECT co_dep_ref\n" +
-                    "    FROM IDOSGD.tdtx_referencia\n" +
-                    "   WHERE co_dep_emi = ?/*:b_02.co_dep_emi*/\n" +
-                    "     AND ti_emi = 'D'\n" +
-                    "     AND es_ref = '1')\n" +
-                    "AND r.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
-                    if(pnuDoc!=null&&pnuDoc.trim().length()>0){
-                        pnuDoc=Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
-                        sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
-                    }
-                    sql.append("UNION \n" +
-                    "SELECT\n" +
-                    "DE.FE_REC_DOC,\n" +
-                    "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n" +
-                    "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n" +
-                    "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n" +
-                    "TO_CHAR(DE.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n" +
-                    "r.nu_ann,\n" +
-                    "r.nu_emi,\n" +
-                    "DE.nu_des,\n" +
-                    "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n" +
-                    "r.co_tip_doc_adm,\n" +
-                    "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(DE.co_dep_des),1,200) de_dep_des,\n" +
-                    "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n" +
-                    "r.NU_ANN_EXP,\n" +
-                    "r.NU_SEC_EXP\n" +
-                    "FROM IDOSGD.TDTV_DESTINOS DE,IDOSGD.TDTV_REMITOS R,IDOSGD.TDTX_REMITOS_RESUMEN RR\n" +
-                    "WHERE R.NU_ANN = ?\n" +
-                    "AND DE.NU_ANN=R.NU_ANN\n" +
-                    "AND RR.NU_ANN=R.NU_ANN\n" +
-                    "AND DE.NU_EMI=RR.NU_EMI\n" +
-                    "AND R.NU_EMI=RR.NU_EMI\n" +
-                    "AND R.es_eli = '0'\n" +
-                    "AND DE.ES_ELI='0'\n" +
-                    "and R.es_doc_emi not in ('9','7','5')\n" +
-                    "AND R.CO_GRU = '1'\n" +
-                    "AND DE.ES_ENV_POR_TRA='1'\n" +
-                    "AND r.co_tip_doc_adm = ?\n");
-                    if(pnuDoc!=null&&pnuDoc.trim().length()>0){
-                        pnuDoc=Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
-                        sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
-                    } 
-                    sql.append(") E\n"+
-                    "order by 1 desc");
-                    
-	sql.append(") A ");
-        sql.append(" LIMIT 200");    
+
+        sql.append("select *\n"
+                + "from(\n"
+                + "select\n"
+                + "d.FE_REC_DOC,\n"
+                + "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n"
+                + "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n"
+                + "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n"
+                + "TO_CHAR(d.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n"
+                + "r.nu_ann,\n"
+                + "r.nu_emi,\n"
+                + "d.nu_des,\n"
+                + "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n"
+                + "r.co_tip_doc_adm,\n"
+                + "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(d.co_dep_des),1,200) de_dep_des,\n"
+                + "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n"
+                + "r.NU_ANN_EXP,\n"
+                + "r.NU_SEC_EXP\n"
+                + "from IDOSGD.TDTV_REMITOS R,IDOSGD.TDTV_DESTINOS D,IDOSGD.TDTX_REMITOS_RESUMEN RR\n"
+                + "where\n"
+                + "r.es_eli = '0'\n"
+                + "AND d.es_eli = '0'\n"
+                + "AND r.nu_ann = ?/*:b_03.NU_ANN_REF*/\n"
+                + "and rr.nu_ann=r.nu_ann\n"
+                + "AND rr.nu_emi = r.nu_emi\n"
+                + "AND d.nu_ann = r.nu_ann\n"
+                + "AND d.nu_emi = r.nu_emi\n"
+                + "AND r.es_doc_emi NOT IN ('5', '9', '7')\n"
+                + "and d.es_doc_rec <> '0'  \n"
+                + "and d.co_dep_des in \n"
+                + "(select ?/*:b_02.co_dep_emi*/ \n"
+                +//from dual 
+                "union \n"
+                + "  SELECT co_dep_ref\n"
+                + "    FROM IDOSGD.tdtx_referencia\n"
+                + "   WHERE co_dep_emi = ?/*:b_02.co_dep_emi*/\n"
+                + "     AND ti_emi = 'D'\n"
+                + "     AND es_ref = '1')\n"
+                + "AND r.co_tip_doc_adm = ?/*:B_03.LI_TIP_DOC*/\n");
+        if (pnuDoc != null && pnuDoc.trim().length() > 0) {
+            pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
+            sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
+        }
+        sql.append("UNION \n"
+                + "SELECT\n"
+                + "DE.FE_REC_DOC,\n"
+                + "SUBSTR(IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(r.co_tip_doc_adm),1,100) de_tip_doc_adm,\n"
+                + "SUBSTR(rr.nu_doc,1,50) NU_DOC,\n"
+                + "TO_CHAR(r.FE_EMI,'DD/MM/YY') FE_EMI_CORTA,\n"
+                + "TO_CHAR(DE.FE_REC_DOC,'DD/MM/YY') FE_REC_DOC_CORTA,\n"
+                + "r.nu_ann,\n"
+                + "r.nu_emi,\n"
+                + "DE.nu_des,\n"
+                + "REPLACE(LTRIM(RTRIM(r.DE_ASU)),CHR(10),' ') DE_ASU,\n"
+                + "r.co_tip_doc_adm,\n"
+                + "substr(IDOSGD.PK_SGD_DESCRIPCION_de_dependencia(DE.co_dep_des),1,200) de_dep_des,\n"
+                + "SUBSTR(rr.nu_expediente,1,20) NU_EXPEDIENTE,\n"
+                + "r.NU_ANN_EXP,\n"
+                + "r.NU_SEC_EXP\n"
+                + "FROM IDOSGD.TDTV_DESTINOS DE,IDOSGD.TDTV_REMITOS R,IDOSGD.TDTX_REMITOS_RESUMEN RR\n"
+                + "WHERE R.NU_ANN = ?\n"
+                + "AND DE.NU_ANN=R.NU_ANN\n"
+                + "AND RR.NU_ANN=R.NU_ANN\n"
+                + "AND DE.NU_EMI=RR.NU_EMI\n"
+                + "AND R.NU_EMI=RR.NU_EMI\n"
+                + "AND R.es_eli = '0'\n"
+                + "AND DE.ES_ELI='0'\n"
+                + "and R.es_doc_emi not in ('9','7','5')\n"
+                + "AND R.CO_GRU = '1'\n"
+                + "AND DE.ES_ENV_POR_TRA='1'\n"
+                + "AND r.co_tip_doc_adm = ?\n");
+        if (pnuDoc != null && pnuDoc.trim().length() > 0) {
+            pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
+            sql.append("AND (R.NU_DOC_EMI = '").append(pnuDoc).append("' OR RR.NU_EXPEDIENTE LIKE '%").append(pnuDoc).append("')\n");
+        }
+        sql.append(") E\n"
+                + "order by 1 desc");
+
+        sql.append(") A ");
+        sql.append(" LIMIT 200");
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoBean.class),
-                    new Object[]{pannio,pcoDepen, pcoDepen, ptiDoc, pannio, ptiDoc});
+                    new Object[]{pannio, pcoDepen, pcoDepen, ptiDoc, pannio, ptiDoc});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -2413,82 +2404,82 @@ private SimpleJdbcCall spInsMesaVirtual;
             e.printStackTrace();
         }
         return list;
-    }    
-    
+    }
+
     @Override
-    public DocumentoEmiBean getEstadoDocumentoAudi(String pnuAnn,String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+    public DocumentoEmiBean getEstadoDocumentoAudi(String pnuAnn, String pnuEmi) {
+        StringBuilder sql = new StringBuilder();
         DocumentoEmiBean documentoEmiBean = null;
-        sql.append("SELECT CO_EMP_EMI,ES_DOC_EMI,NU_ANN,NU_EMI,TI_EMI,CO_DEP_EMI,CO_TIP_DOC_ADM,NU_DOC_EMI\n" +
-        "FROM IDOSGD.TDTV_REMITOS\n" +
-        "WHERE nu_ann = ?\n" +
-        "AND nu_emi = ?");        
-        
+        sql.append("SELECT CO_EMP_EMI,ES_DOC_EMI,NU_ANN,NU_EMI,TI_EMI,CO_DEP_EMI,CO_TIP_DOC_ADM,NU_DOC_EMI\n"
+                + "FROM IDOSGD.TDTV_REMITOS\n"
+                + "WHERE nu_ann = ?\n"
+                + "AND nu_emi = ?");
+
         try {
-             documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
-                    new Object[]{pnuAnn,pnuEmi});
+            documentoEmiBean = this.jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class),
+                    new Object[]{pnuAnn, pnuEmi});
         } catch (EmptyResultDataAccessException e) {
             documentoEmiBean = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return documentoEmiBean;             
-    }    
-    
+        return documentoEmiBean;
+    }
+
     @Override
-    public String insPersonalVoBo(String nuAnn,String nuEmi,String coDep,String coEmp,String coUser){
+    public String insPersonalVoBo(String nuAnn, String nuEmi, String coDep, String coEmp, String coUser) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
-        sqlUpd.append("INSERT INTO IDOSGD.TDTV_PERSONAL_VB(NU_ANN,NU_EMI,CO_DEP,\n" +
-                    "CO_EMP_VB,IN_VB,CO_USE_CRE,\n" +
-                    "FE_USE_CRE,CO_USE_MOD,FE_USE_MOD)\n" +
-                    "VALUES(?,?,?,\n" +
-                    "?,'0',?,\n" +
-                    "CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP)");
+        StringBuilder sqlUpd = new StringBuilder();
+        sqlUpd.append("INSERT INTO IDOSGD.TDTV_PERSONAL_VB(NU_ANN,NU_EMI,CO_DEP,\n"
+                + "CO_EMP_VB,IN_VB,CO_USE_CRE,\n"
+                + "FE_USE_CRE,CO_USE_MOD,FE_USE_MOD)\n"
+                + "VALUES(?,?,?,\n"
+                + "?,'0',?,\n"
+                + "CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP)");
 
         try {
-            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{nuAnn,nuEmi,coDep,coEmp,coUser,coUser});
+            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{nuAnn, nuEmi, coDep, coEmp, coUser, coUser});
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
             vReturn = "Datos Duplicado INSERT TDTV_PERSONAL_VB.";
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return vReturn;        
+        return vReturn;
     }
-    
+
     @Override
-    public String delPersonalVoBo(String nuAnn,String nuEmi,String coDep,String coEmp){
+    public String delPersonalVoBo(String nuAnn, String nuEmi, String coDep, String coEmp) {
         String vReturn = "NO_OK";
-        StringBuffer sqlDel = new StringBuffer();
-        sqlDel.append("DELETE FROM IDOSGD.TDTV_PERSONAL_VB\n" +
-                        "WHERE\n" +
-                        "NU_ANN=?\n" +
-                        "AND NU_EMI=?\n" +
-                        "AND CO_DEP=?\n" +
-                        "AND CO_EMP_VB=?\n" +
-                        "AND IN_VB <> '1'");
+        StringBuilder sqlDel = new StringBuilder();
+        sqlDel.append("DELETE FROM IDOSGD.TDTV_PERSONAL_VB\n"
+                + "WHERE\n"
+                + "NU_ANN=?\n"
+                + "AND NU_EMI=?\n"
+                + "AND CO_DEP=?\n"
+                + "AND CO_EMP_VB=?\n"
+                + "AND IN_VB <> '1'");
 
         try {
-            this.jdbcTemplate.update(sqlDel.toString(), new Object[]{nuAnn,nuEmi,coDep,coEmp});
+            this.jdbcTemplate.update(sqlDel.toString(), new Object[]{nuAnn, nuEmi, coDep, coEmp});
             vReturn = "OK";
         } catch (Exception e) {
             e.printStackTrace();
         }
         return vReturn;
-    }    
+    }
 
     @Override
     public String getInNumeraDocAdm(String tipoDoc) {
         String vReturn = "0";
-        StringBuffer sqlQry = new StringBuffer();
-        sqlQry.append("SELECT IN_NUMERACION FROM IDOSGD.SI_MAE_TIPO_DOC\n" +
-                    "WHERE CDOC_INDBAJ='0'\n" +
-                    "AND CDOC_TIPDOC=?");
+        StringBuilder sqlQry = new StringBuilder();
+        sqlQry.append("SELECT IN_NUMERACION FROM IDOSGD.SI_MAE_TIPO_DOC\n"
+                + "WHERE CDOC_INDBAJ='0'\n"
+                + "AND CDOC_TIPDOC=?");
         try {
             vReturn = this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[]{tipoDoc});
-            if(vReturn==null){
-                vReturn="0";
+            if (vReturn == null) {
+                vReturn = "0";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2499,24 +2490,24 @@ private SimpleJdbcCall spInsMesaVirtual;
     @Override
     public String getInFirmaDocAdm(String tipoDoc) {
         String vReturn = "2";
-        StringBuffer sqlQry = new StringBuffer();
-        sqlQry.append("SELECT IN_TIPO_FIRMA FROM IDOSGD.SI_MAE_TIPO_DOC\n" +
-                    "WHERE CDOC_INDBAJ='0'\n" +
-                    "AND CDOC_TIPDOC=?");
+        StringBuilder sqlQry = new StringBuilder();
+        sqlQry.append("SELECT IN_TIPO_FIRMA FROM IDOSGD.SI_MAE_TIPO_DOC\n"
+                + "WHERE CDOC_INDBAJ='0'\n"
+                + "AND CDOC_TIPDOC=?");
         try {
             vReturn = this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[]{tipoDoc});
-            if(vReturn==null){
-                vReturn="2";
-            }            
+            if (vReturn == null) {
+                vReturn = "2";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return vReturn;
     }
-    
+
     @Override
     public List<DestinatarioDocumentoEmiBean> getLstPersVoBoGrupo(String pcoGrupo) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();
 
 //        sql.append("SELECT a.co_dep co_dependencia,b.DE_CORTA_DEPEN de_dependencia,\n" +
@@ -2533,23 +2524,22 @@ private SimpleJdbcCall spInsMesaVirtual;
 //                    "WHERE a.co_dep = b.co_dependencia\n" +
 //                    "AND a.co_dep = c.co_dep \n"+
 //                    "order by a.rowid ");
-        
-            sql.append("SELECT a.co_dep co_dependencia,b.DE_CORTA_DEPEN de_dependencia,\n" +
-                    "    COALESCE(a.co_emp, b.co_empleado) co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(COALESCE(a.co_emp, b.co_empleado)) de_empleado\n" +
-                    "    FROM (   \n" +
-                    "      select y.cemp_codemp co_emp,  x.co_dep\n" +
-                    "      from IDOSGD.rhtm_per_empleados y RIGHT OUTER JOIN IDOSGD.tdtd_dep_gru x  on (y.cemp_codemp  = x.co_emp and y.cemp_est_emp='1') \n" +
-                    "      where \n" +
-                    "      x.co_gru_des= ?\n" +
-                    "      and x.es_dep_gru = '1'\n" +
-                    "    ) a , IDOSGD.rhtm_dependencia b, IDOSGD.sitm_local_dependencia c\n" +
-                    "    WHERE a.co_dep = b.co_dependencia\n" +
-                    "    AND a.co_dep = c.co_dep \n" +
-                    "    order by 1 ");
+        sql.append("SELECT a.co_dep co_dependencia,b.DE_CORTA_DEPEN de_dependencia,\n"
+                + "    COALESCE(a.co_emp, b.co_empleado) co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(COALESCE(a.co_emp, b.co_empleado)) de_empleado\n"
+                + "    FROM (   \n"
+                + "      select y.cemp_codemp co_emp,  x.co_dep\n"
+                + "      from IDOSGD.rhtm_per_empleados y RIGHT OUTER JOIN IDOSGD.tdtd_dep_gru x  on (y.cemp_codemp  = x.co_emp and y.cemp_est_emp='1') \n"
+                + "      where \n"
+                + "      x.co_gru_des= ?\n"
+                + "      and x.es_dep_gru = '1'\n"
+                + "    ) a , IDOSGD.rhtm_dependencia b, IDOSGD.sitm_local_dependencia c\n"
+                + "    WHERE a.co_dep = b.co_dependencia\n"
+                + "    AND a.co_dep = c.co_dep \n"
+                + "    order by 1 ");
 
         try {
-                list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class),
-                        new Object[]{pcoGrupo});                
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class),
+                    new Object[]{pcoGrupo});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -2557,12 +2547,12 @@ private SimpleJdbcCall spInsMesaVirtual;
             e.printStackTrace();
         }
         return list;
-    }    
-    
-     @Override
+    }
+
+    @Override
     public String updEstadoDocumentoEnvioNotificacion(DocumentoEmiBean documentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update tdtv_destinos \n"
                 + "set CO_USE_MOD=?\n"
@@ -2583,9 +2573,6 @@ private SimpleJdbcCall spInsMesaVirtual;
         }
         return vReturn;
     }
-       
-
-
 
     @Override
     public String updArchivarDocumento(DocumentoEmiBean documentoEmiBean, Usuario usuario) {
@@ -2602,77 +2589,71 @@ private SimpleJdbcCall spInsMesaVirtual;
     public String insMesaVitual(DatosInterBean datosInter) {
         String vReturn = "NO_OK";
 
-        
         this.spInsMesaVirtual = new SimpleJdbcCall(this.dataSource).withCatalogName("PK_SGD_MESA_VIRTUAL").withProcedureName("INS_MESA_VIRTUAL")
-        .withoutProcedureColumnMetaDataAccess()
-        .useInParameterNames("P_COUSEMOD", "P_DEPDES", "P_NOMDES", "P_CARDES", "P_NUANN", "P_NUEMI")
+                .withoutProcedureColumnMetaDataAccess()
+                .useInParameterNames("P_COUSEMOD", "P_DEPDES", "P_NOMDES", "P_CARDES", "P_NUANN", "P_NUEMI")
                 //descargamsj(pnu_ann tdtv_remitos.nu_ann%TYPE,pnu_emi tdtv_remitos.nu_emi%TYPE,pnu_des tdtv_destinos.nu_des%TYPE,pnu_msj tdtv_destinos.nu_msj%TYPE,pfecha tdtv_destinos.fec_finmsj%TYPE,pob_msj tdtv_destinos.ob_msj%TYPE,pmo_msj_dev tdtv_destinos.mo_msj_dev%TYPE,pes_pen_msj tdtv_destinos.es_pen_msj%TYPE,pest VARCHAR2);
-        .declareParameters(
-                new SqlParameter("P_COUSEMOD", Types.VARCHAR),
-                new SqlParameter("P_DEPDES", Types.VARCHAR),
-                new SqlParameter("P_NOMDES", Types.VARCHAR),
-                new SqlParameter("P_CARDES", Types.VARCHAR) ,
-                new SqlParameter("P_NUANN", Types.VARCHAR),
-                new SqlParameter("P_NUEMI", Types.VARCHAR)
-                        );
+                .declareParameters(
+                        new SqlParameter("P_COUSEMOD", Types.VARCHAR),
+                        new SqlParameter("P_DEPDES", Types.VARCHAR),
+                        new SqlParameter("P_NOMDES", Types.VARCHAR),
+                        new SqlParameter("P_CARDES", Types.VARCHAR),
+                        new SqlParameter("P_NUANN", Types.VARCHAR),
+                        new SqlParameter("P_NUEMI", Types.VARCHAR)
+                );
         SqlParameterSource in = new MapSqlParameterSource()
-        .addValue("P_COUSEMOD", datosInter.getCoUseMod())
-        .addValue("P_DEPDES", datosInter.getDeDepDes())
-        .addValue("P_NOMDES", datosInter.getDeNomDes())
-        .addValue("P_CARDES", datosInter.getDeCarDes())               
-       .addValue("P_NUANN", datosInter.getNuAnn()) 
-       .addValue("P_NUEMI", datosInter.getNuEmi()); 
+                .addValue("P_COUSEMOD", datosInter.getCoUseMod())
+                .addValue("P_DEPDES", datosInter.getDeDepDes())
+                .addValue("P_NOMDES", datosInter.getDeNomDes())
+                .addValue("P_CARDES", datosInter.getDeCarDes())
+                .addValue("P_NUANN", datosInter.getNuAnn())
+                .addValue("P_NUEMI", datosInter.getNuEmi());
         try {
             this.spInsMesaVirtual.execute(in);
             vReturn = "OK";
         } catch (Exception ex) {
             //mensaje = "NO_OK";
             ex.printStackTrace();
-        }  
-        
-        
+        }
+
         return vReturn;
     }
-      /*interoperabilidad*/
+
+    /*interoperabilidad*/
 
     @Override
-    public List<DestinatarioDocumentoEmiBean> getLstDestExternoGrupo(String pcoGrupo,String pTiDes) {
+    public List<DestinatarioDocumentoEmiBean> getLstDestExternoGrupo(String pcoGrupo, String pTiDes) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-	@Override
-	public boolean esDocoumentoSalidaExterna(String numEmi, String anio) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean esDocoumentoSalidaExterna(String numEmi, String anio) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean esMensajeriaSedeCentral(String coDependencia) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean esMensajeriaSedeCentral(String coDependencia) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean esDirectoroResponsableOficina(String coDependencia, String codCargo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean esDirectoroResponsableOficina(String coDependencia, String codCargo) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codCargo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean tieneCargoHabilitadoparaEnvioDocsExterno(String codCargo) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean doc) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean esDocumentoEnviadoInternamenteOtraOficina(DocumentoDatoBean doc) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	
-
-
-    
-    
 }

@@ -1,7 +1,6 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import pe.gob.onpe.tramitedoc.bean.AvisoBandejaEntradaBean;
 import pe.gob.onpe.tramitedoc.bean.EtiquetaBandejaEnBean;
@@ -27,7 +25,7 @@ public class AvisoBandejaEntradaDaoImp extends SimpleJdbcDaoBase
     }
 
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoTotal(String coDependencia, String coEmpleado) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append(" SELECT 1 ORDEN, '06' TI_PEN, 'PARA DESPACHO' DE_PEN,")
                 .append(" 'Documentos Administrativos listos para la Firma' DE_RESUMEN, ")
                 .append(" SUM(nu_can)NU_CAN, :pCoDep CO_DEP, '' CO_BANDEJA ")
@@ -212,7 +210,7 @@ public class AvisoBandejaEntradaDaoImp extends SimpleJdbcDaoBase
     }
 
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoPersonal(String coDependencia, String coEmpleado) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append(" SELECT 1 orden,'06' Ti_Pen, 'PARA DESPACHO' De_Pen, ")
                 .append(" 'Documentos Administrativos listos para la Firma' de_resumen,")
                 .append(" SUM(nu_can) Nu_Can, :pCoDep co_dep ")
@@ -331,7 +329,7 @@ public class AvisoBandejaEntradaDaoImp extends SimpleJdbcDaoBase
     }
 
     public List<AvisoBandejaEntradaBean> getBandejaEntradaAccesoFuncionario(String coDependencia, String coEmpleado) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT 1 orden,'06' Ti_Pen, 'PARA DESPACHO' De_Pen, ")
                 .append("  'Documentos Administrativos listos para la Firma' de_resumen, ")
                 .append("   COUNT(1) Nu_Can, :pCoDep co_dep  ")
@@ -434,7 +432,7 @@ public class AvisoBandejaEntradaDaoImp extends SimpleJdbcDaoBase
     }
 
     public List<EtiquetaBandejaEnBean> getListEtiquetaBandejaEntrada(String coDep, String coEmp) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select e.co_est,e.de_est descripcion,count(*) numero_documentos,d.co_dep_des,d.co_emp_rec ");
         sql.append("from IDOSGD.tdtv_bandeja_rec d  WITH(NOLOCK) ");
         sql.append("INNER JOIN IDOSGD.tdtr_estados e  WITH(NOLOCK) ON e.co_est=d.co_etiqueta_rec  ");

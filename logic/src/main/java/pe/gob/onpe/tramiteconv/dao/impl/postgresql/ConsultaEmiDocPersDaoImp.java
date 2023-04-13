@@ -27,7 +27,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
 
     @Override
     public List<DocumentoEmiPersConsulBean> getDocsPersConsulta(DocumentoEmiPersConsulBean buscarDocPer) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro=false;
         Map<String, Object> objectParam = new HashMap<String, Object>();
         
@@ -149,7 +149,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
     
     @Override
     public DocumentoEmiPersConsulBean getDocumentoPersonalEmi(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT R.NU_ANN,R.NU_EMI,R.NU_COR_EMI,\n" +
                     "IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(R.CO_DEP_EMI) DE_DEP_EMI,\n" +
                     "IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(R.CO_LOC_EMI) DE_LOC_EMI,\n" +
@@ -183,7 +183,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
     
     @Override
     public List<DestinatarioDocumentoEmiConsulBean> getLstDestintariotlbEmi(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         List<DestinatarioDocumentoEmiConsulBean> list;                
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local," +
 //                    "NVL2(a.co_loc_des,substr(TD_PK_DESCRIPCION.DE_LOCAL(a.co_loc_des), 1, 100),NULL) de_local,\n" +
@@ -232,7 +232,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
     
     @Override
     public List<ReferenciaConsulBean> getLstDocumReferenciatblEmi(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         List<ReferenciaConsulBean> list;                
         sql.append("SELECT \n" +
                     "IDOSGD.PK_SGD_DESCRIPCION_de_documento (a.co_tip_doc_adm) de_tipo_doc, \n" +
@@ -284,7 +284,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
     @Override
     public String getRutaReporte(DocumentoEmiPersConsulBean buscarDocPer) {
         String vResult="0";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         try {
             sql.append(" R.NU_ANN=RR.NU_ANN");
             sql.append(" AND R.NU_EMI=RR.NU_EMI");               
@@ -331,7 +331,7 @@ public class ConsultaEmiDocPersDaoImp extends SimpleJdbcDaoBase implements Consu
 
     @Override
     public List<DocumentoEmiPersConsulBean> getListaReporteBusqueda(DocumentoEmiPersConsulBean buscarDocPer) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoEmiPersConsulBean> list;
         boolean bBusqFiltro = false;

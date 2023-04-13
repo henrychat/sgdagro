@@ -27,7 +27,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
 
     @Override
     public List<DocumentoVoBoBean> getLsDocsVoBo(BuscarDocumentoVoBoBean bDocVoBo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         String sOrdenList="";
         Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -156,7 +156,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     
     @Override
     public DocumentoVoBoBean getDocumentoVoBo(String pnuAnn, String pnuEmi, String coDep, String coEmpVb) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n" +
                     "RE.NU_ANN, \n" +
                     "RE.NU_EMI,\n" +
@@ -206,7 +206,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String updObsVistoBueno(String nuAnn,String nuEmi,String coDep,String coEmp,String obs,String coUserMod, String esDocVb) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB  \n" +
                         "SET OBS_VB=?,CO_USE_MOD=?,FE_USE_MOD=CURRENT_TIMESTAMP,IN_VB=? \n" +
                         "WHERE NU_ANN=? \n" +
@@ -227,7 +227,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String updToEnviadoVistoBueno(String nuAnn,String nuEmi,String coDep,String coEmp,String esDocVobo,String coUserMod){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB \n" +
                         "SET IN_VB=?,FE_VB=CURRENT_TIMESTAMP,CO_USE_MOD=?,FE_USE_MOD=CURRENT_TIMESTAMP,OBS_VB=NULL\n" +
                         "WHERE NU_ANN=?\n" +
@@ -248,7 +248,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String updToSinVistoBueno(String nuAnn,String nuEmi,String coDep,String coEmp,String esDocVobo,String coUserMod){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB \n" +
                         "SET IN_VB=?,CO_USE_MOD=?,FE_USE_MOD=CURRENT_TIMESTAMP,OBS_VB=NULL,FE_VB=NULL\n" +
                         "WHERE NU_ANN=?\n" +
@@ -269,7 +269,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String getDeObsEmpVoBo(String nuAnn, String nuEmi, String coDep, String coEmp){
        String deObs=null;
-        StringBuffer sqlQry = new StringBuffer();
+         StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT VB.OBS_VB FROM IDOSGD.TDTV_PERSONAL_VB VB\n" +
                         "WHERE VB.NU_ANN=? AND VB.NU_EMI=? AND VB.CO_DEP=? AND VB.CO_EMP_VB=?\n" +
                         "AND VB.IN_VB='2'");       
@@ -331,7 +331,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String updVistoBuenoPersonal(String nuAnn,String nuEmi,String coDep,String coEmp,String esDocVobo,String coUserMod){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB \n" +
                         "SET IN_VB=?,CO_USE_MOD=?,FE_USE_MOD=CURRENT_TIMESTAMP,OBS_VB=NULL\n" +
                         "WHERE NU_ANN=?\n" +
@@ -352,7 +352,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
 //    @Override
 //    public String updVistoBuenoPersonal(String nuAnn,String nuEmi,String esDocVobo,String coEmp){
 //        String vReturn = "NO_OK";
-//        StringBuffer sqlUpd = new StringBuffer();
+//         StringBuilder sqlUpd = new StringBuilder();
 //        sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB VB\n" +
 //                        "SET VB.IN_VB=?,VB.OBS_VB=NULL\n" +
 //                        "WHERE VB.NU_ANN=?\n" +
@@ -372,7 +372,7 @@ public class DocumentoVoBoDaoImp extends SimpleJdbcDaoBase implements DocumentoV
     @Override
     public String updVistoBuenoPersonal(String nuAnn,String nuEmi){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("UPDATE IDOSGD.TDTV_PERSONAL_VB \n" +
                         "SET IN_VB='0',OBS_VB=NULL\n" +
                         "WHERE NU_ANN=?\n" +

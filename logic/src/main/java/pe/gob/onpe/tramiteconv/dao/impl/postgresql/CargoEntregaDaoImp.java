@@ -28,7 +28,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
 
     @Override
     public List<CargoEntregaBean> getCargosEntrega(CargoEntregaBean cargo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
         List<CargoEntregaBean> list;
@@ -96,7 +96,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public List<DocPedienteEntregaBean> getDocsPendienteEntrega(DocPedienteEntregaBean busqDoc) {
         boolean bBusqFiltro=false;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
         List<DocPedienteEntregaBean> list;
@@ -250,7 +250,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     
     @Override
     public DocPedienteEntregaBean getDocPendienteEntrega(String pnuAnn,String pnuEmi,String pnuDes){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocPedienteEntregaBean doc = null;
         sql.append("SELECT A.NU_ANN,A.NU_EMI,B.NU_DES,C.NU_EXPEDIENTE, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n" +
                     "C.NU_DOC,TO_CHAR(A.FE_EMI,'DD/MM/YY') FE_EMI_CORTA, IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(B.CO_DEP_DES) DE_DEP_DES,\n" +
@@ -276,7 +276,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public String insGuiaMp(GuiaMesaPartesBean guia){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.TDTC_GUIA_MP(\n"
                 + "NU_ANN_GUI,NU_GUI,\n"
                 + "CO_LOC_ORI,CO_DEP_ORI,\n"
@@ -301,7 +301,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public String updGuiaMp(GuiaMesaPartesBean guia){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("UPDATE IDOSGD.TDTC_GUIA_MP\n"
                 + "SET FE_GUI_MP=to_timestamp(?,'dd/mm/yyyy hh24:mi:ss')\n"
@@ -325,7 +325,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public String insDetGuiaMp(DetGuiaMesaPartesBean detGuia){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.TDTD_GUIA_MP(\n"
                 + "NU_ANN_GUI,NU_GUI,\n"
                 + "NU_COR,NU_ANN_DES,\n"
@@ -391,7 +391,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     
     @Override
     public GuiaMesaPartesBean getGuiaMp(String pnuAnnGuia, String pnuGuia){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         GuiaMesaPartesBean guia = null;
         sql.append("SELECT NU_ANN_GUI NU_ANN,NU_GUI NU_GUIA,CO_DEP_ORI,CO_LOC_ORI,\n" +
                 "CO_LOC_DES, IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(CO_LOC_DES) DE_LOC_DES,\n" +
@@ -414,7 +414,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     
     @Override
     public List<DocPedienteEntregaBean> getDetalleGuiaMp(String pnuAnnGuia,String pnuGuia){
-        StringBuffer sql = new StringBuffer();        
+         StringBuilder sql = new StringBuilder();        
         List<DocPedienteEntregaBean> list;
         sql.append("SELECT GD.NU_ANN_DES,GD.NU_EMI,GD.NU_DES,GD.NU_COR NU_COR_EMI,RR.NU_EXPEDIENTE,\n" +
         "IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(R.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n" +
@@ -450,7 +450,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public String updEstadoGuiaMp(String estado, String pcoUseMod, String pnuAnnGuia, String pnuGuia){
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+         StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("UPDATE IDOSGD.TDTC_GUIA_MP\n"
                 + "SET ES_GUI_MP=?\n"
@@ -471,7 +471,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     
     @Override
     public DocPedienteEntregaBean getDependenciaDestinoDocExtRec(String pnuAnn, String pnuEmi, String pnuDes){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         DocPedienteEntregaBean doc = null;
         sql.append("SELECT B.CO_LOC_DES, IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(CO_LOC_DES) DE_LOC_DES,\n" +
                     "B.CO_DEP_DES, IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(B.CO_DEP_DES) DE_DEP_DES\n" +
@@ -496,7 +496,7 @@ public class CargoEntregaDaoImp extends SimpleJdbcDaoBase implements CargoEntreg
     @Override
     public List<CargoEntregaBean> getListaReporteBusqueda(CargoEntregaBean cargo) {
         String vResult;
-        StringBuffer prutaReporte = new StringBuffer();
+         StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List list = null;
         

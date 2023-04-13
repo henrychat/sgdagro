@@ -18,7 +18,7 @@ public class PermisoDaoImpl extends SimpleJdbcDaoBase implements PermisoDao{
 			  
 			
 			
-				    StringBuffer sql = new StringBuffer();
+				     StringBuilder sql = new StringBuilder();
 				    sql.append("Select P.COD_USER,P.COD_APLICA,P.COD_OPC from  IDOSGD.SEG_USER_APLICA_OPC  P ");
 				    sql.append(" inner join IDOSGD.SEG_USUARIOS1 U ON (P.COD_USER=U.COD_USER AND U.ES_USUARIO='A') ");
 				    sql.append(" WHERE  U.CEMP_CODEMP=?  AND  P.ES_HABILITADO='1' AND COD_APLICA=?  AND P.COD_OPC=?  ");

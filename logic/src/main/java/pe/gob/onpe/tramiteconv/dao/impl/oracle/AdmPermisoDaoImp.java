@@ -23,7 +23,7 @@ public class AdmPermisoDaoImp extends SimpleJdbcDaoBase implements AdmPermisoDao
 
     @Override
     public List<PermisoBean> getPermisoList(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select s.cdes_user, p.co_use, p.co_dep, p.es_act, p.es_act_wf from TDTR_PERMISOS p inner join seg_usuarios1 s on p.co_use = s.cod_user where co_dep=? ");
         List<PermisoBean> list = new ArrayList<PermisoBean>();
         try {
@@ -41,7 +41,7 @@ public class AdmPermisoDaoImp extends SimpleJdbcDaoBase implements AdmPermisoDao
     @Override
     public String eliPermiso(String codDep) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("delete from TDTR_PERMISOS where co_dep=?");
         try {
@@ -58,7 +58,7 @@ public class AdmPermisoDaoImp extends SimpleJdbcDaoBase implements AdmPermisoDao
     @Override
     public String insertarPermiso(PermisoBean permisoDetalle) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTR_PERMISOS(co_use, co_dep, es_act) ");
         sql.append("values (?,?,?)");
         try {

@@ -26,7 +26,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public List<DependenciaBean> getAllDependencia(boolean esAdmin,String codDependencia) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA FROM IDOSGD.RHTM_DEPENDENCIA WHERE ");
         if(!esAdmin){
             sql.append(" CO_DEPENDENCIA='");
@@ -51,7 +51,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public DependenciaBean getDependencia(String coDep) {
         DependenciaBean dependenciaBean=null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT co_dependencia,de_dependencia,in_baja,co_nivel,\n" +
                 "de_corta_depen,co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(co_empleado) de_empleado,\n" +
                 "de_sigla,co_cargo,IDOSGD.PK_SGD_DESCRIPCION_DE_CARGO(co_cargo) de_cargo,co_tipo_encargatura,\n" +
@@ -73,7 +73,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public List<DependenciaBean> getDependenciaHijo(String coDepPadre) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n" +
                     "co_dependencia, \n" +
                     "de_dependencia, \n" +
@@ -110,7 +110,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     
     @Override
     public List<DependenciaBean> getBuscaDependencia(String busDep, String busTipo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         String sqlDep = " and ti_dependencia='"+busTipo+"' ";
         if(busTipo.equals("2")){
             sqlDep = "";//no aplica filtro 2=todos
@@ -158,7 +158,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
             dep.setCoDependencia(coDep);
         }
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE IDOSGD.RHTM_DEPENDENCIA SET\n" +
                     "CO_DEPENDENCIA='"+dep.getCoDependencia()+"' ,"
                     +"DE_DEPENDENCIA=?,IN_BAJA=?,CO_NIVEL=?,DE_CORTA_DEPEN=?,\n" +
@@ -188,7 +188,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
             dep.setCoDependencia(coDep);
         }
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO IDOSGD.RHTM_DEPENDENCIA(\n" +
                 "CO_DEPENDENCIA,DE_DEPENDENCIA,IN_BAJA,CO_NIVEL,DE_CORTA_DEPEN,\n" +
                 "CO_DEPEN_PADRE,CO_EMPLEADO,TI_DEPENDENCIA,FE_CREA,ID_CREA,FE_ACT,ID_ACT,\n" +
@@ -214,7 +214,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public String insLocalDependencia(LocalDepBean localDep){
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO IDOSGD.SITM_LOCAL_DEPENDENCIA(CO_DEP,CO_LOC,NU_CORRELATIVO,ES_ELI,\n" +
                     "CO_USE_CRE,FE_USE_CRE,CO_USE_MOD,FE_USE_MOD)\n" +
                     "VALUES(?,?,cast(? as int),'0',?,now(),?,now())");        
@@ -233,7 +233,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public LocalDepBean getLocalDepBean(String coDep){
         LocalDepBean localDepBean=null;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEP,CO_LOC,NU_CORRELATIVO NUCORR,ES_ELI FROM IDOSGD.SITM_LOCAL_DEPENDENCIA\n" +
                     "WHERE CO_DEP=?");
         
@@ -251,7 +251,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public String delLocalDependencia(String coDep){
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM IDOSGD.SITM_LOCAL_DEPENDENCIA\n" +
                     "WHERE CO_DEP=?");        
         
@@ -267,7 +267,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public String insEmpDependencia(String coEmp,String coDep){
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO IDOSGD.TDTX_DEPENDENCIA_EMPLEADO(CO_DEP,CO_EMP,ES_EMP)\n" +
                     "VALUES(?,?,'0')");        
         
@@ -284,7 +284,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public String delEmpDependencia(String coDep){
         String vReturn = "ERROR";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM IDOSGD.TDTX_DEPENDENCIA_EMPLEADO\n" +
                     "WHERE CO_DEP=?");        
         
@@ -301,7 +301,7 @@ public class DependenciaDaoImp extends SimpleJdbcDaoBase implements DependenciaD
     @Override
     public List<EmpleadoBean> getLsEmpDepen(String coDep) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_EMP CEMP_CODEMP,ES_EMP ESTADO,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(CO_EMP) NOMBRE\n" +
                     "FROM IDOSGD.TDTX_DEPENDENCIA_EMPLEADO\n" +
                     "WHERE CO_DEP=?");

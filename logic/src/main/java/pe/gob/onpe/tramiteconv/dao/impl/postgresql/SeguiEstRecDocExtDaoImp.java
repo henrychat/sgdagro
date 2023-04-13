@@ -35,7 +35,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
         
     @Override
     public List<DocExtRecSeguiEstBean> getLsDocExtRecSegui(DocExtRecSeguiEstBean docBuscar) {
-        StringBuffer sql = new StringBuffer(); 
+         StringBuilder sql = new StringBuilder(); 
         boolean bBusqFiltro=false;
         Map<String, Object> objectParam = new HashMap<String, Object>();
         
@@ -396,7 +396,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     
     @Override
     public DocExtRecSeguiEstBean getDocumentoExtSeguiBean(String nuAnn, String nuEmi, String nuDes){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT A.NU_ANN,A.NU_EMI,B.NU_DES,A.NU_COR_EMI,C.NU_EXPEDIENTE,TO_CHAR((SELECT FE_EXP FROM IDOSGD.TDTC_EXPEDIENTE WHERE NU_ANN_EXP=A.NU_ANN_EXP AND NU_SEC_EXP=A.NU_SEC_EXP),'DD/MM/YYYY') FE_EXP_CORTA,\n" +
                 "IDOSGD.PK_SGD_DESCRIPCION_DE_PROCESO_EXP(C.CO_PROCESO_EXP) DE_PROCESO_EXP, IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (B.CO_EMP_REC) DE_EMP_REC,\n" +
 //                "DECODE (B.TI_DES,'01', TD_PK_DESCRIPCION.DE_NOM_EMP (B.CO_EMP_DES),'02', TD_PK_DESCRIPCION.DE_NOM_EMP (B.NU_RUC_DES), '03', TD_PK_DESCRIPCION.ANI_SIMIL (B.NU_DNI_DES), '04', TD_PK_DESCRIPCION.OTRO_ORIGEN (B.CO_OTR_ORI_DES)) DE_EMP_DES,\n" +
@@ -441,7 +441,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     
     @Override
     public List<ReferenciaDocExtRecepBean> getLsRefDocExterno(String pnuAnn, String pnuEmi){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<ReferenciaDocExtRecepBean> list;
         sql.append("SELECT A.NU_ANN,A.NU_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,\n" +
                     "C.NU_DOC de_doc_sig,\n" +
@@ -470,7 +470,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     
     @Override
     public List<DestinatarioDocumentoEmiConsulBean> getLsDestinoEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiConsulBean> list = null;
         sql.append("select a.nu_ann,a.nu_emi,a.nu_des,a.co_loc_des co_local,"
 //                + "NVL2(a.co_loc_des,substr(IDOSGD.PK_SGD_DESCRIPCION_DE_LOCAL(a.co_loc_des), 1, 100),NULL) de_local,\n"
@@ -556,7 +556,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     @Override
     public String getRutaReporte(DocExtRecSeguiEstBean docBuscar) {
         String vResult;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         try {
 
             sql.append(" D.NU_ANN=R.NU_ANN");
@@ -680,7 +680,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     @Override
     public List<DocExtRecSeguiEstBean> getListaReporteBusqueda(DocExtRecSeguiEstBean docExtRecSeguiEstBean) {
         String vResult;
-        StringBuffer prutaReporte = new StringBuffer();
+         StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List list = null;
         boolean bBusqFiltro=false;
@@ -922,7 +922,7 @@ public class SeguiEstRecDocExtDaoImp extends SimpleJdbcDaoBase implements SeguiE
     @Override
     public List<DocExtRecSeguiEstBean> getListaReporteResumen(DocExtRecSeguiEstBean docExtRecSeguiEstBean) {
         String vResult;
-        StringBuffer prutaReporte = new StringBuffer();
+         StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List list = null;
         boolean bBusqFiltro = false;

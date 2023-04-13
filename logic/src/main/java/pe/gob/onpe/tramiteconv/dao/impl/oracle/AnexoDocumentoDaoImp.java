@@ -27,30 +27,30 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
 
     @Override
     public List<ReferenciaBean> getDocumentosReferencia(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT \n" +
-                    "PK_SGD_DESCRIPCION.de_documento (a.co_tip_doc_adm) li_tip_doc, \n" +
-                    "DECODE (a.ti_emi,'01', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,\n" +
-                    "                 '05', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,nvl(a.de_doc_sig,'S/N')) li_nu_doc,\n" +
-                    "substr(DECODE (a.ti_emi,\n" +
-                    "      '01', PK_SGD_DESCRIPCION.de_dependencia (a.co_dep_emi),\n" +
-                    "      '02', PK_SGD_DESCRIPCION.de_proveedor (a.nu_ruc_emi),\n" +
-                    "      '03', 'CIUDADANO - ' ||PK_SGD_DESCRIPCION.ani_simil (a.nu_dni_emi),\n" +
-                    "      '04', PK_SGD_DESCRIPCION.otro_origen (a.co_otr_ori_emi),\n" +
-                    "      '05', PK_SGD_DESCRIPCION.de_nom_emp (a.co_emp_emi)\n" +
-                    "     ),1,100) de_dep_emi,                 \n" +
-                    "TO_CHAR(a.fe_emi,'DD/MM/YYYY') fe_emi_corta,\n" +
-                    "b.nu_ann,\n" +
-                    "b.nu_emi,\n" +
-                    "nvl(trim(to_char(b.nu_des)),'N') nu_des ,\n" +
-                    "b.nu_ann_ref,\n" +
-                    "b.nu_emi_ref,\n" +
-                    "nvl(trim(to_char(b.nu_des_ref)),'N') nu_des_ref,nvl(a.de_asu,'') as deAsu,a.CO_TIP_DOC_ADM  as coTipDocAdm \n" +
-                    "FROM tdtv_remitos a,TDTR_REFERENCIA b \n" +
-                    "WHERE a.nu_ann = b.nu_ann_ref \n" +
-                    "AND a.nu_emi = b.nu_emi_ref\n" +
-                    "and b.nu_ann = ? \n" +
-                    "and b.nu_emi = ? ");
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT \n"
+                + "PK_SGD_DESCRIPCION.de_documento (a.co_tip_doc_adm) li_tip_doc, \n"
+                + "DECODE (a.ti_emi,'01', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,\n"
+                + "                 '05', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,nvl(a.de_doc_sig,'S/N')) li_nu_doc,\n"
+                + "substr(DECODE (a.ti_emi,\n"
+                + "      '01', PK_SGD_DESCRIPCION.de_dependencia (a.co_dep_emi),\n"
+                + "      '02', PK_SGD_DESCRIPCION.de_proveedor (a.nu_ruc_emi),\n"
+                + "      '03', 'CIUDADANO - ' ||PK_SGD_DESCRIPCION.ani_simil (a.nu_dni_emi),\n"
+                + "      '04', PK_SGD_DESCRIPCION.otro_origen (a.co_otr_ori_emi),\n"
+                + "      '05', PK_SGD_DESCRIPCION.de_nom_emp (a.co_emp_emi)\n"
+                + "     ),1,100) de_dep_emi,                 \n"
+                + "TO_CHAR(a.fe_emi,'DD/MM/YYYY') fe_emi_corta,\n"
+                + "b.nu_ann,\n"
+                + "b.nu_emi,\n"
+                + "nvl(trim(to_char(b.nu_des)),'N') nu_des ,\n"
+                + "b.nu_ann_ref,\n"
+                + "b.nu_emi_ref,\n"
+                + "nvl(trim(to_char(b.nu_des_ref)),'N') nu_des_ref,nvl(a.de_asu,'') as deAsu,a.CO_TIP_DOC_ADM  as coTipDocAdm \n"
+                + "FROM tdtv_remitos a WITH(NOLOCK),TDTR_REFERENCIA b WITH(NOLOCK)\n"
+                + "WHERE a.nu_ann = b.nu_ann_ref \n"
+                + "AND a.nu_emi = b.nu_emi_ref\n"
+                + "and b.nu_ann = ? \n"
+                + "and b.nu_emi = ? ");
 
         List<ReferenciaBean> list = new ArrayList<ReferenciaBean>();
         try {
@@ -67,28 +67,28 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
 
     @Override
     public List<ReferenciaBean> getDocumentoEmi(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT\n" +
-                    "PK_SGD_DESCRIPCION.de_documento (a.co_tip_doc_adm) li_tip_doc, \n" +
-                    "DECODE (a.ti_emi,'01', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,\n" +
-                    "                 '05', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,nvl(a.de_doc_sig,'S/N')) li_nu_doc,\n" +
-                    "substr(DECODE (a.ti_emi,\n" +
-                    "      '01', PK_SGD_DESCRIPCION.de_dependencia (a.co_dep_emi),\n" +
-                    "      '02', PK_SGD_DESCRIPCION.de_proveedor (a.nu_ruc_emi),\n" +
-                    "      '03', 'CIUDADANO - ' ||PK_SGD_DESCRIPCION.ani_simil (a.nu_dni_emi),\n" +
-                    "      '04', PK_SGD_DESCRIPCION.otro_origen (a.co_otr_ori_emi),\n" +
-                    "      '05', PK_SGD_DESCRIPCION.de_nom_emp (a.co_emp_emi)\n" +
-                    "     ),1,100) de_dep_emi,                 \n" +
-                    "TO_CHAR(a.fe_emi,'DD/MM/YYYY') fe_emi_corta, \n" +
-                    "a.nu_ann,\n" +
-                    "a.nu_emi,\n" +
-                    "'N' nu_des ,\n" +
-                    "a.nu_ann nu_ann_ref,\n" +
-                    "a.nu_emi nu_emi_ref,\n" +
-                    "'N'  nu_des_ref\n" +
-                    "FROM tdtv_remitos a \n" +
-                    "WHERE a.nu_ann = ? \n" +
-                    "and a.nu_emi = ? ");
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT\n"
+                + "PK_SGD_DESCRIPCION.de_documento (a.co_tip_doc_adm) li_tip_doc, \n"
+                + "DECODE (a.ti_emi,'01', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,\n"
+                + "                 '05', nvl(a.nu_doc_emi,' ') || '-' || a.nu_ann || '-' || a.de_doc_sig,nvl(a.de_doc_sig,'S/N')) li_nu_doc,\n"
+                + "substr(DECODE (a.ti_emi,\n"
+                + "      '01', PK_SGD_DESCRIPCION.de_dependencia (a.co_dep_emi),\n"
+                + "      '02', PK_SGD_DESCRIPCION.de_proveedor (a.nu_ruc_emi),\n"
+                + "      '03', 'CIUDADANO - ' ||PK_SGD_DESCRIPCION.ani_simil (a.nu_dni_emi),\n"
+                + "      '04', PK_SGD_DESCRIPCION.otro_origen (a.co_otr_ori_emi),\n"
+                + "      '05', PK_SGD_DESCRIPCION.de_nom_emp (a.co_emp_emi)\n"
+                + "     ),1,100) de_dep_emi,                 \n"
+                + "TO_CHAR(a.fe_emi,'DD/MM/YYYY') fe_emi_corta, \n"
+                + "a.nu_ann,\n"
+                + "a.nu_emi,\n"
+                + "'N' nu_des ,\n"
+                + "a.nu_ann nu_ann_ref,\n"
+                + "a.nu_emi nu_emi_ref,\n"
+                + "'N'  nu_des_ref\n"
+                + "FROM tdtv_remitos a WITH(NOLOCK)\n"
+                + "WHERE a.nu_ann = ? \n"
+                + "and a.nu_emi = ? ");
 
         List<ReferenciaBean> list = new ArrayList<ReferenciaBean>();
         try {
@@ -104,7 +104,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     }
 
     public List<ReferenciaBean> getDocumentosSeguimiento(String pnuAnn, String pnuEmi, String pnuDes) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n"
                 + "PK_SGD_DESCRIPCION.de_documento (b.co_tip_doc_adm) li_tip_doc, \n"
                 + "DECODE (b.ti_emi,'01', b.nu_doc_emi || '-' || b.nu_ann || '-' || b.de_doc_sig, \n"
@@ -120,7 +120,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
                 + "to_char(c.nu_des) nu_des, \n"
                 + "a.nu_ann_ref,\n"
                 + "a.nu_emi_ref \n"
-                + "FROM tdtr_referencia a, tdtv_remitos b , tdtv_destinos c\n"
+                + "FROM tdtr_referencia a WITH(NOLOCK), tdtv_remitos b WITH(NOLOCK), tdtv_destinos c WITH(NOLOCK)\n"
                 + "WHERE a.nu_ann = b.nu_ann \n"
                 + "and a.nu_emi = b.nu_emi \n"
                 + "and b.nu_ann = c.nu_ann \n"
@@ -145,7 +145,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     }
 
     public List<ReferenciaBean> getDocumentoEmiSeg(String pnuAnn, String pnuEmi, String pnuDes) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         Object[] objectParam = null;
 
         sql.append("SELECT \n"
@@ -161,7 +161,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
                 + "c.nu_ann, \n"
                 + "c.nu_emi, \n"
                 + "to_char(c.nu_des) nu_des \n"
-                + "FROM tdtv_remitos b , tdtv_destinos c \n"
+                + "FROM tdtv_remitos b WITH(NOLOCK), tdtv_destinos c WITH(NOLOCK)\n"
                 + "WHERE b.nu_ann = c.nu_ann \n"
                 + "and b.nu_emi = c.nu_emi \n"
                 + "and b.es_eli = '0' \n"
@@ -171,7 +171,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
 
         if (pnuDes.equals("N")) {
             objectParam = new Object[]{pnuAnn, pnuEmi};
-            
+
         } else {
             sql.append("and c.nu_des = ? ");
             objectParam = new Object[]{pnuAnn, pnuEmi, pnuDes};
@@ -193,7 +193,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     public String getUltimoAnexo(String pnuAnn, String pnuEmi) {
         String result = null;
 
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select to_char(nvl(max(nu_ane),0) + 1) nu_ane \n"
                 + "from tdtv_anexos \n"
                 + "where nu_ann = ? \n"
@@ -212,7 +212,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStream archivoAnexo, final int size) {
         String vReturn = "NO_OK";
 
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("update tdtv_anexos set\n"
                 + "ti_public=?,nu_ann=?,\n"
                 + "nu_emi=?,\n"
@@ -259,12 +259,12 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     public String delArchivoAnexo(final DocumentoAnexoBean docAnexo) {
         String vReturn = "NO_OK";
 
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("delete from tdtv_anexos\n"
                 + "WHERE NU_ANN = ?\n"
                 + "AND NU_EMI = ?\n"
                 + "and nu_ane=?");
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 //        sqlUpd.append("update tdtv_anexos\n"
 //                + "set nu_ane=nu_ane-1\n"
 //                + "where  \n"
@@ -283,15 +283,15 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
         return vReturn;
     }
 
-    public String delArchivoAnexoDest(String pNuAnn,String pNuEmi,String pNuDes) {
+    public String delArchivoAnexoDest(String pNuAnn, String pNuEmi, String pNuDes) {
         String vReturn = "NO_OK";
 
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("delete from tdtv_anexos\n"
                 + "WHERE NU_ANN = ?\n"
                 + "AND NU_EMI = ?\n"
                 + "and nu_des=?");
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 //        sqlUpd.append("update tdtv_anexos\n"
 //                + "set nu_ane=nu_ane-1\n"
 //                + "where  \n"
@@ -310,10 +310,9 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
         return vReturn;
     }
 
-      
     public String updAnexoDetalle(final DocumentoAnexoBean docAnexo) {
         String vReturn = "NO_OK";
-        StringBuffer  sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update tdtv_anexos \n"
                 + "set ti_public=?, de_det=REGEXP_REPLACE(?, '[^-_ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz0-9ÁÉÍÓÚáéíóú. ]', ' ')\n"/*SEGDI MVALDERA*/
                 + ",co_use_mod=?\n"
@@ -324,12 +323,12 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
                 + "nu_emi=? and\n"
                 + "nu_ane=?");
         try {
-            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{docAnexo.getTiPublic(),docAnexo.getDeDet(),docAnexo.getCoUseMod(),docAnexo.getReqFirma(),docAnexo.getNuAnn(),docAnexo.getNuEmi(), docAnexo.getNuAne()});
+            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{docAnexo.getTiPublic(), docAnexo.getDeDet(), docAnexo.getCoUseMod(), docAnexo.getReqFirma(), docAnexo.getNuAnn(), docAnexo.getNuEmi(), docAnexo.getNuAne()});
             vReturn = "OK";
         } catch (Exception e) {
             e.printStackTrace();
-            vReturn=e.getMessage();
-            
+            vReturn = e.getMessage();
+
         }
         return vReturn;
     }
@@ -337,7 +336,7 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
     public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStream archivoAnexo, final int size) {
         String vReturn = "NO_OK";
 
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("insert into tdtv_anexos(\n"
                 + "nu_ann,\n"
                 + "nu_emi,\n"
@@ -379,45 +378,44 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
 
     @Override
     public String getNombreArchivo(String pNuAnn, String pNuEmi, String pNuAne) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String result = "NO_OK";
-        sql.append("select de_det from tdtv_anexos where nu_ann=? and nu_emi=? and nu_ane=?");
+        sql.append("select de_det from tdtv_anexos WITH(NOLOCK) where nu_ann=? and nu_emi=? and nu_ane=?");
 
         try {
-            result = this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[]{pNuAnn, pNuEmi,pNuAne});
+            result = this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[]{pNuAnn, pNuEmi, pNuAne});
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
-    
+
     @Override
     public String updExisteAnexo(String pNuAnn, String pNuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         String result = "NO_OK";
         sql.append("update TDTX_REMITOS_RESUMEN SET IN_EXISTE_ANEXO ='0' where NU_ANN=? and NU_EMI=?");
-        
+
         try {
-            this.jdbcTemplate.update(sql.toString(),new Object[]{pNuAnn, pNuEmi});
+            this.jdbcTemplate.update(sql.toString(), new Object[]{pNuAnn, pNuEmi});
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
-    
+
     @Override
     public DocumentoObjBean getPropiedadesArchivo(String pnuAnn, String pnuEmi, String pnuAne) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select \n" +
-                    "nu_ann, \n" +
-                    "nu_emi, \n" +
-                    "de_rut_ori nombre_Archivo,\n" +
-                    "UPPER(SUBSTR(de_rut_ori,instr(de_rut_ori, '.', -1, 1)+1)) tipo_doc\n" +
-                    "from tdtv_anexos \n" +
-                    "where nu_ann = ?\n" +
-                    "and nu_emi = ?\n" +
-                    "AND NU_ANE = ?");
-
+        StringBuilder sql = new StringBuilder();
+        sql.append("select \n"
+                + "nu_ann, \n"
+                + "nu_emi, \n"
+                + "de_rut_ori nombre_Archivo,\n"
+                + "UPPER(SUBSTR(de_rut_ori,instr(de_rut_ori, '.', -1, 1)+1)) tipo_doc\n"
+                + "from tdtv_anexos WITH(NOLOCK)\n"
+                + "where nu_ann = ?\n"
+                + "and nu_emi = ?\n"
+                + "AND NU_ANE = ?");
 
         DocumentoObjBean docObjBean = new DocumentoObjBean();
 
@@ -430,15 +428,15 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
         }
         return (docObjBean);
     }
-    
+
     @Override
-    public String updRemitosResumenInFirmaAnexos(String pFirmaAnexo, String pnuAnn, String pnuEmi){
+    public String updRemitosResumenInFirmaAnexos(String pFirmaAnexo, String pnuAnn, String pnuEmi) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
-        sqlUpd.append("UPDATE TDTX_REMITOS_RESUMEN SET IN_FIRMA_ANEXO = ?\n" +
-                        "WHERE NU_ANN = ? \n" +
-                        "AND NU_EMI = ? ");
-        
+        StringBuilder sqlUpd = new StringBuilder();
+        sqlUpd.append("UPDATE TDTX_REMITOS_RESUMEN SET IN_FIRMA_ANEXO = ?\n"
+                + "WHERE NU_ANN = ? \n"
+                + "AND NU_EMI = ? ");
+
         try {
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{
                 pFirmaAnexo, pnuAnn, pnuEmi
@@ -448,23 +446,23 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
             e.printStackTrace();
             //vReturn = e.getMessage();
         }
-        return vReturn;        
+        return vReturn;
     }
-    
+
     @Override
-    public String updArchivoAnexoFirmado(final DocumentoObjBean docObjBean){
+    public String updArchivoAnexoFirmado(final DocumentoObjBean docObjBean) {
         String vReturn = "NO_OK";
 
         final LobHandler lobhandler = new DefaultLobHandler();
-        StringBuffer sql = new StringBuffer();
-        sql.append("UPDATE TDTV_ANEXOS SET\n" +
-                    "BL_DOC=?,\n" +
-                    "CO_USE_MOD=?,\n" +
-                    "FE_USE_MOD=SYSDATE,\n" +
-                    "FEULA=TO_CHAR(SYSDATE,'YYYYMMDD'),\n" +
-                    "REQ_FIRMA='0'\n" +
-                    "WHERE\n" +
-                    "NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
+        StringBuilder sql = new StringBuilder();
+        sql.append("UPDATE TDTV_ANEXOS SET\n"
+                + "BL_DOC=?,\n"
+                + "CO_USE_MOD=?,\n"
+                + "FE_USE_MOD=SYSDATE,\n"
+                + "FEULA=TO_CHAR(SYSDATE,'YYYYMMDD'),\n"
+                + "REQ_FIRMA='0'\n"
+                + "WHERE\n"
+                + "NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
         try {
             this.jdbcTemplate.execute(sql.toString(),
                     new AbstractLobCreatingPreparedStatementCallback(lobhandler) {
@@ -483,21 +481,21 @@ public class AnexoDocumentoDaoImp extends SimpleJdbcDaoBase implements AnexoDocu
             vReturn = e.getMessage().substring(0, 20);
         }
 
-        return vReturn;        
+        return vReturn;
     }
-    
+
     @Override
-    public String getCanAnexosReqFirma(String nuAnn, String nuEmi){
+    public String getCanAnexosReqFirma(String nuAnn, String nuEmi) {
         String vReturn = "NO_OK";
         try {
-            vReturn = this.jdbcTemplate.queryForObject("SELECT count(1) from tdtv_anexos where\n" +
-                                    "NU_ANN=? AND NU_EMI=?\n" +
-                                    "AND REQ_FIRMA='1'", String.class, 
-                        new Object[]{nuAnn,nuEmi});
+            vReturn = this.jdbcTemplate.queryForObject("SELECT count(1) from tdtv_anexos WITH(NOLOCK)where\n"
+                    + "NU_ANN=? AND NU_EMI=?\n"
+                    + "AND REQ_FIRMA='1'", String.class,
+                    new Object[]{nuAnn, nuEmi});
         } catch (Exception e) {
             e.printStackTrace();
             vReturn = e.getMessage();
         }
-        return vReturn;        
+        return vReturn;
     }
 }

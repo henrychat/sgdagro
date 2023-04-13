@@ -30,7 +30,7 @@ public class ProveedorDaoImp extends SimpleJdbcDaoBase implements ProveedorDao {
     private ApplicationProperties applicationProperties;  
     
     public List<ProveedorBean> getProveedoresList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select cpro_ruc nuRuc, to_char(dpro_fecins,'dd/mm/yyyy') dpro_fecins ,cpro_razsoc descripcion, cpro_domicil, cubi_coddep, cubi_codpro, ");
         //sql.append("cubi_coddis ,no_dep ,no_prv, no_dis, cpro_telefo  from SIVP_PROVEEDOR WHERE ROWNUM <= ").append(applicationProperties.getTopRegistrosConsultas());
         sql.append("cubi_coddis ,no_dep ,no_prv, no_dis, cpro_telefo  from IDOSGD.SIVP_PROVEEDOR LIMIT  ").append(applicationProperties.getTopRegistrosConsultas());
@@ -52,7 +52,7 @@ public class ProveedorDaoImp extends SimpleJdbcDaoBase implements ProveedorDao {
     
 
     public List<UbigeoBean> getUbigeoBusqList(UbigeoBean ubigeo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select ubdep, ubprv, ubdis, ubloc ,coreg ,trim(nodep) nodep, trim(noprv) noprv , trim(nodis) nodis ,cpdis, stubi ,stsob ,feres, inubi, ub_inei  from IDOSGD.idtubias where ");
         sql.append("ubdep like '%'||?||'%' and ubprv like '%'||?||'%' and ");
         sql.append("ubdis like '%'||?||'%' and nodep like '%'||?||'%' and ");
@@ -81,7 +81,7 @@ public class ProveedorDaoImp extends SimpleJdbcDaoBase implements ProveedorDao {
 
     public String insProveedor(ProveedorBean proveedor) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into IDOSGD.LG_PRO_PROVEEDOR ");
         sql.append("(cpro_ruc, dpro_fecins ,cpro_razsoc, cpro_domicil, cubi_coddep, cubi_codpro, cubi_coddis , cpro_telefo) ");
         sql.append("values (?,CURRENT_TIMESTAMP,?,?,?,?,?,?) ");
@@ -107,7 +107,7 @@ public class ProveedorDaoImp extends SimpleJdbcDaoBase implements ProveedorDao {
     
         public ProveedorBean getProveedor(String codProveedor) {
         ProveedorBean proveedorBean = new ProveedorBean();
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         
         sql.append("select cpro_ruc nuRuc, to_char(dpro_fecins,'dd/mm/yyyy') dpro_fecins, \n" +
                     "cpro_razsoc descripcion, cpro_domicil, cubi_coddep, cubi_codpro, \n" +
@@ -134,7 +134,7 @@ public class ProveedorDaoImp extends SimpleJdbcDaoBase implements ProveedorDao {
     public String updProveedor(ProveedorBean proveedor, String codProveedor) {
         String vReturn = "NO_OK";
         
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update IDOSGD.LG_PRO_PROVEEDOR set ");
         sql.append("cpro_ruc=?, cpro_razsoc=?, cpro_domicil=?, cubi_coddep=?, cubi_codpro = ?, cubi_coddis= ? , cpro_telefo =? ");
         sql.append("where cpro_ruc=? ");

@@ -27,7 +27,7 @@ public class ConsultaDocVoBoDaoImp extends SimpleJdbcDaoBase implements Consulta
 
     @Override
     public List<DocumentoVoBoBean> getLsDocsVoBo(BuscarDocumentoVoBoBean bDocVoBo) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         boolean bBusqFiltro = false;
         String sOrdenList="";
         Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -169,7 +169,7 @@ public class ConsultaDocVoBoDaoImp extends SimpleJdbcDaoBase implements Consulta
     
     @Override
     public DocumentoVoBoBean getDocumentoVoBo(String pnuAnn, String pnuEmi, String coDep, String coEmpVb) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT \n" +
                     "RE.NU_ANN, \n" +
                     "RE.NU_EMI,\n" +

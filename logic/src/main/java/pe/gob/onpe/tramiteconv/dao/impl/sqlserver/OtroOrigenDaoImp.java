@@ -31,7 +31,7 @@ public class OtroOrigenDaoImp
   private ApplicationProperties applicationProperties;
   
   public List<OtroOrigenBean> getOtrosOrigenesList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select A.* from ( ");
     sql.append("\tSELECT\tco_otr_ori, ");
     sql.append("\t\tnu_doc_otr_ori, ");
@@ -67,7 +67,7 @@ public class OtroOrigenDaoImp
   }
   
   public List<SiElementoBean> getTipoDocumentoList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select  CELE_DESELE, ");
     sql.append("        CELE_CODELE ");
     sql.append("from IDOSGD.SI_ELEMENTO ");
@@ -90,7 +90,7 @@ public class OtroOrigenDaoImp
   public List<OtroOrigenBean> getOtroOrigenBusqList(OtroOrigenBean otroOrigen) {
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT A.* FROM ( ");
     sql.append("\tSELECT\tco_otr_ori, ");
     sql.append("\t\tnu_doc_otr_ori, ");
@@ -135,7 +135,7 @@ public class OtroOrigenDaoImp
   
   public String insOtroOrigen(OtroOrigenBean otroOrigen) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.tdtr_otro_origen( ");
     sql.append("co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
     sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
@@ -158,7 +158,7 @@ public class OtroOrigenDaoImp
   }
   
   public OtroOrigenBean getOtroOrigen(String codOrigen) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  co_otr_ori, ");
     sql.append("        nu_doc_otr_ori, ");
     sql.append("        co_tip_otr_ori, ");
@@ -193,7 +193,7 @@ public class OtroOrigenDaoImp
   
   public String updOtroOrigen(OtroOrigenBean otroOrigen) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.tdtr_otro_origen set ");
     sql.append("nu_doc_otr_ori=?,co_tip_otr_ori=?,de_ape_pat_otr=?, ");
     sql.append("de_ape_mat_otr=?,de_nom_otr=?,de_raz_soc_otr=?,de_dir_otro_ori=?, ");
@@ -212,7 +212,7 @@ public class OtroOrigenDaoImp
   }
   
   public List<OtroOrigenBean> getOtrosOrigenesPorTipo(String codTipoOtroOrigen) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
     sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
     sql.append("ti_origen ,ref_co_otr_ori,");

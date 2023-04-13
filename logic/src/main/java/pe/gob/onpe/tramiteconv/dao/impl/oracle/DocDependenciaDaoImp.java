@@ -25,7 +25,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 
 //    @Override
 //    public List<DocumentoDependenciaBean> getAllDocXDependencia(String codDependencia, Paginacion paginacion) {
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //
 //        sql.append("SELECT * ");
 //        sql.append("FROM ( SELECT A.*, ROWNUM row_number ");
@@ -57,7 +57,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 
     @Override
     public DocumentoDependenciaBean getDocDependencia(String codDependencia, String codTipDoc) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CO_DEP,CO_TIP_DOC,TI_DESCRIP,CO_USE_CRE,FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,ES_OBL_FIRMA,CO_TIP_DOC AS CO_TIP_DOC_ANT ");
         sql.append("FROM SIVM_DOC_DEPENDENCIA ");
         sql.append("WHERE CO_DEP=? AND CO_TIP_DOC=? AND ES_ELI='0' ");
@@ -83,7 +83,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     @Override
     public int getRowCountDocXDependencia(String codDependencia) {
         int result = -1;
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT  COUNT(1) ");
         sql.append("FROM SIVM_DOC_DEPENDENCIA ");
         sql.append("WHERE CO_DEP=? AND ES_ELI='0' ");
@@ -99,7 +99,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 //    @Override
 //    public String updDocXDependencia(DocumentoDependenciaBean documentoDependenciaBean) {
 //        String vReturn = "NO_OK";
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        sql.append("UPDATE IDOPRETRAM.PTTV_PRE_FICHA ");
 //        sql.append("SET ES_PRE_TRAMITE = '02',NU_FICHA_REG = ?,TI_DOC_REG_FICHA = ?,FE_REGI = TO_DATE(?,'DD/MM/YYYY HH24:MI:SS') ");
 //        sql.append("WHERE NU_PRE_FICHA = ?");
@@ -115,7 +115,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 //    @Override
 //    public String insDocXDependencia(DocumentoDependenciaBean documentoDependenciaBean) {
 //        String vReturn = "NO_OK";
-//        StringBuffer sql = new StringBuffer();
+//         StringBuilder sql = new StringBuilder();
 //        sql.append("INSERT IDOPRETRAM.PTTV_PRE_FICHA ");
 //        sql.append("NU_FICHA_REG, TI_DOC_REG_FICHA, CO_CONTINENTE_NACI, CO_CONTINENTE_DOMICILIO, CO_PAIS_NACI, CO_PAIS_DOMICILIO, CO_PROVINCIA_NACI ");
 //        sql.append("VALUES(?,?,?,?,?,?,?");
@@ -130,7 +130,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 
     @Override
     public List<DocumentoDependenciaBean> getDocDependenciaList(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select A.CO_TIP_DOC CO_TIP_DOC,B.CDOC_DESDOC TI_DESCRIP from SITM_DOC_DEPENDENCIA A,si_mae_tipo_doc B ");
         sql.append("where B.CDOC_GRUPO IN ('01','02','03') AND ");
         sql.append("A.CO_TIP_DOC=B.CDOC_TIPDOC AND ");
@@ -150,7 +150,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 
     @Override
     public List<DocumentoDependenciaBean> getDocDependenciaFaltantesList(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select CDOC_TIPDOC CO_TIP_DOC, CDOC_DESDOC TI_DESCRIP ");
         sql.append("from si_mae_tipo_doc ");
         sql.append("WHERE CDOC_GRUPO in ('01','02','03') ");
@@ -171,7 +171,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
 
     public String insDocDependencia(DocumentoDependenciaBean docDepBean) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into SITM_DOC_DEPENDENCIA(CO_DEP,Co_Tip_Doc,Es_Eli,Co_Use_Cre,Fe_Use_Cre,Co_Use_Mod,Fe_Use_Mod,Es_Obl_Firma) ");
         sql.append("values (?,?,?,?,SYSDATE,?,SYSDATE,?)");
         try {
@@ -186,7 +186,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     }
     public String eliDocDependencia(DocumentoDependenciaBean docDepBean) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("delete from SITM_DOC_DEPENDENCIA ");
         sql.append("where CO_DEP=? and CO_TIP_DOC=? ");
         try {
@@ -200,7 +200,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     }
     public String updDocDependencia(DocumentoDependenciaBean docDepBean,String codDocReempl) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update SITM_DOC_DEPENDENCIA set CO_TIP_DOC=?,CO_USE_MOD=?,FE_USE_MOD=SYSDATE ");
         sql.append("where CO_DEP=? and CO_TIP_DOC=? ");
         try {
@@ -215,7 +215,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     
     @Override
     public List<MotivoBean> getMotDependenciaList(String codDependencia, String codDoc){
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT de_mot,co_mot ");
         sql.append("FROM tdtr_motivo ");
         sql.append("WHERE co_mot IN (SELECT co_mot ");
@@ -236,7 +236,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     }
     @Override
     public List<MotivoBean> getMotFaltantesList(String codDependencia,String codDoc) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT de_mot,co_mot FROM tdtr_motivo ");
         sql.append("WHERE co_mot NOT IN (SELECT co_mot ");
         sql.append("FROM tdtx_moti_docu_depe ");
@@ -256,7 +256,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     
     public String insMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into TDTX_MOTI_DOCU_DEPE(CO_DEP,CO_TIP_DOC,CO_MOT) values (?,?,?)");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
@@ -270,7 +270,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     }
     public String updMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep,String codMotReempl) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update TDTX_MOTI_DOCU_DEPE set CO_MOT=? where CO_DEP=? and CO_TIP_DOC=? and CO_MOT=? ");
         try {
             this.jdbcTemplate.update(sql.toString(), new Object[]{
@@ -284,7 +284,7 @@ public class DocDependenciaDaoImp extends SimpleJdbcDaoBase implements DocDepend
     }
     public String eliMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("delete from TDTX_MOTI_DOCU_DEPE ");
         sql.append("where CO_DEP=? and CO_TIP_DOC=? and CO_MOT=? ");
         try {

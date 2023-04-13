@@ -27,7 +27,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
     private ApplicationProperties applicationProperties;  
         
     public List<OtroOrigenBean> getOtrosOrigenesList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
         sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
         sql.append("ti_origen ,ref_co_otr_ori, PK_SGD_DESCRIPCION.fu_get_departamento (ub_dep) no_dep, ");
@@ -49,7 +49,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
     }
 
     public List<SiElementoBean> getTipoDocumentoList() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("select CELE_DESELE,CELE_CODELE from SI_ELEMENTO WHERE ");
         sql.append("CTAB_CODTAB='TIP_DOC_IDENT' AND CELE_CODELE IN ('01','02','03','04','05','06','09') ");
 
@@ -68,7 +68,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
 
     public String insOtroOrigen(OtroOrigenBean otroOrigen) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("insert into tdtr_otro_origen( ");
         sql.append("co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
         sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
@@ -90,7 +90,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
     }
 
     public OtroOrigenBean getOtroOrigen(String codOrigen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
         sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
         sql.append("ti_origen ,ref_co_otr_ori, ub_dep,ub_pro,ub_dis,es_activo, ");
@@ -116,7 +116,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
 
     public String updOtroOrigen(OtroOrigenBean otroOrigen) {
         String vReturn = "NO_OK";
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("update tdtr_otro_origen set ");
         sql.append("nu_doc_otr_ori=?,co_tip_otr_ori=?,de_ape_pat_otr=?, ");
         sql.append("de_ape_mat_otr=?,de_nom_otr=?,de_raz_soc_otr=?,de_dir_otro_ori=?, ");
@@ -135,7 +135,7 @@ public class OtroOrigenDaoImp extends SimpleJdbcDaoBase implements OtroOrigenDao
     }
     
      public List<OtroOrigenBean> getOtrosOrigenesPorTipo(String codTipoOtroOrigen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
         sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
         sql.append("ti_origen ,ref_co_otr_ori,");

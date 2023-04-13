@@ -21,7 +21,7 @@ public class DependenciaDaoImp
   implements DependenciaDao
 {
   public List<DependenciaBean> getAllDependencia(boolean esAdmin, String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA FROM IDOSGD.RHTM_DEPENDENCIA WHERE ");
     if (!esAdmin) {
       sql.append(" CO_DEPENDENCIA='");
@@ -46,7 +46,7 @@ public class DependenciaDaoImp
   
   public DependenciaBean getDependencia(String coDep) {
     DependenciaBean dependenciaBean = null;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT co_dependencia,de_dependencia,in_baja,co_nivel,\nde_corta_depen,co_empleado,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(co_empleado) de_empleado,\nde_sigla,co_cargo,IDOSGD.PK_SGD_DESCRIPCION_DE_CARGO(co_cargo) de_cargo,co_tipo_encargatura,\n(SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_DOMINIOS('CO_TIPO_ENC',co_tipo_encargatura)) de_tipo_encargatura,\nde_cargo_completo,co_depen_padre,IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(co_depen_padre) de_depen_padre,\ntitulo_dep,\nti_dependencia tiDependencia \nFROM IDOSGD.RHTM_DEPENDENCIA\nWHERE CO_DEPENDENCIA=?");
 
 
@@ -62,7 +62,7 @@ public class DependenciaDaoImp
 
   
   public List<DependenciaBean> getDependenciaHijo(String coDepPadre) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT \nco_dependencia, \nde_dependencia, \nin_baja, \nco_nivel, \nde_corta_depen, \nco_depen_padre, \nco_empleado,\nIDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(co_empleado) de_empleado, \nti_dependencia, \nde_sigla, \nco_cargo, \nIDOSGD.PK_SGD_DESCRIPCION_DE_CARGO(co_cargo) de_cargo,\nco_tipo_encargatura, \n(SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_DOMINIOS('CO_TIPO_ENC',co_tipo_encargatura)) de_tipo_encargatura,\nco_sec_dep, \ntitulo_dep, \nde_cargo_completo \nFROM IDOSGD.RHTM_DEPENDENCIA \nwhere co_depen_padre = ? \norder by co_dependencia");
 
     
@@ -80,7 +80,7 @@ public class DependenciaDaoImp
 
   
   public List<DependenciaBean> getBuscaDependencia(String busDep, String busTipo) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String sqlDep = " and ti_dependencia='" + busTipo + "' ";
     if (busTipo.equals("2")) {
       sqlDep = "";
@@ -129,7 +129,7 @@ public class DependenciaDaoImp
       dep.setCoDependencia(coDep);
     } 
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("UPDATE IDOSGD.RHTM_DEPENDENCIA SET\nCO_DEPENDENCIA='" + dep
         .getCoDependencia() + "' ,DE_DEPENDENCIA=?,IN_BAJA=?,CO_NIVEL=?,DE_CORTA_DEPEN=?,\nCO_DEPEN_PADRE=?,CO_EMPLEADO=?,FE_ACT=CURRENT_TIMESTAMP,ID_ACT=?,\nDE_SIGLA=?,CO_CARGO=?,CO_TIPO_ENCARGATURA=?,TITULO_DEP=?,\nDE_CARGO_COMPLETO=?,TI_DEPENDENCIA=? \nWHERE CO_DEPENDENCIA=?");
 
@@ -159,7 +159,7 @@ public class DependenciaDaoImp
       dep.setCoDependencia(coDep);
     } 
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.RHTM_DEPENDENCIA(\nCO_DEPENDENCIA,DE_DEPENDENCIA,IN_BAJA,CO_NIVEL,DE_CORTA_DEPEN,\nCO_DEPEN_PADRE,CO_EMPLEADO,TI_DEPENDENCIA,FE_CREA,ID_CREA,FE_ACT,ID_ACT,\nDE_SIGLA,CO_CARGO,CO_TIPO_ENCARGATURA,TITULO_DEP,DE_CARGO_COMPLETO)\nVALUES(?,?,'0',?,?,\n?,?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,?,\n?,?,?,?,?)");
 
 
@@ -185,7 +185,7 @@ public class DependenciaDaoImp
   
   public String insLocalDependencia(LocalDepBean localDep) {
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.SITM_LOCAL_DEPENDENCIA(CO_DEP,CO_LOC,NU_CORRELATIVO,ES_ELI,\nCO_USE_CRE,FE_USE_CRE,CO_USE_MOD,FE_USE_MOD)\nVALUES(?,?,?,'0',?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP)");
 
 
@@ -204,7 +204,7 @@ public class DependenciaDaoImp
   
   public LocalDepBean getLocalDepBean(String coDep) {
     LocalDepBean localDepBean = null;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CO_DEP,CO_LOC,NU_CORRELATIVO NUCORR,ES_ELI FROM IDOSGD.SITM_LOCAL_DEPENDENCIA\nWHERE CO_DEP=?");
 
     
@@ -222,7 +222,7 @@ public class DependenciaDaoImp
   
   public String delLocalDependencia(String coDep) {
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("DELETE FROM IDOSGD.SITM_LOCAL_DEPENDENCIA\nWHERE CO_DEP=?");
 
     
@@ -238,7 +238,7 @@ public class DependenciaDaoImp
   
   public String insEmpDependencia(String coEmp, String coDep) {
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.TDTX_DEPENDENCIA_EMPLEADO(CO_DEP,CO_EMP,ES_EMP)\nVALUES(?,?,'0')");
 
     
@@ -255,7 +255,7 @@ public class DependenciaDaoImp
   
   public String delEmpDependencia(String coDep) {
     String vReturn = "ERROR";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("DELETE FROM IDOSGD.TDTX_DEPENDENCIA_EMPLEADO\nWHERE CO_DEP=?");
 
     
@@ -272,7 +272,7 @@ public class DependenciaDaoImp
 
   
   public List<EmpleadoBean> getLsEmpDepen(String coDep) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CO_EMP CEMP_CODEMP,ES_EMP ESTADO,IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP(CO_EMP) NOMBRE\nFROM IDOSGD.TDTX_DEPENDENCIA_EMPLEADO\nWHERE CO_DEP=?");
 
 

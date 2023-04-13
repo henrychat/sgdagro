@@ -29,7 +29,7 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosDao {
 
     public List<ConAnioBean> listConAnio() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CANO_ANOEJE CO_ANIO, CANO_ANOEJE DE_ANIO ");
         sql.append("FROM SI_MAE_ANO_EJECUCION ");
         sql.append("ORDER BY 2 DESC ");
@@ -46,7 +46,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConMesBean> listConMes() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT upper(CELE_DESELE) DE_MES, CELE_CODELE CO_MES FROM SI_ELEMENTO ");
         sql.append("WHERE CTAB_CODTAB=PK_SGD_DESCRIPCION.FU_TI_MESES ");
         sql.append("AND CELE_CODELE != PK_SGD_DESCRIPCION.FU_TI_MES_APE ");
@@ -64,7 +64,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConDiaBean> listConDia() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CELE_DESELE DE_DIA, CELE_CODELE CO_DIA FROM SI_ELEMENTO ");
         sql.append("WHERE CTAB_CODTAB=PK_SGD_DESCRIPCION.FU_TI_DIAS ");
         sql.append("AND CELE_CODELE <= PK_SGD_DESCRIPCION.FU_DIA_MES(TO_CHAR(SYSDATE,'YYYY'),TO_CHAR(SYSDATE,'MM')) ");
@@ -83,7 +83,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConDestinatarioBean> listConDestinatarios(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA from RHTM_DEPENDENCIA ");
         sql.append("WHERE  ? IN (CO_DEPENDENCIA,CO_DEPEN_PADRE) OR CO_DEPENDENCIA IN (select co_dep_ref from tdtx_referencia ");
         sql.append("where co_dep_emi = ? and ti_emi = 'D' and es_ref = '1') ORDER BY 1 ");
@@ -101,7 +101,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConTipoRemitenteBean> listConTipoRemitente() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CELE_DESELE DE_TIPO_REMITENTE,CELE_CODELE CO_TIPO_REMITENTE  FROM SI_ELEMENTO ");
         sql.append("WHERE CTAB_CODTAB='TIP_DESTINO' AND CELE_CODELE NOT IN ('05') ");
         sql.append("UNION SELECT '.:TODOS:.' CELE_DESELE,NULL CELE_CODELE FROM DUAL ORDER BY 1 ");
@@ -119,7 +119,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConExpedienteBean> listConExpediente(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT de_exp,co_exp FROM tdtr_expediente  WHERE ");
         sql.append("co_dep = ? ");
         sql.append("UNION SELECT '.: TODOS :.', NULL FROM DUAL ");
@@ -138,7 +138,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConRemitenteBean> listConRemitente(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_DEPENDENCIA, CO_DEPENDENCIA FROM RHTM_DEPENDENCIA ");
         sql.append("WHERE CO_DEPENDENCIA IN (SELECT CO_DEP FROM TDTX_RESUMEN_DEP WHERE CO_DEP_REF = ? AND TI_TAB = 'D' AND TI_EMI = '01') ");
         sql.append("union select '.:TODOS:.', null from dual ORDER BY 1 ");
@@ -156,7 +156,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConEstadoBean> listConEstado() {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_EST,CO_EST FROM TDTR_ESTADOS ");
         sql.append("WHERE DE_TAB='TDTV_DESTINOS' UNION SELECT '.: TODOS :.',NULL FROM DUAL ORDER BY CO_EST  ");
 
@@ -173,7 +173,7 @@ public class ConMaestrosDaoImp extends SimpleJdbcDaoBase implements ConMaestrosD
     }
 
     public List<ConTipoDocumentoBean> listConTipoDocumento(String codDependencia) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT DE_TIP_DOC,CO_TIP_DOC FROM "
                 + "(\n" +
                     "SELECT DISTINCT\n" +

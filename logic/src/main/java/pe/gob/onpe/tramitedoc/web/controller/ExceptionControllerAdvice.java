@@ -18,7 +18,7 @@ public class ExceptionControllerAdvice {
         @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
         @ExceptionHandler(Exception.class)
 	public ModelAndView exception(HttpServletRequest req, Exception ex) {
-                StringBuffer mensaje = new StringBuffer();
+                 StringBuilder mensaje = new StringBuilder();
                 Usuario usuario = Utilidades.getInstancia().loadUserFromSession(req);
                 String vUsu = "";
                 String vUrl = "";

@@ -19,7 +19,7 @@ public class DocDependenciaDaoImp
   implements DocDependenciaDao
 {
   public DocumentoDependenciaBean getDocDependencia(String codDependencia, String codTipDoc) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT CO_DEP,CO_TIP_DOC, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(CO_TIP_DOC) AS TI_DESCRIP,CO_USE_CRE,FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,ES_OBL_FIRMA,CO_TIP_DOC AS CO_TIP_DOC_ANT ");
     sql.append("FROM IDOSGD.SITM_DOC_DEPENDENCIA ");
     sql.append("WHERE CO_DEP=? AND CO_TIP_DOC=? AND ES_ELI='0' ");
@@ -45,7 +45,7 @@ public class DocDependenciaDaoImp
   
   public int getRowCountDocXDependencia(String codDependencia) {
     int result = -1;
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  COUNT(1) ");
     sql.append("FROM IDOSGD.SITM_DOC_DEPENDENCIA ");
     sql.append("WHERE CO_DEP=? AND ES_ELI='0' ");
@@ -60,7 +60,7 @@ public class DocDependenciaDaoImp
 
   
   public List<DocumentoDependenciaBean> getDocDependenciaList(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select A.CO_TIP_DOC CO_TIP_DOC, ");
     sql.append(" CASE  WHEN B.IN_USOABREVIA IS NOT NULL THEN UPPER(B.CDOC_DESDONOMREAL)  ELSE UPPER(B.CDOC_DESDOC) END   TI_DESCRIP, ");
     sql.append(" CASE  WHEN B.IN_USOABREVIA='1' THEN  UPPER(B.CDOC_DESDOC)  ELSE ' ' END   NOM_ABREV,  ");
@@ -83,7 +83,7 @@ public class DocDependenciaDaoImp
 
   
   public List<DocumentoDependenciaBean> getDocDependenciaFaltantesList(String codDependencia) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select CDOC_TIPDOC CO_TIP_DOC, ");
     sql.append(" CASE  WHEN IN_USOABREVIA IS NOT NULL THEN UPPER(CDOC_DESDONOMREAL)  ELSE UPPER(CDOC_DESDOC) END   TI_DESCRIP, ");
     sql.append(" CASE  WHEN IN_USOABREVIA='1' THEN  UPPER(CDOC_DESDOC)  ELSE ' ' END   NOM_ABREV  ");
@@ -106,7 +106,7 @@ public class DocDependenciaDaoImp
   
   public String insDocDependencia(DocumentoDependenciaBean docDepBean) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.SITM_DOC_DEPENDENCIA(CO_DEP,Co_Tip_Doc,Es_Eli,Co_Use_Cre,Fe_Use_Cre,Co_Use_Mod,Fe_Use_Mod,Es_Obl_Firma) ");
     sql.append("values (?,?,?,?,getdate(),?,getdate(),?)");
     try {
@@ -121,7 +121,7 @@ public class DocDependenciaDaoImp
   }
   public String eliDocDependencia(DocumentoDependenciaBean docDepBean) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("delete from IDOSGD.SITM_DOC_DEPENDENCIA ");
     sql.append("where CO_DEP=? and CO_TIP_DOC=? ");
     try {
@@ -135,7 +135,7 @@ public class DocDependenciaDaoImp
   }
   public String updDocDependencia(DocumentoDependenciaBean docDepBean, String codDocReempl) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.SITM_DOC_DEPENDENCIA set CO_TIP_DOC=?,CO_USE_MOD=?,FE_USE_MOD=getdate() ");
     sql.append("where CO_DEP=? and CO_TIP_DOC=? ");
     try {
@@ -150,7 +150,7 @@ public class DocDependenciaDaoImp
 
   
   public List<MotivoBean> getMotDependenciaList(String codDependencia, String codDoc) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT de_mot,co_mot ");
     sql.append("FROM IDOSGD.tdtr_motivo ");
     sql.append("WHERE co_mot IN (SELECT co_mot ");
@@ -171,7 +171,7 @@ public class DocDependenciaDaoImp
   }
   
   public List<MotivoBean> getMotFaltantesList(String codDependencia, String codDoc) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT de_mot,co_mot FROM IDOSGD.tdtr_motivo ");
     sql.append("WHERE co_mot NOT IN (SELECT co_mot ");
     sql.append("FROM IDOSGD.tdtx_moti_docu_depe ");
@@ -191,7 +191,7 @@ public class DocDependenciaDaoImp
   
   public String insMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("insert into IDOSGD.TDTX_MOTI_DOCU_DEPE(CO_DEP,CO_TIP_DOC,CO_MOT) values (?,?,?)");
     try {
       this.jdbcTemplate.update(sql.toString(), new Object[] { motDocDep
@@ -205,7 +205,7 @@ public class DocDependenciaDaoImp
   }
   public String updMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep, String codMotReempl) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.TDTX_MOTI_DOCU_DEPE set CO_MOT=? where CO_DEP=? and CO_TIP_DOC=? and CO_MOT=? ");
     try {
       this.jdbcTemplate.update(sql.toString(), new Object[] { motDocDep
@@ -219,7 +219,7 @@ public class DocDependenciaDaoImp
   }
   public String eliMotDocDependencia(MotivoDocumentoDependenciaBean motDocDep) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("delete from IDOSGD.TDTX_MOTI_DOCU_DEPE ");
     sql.append("where CO_DEP=? and CO_TIP_DOC=? and CO_MOT=? ");
     try {

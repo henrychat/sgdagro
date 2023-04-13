@@ -27,7 +27,6 @@ import pe.gob.onpe.tramitedoc.bean.RemitenteDocExtRecepBean;
 import pe.gob.onpe.tramitedoc.bean.RequisitoBean;
 import pe.gob.onpe.tramitedoc.dao.MesaPartesDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
-import pe.gob.onpe.tramitedoc.web.util.BusquedaTextual;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 @Repository("mesaPartesDao")
@@ -39,7 +38,7 @@ public class MesaPartesDaoImp
         boolean bBusqFiltro = false;
         boolean bBusqDep = false;
         String sqlContains = "";
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         sql.append(" SELECT TOP 300  X.*, "); // por lo mientras
         sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_TI_DESTINO](X.TI_EMI) DE_TI_EMI, ");
@@ -224,12 +223,12 @@ public class MesaPartesDaoImp
     public String insExpedienteBean(ExpedienteDocExtRecepBean expedienteBean) {
         String vReturn = "NO_OK";
         String clave = Utilidades.generateRandomLetter(4);
-        StringBuffer sqlQry1 = new StringBuffer();
+        StringBuilder sqlQry1 = new StringBuilder();
         sqlQry1.append("select RIGHT(REPLICATE('0', 10) + CAST((ISNULL(MAX(nu_sec_exp), 0) + 1) AS VARCHAR), 10) ");
         sqlQry1.append("from IDOSGD.tdtc_expediente WITH (NOLOCK) ");
         sqlQry1.append("where nu_ann_exp = ? ");
 
-        StringBuffer sqlIns = new StringBuffer();
+        StringBuilder sqlIns = new StringBuilder();
         sqlIns.append("INSERT INTO IDOSGD.TDTC_EXPEDIENTE(\nnu_ann_exp,\nnu_sec_exp,\nfe_exp,\nfe_vence,\nco_proceso,\nde_detalle,\nco_dep_exp,\nco_gru,\nnu_corr_exp,\nnu_expediente,\nus_crea_audi,\nfe_crea_audi,\nus_modi_audi,\nfe_modi_audi,\nes_estado,ccod_tipo_exp,CCLAVE)\nVALUES(?,?,(SELECT CONVERT(DATETIME, ?, 103)),(SELECT CONVERT(DATETIME, ?, 103)),?,?,?,'3',?,?,?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,'0',?, ?)");
 
         try {
@@ -255,7 +254,7 @@ public class MesaPartesDaoImp
 
     public String updExpedienteBean(ExpedienteDocExtRecepBean expedienteBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.TDTC_EXPEDIENTE \nset US_MODI_AUDI=?\n,FE_VENCE=(SELECT CONVERT(DATETIME, ?, 103))\n,CO_PROCESO=?\n,FE_MODI_AUDI=CURRENT_TIMESTAMP\nwhere\nNU_ANN_EXP=? and\nNU_SEC_EXP=?");
 
@@ -277,7 +276,7 @@ public class MesaPartesDaoImp
 
     public String updDocumentoExtBean(String nuAnn, String nuEmi, DocumentoExtRecepBean documentoExtRecepBean, ExpedienteDocExtRecepBean expedienteBean, RemitenteDocExtRecepBean remitenteDocExtRecepBean, String pcoUserMod) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtv_remitos \nset CO_USE_MOD=?,");
         // se agrega otros
         String coOtros = null;
@@ -382,7 +381,7 @@ public class MesaPartesDaoImp
 
     public String insDocumentoExtBean(DocumentoExtRecepBean documentoExtRecepBean, ExpedienteDocExtRecepBean expedienteBean, RemitenteDocExtRecepBean remitenteDocExtRecepBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("INSERT INTO IDOSGD.tdtv_remitos(\nNU_ANN,\nNU_EMI,\nNU_COR_EMI,\nCO_LOC_EMI,\nCO_DEP_EMI,\nCO_EMP_EMI,\nCO_EMP_RES, \nTI_EMI,\nNU_DNI_EMI,\nNU_RUC_EMI,\nCO_OTR_ORI_EMI,\nFE_EMI,\nCO_GRU,\nDE_ASU, \nES_DOC_EMI, \nNU_DIA_ATE, \nCO_TIP_DOC_ADM, \nNU_COR_DOC, \nDE_DOC_SIG, \nNU_ANN_EXP, \nNU_SEC_EXP, \nNU_DET_EXP, \nNU_FOLIOS, \nES_ELI,\nCO_USE_CRE,\nFE_USE_CRE,\nCO_USE_MOD,\nCO_DEP,\nFE_USE_MOD,\nCDIR_REMITE,\nAUT_CORREOE,\nCEXP_CORREOE,\nCTELEFONO,\nCCOD_DPTO,\nCCOD_PROV,\nCCOD_DIST,\nREMI_TI_EMI,\nREMI_NU_DNI_EMI,\nREMI_CO_OTR_ORI_EMI,\nREMI_CARGO,\nCCOD_ORIGING,\nCNUM_DNIMSG,\nCOBS_DOCUMENTO,\nCDOC_DESTRAM,\nCONG_CO_OTR_ORI,\nIND_TIPOCONG,\nIND_TIPOCONGINV,\nIND_REITCONGINV,\nNRO_SOBREAUT,\nAN_SOBREAUT,\nCIND_SENSIBLE)\nVALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT CONVERT(DATETIME, ?, 103)),'3',?,'5',?,?,?,?,?,?,'1',?,'0',?,CURRENT_TIMESTAMP,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
@@ -422,7 +421,7 @@ public class MesaPartesDaoImp
 
     public String insDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         SimpleJdbcCall simpleJdbcCall = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[PK_SGD_OBTENER_SECUENCIA]").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[]{"nu_emi", "nu_ann"}).declareParameters(new SqlParameter[]{new SqlParameter("nu_emi", 12), new SqlParameter("nu_ann", 4), (SqlParameter) new SqlOutParameter("valor", 4)});
         MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("nu_emi", nuEmi).addValue("nu_ann", nuAnn);
         Map out = simpleJdbcCall.execute((SqlParameterSource) mapSqlParameterSource);
@@ -450,7 +449,7 @@ public class MesaPartesDaoImp
 
     public String insReferenciaDocumentoEmi(String pnuAnn, String pnuEmi, ReferenciaDocExtRecepBean ref) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("INSERT INTO IDOSGD.tdtr_referencia(\nNU_ANN,\nNU_EMI,\nCO_REF,\nNU_ANN_REF,\nNU_EMI_REF,\nNU_DES_REF,\nCO_USE_CRE,\nFE_USE_CRE)\nVALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)");
 
         try {
@@ -476,7 +475,7 @@ public class MesaPartesDaoImp
 
     public String getNroCorrelativoDocumento(String pnuAnn, String pcoDepEmi, String ptiEmi) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("select ISNULL(MAX(nu_cor_doc), 0) + 1 ");
         sqlQry.append("from IDOSGD.tdtv_remitos WITH (NOLOCK) ");
         sqlQry.append("where nu_ann=? ");
@@ -492,11 +491,11 @@ public class MesaPartesDaoImp
     }
 
     public DocumentoExtRecepBean getDocumentoExtRecepNew(String coDependencia) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("select  SUBSTRING((SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_SIGLA_CORTA(CO_DEPENDENCIA)), 1, 6) DE_DOC_SIG_G, ");
         sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_ESTADOS_MP]('5', 'TDTV_REMITOS') DE_ES_DOC_EMI_MP, ");
         sql.append("        CO_EMPLEADO co_emp_emi ");
-        sql.append("from IDOSGD.rhtm_dependencia ");
+        sql.append("from IDOSGD.rhtm_dependencia WITH(NOLOCK) ");
         sql.append("where CO_DEPENDENCIA = ? ");
 
         DocumentoExtRecepBean documentoExtRecepBean = null;
@@ -511,12 +510,12 @@ public class MesaPartesDaoImp
     }
 
     public List<MotivoBean> getLstMotivoxTipoDocumento() {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<MotivoBean> list = new ArrayList<MotivoBean>();
 
         sql.append("SELECT  DE_MOT, ");
         sql.append("        CO_MOT ");
-        sql.append("FROM IDOSGD.TDTR_MOTIVO ");
+        sql.append("FROM IDOSGD.TDTR_MOTIVO WITH(NOLOCK) ");
         sql.append("order by 1 ");
 
         try {
@@ -531,35 +530,40 @@ public class MesaPartesDaoImp
     }
 
     public List<ReferenciaDocExtRecepBean> getLstDocExtReferencia(String pnuAnn, String pcoTiDoc, String pcoDepEmi, String pnuExpediente) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<ReferenciaDocExtRecepBean> list = new ArrayList<ReferenciaDocExtRecepBean>();
 
-        sql.append("SELECT TOP 400  A.NU_ANN, ")
+        sql.append("SELECT  TOP 400 * from (")
+                .append("SELECT DISTINCT A.NU_ANN, ")
                 .append("        A.NU_EMI, ")
                 .append("        A.CO_TIP_DOC_ADM CO_TIP_DOC, ")
                 .append("        B.NU_EXPEDIENTE, ")
                 .append("        CONVERT(VARCHAR(10), B.FE_EXP, 3) FE_EXP, ")
-                .append("        SUBSTRING(a.de_asu, 1, 59) de_asu,a.de_doc_sig ")
+                .append("        SUBSTRING(a.de_asu, 1, 59) de_asu, a.de_doc_sig ")
                 .append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ")
                 .append("LEFT JOIN\t IDOSGD.TDTC_EXPEDIENTE B WITH (NOLOCK) ")
-                .append("ON A.NU_ANN_EXP=B.NU_ANN_EXP AND A.NU_SEC_EXP=B.NU_SEC_EXP ") //AND A.NU_COR_EMI=B.NU_CORR_EXP ");
-                .append("INNER JOIN  IDOSGD.TDTV_DESTINOS D WITH (NOLOCK) ON A.NU_ANN=D.NU_ANN AND A.NU_EMI=D.NU_EMI ")
-                .append("WHERE  A.NU_ANN=? AND ")
-                .append("A.CO_TIP_DOC_ADM=? AND ");
+                .append("ON A.NU_ANN_EXP = B.NU_ANN_EXP AND A.NU_SEC_EXP = B.NU_SEC_EXP ") //AND A.NU_COR_EMI=B.NU_CORR_EXP ");
+                .append("INNER JOIN IDOSGD.TDTV_DESTINOS D WITH (NOLOCK) ON A.NU_ANN = D.NU_ANN AND A.NU_EMI = D.NU_EMI ")
+                .append("WHERE A.NU_ANN=?  ")
+                .append("AND A.CO_TIP_DOC_ADM=?  ");
+        //WG20230410
 //    sql.append("A.CO_DEP_EMI=? AND ");
 
         if (pnuExpediente.trim().length() > 0) {
-            sql.append("(B.NU_CORR_EXP = '" + pnuExpediente + "' OR A.NU_DOC_EMI = '" + pnuExpediente + "') AND\n");
+            sql.append("AND (B.NU_CORR_EXP = '" + pnuExpediente + "' OR A.NU_DOC_EMI = '" + pnuExpediente + "') \n");
         }
 
-        sql.append("A.ES_DOC_EMI NOT IN ('9','7','5')AND ")
-                .append("A.TI_EMI NOT IN('05') AND ")
-                .append("A.CO_GRU IN ('1','3') AND ")
-                .append("A.NU_DET_EXP =1 AND ")
-                .append("A.ES_ELI='0' AND ")
-                .append("B.ES_ESTADO='0' AND ")
-                .append("D.NU_DES='1' order by 1 desc ");
+        sql.append("AND A.ES_DOC_EMI NOT IN ('9','7','5') ")
+                .append("AND A.TI_EMI NOT IN('05')  ")
+                .append("AND A.CO_GRU IN ('1','3')  ")
+                .append("AND A.NU_DET_EXP =1  ")
+                .append("AND A.ES_ELI='0'  ")
+                .append("AND B.ES_ESTADO='0'  ")
+                //.append("AND D.NU_DES='1' ")
+                .append(") d ")
+                .append(" order by 1 desc ");
         try {
+            //WG20230410
 //      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(ReferenciaDocExtRecepBean.class), new Object[] { pnuAnn, pcoTiDoc, pcoDepEmi });
             list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(ReferenciaDocExtRecepBean.class), new Object[]{pnuAnn, pcoTiDoc});
         } catch (EmptyResultDataAccessException e) {
@@ -573,7 +577,7 @@ public class MesaPartesDaoImp
 
     public String getNroCorrelativoEmision(String pnuAnn, String pcoDepEmi) {
         String vReturn = "1";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT ISNULL(MAX(a.NU_COR_EMI), 0) + 1 ");
         sqlQry.append("FROM IDOSGD.TDTV_REMITOS a WITH (NOLOCK) ");
         sqlQry.append("WHERE NU_ANN = ? ");
@@ -590,7 +594,7 @@ public class MesaPartesDaoImp
 
     public String updDestinatarioDocumentoEmi(String nuAnn, String nuEmi, DestinatarioDocumentoEmiBean destinatarioDocumentoEmiBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.TDTV_DESTINOS \nset CO_LOC_DES=?\n,CO_DEP_DES=?\n,CO_EMP_DES=?\n,CO_PRI=?\n,DE_PRO=?\n,CO_MOT=?\n,CO_OTR_ORI_DES=? \n,NU_DNI_DES=? \n,NU_RUC_DES=? \n,FE_USE_MOD=CURRENT_TIMESTAMP\n,CO_USE_MOD=?\nwhere\nNU_ANN=? and\nNU_EMI=? and\nNU_DES=?");
 
@@ -608,7 +612,7 @@ public class MesaPartesDaoImp
 
     public String delDestinatarioDocumentoEmi(String nuAnn, String nuEmi, String pnuDes) {
         String vReturn = "NO_OK";
-        StringBuffer sqlDel = new StringBuffer();
+        StringBuilder sqlDel = new StringBuilder();
         sqlDel.append("delete from IDOSGD.TDTV_DESTINOS\nWHERE NU_ANN = ?\nAND NU_EMI = ?\nand NU_DES=?");
 
         try {
@@ -622,7 +626,7 @@ public class MesaPartesDaoImp
 
     public String updReferenciaDocumentoEmi(String pnuAnn, String pnuEmi, ReferenciaDocExtRecepBean ref) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtr_referencia \nset NU_ANN_REF = ?, \nNU_EMI_REF = ?, \nNU_DES_REF = ?\nWHERE NU_ANN = ? AND NU_EMI = ? \nAND CO_REF = ?");
 
         try {
@@ -638,7 +642,7 @@ public class MesaPartesDaoImp
 
     public String delReferenciaDocumentoEmi(String pnuAnn, String pnuEmi, String pnuAnnRef, String pnuEmiRef) {
         String vReturn = "NO_OK";
-        StringBuffer sqlIns = new StringBuffer();
+        StringBuilder sqlIns = new StringBuilder();
         sqlIns.append("DELETE FROM IDOSGD.tdtr_referencia\nWHERE NU_ANN = ? AND NU_EMI = ? \nAND NU_ANN_REF = ? AND NU_EMI_REF = ?");
 
         try {
@@ -652,7 +656,7 @@ public class MesaPartesDaoImp
     }
 
     public DocumentoExtRecepBean getDocumentoExtRec(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT A.NU_ANN, ");
         sql.append("A.NU_EMI, ");
         sql.append("(SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA_CORTA](A.CO_DEP_EMI)) DE_DOC_SIG_G, ");
@@ -704,14 +708,14 @@ public class MesaPartesDaoImp
 
     public Map getDesFieldOtro(String pcoOtros) {
         Map mapResult = null;
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT  C.DE_APE_PAT_OTR + ' ' + C.DE_APE_MAT_OTR + ', ' + C.DE_NOM_OTR + ' - ' + C.DE_RAZ_SOC_OTR DE_NOM_OTROS, ");
         sql.append("        ISNULL(B.CELE_DESELE, '   ') DE_DOC_OTROS, ");
         sql.append("        C.NU_DOC_OTR_ORI NU_DOC_OTROS ");
-        sql.append("FROM IDOSGD.TDTR_OTRO_ORIGEN C ");
+        sql.append("FROM IDOSGD.TDTR_OTRO_ORIGEN C WITH(NOLOCK)");
         sql.append("\tLEFT OUTER JOIN ");
         sql.append("   (SELECT CELE_CODELE, CELE_DESELE ");
-        sql.append("    FROM IDOSGD.SI_ELEMENTO ");
+        sql.append("    FROM IDOSGD.SI_ELEMENTO WITH(NOLOCK)");
         sql.append("   WHERE CTAB_CODTAB ='TIP_DOC_IDENT') B ");
         sql.append("   ON C.CO_TIP_OTR_ORI = B.CELE_CODELE ");
         sql.append("WHERE C.CO_OTR_ORI = ? ");
@@ -725,7 +729,7 @@ public class MesaPartesDaoImp
     }
 
     public List<DestinatarioDocumentoEmiBean> getLstDestinoEmiDoc(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = null;
         sql.append("select  a.nu_ann, ");
         sql.append("        a.nu_emi, ");
@@ -770,7 +774,7 @@ public class MesaPartesDaoImp
 
     public List<ReferenciaDocExtRecepBean> getLstReferenciaDoc(String pnuAnn, String pnuEmi) {
         List<ReferenciaDocExtRecepBean> list;
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
 
         sql.append("SELECT  A.NU_ANN, ");
         sql.append("        A.NU_EMI, ");
@@ -799,7 +803,7 @@ public class MesaPartesDaoImp
     }
 
     public DocumentoExtRecepBean getDocumentoExtRecBasic(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT  A.NU_ANN,A.NU_EMI, ");
         sql.append("        A.CO_LOC_EMI, ");
         sql.append("        A.CO_EMP_EMI, ");
@@ -834,7 +838,7 @@ public class MesaPartesDaoImp
 
     public String updEstadoDocumentoExt(DocumentoExtRecepBean documentoExtRecepBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("update IDOSGD.tdtv_remitos \nset CO_USE_MOD=? \n,FE_USE_MOD=CURRENT_TIMESTAMP \n,FE_EMI=CURRENT_TIMESTAMP \n,ES_DOC_EMI=? \nWHERE NU_ANN=? \nAND NU_EMI=? ");
 
@@ -854,10 +858,10 @@ public class MesaPartesDaoImp
 
     public String anularDocumentoExtRecep(DocumentoExtRecepBean documentoExtRecepBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT ISNULL(MAX(nu_cor_doc), 1) + 1\nFROM IDOSGD.tdtv_remitos WITH (NOLOCK) \nWHERE nu_ann         = ?\nAND ti_emi         = ?\nAND co_dep_emi     = ?\nAND co_tip_doc_adm = ?");
 
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
         sqlUpd.append("update IDOSGD.tdtv_remitos \nset es_doc_emi = ?,\nnu_cor_doc = ?,fe_use_mod=CURRENT_TIMESTAMP,co_use_mod=? \nWHERE nu_ann = ?\nAND nu_emi = ?\nAND es_eli = '0'");
 
         try {
@@ -875,7 +879,7 @@ public class MesaPartesDaoImp
     }
 
     public ReferenciaDocExtRecepBean getRefAtenderDocExtRec(String pnuAnn, String pnuEmi) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT\tA.NU_ANN, ");
         sql.append("\t\tA.NU_EMI, ");
         sql.append("\t\tSUBSTRING(B.NU_EXPEDIENTE, 1, 20) NU_EXPEDIENTE, ");
@@ -902,7 +906,7 @@ public class MesaPartesDaoImp
 
     public String getNumeroExpediente(ExpedienteDocExtRecepBean expedienteBean) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry1 = new StringBuffer();
+        StringBuilder sqlQry1 = new StringBuilder();
         sqlQry1.append("select\tRIGHT(REPLICATE('0', 7) + (RTRIM(LTRIM(CAST((ISNULL(MAX(NU_CORR_EXP), 0) + 1) AS VARCHAR)))), 7) nuCorrExp, ");
         sqlQry1.append("\tSUBSTRING((SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA_CORTA](?)), 1, 6) deSiglaCorta ");
         sqlQry1.append("from IDOSGD.tdtc_expediente WITH (NOLOCK) ");
@@ -926,7 +930,7 @@ public class MesaPartesDaoImp
 
     public String updFechaExpedienteMP(String coUser, String nuAnnExp, String nuSecExp) {
         String vReturn = "NO_OK";
-        StringBuffer sqlUpd = new StringBuffer();
+        StringBuilder sqlUpd = new StringBuilder();
 
         sqlUpd.append("UPDATE IDOSGD.TDTC_EXPEDIENTE \nSET US_MODI_AUDI=? \n,FE_MODI_AUDI=CURRENT_TIMESTAMP \n,FE_EXP=getdate() \nWHERE NU_ANN_EXP=? \nAND NU_SEC_EXP=? ");
 
@@ -943,7 +947,7 @@ public class MesaPartesDaoImp
 
     public String getPermisoChangeEstadoMP(String coEmp, String coDep) {
         String vReturn = "NO_OK";
-        StringBuffer sqlQry = new StringBuffer();
+        StringBuilder sqlQry = new StringBuilder();
         sqlQry.append("SELECT IN_CAMBIO_EST FROM IDOSGD.TDTR_PERMISO_MP\nWHERE CO_EMP=? AND CO_DEP=?\nAND ES_ELI='0'");
 
         try {
@@ -958,7 +962,7 @@ public class MesaPartesDaoImp
     }
 
     public ProcesoExpBean getProcesoExpediente(String pcoProceso) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT NU_PLAZO NU_DIAS_PLAZO, DE_ASUNTO FROM IDOSGD.TDTR_PROCESOS_EXP\nWHERE CO_PROCESO=? AND ES_ESTADO = '1'");
 
         ProcesoExpBean proceso = null;
@@ -1124,7 +1128,7 @@ public class MesaPartesDaoImp
     }
 
     public List<DocumentoBean> getListaReporteBusquedaVoucher(DocumentoBean documento) {
-        StringBuffer prutaReporte = new StringBuffer();
+        StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoBean> list = null;
 
@@ -1157,7 +1161,7 @@ public class MesaPartesDaoImp
     }
 
     public List<DocumentoExtRecepBean> getListaReporteBusqueda(BuscarDocumentoExtRecepBean buscarDocumentoExtRecepBean) {
-        StringBuffer prutaReporte = new StringBuffer();
+        StringBuilder prutaReporte = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoExtRecepBean> list = null;
         boolean bBusqFiltro = false;
@@ -1326,7 +1330,7 @@ public class MesaPartesDaoImp
     }
 
     public String getPassDniPide(String pctabCodTab, String Dni) {
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("SELECT CELE_DESCOR\nFROM   IDOSGD.SI_ELEMENTO\nWHERE  CTAB_CODTAB = ? AND CELE_DESELE= ?");
 
         String pkExp = null;

@@ -25,7 +25,7 @@ public class ConsultaOtroOrigenDaoImp
   private ApplicationProperties applicationProperties;
   
   public List<OtroOrigenBean> getOtroOrigenBusqList(OtroOrigenBean otroOrigen) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     String sqlContains = "";
     sql.append("SELECT A.* FROM ( ");

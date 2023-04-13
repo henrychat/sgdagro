@@ -31,7 +31,7 @@ public class RequisitoDaoImpl
   private ApplicationProperties applicationProperties;
   
   public List<RequisitoBean> getRequisitoList() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  COD_REQ AS codRequisito, ");
     sql.append("        DE_DESCRIPCION AS descripcion, ");
     sql.append("        ES_ESTADO, ");
@@ -56,7 +56,7 @@ public class RequisitoDaoImpl
 
   
   public List<RequisitoBean> getRequisitoBusqList(RequisitoBean requisito) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     
     sql.append("SELECT A.* FROM ( ");
@@ -101,7 +101,7 @@ public class RequisitoDaoImpl
   
   public String insRequisito(RequisitoBean requisito, String codusuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     String genCoProceso = "";
     
     sql.append("INSERT INTO IDOSGD.TDTR_REQUISITOS ");
@@ -132,7 +132,7 @@ public class RequisitoDaoImpl
   
   public RequisitoBean getRequisito(String codRequisito) {
     RequisitoBean requisitoBean = new RequisitoBean();
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  COD_REQ AS codRequisito, ");
     sql.append("        DE_DESCRIPCION AS descripcion, ");
     sql.append("        ES_ESTADO, ");
@@ -160,7 +160,7 @@ public class RequisitoDaoImpl
   public String updRequisito(RequisitoBean requisito, String codusuario) {
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("UPDATE IDOSGD.TDTR_REQUISITOS SET ");
     sql.append("ES_ESTADO=?, DE_DESCRIPCION=?, US_MODI_AUDI=?, FE_MODI_AUDI=CURRENT_TIMESTAMP ");
     sql.append("WHERE COD_REQ=? ");
@@ -180,7 +180,7 @@ public class RequisitoDaoImpl
   
   public String insTupaRequisito(RequisitoBean requisito, String codusuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.TDTX_REQUISITO_PROCESO ");
     sql.append("(COD_REQUISITO, COD_PROCESO, NU_CORRELATIVO, ES_ESTADO, CO_USE_CRE, CO_USE_MOD, FE_USE_CRE, FE_USE_MOD, IN_OBLIGATORIO) ");
     sql.append("values (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?) ");
@@ -206,7 +206,7 @@ public class RequisitoDaoImpl
     List<RequisitoBean> lis_expedientes = null;
     String vReturn = "NO_OK";
     
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("UPDATE IDOSGD.TDTX_REQUISITO_PROCESO SET ");
     if (requisito.getCodRem() != null && !requisito.getCodRem().equals("")) {
       sql.append("COD_REQUISITO=?, CO_USE_MOD=?, FE_USE_MOD=CURRENT_TIMESTAMP ");
@@ -264,7 +264,7 @@ public class RequisitoDaoImpl
   public String eliTupaRequisito(RequisitoBean requisito) {
     List<RequisitoBean> lis_expedientes = null;
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("DELETE FROM IDOSGD.TDTX_REQUISITO_PROCESO ");
     sql.append("WHERE COD_REQUISITO=? AND COD_PROCESO=? ");
     
@@ -292,7 +292,7 @@ public class RequisitoDaoImpl
 
   
   public List<RequisitoBean> getTupaRequisitoBusqList(RequisitoBean requisito) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     Map<String, Object> objectParam = new HashMap<String, Object>();
     
     sql.append("SELECT  r.COD_REQ AS codRequisito, ");
@@ -328,7 +328,7 @@ public class RequisitoDaoImpl
 
   
   public List<RequisitoBean> getExpedienteRequisitoList(String codRequisito, String codProceso) {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("SELECT  NU_ANN_EXP AS aniExpediente, ");
     sql.append("        NU_SEC_EXP AS numExpediente ");
     sql.append("FROM IDOSGD.TDTX_REQUISITO_EXPEDIENTE ");
@@ -351,7 +351,7 @@ public class RequisitoDaoImpl
   
   public String eliExpedienteRequisito(String codRequisito, String codProceso) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("DELETE FROM IDOSGD.TDTX_REQUISITO_EXPEDIENTE ");
     sql.append("WHERE COD_REQUISITO = ? ");
     sql.append("AND COD_PROCESO = ? ");
@@ -369,7 +369,7 @@ public class RequisitoDaoImpl
   
   public String insExpedienteRequisito(RequisitoBean requisito, String codusuario) {
     String vReturn = "NO_OK";
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO IDOSGD.TDTX_REQUISITO_EXPEDIENTE( ");
     sql.append("\tNU_ANN_EXP, ");
     sql.append("\tNU_SEC_EXP, ");

@@ -24,7 +24,7 @@ public class EtiquetaDocumentoDaoImp
   implements EtiquetaDocumentoDao
 {
   public List<EtiquetaBean> getListEtiquetas() {
-    StringBuffer sql = new StringBuffer();
+     StringBuilder sql = new StringBuilder();
     sql.append("select co_est,de_est ");
     sql.append("from IDOSGD.tdtr_estados ");
     sql.append("where de_tab = 'CO_ETIQUETA_REC' ");

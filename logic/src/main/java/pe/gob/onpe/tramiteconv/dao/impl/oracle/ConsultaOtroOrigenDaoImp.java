@@ -30,7 +30,7 @@ public class ConsultaOtroOrigenDaoImp extends SimpleJdbcDaoQuery implements Cons
     
     @Override
     public List<OtroOrigenBean> getOtroOrigenBusqList(OtroOrigenBean otroOrigen) {
-        StringBuffer sql = new StringBuffer();
+         StringBuilder sql = new StringBuilder();
         sql.append("SELECT co_otr_ori, nu_doc_otr_ori, co_tip_otr_ori, de_ape_pat_otr , ");
         sql.append("de_ape_mat_otr, de_nom_otr, de_raz_soc_otr, de_dir_otro_ori, ");
         sql.append("ti_origen ,ref_co_otr_ori, ");
