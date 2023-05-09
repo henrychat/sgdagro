@@ -1564,11 +1564,11 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append("\t   e.CEMP_CODEMP ");
         sql.append("FROM IDOSGD.RHTM_PER_EMPLEADOS e ");
         sql.append("WHERE e.CEMP_EST_EMP = '1' ");
-        sql.append("AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA ");
-        sql.append("\t\t            from IDOSGD.rhTM_dependencia d ");
-        sql.append("\t\t \t    where d.CO_DEPENDENCIA =? ");
-        sql.append("\t\t\t    or CO_DEPEN_PADRE=?) ");
-        sql.append("\t\t\t    OR CO_DEPENDENCIA=? ) ");
+//        sql.append("AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA ");
+//        sql.append("\t\t            from IDOSGD.rhTM_dependencia d ");
+//        sql.append("\t\t \t    where d.CO_DEPENDENCIA =? ");
+//        sql.append("\t\t\t    or CO_DEPEN_PADRE=?) ");
+//        sql.append("\t\t\t    OR CO_DEPENDENCIA=? ) ");
         sql.append("UNION ");
         sql.append("SELECT  e.cemp_apepat, ");
         sql.append("\t    e.cemp_apemat, ");
