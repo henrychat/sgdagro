@@ -38,7 +38,7 @@ public class NewMain {
         
         String pass5=Utility.getInstancia().cifrar("20546537782",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
         System.out.println("passRUC==>"+pass5);
-           String pass6=Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A051ABF082B410FFB79036F15AC90B25F",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
+           String pass6=Utility.getInstancia().descifrar("B9538719BA40F788C66CA9D0AF36C1D5",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
         System.out.println("pass2==>"+pass6);
     //     String pass5=Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A051ABF082B410FFB79036F15AC90B25F",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
      //   System.out.println("pass3==>"+pass5);

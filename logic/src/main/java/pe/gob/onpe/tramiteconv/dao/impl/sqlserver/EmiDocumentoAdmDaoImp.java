@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -516,6 +517,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         DocumentoEmiBean documentoEmiBean = new DocumentoEmiBean();
         try {
             documentoEmiBean = (DocumentoEmiBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoEmiBean.class), new Object[]{pnuAnn, pnuEmi});
+            
         } catch (EmptyResultDataAccessException e) {
             documentoEmiBean = null;
         } catch (Exception e) {
@@ -845,7 +847,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         System.out.println("pannio: " + pannio);
         System.out.println("ptiDoc: " + ptiDoc);
         System.out.println("pnuDoc: " + pnuDoc);
-        System.out.println(sql);
+        logger.info(sql.toString());
 
         try {
             //vReturn = (String)this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[] { pnuAnn, pcoDepEmi, pcoDoc });
@@ -1092,7 +1094,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
             String snuCorEmi = (String) this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class, new Object[]{documentoEmiBean.getNuAnn(), documentoEmiBean.getCoDepEmi()});
             documentoEmiBean.setNuEmi(snuEmi);
             documentoEmiBean.setNuCorEmi(snuCorEmi);
-
+//            WGC-20240506
             documentoEmiBean.setCoVerExt(AleatorioCodVerificacion.generaCodVerificacion());
 
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getNuAnn(), snuEmi, (snuCorEmi == null) ? null : Integer.valueOf(Integer.parseInt(snuCorEmi)), documentoEmiBean
@@ -1100,6 +1102,39 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                 .getTiEmi(), documentoEmiBean.getDeAsu(), documentoEmiBean.getEsDocEmi(), (documentoEmiBean.getNuDiaAte() == null) ? null : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuDiaAte())), documentoEmiBean.getCoTipDocAdm(),
                 (documentoEmiBean.getNuCorDoc() == null) ? null : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuCorDoc())), documentoEmiBean.getDeDocSig(), documentoEmiBean.getNuAnnExp(), documentoEmiBean.getNuSecExp(),
                 (documentoEmiBean.getNuDocEmi() == null) ? null : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuDocEmi())), documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod(), documentoEmiBean.getDeObsDoc(), documentoEmiBean.getCoVerExt()});
+
+            ////////////////////////////////////////////
+            Object[] params = new Object[]{
+                    documentoEmiBean.getNuAnn(),
+                    snuEmi,
+                    (snuCorEmi == null) ? "NULL" : Integer.valueOf(Integer.parseInt(snuCorEmi)),
+                    documentoEmiBean.getCoLocEmi(),
+                    documentoEmiBean.getCoDepEmi(),
+                    documentoEmiBean.getCoEmpEmi(),
+                    documentoEmiBean.getCoEmpRes(),
+                    documentoEmiBean.getDeAsu(),
+                    documentoEmiBean.getEsDocEmi(),
+                    (documentoEmiBean.getNuDiaAte() == null) ? "NULL" : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuDiaAte())),
+                    documentoEmiBean.getCoTipDocAdm(),
+                    (documentoEmiBean.getNuCorDoc() == null) ? "NULL" : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuCorDoc())),
+                    documentoEmiBean.getDeDocSig(),
+                    documentoEmiBean.getNuAnnExp(),
+                    documentoEmiBean.getNuSecExp(),
+                    (documentoEmiBean.getNuDocEmi() == null) ? "NULL" : Integer.valueOf(Integer.parseInt(documentoEmiBean.getNuDocEmi())),
+                    documentoEmiBean.getCoUseMod(),
+                    documentoEmiBean.getCoUseMod(),
+                    documentoEmiBean.getDeObsDoc(),
+                    documentoEmiBean.getCoVerExt()
+            };
+
+            String formattedQuery = sqlUpd.toString();
+            for (Object param : params) {
+                formattedQuery = formattedQuery.replaceFirst("\\?", param != null ? "'" + param.toString() + "'" : "NULL");
+            }
+
+            System.out.println("Query ejecutado: " + formattedQuery);
+
+            ////////////////////////////////////////
 
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
@@ -1564,11 +1599,11 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append("\t   e.CEMP_CODEMP ");
         sql.append("FROM IDOSGD.RHTM_PER_EMPLEADOS e ");
         sql.append("WHERE e.CEMP_EST_EMP = '1' ");
-//        sql.append("AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA ");
-//        sql.append("\t\t            from IDOSGD.rhTM_dependencia d ");
-//        sql.append("\t\t \t    where d.CO_DEPENDENCIA =? ");
-//        sql.append("\t\t\t    or CO_DEPEN_PADRE=?) ");
-//        sql.append("\t\t\t    OR CO_DEPENDENCIA=? ) ");
+        sql.append("AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA ");
+        sql.append("\t\t            from IDOSGD.rhTM_dependencia d ");
+        sql.append("\t\t \t    where d.CO_DEPENDENCIA =? ");
+        sql.append("\t\t\t    or CO_DEPEN_PADRE=?) ");
+        sql.append("\t\t\t    OR CO_DEPENDENCIA=? ) ");
         sql.append("UNION ");
         sql.append("SELECT  e.cemp_apepat, ");
         sql.append("\t    e.cemp_apemat, ");
@@ -1591,6 +1626,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         try {
             list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi});
+        
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -1660,9 +1696,13 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sqlUpd.append("update IDOSGD.tdtv_remitos \nset CO_USE_MOD=?,");
 
         if (documentoEmiBean != null) {
+            
+            Date fechaAteEmi = Utility.getInstancia().getDateFromString(documentoEmiBean.getFecAteEmi());
             documentoEmiBean.setNuAnn(nuAnn);
-            sqlUpd.append("DE_ASU=?\n,NU_DIA_ATE=?\n,CO_TIP_DOC_ADM=?\n,NU_DOC_EMI=?\n,DE_DOC_SIG=?\n,NU_COR_DOC= (CASE WHEN ? IS NOT NULL THEN ? ELSE ? END)\n,OBS_DOC= ?,\n");
-
+            sqlUpd.append("DE_ASU=?\n,NU_DIA_ATE=?\n,CO_TIP_DOC_ADM=?\n,NU_DOC_EMI=?\n,DE_DOC_SIG=?\n, ")
+                    .append("NU_COR_DOC= (CASE WHEN ? IS NOT NULL THEN ? ELSE ? END)\n,OBS_DOC= ?,\n");
+                    //.append("FE_ATE_EMI=").append(fechaAteEmi).append(",\n"); //WG10072023 Se agrego el campo FECHA_ATENCION
+            
             if (documentoEmiBean.getNuDocEmi() == null || documentoEmiBean.getNuDocEmi().trim().equals("")) {
                 String vnuCorDoc = getNroCorrelativoDocumento(documentoEmiBean);
                 documentoEmiBean.setNuCorDoc(vnuCorDoc);
@@ -1683,13 +1723,16 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                     .getCoDependencia() + "'\n,CO_EMP_EMI='" + remitenteEmiBean
                             .getCoEmpFirma() + "',\n");
         }
+        
         sqlUpd.append("FE_USE_MOD=CURRENT_TIMESTAMP where\nNU_ANN=? and\nNU_EMI=?");
 
         try {
             if (documentoEmiBean != null) {
-                this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{pcoUserMod, documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(), documentoEmiBean
-                    .getCoTipDocAdm(), documentoEmiBean.getNuDocEmi(), documentoEmiBean.getDeDocSig(), documentoEmiBean
-                    .getNuDocEmi(), documentoEmiBean.getNuCorDoc(), documentoEmiBean.getNuCorDoc(), documentoEmiBean.getDeObsDoc(), nuAnn, nuEmi});
+                this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{pcoUserMod, documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(), 
+                    documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getNuDocEmi(), documentoEmiBean.getDeDocSig(), 
+                    documentoEmiBean.getNuDocEmi(), documentoEmiBean.getNuCorDoc(), documentoEmiBean.getNuCorDoc(), documentoEmiBean.getDeObsDoc(),
+                    // WG10072023  Se agrego el campo FECHA_ATENCION
+                    nuAnn, nuEmi}); 
             } else {
 
                 this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{pcoUserMod, nuAnn, nuEmi});

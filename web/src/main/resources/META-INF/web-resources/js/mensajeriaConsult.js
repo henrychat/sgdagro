@@ -297,7 +297,7 @@ function fu_iniTblDocMensajeriaRecep(){
         $('#divflotante').html(text);
 
         var x = elemento.left;
-        var y = elemento.top + 24;
+        var y = elemento.top + 370;
         $("#divflotante").css({left: x, top: y});
 
         document.getElementById('divflotante').style.display = 'block';

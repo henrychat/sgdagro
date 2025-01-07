@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DocumentoEmiBean {
+
     private String coDepEmi;
     private String coEmpEmi;
     private String coEmpRes;
@@ -37,7 +38,7 @@ public class DocumentoEmiBean {
     private String deTipEmi;
     private String esDocEmi;
     private String feEmi;
-    private String feEmiCorta;
+    private String feEmiCorta;    
     private String inExpe;
     private String inOficio;
     private String nuAnn;
@@ -75,10 +76,28 @@ public class DocumentoEmiBean {
     private String tiDest;
     private String tiEnvMsj;
     private String recursoenvio;
+    private String fecAteEmi;
+    private String fecAteEmiCorta;
     private String deObsDoc;
     private String nuFol;
     private String coVerExt;
-    private String confidencial;
+    private String confidencial;    
+
+    public String getFecAteEmi() {
+        return fecAteEmi;
+    }
+
+    public void setFecAteEmi(String fecAteEmi) {
+        this.fecAteEmi = fecAteEmi;
+    }
+
+    public String getFecAteEmiCorta() {
+        return fecAteEmiCorta;
+    }
+
+    public void setFecAteEmiCorta(String fecAteEmiCorta) {
+        this.fecAteEmiCorta = fecAteEmiCorta;
+    }
 
     public String getConfidencial() {
         return confidencial;
@@ -87,7 +106,7 @@ public class DocumentoEmiBean {
     public void setConfidencial(String confidencial) {
         this.confidencial = confidencial;
     }
-     
+
     public String getRecursoenvio() {
         return recursoenvio;
     }
@@ -95,7 +114,7 @@ public class DocumentoEmiBean {
     public void setRecursoenvio(String recursoenvio) {
         this.recursoenvio = recursoenvio;
     }
-    
+
     public String getCoDepEmi() {
         return coDepEmi;
     }
@@ -627,6 +646,5 @@ public class DocumentoEmiBean {
     public void setCoVerExt(String coVerExt) {
         this.coVerExt = coVerExt;
     }
-    
-    
+
 }

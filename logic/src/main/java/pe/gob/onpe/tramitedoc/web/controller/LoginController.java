@@ -2,7 +2,6 @@ package pe.gob.onpe.tramitedoc.web.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import pe.gob.onpe.autentica.model.Usuario;
 import pe.gob.onpe.autentica.service.UsuarioService;
 import pe.gob.onpe.libreria.util.Mensaje;
@@ -23,7 +21,6 @@ import pe.gob.onpe.tramitedoc.service.ReferencedData;
 import pe.gob.onpe.tramitedoc.service.UsuarioConfigService;
 import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
-import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 import pe.gob.onpe.tramitedoc.web.validator.UsuarioValidator;
 
 @Controller(value = "loginController")
@@ -81,6 +78,7 @@ public class LoginController extends GeneralController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String doProcessForm(@ModelAttribute("usuario") Usuario usuario, Model model, BindingResult result, HttpServletRequest request) {
+        logger.info(usuario);
         UsuarioConfigBean usuarioConfig = new UsuarioConfigBean();
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpSession sesion = httpServletRequest.getSession(false);

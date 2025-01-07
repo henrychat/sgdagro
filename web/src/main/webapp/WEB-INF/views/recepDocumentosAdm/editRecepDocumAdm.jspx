@@ -141,14 +141,14 @@
                                     <form:input path="telefonoRemite" readonly="true" size="30" style="width:99%;"/>
                                     </td>
                                     </tr>
-                                    <tr>
+<!--                                    <tr>
                                         <td>Obs.
                                         </td>
                                         <td colspan="4">
                                     <form:textarea class="delUpperCase" path="obsRemite" readonly="true" rows="2" cols="60" style="height:40px;width:98%;overflow:auto;resize:none;" maxlength="200"/>
                                     </td>  
 
-                                    </tr>
+                                    </tr>-->
                                 </table>
                             </fieldset>  							
                         </td>

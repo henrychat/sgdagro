@@ -13,6 +13,7 @@ import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by IntelliJ IDEA. User: crosales Date: 09/05/12 Time: 06:52 PM To
@@ -39,13 +40,11 @@ public class LogoutController extends GeneralController {
             if (usuario.getInicioId().equals("inicio")) {
                 destino = "inicio";
             }
-            //usuarioService.cerrarSession(usuario, applicationProperties.getCoAplicativo());
+//            usuarioService.cerrarSession(usuario, applicationProperties.getCoAplicativo());
             usuario.setNuDni(null);
             usuario.setCoUsuario(null);
         }
-
         ServletUtility.getInstancia().invalidateSession(request);
-
         return destino;
     }
 

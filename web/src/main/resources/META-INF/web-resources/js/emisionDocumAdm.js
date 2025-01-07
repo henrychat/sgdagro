@@ -1,3 +1,5 @@
+/* global bootbox */
+
 function fn_buscaReferenciaOrigen() {
     var p = new Array();
     p[0] = "accion=goBuscaReferenciaOrigen";
@@ -1642,6 +1644,7 @@ function fu_setDatoDependenciaDestEmi(cod, desc) {
 }
 
 function fu_cambioTxtEmiDoc(input) {
+    console.log("input: "+input);
     var arrCampo = new Array();
     arrCampo[0] = "1=" + $("#tblDestEmiDocAdm tbody tr:eq(" + (($(input).parent()).parent()).index() + ") td:eq(1)").text();//codDependencia
     arrCampo[1] = "5=" + $("#tblDestEmiDocAdm tbody tr:eq(" + (($(input).parent()).parent()).index() + ") td:eq(5)").text();//codEmpleado
@@ -1719,6 +1722,8 @@ function fu_setArrAsignaDestinOK(index, cod, desc) {
 
 function fn_evalDestinatarioCorrectotblEmi(indexFila) {
     var arrInputAnt = ($("#tblDestEmiDocAdm tbody tr:eq(" + indexFila + ")").children().get(12).innerHTML).split("$#");
+    console.log("arrInputAnt: " +arrInputAnt);
+    console.log(arrInputAnt)
     var countFound = 0;
     //var arrIndexCompara=[0,2,4,6];
     for (var i = 0; i < arrInputAnt.length; i++)
@@ -1726,6 +1731,7 @@ function fn_evalDestinatarioCorrectotblEmi(indexFila) {
         var found = true;
         $("#tblDestEmiDocAdm tbody tr:eq(" + indexFila + ") td").each(function (index) {
             if (index in {0: 1, 2: 1, 4: 1, 6: 1}) {
+                debugger
                 var valInput = allTrim(fu_getValorUpperCase($(this).find('input[type=text]').val()));
                 if (arrInputAnt[i] === valInput) {
                     if (found) {
@@ -1736,7 +1742,11 @@ function fn_evalDestinatarioCorrectotblEmi(indexFila) {
             }
         });
     }
+    console.log("countFound: "+countFound)
+    console.log(countFound);
     return countFound;
+
+
 //    if(countFound === 4){
 //        fn_changeDestinatarioCorrecto(indexFila);
 //    }else{
@@ -2063,6 +2073,7 @@ function getJsonFormDocumentoEmiBean() {
     arrCampoBean[16] = "nuSecExp";
     arrCampoBean[17] = "nuCorDoc";
     arrCampoBean[18] = "deObsDoc";
+    arrCampoBean[19] = "fecAteEmi";
     var o = {};
     var a = $('#documentoEmiBean').serializeArray();
     $.each(a, function () {
@@ -2644,6 +2655,8 @@ function fn_cargaDocEmi() {
                     if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
                         //fn_cargaDocApplet(docs.noUrl, docs.noDoc,function(data){
                         fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function (data) {
+                            console.log(docs.noUrl)
+                            console.log(data)
                             resulCarga = data;
                             console.log('Cargando WORD' + docs.noDoc);
                             console.log(resulCarga);
@@ -2676,7 +2689,7 @@ function fn_cargaDocEmi() {
                                     }
                                 }, 'text', false, false, "POST");
                             } else {
-                                alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente.");
+                                alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente1.");
                             }
                         });
                     }
@@ -2934,6 +2947,7 @@ function fn_validarToDespacho(stipo) {
 }
 
 function fn_verificarExisteDestinatario(idTabla) {
+    console.log("idtabla: "+idTabla)
     var limCaracter = false;
     var found = false;
     var nroFilas = 0;
@@ -2942,6 +2956,8 @@ function fn_verificarExisteDestinatario(idTabla) {
         if (index > 0 && !$(row).hasClass('oculto') && !found) {
             nroFilas++;
             if ($(row).find('td').last().html() !== "1") {
+                console.log("aqui abajo el: ")
+                console.log($(row).find('td').last().html())
                 found = true;
                 return false;
             }
@@ -3516,10 +3532,7 @@ function fu_changeEstadoDocEmiAdm(pEstadoDoc) {
         grabadoFir = "1";
     }
 
-
     var validaFiltro = fu_verificarCamposDocEmiAdm('1', pEstadoDoc);
-
-
 
     if (validaFiltro === "1") {
         //verificar si necesita grabar el documento.
@@ -3551,9 +3564,7 @@ function fu_changeEstadoDocEmiAdm(pEstadoDoc) {
                             }
                         }
                     });
-
                 }
-
 
             } else if (pEstadoDoc === "7" && jQuery("#txtEsNuevoDocAdm").val() === "0") {//a Despacho
 //                if(fu_existeVistoBuenoDocAdm()){ 
@@ -3620,9 +3631,14 @@ function fn_grabarDocumentoEmiAdm() {
         var rpta = fu_verificarDestinatario("1");
         var nrpta = rpta.substr(0, 1);
         var vResult = "0";
+
+        console.log("SIN INGRESA pesDocEmi: "+pesDocEmi);
+        console.log("SIN INGRESA nrpta1: "+nrpta);
+        console.log("respuesta total: "+rpta)
         if (pesDocEmi === "7") {
             if (nrpta === "1") {
                 vResult = "1";
+
             }
         } else {
             if (nrpta === "1" || nrpta === "E") {
@@ -3651,7 +3667,7 @@ function fn_grabarDocumentoEmiAdm() {
                 alert_Info("Emisión :", rpta);
             }
         } else {
-            alert_Info("Emisión :", rpta);
+            alert_Info("Emisión7 :", rpta);
         }
     }
     return false;
@@ -3954,7 +3970,7 @@ function fn_cargaDocFirmaApplet(pnoDoc, callback) {
 }
 
 function fn_firmarDocumentoEmi() {
-
+    console.log("aca es")
     var pnuAnn = jQuery('#documentoEmiBean').find('#nuAnn').val();
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
     jQuery('#documentoEmiBean').find("#nuSecuenciaFirma").val("");
@@ -3983,6 +3999,7 @@ function fn_firmarDocumentoEmi() {
                         var result;
                         eval("var docs=" + data);
                         if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                            console.log("ingreso if")
                             if (docs.retval === "OK") {
                                 jQuery('#documentoEmiBean').find("#txtnuDocEmiAn").val(docs.numeroDoc);
                                 jQuery('#documentoEmiBean').find("#nuDocEmi").val(docs.numeroDoc);
@@ -6380,4 +6397,137 @@ function showColInfoObservacion()
 {
     $("#infoObservaciones").hide();
     $("#infoObservaciones2").show();
+}
+
+
+
+/*WG 20230608 */
+function fu_addFecAteDoc() {
+    var fecAtencion = jQuery('#documentoEmiBean').find("#fecAteEmi").val();
+    if (fecAtencion === '') {
+        var vFeEmi = jQuery('#documentoEmiBean').find('#feEmiCorta').val();
+        var dias = parseInt(jQuery('#documentoEmiBean').find('#nuDiaAte').val());
+
+        var fecha = moment(vFeEmi, "DD/MM/YYYY");
+//        alert(fecha);
+//        alert(dias);
+        var i = parseInt(1);
+        while (dias > 0) {
+
+            var fecha = moment(vFeEmi, "DD/MM/YYYY").add('days', i);
+            var day = moment(fecha, "DD/MM/YYYY").day();
+//        alert(fecha);
+//        alert(day);
+            i++;
+            if (day > 0 && day < 6) {
+                dias--;
+            }
+        }
+        jQuery('#documentoEmiBean').find("#fecAteEmi").val(moment(fecha, "DD/MM/YYYY").format("DD/MM/YYYY"));
+    }
+}
+
+function fu_preValidaFecAteDoc(callJsp) {
+//    var vfechaAteDoc = allTrim(jQuery('#documentoEmiBean').find('#fecAteEmi').val());
+    return fn_validaFecAteDocAdm(callJsp);
+}
+
+function fn_validaFecAteDocAdm(callJsp) {
+    var vResult = false;
+    var noForm = 'documentoEmiBean';
+    var vfechaAteDoc = allTrim(jQuery('#' + noForm).find('#fecAteEmi').val());
+    if (!!vfechaAteDoc) {
+        if (moment(vfechaAteDoc, "DD/MM/YYYY").isValid()) {
+            var fecha = moment(vfechaAteDoc, ["DD", "DD/MM", "DD/MM/YY", "DD/MM/YY HH:mm", "DD/MM/YYYY", "DD/MM/YYYY HH:mm"]);
+            if (fecha.isValid()) {
+                if (fecha.hour() === 0) {
+                    fecha.hour(moment().hour());
+                }
+                if (fecha.minute() === 0) {
+                    fecha.minute(moment().minute());
+                }
+                jQuery('#' + noForm).find("#fecAteEmi").val(moment(fecha, "DD/MM/YYYY").format("DD/MM/YYYY"));
+                jQuery('#envDocumentoEmiBean').val("1");
+            }
+
+            if (fu_validaFecAteDoc(callJsp) === "1") {
+                vResult = true;
+            } else {
+                vResult = false;
+            }
+        } else {
+            bootbox.alert('Fecha Atención no es válida.');
+            vResult = false;
+        }
+    } else {
+        vResult = true;
+    }
+    return vResult;
+}
+
+function fu_validaFecAteDoc(callJsp) {
+
+    var vReturn = "0";
+    var vFeAteDoc = jQuery('#documentoEmiBean').find('#fecAteEmi').val();
+    var vFeEmi = jQuery('#documentoEmiBean').find('#feEmiCorta').val();
+
+    var lFeAteDoc = vFeAteDoc.length;
+    if (lFeAteDoc >= 10) {
+        var fechaValida = valFecha(vFeAteDoc.substr(0, 10));
+        if (fechaValida) {
+            var vresult = fu_validaComparaFecAteDocu(moment(vFeAteDoc, "DD/MM/YYYY HH:mm"), moment(vFeEmi, "DD/MM/YYYY HH:mm"));
+            if (vresult !== "1") {
+                vReturn = "0";
+            } else {
+                vReturn = "1";
+                var dias = getNumeroDeDiasDiferens(vFeEmi, vFeAteDoc);
+                jQuery('#documentoEmiBean').find('#nuDiaAte').val(dias);
+//                alert(jQuery('#documentoEmiBean').find('#nuDiaAte').val());
+            }
+        } else {
+            bootbox.alert('Fecha Atención no es válida.');
+            vReturn = "0";
+        }
+    }
+    if (callJsp) {
+        jQuery('#documentoEmiBean').find('#fecAteEmi').focus();
+    }
+    return vReturn;
+}
+
+function fu_validaComparaFecAteDocu(dfeAte, dfeRec) {
+    var vRetorna = "1";
+    if (dfeAte.isBefore(dfeRec)) {
+        vRetorna = "Fecha Atención debe ser mayor a la Emisión.";
+    }
+    return vRetorna;
+}
+
+function getNumeroDeDiasDiferens(feInicio, feFin) {
+//    alert("FECHA:" + feInicio);
+//    alert("FECHA 2:" + feFin);
+    var aFecha1 = feInicio.split('/');
+    var aFecha2 = feFin.split('/');
+    var fFecha1 = Date.UTC(aFecha1[2], aFecha1[1] - 1, aFecha1[0]);
+    var fFecha2 = Date.UTC(aFecha2[2], aFecha2[1] - 1, aFecha2[0]);
+    var dif = fFecha2 - fFecha1;
+//    alert("DIAS : "  + parseInt(dif));
+    var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+//    alert(dias);
+//    alert(feInicio);
+
+
+    var diasAte = 0;
+    for (i = 1; i <= dias; i++) {
+//        alert(i);
+        var fecha = moment(feInicio, "DD/MM/YYYY").add('days', i);
+        var day = moment(fecha, "DD/MM/YYYY").day();
+//        alert(fecha);
+//        alert(day);
+
+        if (day > 0 && day < 6) {
+            diasAte++;
+        }
+    }
+    return parseInt(diasAte);
 }

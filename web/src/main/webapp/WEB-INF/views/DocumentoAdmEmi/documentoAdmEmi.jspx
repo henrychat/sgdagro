@@ -13,7 +13,7 @@
     <script languaje="javascript">jQuery(document).ready(function() {
         fn_inicializaDocAdmEmi('${buscarDocumentoEmiBean.sCoAnnio}');
         loadJs("${resourceURL}/js/controller/EmiDocumAdm.Controller.js");
-
+        
          //  jQuery('#btn-buscar').click();
     });</script>
 	<!--<script languaje="javascript">jQuery(document).ready(function() {fn_inicializaDocAdmEmi('${buscarDocumentoEmiBean.sCoAnnio}');});</script>  	-->

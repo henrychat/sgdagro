@@ -175,7 +175,7 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
                     if ("INS".equals(sAccionBD)) {
                         vReturn = this.mesaPartesDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
                         if ("NO_OK".equals(vReturn)) {
-                            throw new validarDatoException("Error Agregando Destinatario");
+                            throw new validarDatoException("Error Agregando Destinatario2");
                         }
                         continue;
                     }
@@ -252,7 +252,7 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
                     dest.setCoUseCre(pcoUserMod);
                     vReturn = this.mesaPartesDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
                     if ("NO_OK".equals(vReturn)) {
-                        throw new validarDatoException("Error Agregando Destinatario");
+                        throw new validarDatoException("Error Agregando Destinatario3");
                     }
                 }
             }

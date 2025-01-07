@@ -168,7 +168,8 @@
                                                 <td>Número:</td>
                                                 <td><form:hidden path="nuCorDoc"/>
                                                     <input id="txtnuDocEmiAn" name="txtnuDocEmiAn" type="hidden" value="${documentoEmiBean.nuDocEmi}"/>
-                                                    <form:input path="nuDocEmi" readonly="true" style="text-align: center" size="5" maxlength="6" class="delUpperCase"/>
+                                                    <!--<form:input path="nuDocEmi" readonly="true" style="text-align: center" size="5" maxlength="6" class="delUpperCase"/>-->
+                                                    <form:input path="nuDocEmi" style="text-align: center" size="5" maxlength="6" class="delUpperCase"/>
                                                     <jsp:text>-</jsp:text>
                                                     <input type="text" readonly="true" value="${documentoEmiBean.nuAnn}" size="2" maxlength="4"/>
                                                     <jsp:text>-</jsp:text>

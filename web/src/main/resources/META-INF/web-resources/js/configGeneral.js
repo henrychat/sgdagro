@@ -1115,6 +1115,7 @@ function fn_grabarNuevoCiudadano() {
     var deDomicil = allTrim($("#txtDeDomicil").val());
     var deEmail = allTrim($("#txtDeEmail").val());
     var deTelefo = allTrim($("#txtDeTelefo").val());
+    console.log(deDomicil+' '+deEmail+' '+deTelefo)
     
     if (!!valFormCiudadano()) {
          bootbox.confirm({

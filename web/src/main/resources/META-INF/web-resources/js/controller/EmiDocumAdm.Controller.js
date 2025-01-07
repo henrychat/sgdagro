@@ -58,7 +58,7 @@ base.Event = {
         
             jQuery('#sFeEmiIni').val(jQuery('#sCoAnnio').parent('td').find('#fechaFiltro').attr('fini'));
            jQuery('#sFeEmiFin').val(jQuery('#sCoAnnio').parent('td').find('#fechaFiltro').attr('ffin'));    
-
+debugger;
             jQuery('#sTipoBusqueda').val('0');
               fu_validaFiltroEmiDocAdm('0');
             var unindexed_array = $('#buscarDocumentoEmiBean').serializeArray();

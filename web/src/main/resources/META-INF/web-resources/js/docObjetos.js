@@ -35,8 +35,8 @@ function fn_firmarDocApplet(urlDoc, rutaDoc, tipoFirma) {
     try {
         retval = appletObj[0].ejecutaFirma(urlDoc, rutaDoc, tipoFirma);
     } catch (ex) {
-       bootbox.alert("Fallo en abrir el documento");
-       return;
+        bootbox.alert("Fallo en abrir el documento");
+        return;
     }
     return retval;
 }
@@ -49,8 +49,8 @@ function fn_abrirDocApplet(purlDoc, prutaDoc) {
     try {
         retval = appletObj[0].abrirDocumento(urlDoc, rutaDoc);
     } catch (ex) {
-       bootbox.alert("Fallo en abrir el documento");
-       return;
+        bootbox.alert("Fallo en abrir el documento");
+        return;
         //console.log(ex.message);
     }
     return retval;
@@ -62,8 +62,8 @@ function fn_abrirDocFromPCApplet(rutaDoc) {
     try {
         retval = appletObj[0].abrirDocumentoPC(rutaDoc);
     } catch (ex) {
-       bootbox.alert("Fallo en abrir el documento");
-       return;
+        bootbox.alert("Fallo en abrir el documento");
+        return;
         //console.log(ex.message);
     }
     return retval;
@@ -76,86 +76,86 @@ function fn_generaDocApplet(urlDoc, rutaDoc, nuAnn, nuEmi, tieneWord, callback) 
      try{
      retval=appletObj[0].verificaSiExisteDoc(rutaDoc,false);
      if (retval=="SI"){
-    bootbox.alert("El documento ya fue creado, se procedera a visualizar.");
+     bootbox.alert("El documento ya fue creado, se procedera a visualizar.");
      }
      retval=appletObj[0].generaDocumento(urlDoc,rutaDoc,false);
      
      }catch(ex){
-    bootbox.alert("Fallo en Generar el documento");
+     bootbox.alert("Fallo en Generar el documento");
      }
      return retval;*/
 
     var retval = "";
     var param = {rutaDoc: rutaDoc, verBloqueo: false};
-    runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function(data) {
+    runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function (data) {
         retval = data;
         if (retval === "SI") {
-           bootbox.alert("El documento ya fue creado, se procedera a visualizar.",function(){
+            bootbox.alert("El documento ya fue creado, se procedera a visualizar.", function () {
                 var param = {urlDoc: urlDoc, rutaDoc: rutaDoc, remplazaArchivo: false};
-                runApplet(appletsTramiteDoc   .generaDocumento, param, function(data) {
+                runApplet(appletsTramiteDoc.generaDocumento, param, function (data) {
                     retval = data;
                     callback(retval);
                 });
-           });       
-        }else{
-            
+            });
+        } else {
+
             //console.log("Colocar logica para que indiar que habra desde Respositorio");
             //INICIO
-            if (typeof (tieneWord) !== "undefined" && tieneWord !== "" && tieneWord==="SI") {
+            if (typeof (tieneWord) !== "undefined" && tieneWord !== "" && tieneWord === "SI") {
 //                console.log("Existe un backup en BD, procedo a abrirlo");
                 //LOGICA PARA ABRIR DESDE BD
-                    var pAbreWord = "&pAbreWord="+tieneWord;
-                    var p = new Array();
-                    p[0] = "accion=goDocRutaAbrirEmiReporte";        
-                    p[1] = "nuAnn=" + nuAnn;
-                    p[2] = "nuEmi=" + nuEmi;
-                    p[3] = "tiOpe=" + "5";
-                    p[4] = "pAbreWord=" + tieneWord;
-                    
+                var pAbreWord = "&pAbreWord=" + tieneWord;
+                var p = new Array();
+                p[0] = "accion=goDocRutaAbrirEmiReporte";
+                p[1] = "nuAnn=" + nuAnn;
+                p[2] = "nuEmi=" + nuEmi;
+                p[3] = "tiOpe=" + "5";
+                p[4] = "pAbreWord=" + tieneWord;
+
 //                    console.log("pnuEmi->"+nuEmi);
 //                    console.log("ptiOpe->5");                    
 //                    console.log("/srDocObjeto.do?accion=goDocRutaAbrirEmiReporte");
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                        
-                        var result;
-                        eval("var docs=" + data);
+                ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+
+                    var result;
+                    eval("var docs=" + data);
 //                        console.log("data->"+data);
-                        if (typeof(docs) !== "undefined" && typeof(docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
+                    if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
 //                            console.log("docs.retval->"+docs.retval);                
-                            if (docs.retval === "OK") {
+                        if (docs.retval === "OK") {
 //                                console.log("urlDoc->"+docs.noUrl+pAbreWord);
 //                                console.log("rutaDoc->"+docs.noDoc);
-                                //result = fn_abrirDocApplet(docs.noUrl, docs.noDoc);
-                                var param={urlDoc:docs.noUrl+pAbreWord,rutaDoc:docs.noDoc};
-                                runApplet(appletsTramiteDoc.abrirDocumento,param,function(data){
-                                    //result=data;
-                                    retval = data;
-                                    callback(retval);
-                                });
-                            } else {
+                            //result = fn_abrirDocApplet(docs.noUrl, docs.noDoc);
+                            var param = {urlDoc: docs.noUrl + pAbreWord, rutaDoc: docs.noDoc};
+                            runApplet(appletsTramiteDoc.abrirDocumento, param, function (data) {
+                                //result=data;
+                                retval = data;
+                                callback(retval);
+                            });
+                        } else {
 //                                console.log("alert_Danger1");
-                                //Error en Documento
-                                alert_Danger("!Repositorio : ", docs.retval);
-                            }
+                            //Error en Documento
+                            alert_Danger("!Repositorio : ", docs.retval);
                         }
+                    }
 
-                    }, 'text', false, false, "POST");
-                
+                }, 'text', false, false, "POST");
+
                 //FIN LOGICA
-            }else{
+            } else {
                 console.log("Abro appletsTramiteDoc.generaDocumento");
-                console.log("urlDoc->"+urlDoc);
-                console.log("rutaDoc->"+rutaDoc);
+                console.log("urlDoc->" + urlDoc);
+                console.log("rutaDoc->" + rutaDoc);
                 console.log("remplazaArchivo->false");
                 var param = {urlDoc: urlDoc, rutaDoc: rutaDoc, remplazaArchivo: false};
-                    runApplet(appletsTramiteDoc.generaDocumento, param, function(data) {
-                        retval = data;
-                        callback(retval);
-                    });
+                runApplet(appletsTramiteDoc.generaDocumento, param, function (data) {
+                    retval = data;
+                    callback(retval);
+                });
             }
-            
+
             //FIN
-            
+
         }
     });
 
@@ -168,8 +168,8 @@ function fn_verificaSiExisteDocApplet(rutaDoc) {
         //verificaSiExisteDoc
         retval = appletObj[0].verificaSiExisteDoc(rutaDoc, false);
     } catch (ex) {
-       bootbox.alert("Fallo en verificar si existe el documento");
-       return;
+        bootbox.alert("Fallo en verificar si existe el documento");
+        return;
     }
     return retval;
 }
@@ -182,8 +182,8 @@ function fn_generaDocumentoApplet(urlDoc, rutaDoc, remplazaArchivo) {
         }
         retval = appletObj[0].generaDocumento(urlDoc, rutaDoc, remplazaArchivo);
     } catch (ex) {
-       bootbox.alert("Fallo en generar el documento");
-       return;
+        bootbox.alert("Fallo en generar el documento");
+        return;
     }
     return retval;
 }
@@ -194,8 +194,8 @@ function fn_cargarDocumentoApplet(urlDoc, rutaDoc) {
     try {
         retval = appletObj[0].cargarDocumento(urlDoc, rutaDoc);
     } catch (ex) {
-       bootbox.alert("Fallo en cargar el documento");
-       return;
+        bootbox.alert("Fallo en cargar el documento");
+        return;
     }
     return retval;
 }
@@ -231,18 +231,18 @@ function fn_cargaDocApplet(urlDoc, rutaDoc, callback) {
 
     var retval = "";
     var param = {rutaDoc: rutaDoc, verBloqueo: false};
-    runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function(data) {
+    runApplet(appletsTramiteDoc.verificaSiExisteDoc, param, function (data) {
         retval = data;
         if (retval === "SI") {
             var param = {urlDoc: urlDoc, rutaDoc: rutaDoc};
-            runApplet(appletsTramiteDoc.cargarDocumento, param, function(data) {
+            runApplet(appletsTramiteDoc.cargarDocumento, param, function (data) {
                 callback(data);
             });
         } else {
-           bootbox.alert("El documento NO existe en: " + rutaDoc,function(){
+            bootbox.alert("El documento NO existe en: " + rutaDoc, function () {
                 callback(retval);
-           });
-           
+            });
+
         }
     });
 
@@ -259,7 +259,7 @@ function fn_verDocumentosObj(pnuAnn, pnuEmi, ptiOpe) {
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "tiOpe=" + ptiOpe;
         //
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
             //var docs = JSON.parse(data);
@@ -268,7 +268,7 @@ function fn_verDocumentosObj(pnuAnn, pnuEmi, ptiOpe) {
                     //result = fn_abrirDocApplet(docs.noUrl,docs.noDoc);
                     var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
                     //runApplet(appletsTramiteDoc.abrirDocumento, param, function(data) {
-                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function(data) {
+                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function (data) {
                         result = data;
                     });
                 } else {
@@ -284,7 +284,7 @@ function fn_verDocumentosObj(pnuAnn, pnuEmi, ptiOpe) {
 
 //YUAL
 
-function fn_verDocumentoInicialObj(pnuAnn, pnuEmi,pnuDes) {
+function fn_verDocumentoInicialObj(pnuAnn, pnuEmi, pnuDes) {
     if (!!pnuAnn) {
         var p = new Array();
         p[0] = "accion=goDocInicialRutaAbrir";
@@ -293,7 +293,7 @@ function fn_verDocumentoInicialObj(pnuAnn, pnuEmi,pnuDes) {
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "nuDes=" + pnuDes;
         //
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
             //var docs = JSON.parse(data);
@@ -302,7 +302,7 @@ function fn_verDocumentoInicialObj(pnuAnn, pnuEmi,pnuDes) {
                     //result = fn_abrirDocApplet(docs.noUrl,docs.noDoc);
                     var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
                     //runApplet(appletsTramiteDoc.abrirDocumento, param, function(data) {
-                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function(data) {
+                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function (data) {
                         result = data;
                     });
                 } else {
@@ -317,36 +317,35 @@ function fn_verDocumentoInicialObj(pnuAnn, pnuEmi,pnuDes) {
 }
 
 
-function fn_selAccion() 
+function fn_selAccion()
 {
 
-    var accion=jQuery('#ddlAccion').val();   
-   
+    var accion = jQuery('#ddlAccion').val();
 
-    if(accion === "0" ||  accion==="3")
+
+    if (accion === "0" || accion === "3")
     {
-        $('#divUrgencia').show(); 
-        $('#divMensajeria').show(); 
+        $('#divUrgencia').show();
+        $('#divMensajeria').show();
     }
     /*if(accion === "1")
+     {
+     $('#divUrgencia').hide(); 
+     $('#divMensajeria').hide(); 
+     }*/
+    if (accion === "1" || accion === "3")
     {
-        $('#divUrgencia').hide(); 
-        $('#divMensajeria').hide(); 
-    }*/
-    if(accion === "1"  ||  accion==="3" )
-    {
-        $('#divUrgencia').show(); 
-        $('#divMensajeria').hide(); 
+        $('#divUrgencia').show();
+        $('#divMensajeria').hide();
     }
-  
 }
 
 
-function fn_grabarEnvioNotificacionObj(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tipoBandeja) {
+function fn_grabarEnvioNotificacionObj(pnuAnn, pnuEmi, pexisteDoc, pexisteAnexo, tipoBandeja) {
 
     var nCodAccion = allTrim($("#ddlAccion").val());
     var nCodUrgencia = allTrim($("#ddlUrgencia").val());
-    var nCodDepMsj=allTrim($("#sMensajeria").val());
+    var nCodDepMsj = allTrim($("#sMensajeria").val());
 
     var p = new Array();
     //p[0] = "accion=goDocRutaAbrir";
@@ -358,72 +357,115 @@ function fn_grabarEnvioNotificacionObj(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tip
     p[5] = "nCodDepMsj=" + nCodDepMsj;
 
     //ajaxCallSendJson(url, jsonString, function(data) {
-    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
 
-        if (data.substring(0,1) === "1") {
-        	if(nCodAccion==="0"){
-        		alert_Sucess("MENSAJE", "Se envió el documento a la mensajería correctamente");	
-        	}
-        	if(nCodAccion==="3"){
-        		alert_Sucess("MENSAJE", "Se envió el documento a notificación electrónica");	
-        	}
-        	if(nCodAccion==="1"){
-        		alert_Sucess("MENSAJE", "Se registro documento para entrega directa satisfactoriamente");	
-        	}
-            
-            if(tipoBandeja==="EDIT"){
-                editarDocumentoEmiClick(pnuAnn, pnuEmi,pexisteDoc,pexisteAnexo);           
+        if (data.substring(0, 1) === "1") {
+            if (nCodAccion === "0") {
+                alert_Sucess("MENSAJE", "Se envió el documento a la mensajería correctamente");
             }
-            if(tipoBandeja==="NEW"){
+            if (nCodAccion === "3") {
+                alert_Sucess("MENSAJE", "Se envió el documento a notificación electrónica");
+            }
+            if (nCodAccion === "1") {
+                alert_Sucess("MENSAJE", "Se registro documento para entrega directa satisfactoriamente");
+            }
+
+            if (tipoBandeja === "EDIT") {
+                editarDocumentoEmiClick(pnuAnn, pnuEmi, pexisteDoc, pexisteAnexo);
+            }
+            if (tipoBandeja === "NEW") {
                 EnvioOkMensajeria();
-            }
-            else {
-                  ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function(data) {
-                        refreshScript("divTablaEmiDocumenAdm", data);
-                    }, 'text', false, false, "POST");
-           
-           }
-            removeDomId('windowConsultaAnexo');
-        } 
-        else
-        if (data.substring(0,1) === "2"){
-        	 alert_Danger("Validación:", data.substring(1,data.length));
-        } 
-        else {
-            alert_Danger("ERROR:", data.substring(1,data.length));
-        }
-    }, 'text', false, false, "POST");    
-      
+            } else {
+                ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function (data) {
+                    refreshScript("divTablaEmiDocumenAdm", data);
+                }, 'text', false, false, "POST");
 
-                            
+            }
+            removeDomId('windowConsultaAnexo');
+        } else
+        if (data.substring(0, 1) === "2") {
+            alert_Danger("Validación:", data.substring(1, data.length));
+        } else {
+            alert_Danger("ERROR:", data.substring(1, data.length));
+        }
+    }, 'text', false, false, "POST");
+    debugger;
+
+    fn_notificaCasilla_token(pnuAnn, pnuEmi);
     return;
 }
 
-function fn_grabarArchivarDocumento(pnuAnn,pnuEmi) {
+function fn_notificaCasilla_token(pnuAnn, pnuEmi) {
+    console.log("entro a casilla");
+    var user = {"compagnia": {"id": "1"}, "sistema": {"id": "1"}, "nombre": "admin", "password": "504a923549dc2d7399fa0c939f1cc8cf"};    
+    var token = '5e3a20972cf3bf71d526251d49b5e4b4';
+    jQuery.ajax({
+        url: "https://qa.serfor.gob.pe/sgiseguridad/auth/apptoken",        
+//        url: "http://localhost:9301/sgiseguridad/auth/apptoken",        
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(user),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", token); 
+        },
+        success: function (data) {
+            console.log("Respuesta:", data);
+            console.log("Respuesta:", data.token);
+            token = data.token;
+            fn_notificaCasilla(pnuAnn, pnuEmi, token);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error:", jqXHR.status, textStatus, errorThrown);
+        }
+    });    
+}
 
-    
-    var myForm='documentoEmiArBean';
+function fn_notificaCasilla(pnuAnn, pnuEmi, token) {
+    var filter = {"anio": pnuAnn, "numEmi": pnuEmi};
+    jQuery.ajax({
+        url: "https://qa.serfor.gob.pe/sgimpv/casilla/integraSGD",
+//        url: "http://localhost:9313/sgimpv/casilla/integraSGD",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(filter),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", token); 
+        },
+        success: function (data) {
+            console.log("Respuesta:", data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("Error:", jqXHR.status, textStatus, errorThrown);
+        }
+    });
+}
 
-    if(fn_valFormArchivarDoc(myForm)){
+function fn_grabarArchivarDocumento(pnuAnn, pnuEmi) {
+
+    var myForm = 'documentoEmiArBean';
+
+    if (fn_valFormArchivarDoc(myForm)) {
         var jsonBody =
                 {
                     "nuAnn": pnuAnn, "nuEmi": pnuEmi,
-                    "feEmi": $('#'+myForm).find("#itxtFecha").val(), "docObser": $('#'+myForm).find("#itxtObservaciones").val()
+                    "feEmi": $('#' + myForm).find("#itxtFecha").val(), "docObser": $('#' + myForm).find("#itxtObservaciones").val()
                 };
         var jsonString = JSON.stringify(jsonBody);
         var url = "/srDocObjeto.do?accion=goUpdArchivarDoc";
-        ajaxCallSendJson(url, jsonString, function(data) {
+        ajaxCallSendJson(url, jsonString, function (data) {
             if (data === "Datos guardados.") {
-                alert_Sucess("MENSAJE", data);                           
-          
-                ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function(data) {
-                            $('#divNewEmiDocumAdmin').hide();
-                            $('#divEmiDocumentoAdmin').show();
-                            refreshScript("divTablaEmiDocumenAdm", data);
-                        }, 'text', false, false, "POST");
-                        
-                        
-                jQuery('#divNewEmiDocumAdmin').html("");        
+                alert_Sucess("MENSAJE", data);
+
+                ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function (data) {
+                    $('#divNewEmiDocumAdmin').hide();
+                    $('#divEmiDocumentoAdmin').show();
+                    refreshScript("divTablaEmiDocumenAdm", data);
+                }, 'text', false, false, "POST");
+
+
+                jQuery('#divNewEmiDocumAdmin').html("");
                 removeDomId('windowConsultaArchivar');
 
             } else {
@@ -431,62 +473,62 @@ function fn_grabarArchivarDocumento(pnuAnn,pnuEmi) {
             }
         }, 'text', false, false, "POST");
         /*$('#RutaDocs').html("<strong>" + dirPri + "</strong>");
-        setTimeout("fu_activaDependencia_dir(" + codDep + "," + codDep + ");", 500);*/
+         setTimeout("fu_activaDependencia_dir(" + codDep + "," + codDep + ");", 500);*/
     }
     return;
 }
 
-function fn_valFormArchivarDoc(objForm){
-    var vReturn=1;
-    var Observaciones=$('#'+objForm).find("#itxtObservaciones").val();
-    var Fecha=$('#'+objForm).find("#itxtFecha").val();
+function fn_valFormArchivarDoc(objForm) {
+    var vReturn = 1;
+    var Observaciones = $('#' + objForm).find("#itxtObservaciones").val();
+    var Fecha = $('#' + objForm).find("#itxtFecha").val();
 
-    
-    if ( document.getElementById( "vacio" )) {
-        var vacio=document.getElementById("vacio").value;
-        
-        if(vacio==="-1")
+
+    if (document.getElementById("vacio")) {
+        var vacio = document.getElementById("vacio").value;
+
+        if (vacio === "-1")
         {
-           vReturn=0;
-           alert_Info("Aviso", "Verificar los archivos adjuntos"); 
+            vReturn = 0;
+            alert_Info("Aviso", "Verificar los archivos adjuntos");
         }
     }
 
-    
-    if (!!Observaciones===false)
+
+    if (!!Observaciones === false)
     {
-        vReturn=0;
+        vReturn = 0;
         alert_Info("Aviso", "Debe Ingresar por lo menos una observación");
-        $('#'+objForm).find('#itxtObservaciones').focus();
+        $('#' + objForm).find('#itxtObservaciones').focus();
     }
-    if (!!Fecha===false)
+    if (!!Fecha === false)
     {
-        vReturn=0;
+        vReturn = 0;
         alert_Info("Aviso", "Debe Ingresar Fecha");
-        $('#'+objForm).find('#itxtFecha').focus();
+        $('#' + objForm).find('#itxtFecha').focus();
     }
-    
-    if(!!Fecha){
-            if(moment(fecha, "DD/MM/YYYY").isValid()){// HH:mm
-  
-                var fecha=moment(fecha, ["DD","DD/MM","DD/MM/YY","DD/MM/YY HH:mm","DD/MM/YYYY","DD/MM/YYYY HH:mm"]); 
-                if(!fecha.isValid()){
-                vReturn=0;
-                 bootbox.alert("<h5>Fecha Inválida.</h5>", function() {
-                     bootbox.hideAll();
-                     $('#'+objForm).find('#itxtFecha').focus();
-                 });
-                                         
-                }                
-            }     
-       
-       
+
+    if (!!Fecha) {
+        if (moment(fecha, "DD/MM/YYYY").isValid()) {// HH:mm
+
+            var fecha = moment(fecha, ["DD", "DD/MM", "DD/MM/YY", "DD/MM/YY HH:mm", "DD/MM/YYYY", "DD/MM/YYYY HH:mm"]);
+            if (!fecha.isValid()) {
+                vReturn = 0;
+                bootbox.alert("<h5>Fecha Inválida.</h5>", function () {
+                    bootbox.hideAll();
+                    $('#' + objForm).find('#itxtFecha').focus();
+                });
+
+            }
+        }
+
+
     }
-    
- 
-   
-   
-   
+
+
+
+
+
     return vReturn;
 }
 
@@ -499,9 +541,9 @@ function fn_verDocumentosFromPC2(pnuAnn, pnuEmi, ptiOpe) {
         p[1] = "nuAnn=" + pnuAnn;
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "tiOpe=" + ptiOpe;
-        
-       
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+
+
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
             if (typeof (docs) != "undefined" && typeof (docs.nuAnn) != 'undefined' && docs.nuAnn != "") {
@@ -526,22 +568,22 @@ function fn_verDocumentosFromPC(pnuAnn, pnuEmi, ptiOpe) {
         p[1] = "nuAnn=" + pnuAnn;
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "tiOpe=1";
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
             if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
                 //result = fn_abrirDocFromPCApplet(docs.noDoc);
-                    /*if (docs.retval === "OK") {
-	                var param = {rutaDoc: docs.noDoc};
-	                runApplet(appletsTramiteDoc.abrirDocumentoPC, param, function(data) {
-	                    result = data;
-	                    if (result != "OK") {
-	                        alert_Danger("!Abrir Docx : ", result);
-	                    }
-	                });				
-                    }else{
-                        alert_Danger("!Abrir Docx : ", docs.retval);				
-                    }*/
+                /*if (docs.retval === "OK") {
+                 var param = {rutaDoc: docs.noDoc};
+                 runApplet(appletsTramiteDoc.abrirDocumentoPC, param, function(data) {
+                 result = data;
+                 if (result != "OK") {
+                 alert_Danger("!Abrir Docx : ", result);
+                 }
+                 });				
+                 }else{
+                 alert_Danger("!Abrir Docx : ", docs.retval);				
+                 }*/
                 if (docs.retval === "OK") {
 //                    var param = {rutaDoc: docs.noDoc};
 //                    runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumentoPC, param, function(data) {
@@ -550,14 +592,14 @@ function fn_verDocumentosFromPC(pnuAnn, pnuEmi, ptiOpe) {
 //                            alert_Danger("!Abrir Docx : ", result);
 //                        }
 //                    });
-                    fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function(data) {
+                    fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function (data) {
                         result = data;
                         if (result !== "OK") {
-                           bootbox.alert(result);
+                            bootbox.alert(result);
                         }
                     });
-                                        
-                }else{
+
+                } else {
                     alert_Danger("!Abrir Docx : ", docs.retval);
                 }
             }
@@ -567,22 +609,22 @@ function fn_verDocumentosFromPC(pnuAnn, pnuEmi, ptiOpe) {
     return false;
 }
 
-function fn_enviarNotificacionObj(pnuAnn, pnuEmi,ptiEnv,pexisteDoc,pexisteAnexo,tipoBandeja,docEstadoMsj) {
+function fn_enviarNotificacionObj(pnuAnn, pnuEmi, ptiEnv, pexisteDoc, pexisteAnexo, tipoBandeja, docEstadoMsj) {
 
     if (!!pnuAnn) {
         var p = new Array();
         p[0] = "accion=goDocEnviarNotificacion";
-       // p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
-       p[1]="pnuAnn="+pnuAnn;
-       p[2]="pnuEmi="+pnuEmi;
-       p[3]="ptiEnvMsj="+ptiEnv;
-       p[4]="pexisteDoc="+pexisteDoc;
-       p[5]="pexisteAnexo="+pexisteAnexo;
-       p[6]="tipoBandeja="+tipoBandeja;
-       /*interopabilidad*/
-       p[7]="docEstadoMsj="+docEstadoMsj;
+        // p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
+        p[1] = "pnuAnn=" + pnuAnn;
+        p[2] = "pnuEmi=" + pnuEmi;
+        p[3] = "ptiEnvMsj=" + ptiEnv;
+        p[4] = "pexisteDoc=" + pexisteDoc;
+        p[5] = "pexisteAnexo=" + pexisteAnexo;
+        p[6] = "tipoBandeja=" + tipoBandeja;
         /*interopabilidad*/
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        p[7] = "docEstadoMsj=" + docEstadoMsj;
+        /*interopabilidad*/
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             if (data !== null)
             {
                 $("body").append(data);
@@ -598,11 +640,11 @@ function fn_ArchivarDocumentosMsj(pnuAnn, pnuEmi) {
     if (!!pnuAnn) {
         var p = new Array();
         p[0] = "accion=goArDocMsjEnviados";
-       // p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
-       p[1]="pnuAnn="+pnuAnn;
-       p[2]="pnuEmi="+pnuEmi;
-     
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        // p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
+        p[1] = "pnuAnn=" + pnuAnn;
+        p[2] = "pnuEmi=" + pnuEmi;
+
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             if (data !== null)
             {
                 $("body").append(data);
@@ -618,7 +660,7 @@ function fn_verAnexosObj(pnuAnn, pnuEmi, pnuDes) {
         var p = new Array();
         p[0] = "accion=goDocAnexo";
         p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             if (data !== null)
             {
                 $("body").append(data);
@@ -634,7 +676,7 @@ function fn_cargarDocumentosAnexosObj(pnuAnn, pnuEmi) {
         var p = new Array();
         p[0] = "accion=goCargarDocumentosAnexos";
         p[1] = "pkEmi=" + pnuAnn + pnuEmi + "N";
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             if (data !== null)
             {
                 $("body").append(data);
@@ -646,27 +688,27 @@ function fn_cargarDocumentosAnexosObj(pnuAnn, pnuEmi) {
 }
 
 
-function fn_verSeguimientoObj(pnuAnn, pnuEmi, pnuDes) {     
-    
+function fn_verSeguimientoObj(pnuAnn, pnuEmi, pnuDes) {
+
     if (!!pnuAnn) {
         var p = new Array();
         p[0] = "accion=goDocSeguimiento";
         p[1] = "pkEmi=" + pnuAnn + pnuEmi + pnuDes;
         //validando si existe seguimiento
-        ajaxCall("/srDocObjeto.do", "accion=goDocSeguimientoRoot&"+p[1], function(data) {
-            if (data == null || data==""){
+        ajaxCall("/srDocObjeto.do", "accion=goDocSeguimientoRoot&" + p[1], function (data) {
+            if (data == null || data == "") {
                 alert_Info("Seguimiento :", "No se puede dar seguimiento a documentos sin destinatario o anulados.");
                 return;
-            }else{
+            } else {
                 //si es ok 
-                ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                    if (data !== null){
+                ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+                    if (data !== null) {
                         $("body").append(data);
                     }
                 }, 'text', false, false, "POST");
             }
         }, 'text', false, true, "GET");
-     
+
     }
     return false;
 }
@@ -678,8 +720,8 @@ function fn_anexosJson(
         p[0] = "accion=goDocAnexoRoot";
         p[1] = "nuAnn=" + pnuAnn;
         p[2] = "nuEmi=" + pnuEmi;
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-           bootbox.alert(data);
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+            bootbox.alert(data);
         }, 'text', false, false, "POST");
 
     }
@@ -690,7 +732,7 @@ function fn_verDetalleDocAnexo(vpkEmiDoc) {
     var p = new Array();
     p[0] = "accion=goDetalleDocAnexo";
     p[1] = "pkEmi=" + vpkEmiDoc;
-    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
         if (data !== null)
         {
             refreshScript("divDetalleDocAnexo", data);
@@ -702,8 +744,8 @@ function fn_verDetalleSeguimiento(vpkEmiDoc) {
     var p = new Array();
     p[0] = "accion=goDetalleSeguimiento";
     p[1] = "pkEmi=" + vpkEmiDoc;
-    p[2] = "pkExp=" + jQuery('#frm_docOrigenBean_pkExp').val();    
-    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+    p[2] = "pkExp=" + jQuery('#frm_docOrigenBean_pkExp').val();
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
         if (data !== null)
         {
             refreshScript("divDetalleDocSeguimiento", data);
@@ -719,19 +761,19 @@ function fn_verDocAnexo(pnuAnn, pnuEmi, pnuAne) {
         p[1] = "nuAnn=" + pnuAnn;
         p[2] = "nuEmi=" + pnuEmi;
         p[3] = "nuAne=" + pnuAne;
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
             var result;
             eval("var docs=" + data);
             if (typeof (docs) != "undefined" && typeof (docs.nuAnn) != 'undefined' && docs.nuAnn != "") {
-              
+
                 var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
                 //EJHM
-                if(docs.noUrl==null || typeof (docs.noUrl) == "undefined"){
-                	//alert(docs.retval);
-                	 alert_Danger("Error en Anexo: ", docs.retval);
-                	return false;
+                if (docs.noUrl == null || typeof (docs.noUrl) == "undefined") {
+                    //alert(docs.retval);
+                    alert_Danger("Error en Anexo: ", docs.retval);
+                    return false;
                 }
-                runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data) {
+                runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function (data) {
                     result = data;
                 });
             }
@@ -752,11 +794,11 @@ function fn_capturarAnexo(pnuAnn, pnuEmi, pnuAne) {
         p[3] = "nuAne=" + pnuAne;
         p[4] = "nuAnnDocProyecto=" + $('#nuAnnDocGenerado').val();
         p[5] = "nuEmiDocProyecto=" + $('#Padre_pkEmiDoc').val();
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-        	
-        	 var mensaje=JSON.parse(data).retval;
-        	
-          alert_Sucess("ANEXO", mensaje);
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+
+            var mensaje = JSON.parse(data).retval;
+
+            alert_Sucess("ANEXO", mensaje);
 
         }, 'text', false, false, "POST");
 
@@ -767,28 +809,28 @@ function fn_capturarAnexo(pnuAnn, pnuEmi, pnuAne) {
 
 function fn_verDocAnexoArchivado() {
 
-        var p = new Array();
-        p[0] = "accion=goDocRutaAnexoArchivado";
-        p[1] = "nuAnn=" + $('#nuAnn').val();
-        p[2] = "nuEmi=" + $('#nuEmi').val();
-        p[3] = "nuDes=" + $('#nuDes').val();
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-            var result;
-            eval("var docs=" + data);
-            if (typeof (docs) != "undefined" && typeof (docs.nuAnn) != 'undefined' && docs.nuAnn != "") {
-                //result = fn_abrirDocApplet(docs.noUrl,docs.noDoc);
-                var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
-                /*runApplet(appletsTramiteDoc.abrirDocumento, param, function(data) {
-                    result = data;
-                });*/
-                runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento,param, function(data) {
-                    result = data;
-                });
-            }
+    var p = new Array();
+    p[0] = "accion=goDocRutaAnexoArchivado";
+    p[1] = "nuAnn=" + $('#nuAnn').val();
+    p[2] = "nuEmi=" + $('#nuEmi').val();
+    p[3] = "nuDes=" + $('#nuDes').val();
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
+        var result;
+        eval("var docs=" + data);
+        if (typeof (docs) != "undefined" && typeof (docs.nuAnn) != 'undefined' && docs.nuAnn != "") {
+            //result = fn_abrirDocApplet(docs.noUrl,docs.noDoc);
+            var param = {urlDoc: docs.noUrl, rutaDoc: docs.noDoc};
+            /*runApplet(appletsTramiteDoc.abrirDocumento, param, function(data) {
+             result = data;
+             });*/
+            runOnDesktop(accionOnDesktopTramiteDoc.abrirDocumento, param, function (data) {
+                result = data;
+            });
+        }
 
-        }, 'text', false, false, "POST");
+    }, 'text', false, false, "POST");
 
-   
+
     return false;
 }
 
@@ -815,17 +857,17 @@ function fn_generaDocx() {
                     p[1] = "nuAnn=" + pnuAnn;
                     p[2] = "nuEmi=" + pnuEmi;
                     p[3] = "tiOpe=1";
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+                    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
                         var result;
                         eval("var docs=" + data);
                         if (typeof (docs) !== "undefined" && typeof (docs.retval) !== 'undefined' && docs.retval !== "") {
                             if (docs.retval === "OK") {
                                 //fn_generaDocApplet(docs.noUrl, docs.noDoc, function(data) {
-                     
-                                fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function(data) {
+
+                                fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function (data) {
                                     result = data;
                                     if (result !== "OK") {
-                                       bootbox.alert(result);
+                                        bootbox.alert(result);
                                     }
                                 });
                             } else {
@@ -847,7 +889,7 @@ function fn_generaDocx() {
 function fn_generaDocxInter() {
     var pnuAnn = jQuery('#documentoEmiBean').find('#nuAnn').val();
     var pnuEmi = jQuery('#documentoEmiBean').find('#nuEmi').val();
-    
+
 //    console.log("fn_generaDocx()");
     var rpta = fu_verificarDestinatarioInter();
     var nrpta = rpta.substr(0, 1);
@@ -873,7 +915,7 @@ function fn_generaDocxInter() {
 //                    console.log("/srDocObjeto.do?accion=goRutaGeneraDocx");
 //                    console.log("nuEmi->"+pnuEmi);
 //                    console.log("tiOpe=1");
-                    ajaxCall("/srDocObjetoInter.do", p.join("&"), function(data) {
+                    ajaxCall("/srDocObjetoInter.do", p.join("&"), function (data) {
                         var result;
                         eval("var docs=" + data);
 //                        console.log("data->"+data);
@@ -892,15 +934,15 @@ function fn_generaDocxInter() {
 //                                       bootbox.alert(result);
 //                                    }
 //                                });
-                                    //MVALDERA(mvaldera@pcm.gob.pe)  
+                                //MVALDERA(mvaldera@pcm.gob.pe)  
 
-                                    fn_generaDocDesktopInter(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function(data) {
-                                        result = data;
-                                        if (result !== "OK") {
-                                           bootbox.alert(result);
-                                        }
-                                    });
-                                        
+                                fn_generaDocDesktopInter(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function (data) {
+                                    result = data;
+                                    if (result !== "OK") {
+                                        bootbox.alert(result);
+                                    }
+                                });
+
 
                             } else {
 //                                console.log("alert_Danger2");
@@ -945,17 +987,17 @@ function fn_generaDocxPersonal() {
                     p[1] = "nuAnn=" + pnuAnn;
                     p[2] = "nuEmi=" + pnuEmi;
                     p[3] = "tiOpe=1";
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+                    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
                         var result;
                         eval("var docs=" + data);
                         if (typeof (docs) !== "undefined" && typeof (docs.retval) !== 'undefined' && docs.retval !== "") {
                             if (docs.retval === "OK") {
                                 //fn_generaDocApplet(docs.noUrl, docs.noDoc, function(data) {
-                     
-                                fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function(data) {
+
+                                fn_generaDocDesktop(docs.noUrl, docs.noDoc, docs.nuAnn, docs.nuEmi, docs.tieneWord, function (data) {
                                     result = data;
                                     if (result !== "OK") {
-                                       bootbox.alert(result);
+                                        bootbox.alert(result);
                                     }
                                 });
                             } else {
@@ -975,61 +1017,61 @@ function fn_generaDocxPersonal() {
     return false;
 }
 /*ANTES
-function fn_generaDocxPersonal() {
-    var pnuAnn = jQuery('#documentoPersonalEmiBean').find('#nuAnn').val();
-    var pnuEmi = jQuery('#documentoPersonalEmiBean').find('#nuEmi').val();
-
-    var rpta = fu_verificarDestinatario("1");
-    var nrpta = rpta.substr(0, 1);
-    if (nrpta === "1") {
-        rpta = fu_verificarReferencia();
-        nrpta = rpta.substr(0, 1);
-        if (nrpta === "1") {
-            rpta = fu_verificarChangeDocumentoEmiPersonal();
-            nrpta = rpta.substr(0, 1);
-            if (nrpta === "1") {
-                alert_Warning("Emisión :", "Necesita grabar los cambios");
-            } else {
-                if (!!pnuAnn) {
-                    var p = new Array();
-                    p[0] = "accion=goRutaGeneraDocx";
-                    p[1] = "nuAnn=" + pnuAnn;
-                    p[2] = "nuEmi=" + pnuEmi;
-                    p[3] = "tiOpe=1";
-                    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
-                        var result;
-                        eval("var docs=" + data);
-                        if (typeof (docs) != "undefined" && typeof (docs.retval) != 'undefined' && docs.retval != "") {
-                            if (docs.retval === "OK") {
-//                             result = fn_generaDocApplet(docs.noUrl,docs.noDoc);
-//                            if (result!="OK"){
-//                               bootbox.alert(result);
-//                            }
-                                //fn_generaDocApplet(docs.noUrl, docs.noDoc, function(data) {
-                                fn_generaDocDesktop(docs.noUrl, docs.noDoc, function(data) {
-                                    result = data;
-                                    if (result !== "OK") {
-                                       bootbox.alert(result);
-                                    }
-                                });
-
-
-                            } else {
-                                alert_Danger("Generar Docx: ", docs.retval);
-                            }
-                        }
-                    }, 'text', false, false, "POST");
-                }
-            }
-        } else {
-            alert_Info("Emisión :", rpta);
-        }
-    } else {
-        alert_Info("Emisión :", rpta);
-    }
-    return false;
-}
-*/
+ function fn_generaDocxPersonal() {
+ var pnuAnn = jQuery('#documentoPersonalEmiBean').find('#nuAnn').val();
+ var pnuEmi = jQuery('#documentoPersonalEmiBean').find('#nuEmi').val();
+ 
+ var rpta = fu_verificarDestinatario("1");
+ var nrpta = rpta.substr(0, 1);
+ if (nrpta === "1") {
+ rpta = fu_verificarReferencia();
+ nrpta = rpta.substr(0, 1);
+ if (nrpta === "1") {
+ rpta = fu_verificarChangeDocumentoEmiPersonal();
+ nrpta = rpta.substr(0, 1);
+ if (nrpta === "1") {
+ alert_Warning("Emisión :", "Necesita grabar los cambios");
+ } else {
+ if (!!pnuAnn) {
+ var p = new Array();
+ p[0] = "accion=goRutaGeneraDocx";
+ p[1] = "nuAnn=" + pnuAnn;
+ p[2] = "nuEmi=" + pnuEmi;
+ p[3] = "tiOpe=1";
+ ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+ var result;
+ eval("var docs=" + data);
+ if (typeof (docs) != "undefined" && typeof (docs.retval) != 'undefined' && docs.retval != "") {
+ if (docs.retval === "OK") {
+ //                             result = fn_generaDocApplet(docs.noUrl,docs.noDoc);
+ //                            if (result!="OK"){
+ //                               bootbox.alert(result);
+ //                            }
+ //fn_generaDocApplet(docs.noUrl, docs.noDoc, function(data) {
+ fn_generaDocDesktop(docs.noUrl, docs.noDoc, function(data) {
+ result = data;
+ if (result !== "OK") {
+ bootbox.alert(result);
+ }
+ });
+ 
+ 
+ } else {
+ alert_Danger("Generar Docx: ", docs.retval);
+ }
+ }
+ }, 'text', false, false, "POST");
+ }
+ }
+ } else {
+ alert_Info("Emisión :", rpta);
+ }
+ } else {
+ alert_Info("Emisión :", rpta);
+ }
+ return false;
+ }
+ */
 function fn_cargaObjDoc(pnuAnn, pnuEmi, ptiOpe) {
     var p = new Array();
     p[0] = "accion=goRutaCargaDoc";
@@ -1037,11 +1079,11 @@ function fn_cargaObjDoc(pnuAnn, pnuEmi, ptiOpe) {
     p[2] = "nuEmi=" + pnuEmi;
     p[3] = "tiOpe=" + ptiOpe;
     var result = "ERROR";
-    ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+    ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
         eval("var docs=" + data);
         if (typeof (docs) !== "undefined" && typeof (docs.nuAnn) !== 'undefined' && docs.nuAnn !== "") {
             //fn_cargaDocApplet(docs.noUrl, docs.noDoc, function(data) {
-            fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function(data) {
+            fn_cargaDocDesktop(docs.noUrl, docs.noDoc, function (data) {
                 result = data;
             });
         }
@@ -1070,35 +1112,36 @@ function fu_callEventoTablaAnexosdetalle() {
 
 
 function fn_verRequisitoObj(frm_docOrigenBean_pkExp) {
-    if(!!frm_docOrigenBean_pkExp&&allTrim(frm_docOrigenBean_pkExp).length>6){    
-        var pnuAnnExp=frm_docOrigenBean_pkExp.substr(0,4);
-        var pnuSecExp=frm_docOrigenBean_pkExp.substr(4);
-        if (!!pnuAnnExp&&!!pnuSecExp) {
+    if (!!frm_docOrigenBean_pkExp && allTrim(frm_docOrigenBean_pkExp).length > 6) {
+        var pnuAnnExp = frm_docOrigenBean_pkExp.substr(0, 4);
+        var pnuSecExp = frm_docOrigenBean_pkExp.substr(4);
+        if (!!pnuAnnExp && !!pnuSecExp) {
             var p = new Array();
             p[0] = "accion=goRequisitosExpDocExtSeg";
             p[1] = "pnuAnnExp=" + pnuAnnExp;
             p[2] = "pnuSecExp=" + pnuSecExp;
-            ajaxCall("/srMesaPartes.do", p.join("&"), function(data) {
+            ajaxCall("/srMesaPartes.do", p.join("&"), function (data) {
                 if (data !== null)
                 {
                     $("body").append(data);
                 }
             }, 'text', false, false, "POST");
 
-        }        
+        }
     }
     return false;
 }
 /*interoperabilidad*/
-function fn_grabarEnvioMesaVirtual(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tipoBandeja) {
+function fn_grabarEnvioMesaVirtual(pnuAnn, pnuEmi, pexisteDoc, pexisteAnexo, tipoBandeja) {
 
     var nDeDepDes = allTrim($("#txtDeDepDes").val());
     var nDeNomDes = allTrim($("#txtDeNomDes").val());
-    var nDeCarDes=allTrim($("#txtDeCarDes").val());
+    var nDeCarDes = allTrim($("#txtDeCarDes").val());
 
-    var vValidar=fu_validarMesaVirtual();
-    
-    if (vValidar===1)
+    alert_Sucess("MENSAJE", "entrar a casilla");
+    var vValidar = fu_validarMesaVirtual();
+
+    if (vValidar === 1)
     {
         var p = new Array();
         //p[0] = "accion=goDocRutaAbrir";
@@ -1110,149 +1153,145 @@ function fn_grabarEnvioMesaVirtual(pnuAnn,pnuEmi,pexisteDoc,pexisteAnexo,tipoBan
         p[5] = "nDeCarDes=" + nDeCarDes;
 
         //ajaxCallSendJson(url, jsonString, function(data) {
-        ajaxCall("/srDocObjeto.do", p.join("&"), function(data) {
+        ajaxCall("/srDocObjeto.do", p.join("&"), function (data) {
 
-            if (data.substring(0,1) === "1") {
+            if (data.substring(0, 1) === "1") {
                 alert_Sucess("MENSAJE", "Se envió el documento a la mensajería correctamente");
-                if(tipoBandeja==="EDIT"){
-                    editarDocumentoEmiClick(pnuAnn, pnuEmi,pexisteDoc,pexisteAnexo);           
+                if (tipoBandeja === "EDIT") {
+                    editarDocumentoEmiClick(pnuAnn, pnuEmi, pexisteDoc, pexisteAnexo);
                 }
-                if(tipoBandeja==="NEW"){
+                if (tipoBandeja === "NEW") {
                     EnvioOkMensajeria();
-                }
-                else {
-                      ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function(data) {
-                            refreshScript("divTablaEmiDocumenAdm", data);
-                        }, 'text', false, false, "POST");
+                } else {
+                    ajaxCall("/srDocumentoAdmEmision.do?accion=goInicio", $('#buscarDocumentoEmiBean').serialize(), function (data) {
+                        refreshScript("divTablaEmiDocumenAdm", data);
+                    }, 'text', false, false, "POST");
 
-               }
+                }
                 removeDomId('windowConsultaAnexo');
 
 
 
             } else {
-                alert_Danger("ERROR:", data.substring(1,data.length));
+                alert_Danger("ERROR:", data.substring(1, data.length));
             }
-        }, 'text', false, false, "POST");    
+        }, 'text', false, false, "POST");
 
 
     }
 
-                            
+
     return;
 }
 
-function fu_validarMesaVirtual(){
-    var valRetorno=1;//no buscar por referencia
-    
+function fu_validarMesaVirtual() {
+    var valRetorno = 1;//no buscar por referencia
+
     var nDeDepDes = allTrim($("#txtDeDepDes").val());
     var nDeNomDes = allTrim($("#txtDeNomDes").val());
-    var nDeCarDes=allTrim($("#txtDeCarDes").val());
-    
-    if(!(typeof(nDeDepDes)!=="undefined" && nDeDepDes!==null && nDeDepDes!==""))
+    var nDeCarDes = allTrim($("#txtDeCarDes").val());
+
+    if (!(typeof (nDeDepDes) !== "undefined" && nDeDepDes !== null && nDeDepDes !== ""))
     {
         valRetorno = 0;
         alert_Info("Aviso", "Debe Ingresar por lo menos una dependencia u oficina");
     }
-    
-    if(!(typeof(nDeNomDes)!=="undefined" && nDeNomDes!==null && nDeNomDes!==""))
+
+    if (!(typeof (nDeNomDes) !== "undefined" && nDeNomDes !== null && nDeNomDes !== ""))
     {
         valRetorno = 0;
         alert_Info("Aviso", "Debe Ingresar por lo menos un Destinatario o Persona");
     }
-    
-    if(!(typeof(nDeCarDes)!=="undefined" && nDeCarDes!==null && nDeCarDes!==""))
+
+    if (!(typeof (nDeCarDes) !== "undefined" && nDeCarDes !== null && nDeCarDes !== ""))
     {
         valRetorno = 0;
         alert_Info("Aviso", "Debe Ingresar por lo menos un cargo del destinatario");
     }
-    
-   
+
+
 
     return valRetorno;
 }
 
-function fn_activarInter(siInter,tipoEnv)
+function fn_activarInter(siInter, tipoEnv)
 {
-    console.log("tipo"+siInter);
-     console.log("tipo"+tipoEnv);
-    if (tipoEnv==="-1" )
+    console.log("tipo" + siInter);
+    console.log("tipo" + tipoEnv);
+    if (tipoEnv === "-1")
     {
-        if (siInter==="S")
-         {
-             jQuery('#viewFisico').hide();
-             jQuery('#viewInter').show();
-
-             var pDesDes=$("#txtDeDepDes").val();
-             if (pDesDes!="" && pDesDes!=null)
-             {
-                 document.getElementById("txtDeDepDes").readOnly = true; 
-             }
-             
-             var pNomDes=$("#txtDeNomDes").val();
-             if (pNomDes!="" && pNomDes!=null)
-             {
-                 document.getElementById("txtDeNomDes").readOnly = true; 
-             }
-
-             var pCarDes=$("#txtDeCarDes").val();
-             if (pCarDes!="" && pCarDes!=null)
-             {
-                 document.getElementById("txtDeCarDes").readOnly = true; 
-             }
-
-
-
-
-
-
-             jQuery('#viewChkInter').show();
-
-             document.getElementById("chkviewInter").checked = true;
-             
-             jQuery('#viewFisicoF').hide();
-             jQuery('#viewInterF').show();
-         }
-         else
-         {
-             jQuery('#viewFisico').show();
-             jQuery('#viewInter').hide();
-             jQuery('#viewChkInter').hide();
-
-             jQuery('#viewFisicoF').show();
-             jQuery('#viewInterF').hide();
-         }   
-    }
-    else
-    {
-        if (tipoEnv==="2")
-         {
+        if (siInter === "S")
+        {
             jQuery('#viewFisico').hide();
             jQuery('#viewInter').show();
-             
+
+            var pDesDes = $("#txtDeDepDes").val();
+            if (pDesDes != "" && pDesDes != null)
+            {
+                document.getElementById("txtDeDepDes").readOnly = true;
+            }
+
+            var pNomDes = $("#txtDeNomDes").val();
+            if (pNomDes != "" && pNomDes != null)
+            {
+                document.getElementById("txtDeNomDes").readOnly = true;
+            }
+
+            var pCarDes = $("#txtDeCarDes").val();
+            if (pCarDes != "" && pCarDes != null)
+            {
+                document.getElementById("txtDeCarDes").readOnly = true;
+            }
+
+
+
+
+
+
+            jQuery('#viewChkInter').show();
+
+            document.getElementById("chkviewInter").checked = true;
+
+            jQuery('#viewFisicoF').hide();
+            jQuery('#viewInterF').show();
+        } else
+        {
+            jQuery('#viewFisico').show();
+            jQuery('#viewInter').hide();
+            jQuery('#viewChkInter').hide();
+
+            jQuery('#viewFisicoF').show();
+            jQuery('#viewInterF').hide();
+        }
+    } else
+    {
+        if (tipoEnv === "2")
+        {
+            jQuery('#viewFisico').hide();
+            jQuery('#viewInter').show();
+
             document.getElementById("txtDeDepDes").readOnly = true;
             document.getElementById("txtDeNomDes").readOnly = true;
             document.getElementById("txtDeCarDes").readOnly = true;
 
-             /*jQuery('#viewChkInter').show();
-
+            /*jQuery('#viewChkInter').show();
+             
              jQuery("#viewChkInter").prop('checked',true);
              jQuery("#viewChkInter").attr('checked',true);*/
 
-             jQuery('#viewFisicoF').hide();
-             jQuery('#viewInterF').show();
-         }
-         else
-         {
-             jQuery('#viewFisico').show();
-             jQuery('#viewInter').hide();
-             jQuery('#viewChkInter').hide();
+            jQuery('#viewFisicoF').hide();
+            jQuery('#viewInterF').show();
+        } else
+        {
+            jQuery('#viewFisico').show();
+            jQuery('#viewInter').hide();
+            jQuery('#viewChkInter').hide();
 
-             jQuery('#viewFisicoF').show();
-             jQuery('#viewInterF').hide();
-         }
+            jQuery('#viewFisicoF').show();
+            jQuery('#viewInterF').hide();
+        }
     }
-  
+
 
 }
 
@@ -1261,23 +1300,22 @@ function fn_activarInter(siInter,tipoEnv)
 function fn_changeChkVerInter(chk)
 {
 
-    if(chk.checked){    
+    if (chk.checked) {
         jQuery('#viewFisico').hide();
-        jQuery('#viewInter').show();     
-        
-        jQuery('#viewFisicoF').hide();
-        jQuery('#viewInterF').show();        
+        jQuery('#viewInter').show();
 
-    }
-    else
+        jQuery('#viewFisicoF').hide();
+        jQuery('#viewInterF').show();
+
+    } else
     {
         jQuery('#viewFisico').show();
         jQuery('#viewInter').hide();
-        
+
         jQuery('#viewFisicoF').show();
         jQuery('#viewInterF').hide();
     }
-    
+
 }
 
 

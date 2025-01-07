@@ -1,22 +1,22 @@
 /* global dojo, bootbox, pRutaContexto, resourceURL, dijit */
 
-$(document).on('mouseenter', '.toolTipVerTodo', function(e) {
+$(document).on('mouseenter', '.toolTipVerTodo', function (e) {
     var posicion = $(this).position();
-    var contenido = $(this).is("input")?$(this).val():$(this).text();
+    var contenido = $(this).is("input") ? $(this).val() : $(this).text();
 
-    if($.trim(contenido).length>=5){
-        if($(this).is("input")){
-            $(this).parent().append("<div id='contentTooltip' class='divTipTable' style='word-wrap:break-word !important;color:black !important;white-space:normal !important;'>"+  contenido+ "</div>");                              
-        }else{
-            $(this).append("<div id='contentTooltip' class='divTipTable' style='word-wrap:break-word !important;color:black !important;white-space:normal !important;'>"+  contenido+ "</div>");                              
+    if ($.trim(contenido).length >= 5) {
+        if ($(this).is("input")) {
+            $(this).parent().append("<div id='contentTooltip' class='divTipTable' style='word-wrap:break-word !important;color:black !important;white-space:normal !important;'>" + contenido + "</div>");
+        } else {
+            $(this).append("<div id='contentTooltip' class='divTipTable' style='word-wrap:break-word !important;color:black !important;white-space:normal !important;'>" + contenido + "</div>");
         }
-        $("#contentTooltip").css("top",(posicion.top + 24)).css("left",(posicion.left)).css("display","block"); 
+        $("#contentTooltip").css("top", (posicion.top + 24)).css("left", (posicion.left)).css("display", "block");
     }
     return;
 });
 
-$(document).on('mouseleave', '.toolTipVerTodo', function() {
-    $("#contentTooltip").remove(); 
+$(document).on('mouseleave', '.toolTipVerTodo', function () {
+    $("#contentTooltip").remove();
 });
 
 var gridModel = [{valor: 'CODIGO', width: 60, align: 'center'},
@@ -28,11 +28,11 @@ var gridModel3 = [{valor: 'CODIGO', width: 60, align: 'center'},
     {valor: 'CODIGO2', width: 10, align: 'center'}
 ];
 
-var icoEtiqueta={
-    0:"glyphicon glyphicon-tag",
-    1:"glyphicon glyphicon-time",
-    2:"glyphicon glyphicon-flash",
-    3:"glyphicon glyphicon-transfer"
+var icoEtiqueta = {
+    0: "glyphicon glyphicon-tag",
+    1: "glyphicon glyphicon-time",
+    2: "glyphicon glyphicon-flash",
+    3: "glyphicon glyphicon-transfer"
 };
 var coloresVencimiento = {
     0: {"text": "Normal", "color": "#009BE6", "descrip": "Documentos sin días límites de atención.", "cssClass": "estadoVenNormal"},
@@ -46,8 +46,7 @@ function setButtonEvents(parentFormId) {
     var container;
     if (parentFormId) {
         container = jQuery('#' + parentFormId);
-    }
-    else {
+    } else {
         container = document;
     }
     //dojo.query("input, button", container).forEach(setEventButton);
@@ -64,11 +63,10 @@ function setEvents(parentFormId) {
                 break;
             }
         }
-    }
-    else {
+    } else {
         container = document;
     }
-    if (typeof(container) !== 'object') {
+    if (typeof (container) !== 'object') {
         container = jQuery(parentFormId);
     }
     jQuery("input, button", container).each(setEventButton);
@@ -77,22 +75,22 @@ function setEvents(parentFormId) {
 function setEventButton(obj, index, arr) {
     if (obj.type === 'submit' || obj.type === 'reset' || obj.type === 'button') {
         if (!obj.onmouseover) {
-            jQuery(obj).onmouseover(function(e) {
+            jQuery(obj).onmouseover(function (e) {
                 jQuery(obj).addClass('ui-state-hover');
             });
         }
         if (!obj.onmouseout) {
-            jQuery(obj).onmouseout(function(e) {
+            jQuery(obj).onmouseout(function (e) {
                 jQuery(obj).removeClass('ui-state-hover');
             });
         }
         if (!obj.onfocus) {
-            jQuery(obj).onfocus(function(e) {
+            jQuery(obj).onfocus(function (e) {
                 jQuery(obj).addClass('ui-state-hover');
             });
         }
         if (!obj.onblur) {
-            jQuery(obj).onblur(function(e) {
+            jQuery(obj).onblur(function (e) {
                 jQuery(obj).removeClass('ui-state-hover');
             });
         }
@@ -113,13 +111,13 @@ function setFirstElement(oForm) {
     for (var i = 0; i < oForm.elements.length; i++) {
         var oField = oForm.elements[i];
         if ((oField.type === 'text' || oField.type === 'password' || oField.type === 'select-one' || oField.type === 'textarea')) {
-            if (typeof(oField.tabIndex) !== 'undefined' && oField.tabIndex === 1) {
+            if (typeof (oField.tabIndex) !== 'undefined' && oField.tabIndex === 1) {
                 try {
                     oField.focus();
                 } catch (e) {
                 }
             }
-            jQuery(oField).bind('paste', function(e) {
+            jQuery(oField).bind('paste', function (e) {
                 return false;
             });
         }
@@ -129,7 +127,7 @@ function setFirstElement(oForm) {
 
 function pushFocusEvent(setFocusOnLoad, parentFormId, callbackFunction) {
     setEvents(parentFormId);
-    if (typeof(setFocusOnLoad) === 'undefined' || setFocusOnLoad === true || setFocusOnLoad === 'firstElement') {
+    if (typeof (setFocusOnLoad) === 'undefined' || setFocusOnLoad === true || setFocusOnLoad === 'firstElement') {
         if (parentFormId) {
             for (var j = 0; j < document.forms.length; j++) {
                 if (parentFormId === document.forms[j].id) {
@@ -137,14 +135,12 @@ function pushFocusEvent(setFocusOnLoad, parentFormId, callbackFunction) {
                     break;
                 }
             }
-        }
-        else {
+        } else {
             if (document.forms.length > 0) {
                 setFirstElement(document.forms[0]);
             }
         }
-    }
-    else {
+    } else {
         if (setFocusOnLoad !== false) {
             if (parentFormId) {
                 try {
@@ -164,8 +160,7 @@ function filtrarTeclado(pEvent, autoSubmit, pvalidKeys, sucessGoToId, errorGoToI
     if (tk.isIntro()) {
         if (callbackFunction) {
             (callbackFunction(tk.objEvent, tk.currentObj)) ? mueveFoco(tk.currentObj, sucessGoToId) : mueveFoco(tk.currentObj, errorGoToId);
-        }
-        else {
+        } else {
             mueveFoco(tk.currentObj, sucessGoToId);
         }
     }
@@ -177,12 +172,11 @@ function mueveFoco(obj, goTo) {
     if (obj.type !== 'textarea') {
         if (goTo) {
             to = document.getElementById(goTo);
-        }
-        else {
+        } else {
             var ltabindex = obj.tabIndex + 1;
             to = jQuery("*[tabindex=" + ltabindex + "]")[0];
         }
-        if (to !== null && typeof(obj) !== 'undefined') {
+        if (to !== null && typeof (obj) !== 'undefined') {
             jQuery(obj).removeClass('activado_confoco').addClass('normal');
             jQuery(to).removeClass('normal').addClass('activado_confoco');
             try {
@@ -196,7 +190,7 @@ function mueveFoco(obj, goTo) {
 
 function salir(url) {
     var params = {accion: 'salir'};
-    ajaxCall("/logout.do", params, function(data) {
+    ajaxCall("/logout.do", params, function (data) {
         jQuery("#body").hide()/*style("display","none")*/;
         $.cookie("State", null, {expires: -1});
         $.cookie("Acceso", null, {expires: -1});
@@ -204,13 +198,20 @@ function salir(url) {
         $.cookie("JSESSIONID", null, {expires: -1});
         $.cookie("SaveStateCookie", null, {expires: -1});
         var state = $.cookie("State");
-        if (state !== 'undefined' && state !== null) {
-        } else{
-            try{cerrarConexion_wsocket();}catch(ex){}
+        if (typeof state !== 'undefined' && state !== null) {
+            console.log('1: '+url);
+            console.log(state);
+        } else {
+            try {
+                cerrarConexion_wsocket();
+            } catch (ex) {
+            }
             if (data === "inicio") {
-                window.location.replace("/inicio/login.do");
+                window.location.replace("/sgd/login.do");
+                console.log(url)
             } else {
-                window.location.replace(url);
+               window.location.replace("/sgd/login.do");
+                console.log('2: '+url)
             }
         }
     }, 'text', false, true, 'POST');
@@ -220,18 +221,18 @@ function salir(url) {
 function fastLogout(msg) {
     dojo.cookie("JSESSIONID", null, {expires: -1});
     if (msg) {
-       bootbox.alert("se ha terminado la session, vuelva a ingresar",function(){
-           window.location = pRutaContexto + "/login.do";
-       });
-    }else{
+        bootbox.alert("se ha terminado la session, vuelva a ingresar", function () {
+            window.location = pRutaContexto + "/login.do";
+        });
+    } else {
         window.location = pRutaContexto + "/login.do";
     }
-    
+
 }
 
 function loadding(onOf) {
     if (onOf) {
-        var div="<div id='loadding' class='box'><div class='image'><img align='absmiddle' src='"+resourceURL+"/images/loading.gif'></div><div class='line1'>PROCESANDO</div><div class='line2'>Ejecutando petición, por favor espere...</div></div>";
+        var div = "<div id='loadding' class='box'><div class='image'><img align='absmiddle' src='" + resourceURL + "/images/loading.gif'></div><div class='line1'>PROCESANDO</div><div class='line2'>Ejecutando petición, por favor espere...</div></div>";
         jQuery.blockUI({
             message: div,
             css: {
@@ -243,9 +244,8 @@ function loadding(onOf) {
                 backgroundColor: 'black',
                 opacity: 0.10
             }
-        });        
-    }
-    else {
+        });
+    } else {
         //jQuery("#loadding").hide();
         jQuery.unblockUI();
     }
@@ -258,7 +258,7 @@ function refreshAppBody(data) {
     refreshScript("applicationPanel", data);
     jQuery('#applicationPanel').show();
 }
-function refreshAppBodyFrame(data) { 
+function refreshAppBodyFrame(data) {
     jQuery('#applicationPanel').html(data);
     jQuery('#applicationPanel').show();
 }
@@ -320,62 +320,62 @@ function ejecutaOpcionModal(idOpc, url, tipo) {
     if (!!tipo === false) {
         tipo = "GET";
     }
-    ajaxCall(url, null, function(data){     
+    ajaxCall(url, null, function (data) {
         if (data !== null) {
             $("body").append(data);
         }
     }, 'text', false, false, tipo);
 }
 
-function ejecutaOpcionJson(idOpc, url, tipo, mngr){
+function ejecutaOpcionJson(idOpc, url, tipo, mngr) {
     if (!!tipo === false) {
         tipo = "GET";
     }
     if (jQuery(idOpc).hasClass('menu_lista')) {
-        ajaxCall(url, null, function(data){
+        ajaxCall(url, null, function (data) {
             if (mngr) {
                 mngr(data);
-            }              
+            }
         }, 'json', false, false, tipo);
     } else {
         return false;
-    }  
+    }
 }
 
-function ejecutaOpcionJsonConfirm(idOpc, url, tipo, mngr){//ecueva
+function ejecutaOpcionJsonConfirm(idOpc, url, tipo, mngr) {//ecueva
     if (!!tipo === false) {
         tipo = "GET";
     }
     if (jQuery(idOpc).hasClass('menu_lista')) {
-            bootbox.dialog({
-                message: "<p>Al confirmar esta opción se actualizará los cambios realizados en las siguientes listas del sistema, permitiendo visualizar los cambios a todos los usuarios :</p>"+
-                          "<ul><li>Tupa</li>"+
-                          "<li>Locales y Dependencias</li>"+
-                          "<li>Tipos de Destinos</li>"+
-                          "<li>Tipos de Encargatura</li>"+
-                          "<li>Tipos de Emisores Externos</li>"+
-                          "<h5>¿Desea confirmar?</h5>",
-                buttons: {
-                    SI: {
-                        label: "SI",
-                        className: "btn-primary",
-                        callback: function() {
-                            ajaxCall(url, null, function(data){
-                                if (mngr) {
-                                    mngr(data);
-                                }              
-                            }, 'json', false, false, tipo);
-                        }                        
-                    },
-                    NO: {
-                        label: "NO",
-                        className: "btn-default"
+        bootbox.dialog({
+            message: "<p>Al confirmar esta opción se actualizará los cambios realizados en las siguientes listas del sistema, permitiendo visualizar los cambios a todos los usuarios :</p>" +
+                    "<ul><li>Tupa</li>" +
+                    "<li>Locales y Dependencias</li>" +
+                    "<li>Tipos de Destinos</li>" +
+                    "<li>Tipos de Encargatura</li>" +
+                    "<li>Tipos de Emisores Externos</li>" +
+                    "<h5>¿Desea confirmar?</h5>",
+            buttons: {
+                SI: {
+                    label: "SI",
+                    className: "btn-primary",
+                    callback: function () {
+                        ajaxCall(url, null, function (data) {
+                            if (mngr) {
+                                mngr(data);
+                            }
+                        }, 'json', false, false, tipo);
                     }
+                },
+                NO: {
+                    label: "NO",
+                    className: "btn-default"
                 }
-            });          
+            }
+        });
     } else {
         return false;
-    }  
+    }
 }
 
 function mostrarMenu() {
@@ -392,8 +392,8 @@ function ocultarMenu() {
     lpane.toggle();
 }
 function ajaxCallframe(url, params, mngr, type, sync, silent, tipo) {
-    var frame="<iframe id='iframeExterno' height='1200px' width='100%' frameborder='0' src='"+url+"' ></iframe>";
-    if (mngr) { 
+    var frame = "<iframe id='iframeExterno' height='1200px' width='100%' frameborder='0' src='" + url + "' ></iframe>";
+    if (mngr) {
         jQuery('#applicationPanel').html(frame);
         //jQuery('#iframeExterno').src=url;
         jQuery('#applicationPanel').show();
@@ -409,11 +409,11 @@ function ajaxCall(url, params, mngr, type, sync, silent, tipo) {
         type: (tipo === "GET" || tipo === "get") ? 'get' : 'post',
         dataType: (type) ? type : 'text',
         async: (sync) ? false : true,
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             //alert(request.responseText);
             refreshAppBody(request.responseText);
         },
-        success: function(result, textStatus, xhr) {
+        success: function (result, textStatus, xhr) {
             if (result === null) {
                 return;
             }
@@ -421,9 +421,9 @@ function ajaxCall(url, params, mngr, type, sync, silent, tipo) {
                 mngr(result);
             }
         }};
-    if (typeof(params) === 'object') {
+    if (typeof (params) === 'object') {
         objAjax.data = params;
-    } else if (typeof(params) === "string") {
+    } else if (typeof (params) === "string") {
         objAjax.data = params;
     }
     jQuery.ajax(objAjax);
@@ -440,11 +440,11 @@ function ajaxCallActionForm(url, params, mngr, type, sync, silent, tipo) {
         type: (tipo == "GET" || tipo == "get") ? 'get' : 'post',
         dataType: (type) ? type : 'text',
         async: (sync) ? false : true,
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             //alert(request.responseText);
             refreshAppBody(request.responseText);
         },
-        success: function(result, textStatus, xhr) {
+        success: function (result, textStatus, xhr) {
             if (result == null) {
                 return;
             }
@@ -452,9 +452,9 @@ function ajaxCallActionForm(url, params, mngr, type, sync, silent, tipo) {
                 mngr(result);
             }
         }};
-    if (typeof(params) == 'object') {
+    if (typeof (params) == 'object') {
         objAjax.data = params;
-    } else if (typeof(params) == "string") {
+    } else if (typeof (params) == "string") {
         objAjax.data = params;
     }
     jQuery.ajax(objAjax);
@@ -472,11 +472,11 @@ function ajaxCallActionFormSendJson(url, params, mngr, type, sync, silent, tipo)
         dataType: (type) ? type : 'text',
         async: (sync) ? false : true,
         contentType: 'application/json',
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             //alert(request.responseText);
             refreshAppBody(request.responseText);
         },
-        success: function(result, textStatus, xhr) {
+        success: function (result, textStatus, xhr) {
             if (result == null) {
                 return;
             }
@@ -484,9 +484,9 @@ function ajaxCallActionFormSendJson(url, params, mngr, type, sync, silent, tipo)
                 mngr(result);
             }
         }};
-    if (typeof(params) == 'object') {
+    if (typeof (params) == 'object') {
         objAjax.data = params;
-    } else if (typeof(params) == "string") {
+    } else if (typeof (params) == "string") {
         objAjax.data = params;
     }
     jQuery.ajax(objAjax);
@@ -504,11 +504,11 @@ function ajaxCallSendJson(url, params, mngr, type, sync, silent, tipo) {
         dataType: (type) ? type : 'text',
         async: (sync) ? false : true,
         contentType: 'application/json',
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             //alert(request.responseText);
             refreshAppBody(request.responseText);
         },
-        success: function(result, textStatus, xhr) {
+        success: function (result, textStatus, xhr) {
             if (result == null) {
                 return;
             }
@@ -516,30 +516,58 @@ function ajaxCallSendJson(url, params, mngr, type, sync, silent, tipo) {
                 mngr(result);
             }
         }};
-    if (typeof(params) == 'object') {
+    if (typeof (params) == 'object') {
         objAjax.data = params;
-    } else if (typeof(params) == "string") {
+    } else if (typeof (params) == "string") {
         objAjax.data = params;
     }
+    jQuery.ajax(objAjax);
+
+}
+function ajaxCallSendJsonV2(url, params, mngr, type, sync, silent, tipo) {
+    var urlFullPath = url;
+    if (!silent) {
+        loadding(true);
+    }
+    var objAjax = {
+        url: urlFullPath,
+        type: (tipo === "GET" || tipo === "get") ? 'get' : 'post',
+        dataType: (type) ? type : 'text',
+        async: (sync) ? false : true,
+        contentType: 'application/json',
+        crossDomain: true,
+        headers: {
+            'Access-Control-Allow-Origin': 'https://serforlimsgd03.serfor.gob.pe'
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);
+//            refreshAppBody(request.responseText);
+        },
+        success: function (result, textStatus, xhr) {
+            if (result === null) {
+                return;
+            }
+            if (mngr) {
+                mngr(result);
+            }
+        }};   
     jQuery.ajax(objAjax);
 
 }
 
 function xhrResponseManager(respuesta, fnCallBack, tipo) {
     loadding(false);
-    if (typeof(tipo) != 'undefined' && tipo == 'json') {
+    if (typeof (tipo) != 'undefined' && tipo == 'json') {
         var oJson = jsonFormatValide(respuesta);
         if (oJson == null) {
 
             return false;
-        }
-        else {
+        } else {
             if (fnCallBack) {
                 fnCallBack(oJson);
             }
         }
-    }
-    else {
+    } else {
         if (fnCallBack) {
             fnCallBack(respuesta);
         }
@@ -549,7 +577,7 @@ function xhrResponseManager(respuesta, fnCallBack, tipo) {
 function jsonFormatValide(result) {
     try {
         eval("var v=" + result);
-        if (typeof(v) != "undefined" && typeof(v.coRespuesta) != 'undefined' && v.coRespuesta != "") {
+        if (typeof (v) != "undefined" && typeof (v.coRespuesta) != 'undefined' && v.coRespuesta != "") {
             return v;
         }
     } catch (e) {
@@ -558,13 +586,12 @@ function jsonFormatValide(result) {
 }
 
 function bindTableEvents(tableId, colNum) {
-    dojo.query(tableId).onclick(function(e) {
+    dojo.query(tableId).onclick(function (e) {
         obj = (e.target || e.srcElement);
         if (obj.tagName == 'INPUT') {
             var tr = obj.parentNode.parentNode;
             toogleRowSelected(tr, obj, false);
-        }
-        else {
+        } else {
             var tr = obj.parentNode;
             if (tr.tagName != "TR") {
                 tr = obj.parentNode.parentNode;
@@ -587,8 +614,7 @@ function toogleRowSelected(tableRow, cBoxObj, state) {
     if (checked) {
         cBoxObj.checked = false;
         deseleccionaFila(tableRow);
-    }
-    else {
+    } else {
         cBoxObj.checked = true;
         seleccionaFila(tableRow);
     }
@@ -613,27 +639,22 @@ function showDown(evt) {
     if (evt) {
         if (evt.ctrlKey && (evt.keyCode == 86 || evt.keyCode == 118)) {
             cancelKey(evt);
-        }
-        else if (evt.keyCode == 8) {
+        } else if (evt.keyCode == 8) {
 
             var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
             if (node != null && node.type != "text" && node.type != "password" && node.type != "textarea") {
                 cancelKey(evt);
             }
-        }
-        else if (evt.keyCode == 116) {
+        } else if (evt.keyCode == 116) {
 
             cancelKey(evt);
-        }
-        else if (evt.ctrlKey && (evt.keyCode == 78 || evt.keyCode == 82)) {
+        } else if (evt.ctrlKey && (evt.keyCode == 78 || evt.keyCode == 82)) {
 
             cancelKey(evt);
-        }
-        else if (evt.ctrlKey && (evt.keyCode == 65 || evt.keyCode == 85)) {
+        } else if (evt.ctrlKey && (evt.keyCode == 65 || evt.keyCode == 85)) {
 
             cancelKey(evt);
-        }
-        else if (evt.altKey && (evt.keyCode == 37 || evt.keyCode == 39)) {
+        } else if (evt.altKey && (evt.keyCode == 37 || evt.keyCode == 39)) {
 
             return false;
         }
@@ -644,8 +665,7 @@ function cancelKey(evt) {
     if (evt.preventDefault) {
         evt.preventDefault();
         return false;
-    }
-    else {
+    } else {
         evt.keyCode = 0;
         evt.returnValue = false;
     }
@@ -658,48 +678,46 @@ function loadObjectsMenu(nver)
     loadSuccess = false;
     //console.log("inicia LoadMenu");
     ajaxCall("/recursos", {accion: 'opcionesMenu', version: nver},
-    function(data) {
-        //console.log("fin loadMenu");
-        if (data.retmenu)
-        {
-            //console.log(data.retmenu);
-            public_menuItem = (data.menuItem) ? eval(data.menuItem) : 0;
-            loadSuccess = true;
-        }
-        else {
+            function (data) {
+                //console.log("fin loadMenu");
+                if (data.retmenu)
+                {
+                    //console.log(data.retmenu);
+                    public_menuItem = (data.menuItem) ? eval(data.menuItem) : 0;
+                    loadSuccess = true;
+                } else {
 
-        }
-    }, 'json', true, true, 'GET');
+                }
+            }, 'json', true, true, 'GET');
 }
 
 function loadObjects(nver)
 {
     loadSuccess = false;
     ajaxCall("/recursos", {accion: 'loadObjs', version: nver},
-    function(data) {
-        if (data.retval)
-        {
-            //console.log(data.retval);
-            public_subTipoTramite = (data.subtipotramite) ? eval(data.subtipotramite) : 0;
-            public_domRestriccion = (data.domRestriccion) ? eval(data.domRestriccion) : 0;
-            public_domDiscapacidad = (data.domDiscapacidad) ? eval(data.domDiscapacidad) : 0;
-            public_domInterdiccion = (data.domInterdiccion) ? eval(data.domInterdiccion) : 0;
-            public_nivelEduca = (data.niveleduca) ? eval(data.niveleduca) : 0;
-            public_estadoCivil = (data.estadocivil) ? eval(data.estadocivil) : 0;
-            public_genero = {'rows': [{'cell': ['1', 'MASCULINO']}, {'cell': ['2', 'FEMENINO']}]};
-            public_observacion = (data.observacion) ? eval(data.observacion) : 0;
-            public_tipoPagoConsulado = {'rows': [{'cell': ['1', 'TIMBRE CONSULAR']}, {'cell': ['32', 'RJ 183-2006/003-2010 - TRAMITE GRATUITO DISCAPACIDAD']}]};
-            public_diagnostico = (data.diagnostico) ? eval(data.diagnostico) : 0;
-            loadSuccess = true;
-        }
-        else {
+            function (data) {
+                if (data.retval)
+                {
+                    //console.log(data.retval);
+                    public_subTipoTramite = (data.subtipotramite) ? eval(data.subtipotramite) : 0;
+                    public_domRestriccion = (data.domRestriccion) ? eval(data.domRestriccion) : 0;
+                    public_domDiscapacidad = (data.domDiscapacidad) ? eval(data.domDiscapacidad) : 0;
+                    public_domInterdiccion = (data.domInterdiccion) ? eval(data.domInterdiccion) : 0;
+                    public_nivelEduca = (data.niveleduca) ? eval(data.niveleduca) : 0;
+                    public_estadoCivil = (data.estadocivil) ? eval(data.estadocivil) : 0;
+                    public_genero = {'rows': [{'cell': ['1', 'MASCULINO']}, {'cell': ['2', 'FEMENINO']}]};
+                    public_observacion = (data.observacion) ? eval(data.observacion) : 0;
+                    public_tipoPagoConsulado = {'rows': [{'cell': ['1', 'TIMBRE CONSULAR']}, {'cell': ['32', 'RJ 183-2006/003-2010 - TRAMITE GRATUITO DISCAPACIDAD']}]};
+                    public_diagnostico = (data.diagnostico) ? eval(data.diagnostico) : 0;
+                    loadSuccess = true;
+                } else {
 
-        }
-    }, 'json', false, true, 'GET');
+                }
+            }, 'json', false, true, 'GET');
 }
 
 
-search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetalle, idToSkip, idDetalle2, valToSkip)
+search = function (titulo, db, modelo, posx, posy, fncallbak, objSource, idDetalle, idToSkip, idDetalle2, valToSkip)
 {
     p = {
         id: "Window_Advanced_Search",
@@ -709,7 +727,7 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
         beginSearch: 0
     };
     var g = {
-        doFilter: function(e) {
+        doFilter: function (e) {
             var k = e.charCode || e.keyCode || e.which;
             if (e.ctrlKey || e.altKey) {
                 return true;
@@ -724,7 +742,7 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
                 }
             }
         },
-        refeshTable: function(valx, filtrar) {
+        refeshTable: function (valx, filtrar) {
             var entra = false;
             if (valx.length > 0) {
                 valx = valx.toUpperCase();
@@ -769,7 +787,7 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
             ;
 
             var dtarget = $(g.bTable);
-            setTableEvents(dtarget, function(fila) {
+            setTableEvents(dtarget, function (fila) {
                 g.doClose();
                 //var fields = $("td", fila).length;
                 objSource.value = $("td", fila)[0].innerHTML;
@@ -792,7 +810,7 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
             }, 0);
 
         },
-        doClose: function() {
+        doClose: function () {
             $(g.priDiv).remove();
         }
     };
@@ -886,16 +904,16 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
 
     $("body").append(g.priDiv);
 
-    $('input[name=txtcadena]', g.sDiv).keydown(function(e) {
+    $('input[name=txtcadena]', g.sDiv).keydown(function (e) {
         g.doFilter(e)
     });
-    $('#cerrar', g.priDiv).click(function() {
+    $('#cerrar', g.priDiv).click(function () {
         g.doClose()
     })
     $('input[name=txtcadena]', g.sDiv).addClass('activado_confoco');
     $('input[name=txtcadena]', g.sDiv).focus();
 
-    document.onkeypress = function(elevento) {
+    document.onkeypress = function (elevento) {
         var levento = (window.event) ? window.event : elevento;
         var lcodigo = levento.keyCode || levento.charCode;
         if ((levento.keyCode == 27))
@@ -911,7 +929,7 @@ search = function(titulo, db, modelo, posx, posy, fncallbak, objSource, idDetall
 
 function setTableEvents(target, click, dlbclick)
 {
-    $("tbody tr", target).each(function(e) {
+    $("tbody tr", target).each(function (e) {
         setTableRowEvents(this, click, dlbclick);
     });
 }
@@ -920,26 +938,26 @@ function setTableRowEvents(fila, clickCallback, dlbclickCallback)
 {
     $(fila)
             .click(
-            function() {
-                $(fila).parent().children("tr").removeClass('seleccionado');
-                $(fila).addClass('seleccionado');
-                clickCallback ? clickCallback(fila) : 0;
-            })
+                    function () {
+                        $(fila).parent().children("tr").removeClass('seleccionado');
+                        $(fila).addClass('seleccionado');
+                        clickCallback ? clickCallback(fila) : 0;
+                    })
             .dblclick(
-            function() {
-                dlbclickCallback ? dlbclickCallback(fila) : 0;
-            })
+                    function () {
+                        dlbclickCallback ? dlbclickCallback(fila) : 0;
+                    })
             .hover(
-            function() {
-                $(fila).addClass('over');
-            },
-            function() {
-                $(fila).removeClass('over');
-            }
-    );
+                    function () {
+                        $(fila).addClass('over');
+                    },
+                    function () {
+                        $(fila).removeClass('over');
+                    }
+            );
 }
 
-showDetailByCod = function(pEvent, dataSource, wind, strIdDetalle, strIdSaltar, flagShowGridonF1, psearchbyDetail, fundCallBack, listValidKeys)
+showDetailByCod = function (pEvent, dataSource, wind, strIdDetalle, strIdSaltar, flagShowGridonF1, psearchbyDetail, fundCallBack, listValidKeys)
 {
     var tecla = new KeyboardClass(pEvent, listValidKeys);
     tecla.currentObj.firstval = '';
@@ -972,14 +990,12 @@ showDetailByCod = function(pEvent, dataSource, wind, strIdDetalle, strIdSaltar, 
             if (!flag) {
                 if (psearchbyDetail) {
                     saltar(tecla.currentObj, strIdDetalle, wind);
-                }
-                else {
+                } else {
                     (fundCallBack) ? fundCallBack(0, tecla.currentObj, strIdSaltar) : 0;
                 }
             }
         }
-    }
-    else {
+    } else {
         if (tecla.isHelp()) {
             if (flagShowGridonF1) {
                 search('BUSQUEDAS', dataSource, gridModel, 150, 250, fundCallBack, tecla.currentObj, strIdDetalle, strIdSaltar);
@@ -1010,27 +1026,24 @@ function regresarLimpiar() {
 
 function autoCloseModalW(obj) {
     var ventana;
-    if (typeof(obj) == 'object') {
+    if (typeof (obj) == 'object') {
         ventana = obj.parentNode.parentNode.parentNode.parentNode;
-    }
-    else {
+    } else {
         ventana = jQuery('#' + obj);
     }
     //var cmdsalir = dojo.query("input[type=button][value=Salir]", ventana)[0];
     var cmdsalir = jQuery("button[type=button][value=Salir]", ventana)[0];
-    if (typeof(cmdsalir) != 'undefined') {
+    if (typeof (cmdsalir) != 'undefined') {
         cmdsalir.click();
-    }
-    else {
+    } else {
         removeDomId(ventana);
     }
 }
 
 function removeDomId(obj) {
-    if (typeof(obj) == "object") {
+    if (typeof (obj) == "object") {
         obj.parentNode.removeChild(obj);
-    }
-    else {
+    } else {
         //var ventana = dojo.byId(obj);
         var ventana = jQuery('#' + obj);
         //ventana.removeChild(ventana);
@@ -1071,7 +1084,7 @@ function setZindex(id) {
     } else {
         var width = w.substring(0, w.indexOf("px"));
         x = Math.round((dims.ancho / 2 - width / 2) * Math.pow(10, 0)) / Math.pow(10, 0);
-        if(x < 20){
+        if (x < 20) {
             x = 20;
         }
     }
@@ -1081,7 +1094,7 @@ function setZindex(id) {
     } else {
         var height = h.substring(0, h.indexOf("px"));
         y = Math.round((dims.alto / 2 - height / 2) * Math.pow(10, 0)) / Math.pow(10, 0);
-        if(y < 20){
+        if (y < 20) {
             y = 20;
         }
     }
@@ -1121,80 +1134,79 @@ function showChangeDialog() {
 
 function cancelChangePwd() {
     /*
-    jQuery("#dlglogin").show();
-    var dlg = jQuery("#dlgchange");
-    dlg.hide();
-    jQuery(':input', dlg).each(function() {
-        var type = this.type;
-        if (type == 'text' || type == 'password') {
-            this.value = "";
-        }
-    });
-    jQuery("#coUsuario").focus();
-    jQuery("#msgChange").hide();
-    jQuery("#errorChange").html("");
-    */
-   removeDomId('windowChangePwd');
-   
+     jQuery("#dlglogin").show();
+     var dlg = jQuery("#dlgchange");
+     dlg.hide();
+     jQuery(':input', dlg).each(function() {
+     var type = this.type;
+     if (type == 'text' || type == 'password') {
+     this.value = "";
+     }
+     });
+     jQuery("#coUsuario").focus();
+     jQuery("#msgChange").hide();
+     jQuery("#errorChange").html("");
+     */
+    removeDomId('windowChangePwd');
+
 }
 
 function goChangePwd() {
-    
+
     $("#msgChange").hide();
     jQuery('#txtUsuario').val(fu_getTextUpperCase("txtUsuario"));
     jQuery('#txtClaveOriginal').val(fu_getTextCadenaLogin("txtClaveOriginal"));
     jQuery('#txtClaveNew1').val(fu_getTextCadenaLogin("txtClaveNew1"));
-    jQuery('#txtClaveNew2').val(fu_getTextCadenaLogin("txtClaveNew2"));    
-    
-    
-    
+    jQuery('#txtClaveNew2').val(fu_getTextCadenaLogin("txtClaveNew2"));
+
+
+
     var nuDni = $("#txtUsuario").val();
     var clave = $("#txtClaveOriginal").val();
     var pwd1 = $("#txtClaveNew1").val();
     var pwd2 = $("#txtClaveNew2").val();
     if (nuDni == "" || clave == "" || pwd1 == "" || pwd2 == "") {
-        bootbox.alert("<h5>Todos los campos (*) son requeridos.", function() {
+        bootbox.alert("<h5>Todos los campos (*) son requeridos.", function () {
             bootbox.hideAll();
             jQuery('#txtUsuario').focus();
-        });         
+        });
         //alert("todos los campos (*) son requeridos");
         return;
-    };
-    
+    }
+    ;
+
     if (pwd1 == pwd2) {
         var params = {accion: 'changepwd', nuDni: nuDni, dePassword: clave, dePasswordNuevo: pwd1, dePasswordRepeat: pwd2};
-        ajaxCall("/logout.do", params, function(data) {
+        ajaxCall("/logout.do", params, function (data) {
             if (data.coRespuesta == "1") {
-                bootbox.alert("<h5>"+data.deRespuesta, function() {
+                bootbox.alert("<h5>" + data.deRespuesta, function () {
                     bootbox.hideAll();
                     $("#dePass").val("");
                     cancelChangePwd();
 
-                });                  
+                });
 //               bootbox.alert(data.deRespuesta);
 //                cancelChangePwd();
-            }
-            else {
+            } else {
                 jQuery("#msgChange").show();
                 jQuery("#errorChange").html(data.deRespuesta);
             }
         }, 'json', false, true, 'POST');
-    }
-    else {
-       bootbox.alert("La nueva clave ingresada no coincide");
+    } else {
+        bootbox.alert("La nueva clave ingresada no coincide");
     }
 }
 function login() {
     jQuery('#coUsuario').val(fu_getTextUpperCase("coUsuario"));
-    jQuery('#dePass').val(fu_getTextCadenaLogin("dePass"));    
+    jQuery('#dePass').val(fu_getTextCadenaLogin("dePass"));
     document.forms[0].submit();
 }
 
 function loginSession() {
     jQuery('#coUsuario').val(fu_getTextUpperCase("coUsuario"));
-    jQuery('#dePass').val(fu_getTextCadenaLogin("dePass"));   
-    jQuery('#captcha').val(fu_getTextCadenaLogin("captcha"));     
-    
+    jQuery('#dePass').val(fu_getTextCadenaLogin("dePass"));
+    jQuery('#captcha').val(fu_getTextCadenaLogin("captcha"));
+
     //document.forms[0].submit();
     return true;
 }
@@ -1212,7 +1224,7 @@ function submitLogin() {
 function expira_inicio(/*url*/) {
     document.formExpira.submit();
     //window.location.replace(url);
-        
+
 }
 
 function btnEnable(obj) {
@@ -1252,7 +1264,7 @@ function openWindow_post(purl, pparam) {
     jQuery(form).attr("target", "VentanaReporte");
 
     jQuery.each(pparameters,
-            function(key) {
+            function (key) {
                 jQuery(form).append('<input type="text" name="' + key + '" value="' + this + '" />');
             });
 
@@ -1275,7 +1287,7 @@ function openWindow_post(purl, pparam) {
 
 function split_param(param) {
     var queryString = {};
-    param.replace(/([^?=&]+)(=([^&]*))?/g, function($0, $1, $2, $3) {
+    param.replace(/([^?=&]+)(=([^&]*))?/g, function ($0, $1, $2, $3) {
         queryString[$1] = $3;
     });
     return queryString;
@@ -1305,11 +1317,11 @@ function refrescarBandejaEntrada() {
     p[0] = "accion=goInicio";
     var nameDiv = "divTablaBandejaEntrada";
     var div = "#" + nameDiv;
-    jQuery(div).fadeOut(250, function() {
+    jQuery(div).fadeOut(250, function () {
         jQuery(this).show().css({visibility: "hidden"});
     });
-    ajaxCall("/srBandejaEntrada.do", p.join("&"), function(data) {
-        jQuery(div).fadeIn(500, function() {
+    ajaxCall("/srBandejaEntrada.do", p.join("&"), function (data) {
+        jQuery(div).fadeIn(500, function () {
             jQuery(this).show().css({visibility: "visible"});
             refreshScript(nameDiv, data);
         });
@@ -1320,7 +1332,7 @@ function appletCargado(datosPC) {
     //alert(datosPC);
 
     ajaxCall("/config.do", "accion=goDatosPC&" + datosPC,
-            function(data) {
+            function (data) {
                 null;
             }, 'text', true, true, 'POST');
 
@@ -1328,7 +1340,7 @@ function appletCargado(datosPC) {
 
 function appletCargadoRutaDoc(datosPC) {
     debugger;
-    jQuery("#RutaDocs").html("<strong>"+datosPC+"</strong>");
+    jQuery("#RutaDocs").html("<strong>" + datosPC + "</strong>");
 
 }
 
@@ -1346,10 +1358,10 @@ function alert_Sucess(titulo, msg) {
     var TagId = '';
 
     /*if (DivPopUp.length !== 0) {
-        TagId = "#" + id;
-    } else {
-        TagId = "#applicationPanel";
-    }*/
+     TagId = "#" + id;
+     } else {
+     TagId = "#applicationPanel";
+     }*/
     TagId = "#applicationPanel";
     var msgHtml = "<strong>" + titulo + "</strong>" + " " + msg;
     $('<div id="notificacion_proyect" style="display: none;">')
@@ -1358,16 +1370,16 @@ function alert_Sucess(titulo, msg) {
             .html(msgHtml)
             .addClass("notification alert alert-success")
             .position(
-            {
-                my: "right top",
-                at: "right top",
-                of: "#applicationPanel"
-            }
-    );
+                    {
+                        my: "right top",
+                        at: "right top",
+                        of: "#applicationPanel"
+                    }
+            );
 
-    jQuery('#notificacion_proyect').fadeIn("slow",function(){
+    jQuery('#notificacion_proyect').fadeIn("slow", function () {
         removeNotification();
-    });    
+    });
 }
 
 function alert_Danger(titulo, msg) {
@@ -1377,10 +1389,10 @@ function alert_Danger(titulo, msg) {
     var TagId = '';
 
     /*if (DivPopUp.length !== 0) {
-        TagId = "#" + id;
-    } else {
-        TagId = "#applicationPanel";
-    }*/
+     TagId = "#" + id;
+     } else {
+     TagId = "#applicationPanel";
+     }*/
     TagId = "#applicationPanel";
     var msgHtml = "<strong>" + titulo + "</strong>" + " " + msg;
     $('<div id="notificacion_proyect" style="display: none;">')
@@ -1389,16 +1401,16 @@ function alert_Danger(titulo, msg) {
             .html(msgHtml)
             .addClass("notification alert alert-danger")
             .position(
-            {
-                my: "right top",
-                at: "right top",
-                of: "#applicationPanel"
-            }
-    );
+                    {
+                        my: "right top",
+                        at: "right top",
+                        of: "#applicationPanel"
+                    }
+            );
 
-    jQuery('#notificacion_proyect').fadeIn("slow",function(){
+    jQuery('#notificacion_proyect').fadeIn("slow", function () {
         removeNotification();
-    });        
+    });
 }
 
 function alert_Warning(titulo, msg) {
@@ -1408,11 +1420,11 @@ function alert_Warning(titulo, msg) {
     var TagId = '';
 
     /*if (DivPopUp.length !== 0) {
-        TagId = "#" + id;
-    } else {
-        TagId = "#applicationPanel";
-    }*/
-    TagId = "#applicationPanel";     
+     TagId = "#" + id;
+     } else {
+     TagId = "#applicationPanel";
+     }*/
+    TagId = "#applicationPanel";
     var msgHtml = "<strong>" + titulo + "</strong>" + " " + msg;
     $('<div id="notificacion_proyect" style="display: none;">')
             //.appendTo("#applicationPanel")
@@ -1420,16 +1432,16 @@ function alert_Warning(titulo, msg) {
             .html(msgHtml)
             .addClass("notification alert alert-warning")
             .position(
-            {
-                my: "right top",
-                at: "right top",
-                of: "#applicationPanel"
-            }
-    );
+                    {
+                        my: "right top",
+                        at: "right top",
+                        of: "#applicationPanel"
+                    }
+            );
 
-    jQuery('#notificacion_proyect').fadeIn("slow",function(){
+    jQuery('#notificacion_proyect').fadeIn("slow", function () {
         removeNotification();
-    });     
+    });
 }
 
 function alert_Info(titulo, msg) {
@@ -1439,19 +1451,19 @@ function alert_Info(titulo, msg) {
             .html(msgHtml)
             .addClass("notification alert alert-info")
             .position(
-            {
-                my: "right top",
-                at: "right top",
-                of: "#applicationPanel"
-            }
-    );
+                    {
+                        my: "right top",
+                        at: "right top",
+                        of: "#applicationPanel"
+                    }
+            );
 
-    jQuery('#notificacion_proyect').fadeIn("slow",function(){
+    jQuery('#notificacion_proyect').fadeIn("slow", function () {
         removeNotification();
     });
 }
 
-function fn_abrirRutaDocs(){
+function fn_abrirRutaDocs() {
     var retval = "NO";
 //    var appletObj = jQuery('#firmarDocumento');
 //    try{
@@ -1460,10 +1472,10 @@ function fn_abrirRutaDocs(){
 //        retval = "NO";
 //    }
     /*var param={};
-    runApplet(appletsTramiteDoc.abrirRutaDocs,param,function(data){
-        retval=data;
-    });*/
-    runOnDesktop(accionOnDesktopTramiteDoc.abrirRutaDocs,null);    
+     runApplet(appletsTramiteDoc.abrirRutaDocs,param,function(data){
+     retval=data;
+     });*/
+    runOnDesktop(accionOnDesktopTramiteDoc.abrirRutaDocs, null);
     //return retval;
 }
 
@@ -1480,62 +1492,62 @@ function fn_updDependenciaUsuario() {
     var pcoUsuario = jQuery('#coUsuario').val();
     jQuery('#coDep').val("");
     jQuery('#deDependencia').val("");
-    
+
     if (!!pcoUsuario) {
         var p = new Array();
-        p[0] = "accion=goSeleccionaDep";	
-        p[1] = "pcoUsuario="+pcoUsuario;	
-        ajaxCall("/srDepAcceso.do",p.join("&"),function(data){
+        p[0] = "accion=goSeleccionaDep";
+        p[1] = "pcoUsuario=" + pcoUsuario;
+        ajaxCall("/srDepAcceso.do", p.join("&"), function (data) {
             var result;
-            eval("var docs="+data);
-            if(typeof(docs)!="undefined" && typeof(docs.retval)!='undefined' && docs.retval!=""){
-                if(docs.retval =="OK"){
+            eval("var docs=" + data);
+            if (typeof (docs) != "undefined" && typeof (docs.retval) != 'undefined' && docs.retval != "") {
+                if (docs.retval == "OK") {
                     jQuery('#cempCodemp').val(docs.coEmp);
                     jQuery('#coDep').val(docs.coDep);
                     jQuery('#deDependencia').val(docs.deDep);
-                    jQuery('#deDependencia').attr('title',docs.deDep);
+                    jQuery('#deDependencia').attr('title', docs.deDep);
                     jQuery('#hinAD').val(docs.inAD);
-                    
+
                 }
             }
 
-        }, 'text', true, true, "POST");       
+        }, 'text', true, true, "POST");
     }
 
 }
 
-function fu_setDependenciaAcceso(pcoDep,pdeDep) {
+function fu_setDependenciaAcceso(pcoDep, pdeDep) {
     jQuery('#coDep').val(pcoDep);
     jQuery('#deDependencia').val(pdeDep);
     removeDomId('windowDependenciaAcceso');
 }
 
-function fn_cambiaPwd(){
+function fn_cambiaPwd() {
     jQuery('#coUsuario').val(fu_getTextUpperCase("coUsuario"));
     var pcoUsuario = jQuery('#coUsuario').val();
 
-    var p = new Array();    
-    p[0] = "accion=goCambioPwd";	    
+    var p = new Array();
+    p[0] = "accion=goCambioPwd";
     if (!!pcoUsuario) {
-        p[1] = "pcoUsuario=" + pcoUsuario;    
+        p[1] = "pcoUsuario=" + pcoUsuario;
     }
-    ajaxCall("/srDepAcceso.do",p.join("&"),function(data){
-            if(data !== null){
-                jQuery("body").append(data);
-            }    
-        },
-    'text', false, false, "POST");       
-    
+    ajaxCall("/srDepAcceso.do", p.join("&"), function (data) {
+        if (data !== null) {
+            jQuery("body").append(data);
+        }
+    },
+            'text', false, false, "POST");
+
 }
 
-function fn_inicializaVentanaModal(divId){
-    jQuery("#"+divId).draggable({handle: "#dragmodal"});
-    jQuery("#"+divId).keyup(function(event){
-        if(event.which===27)
+function fn_inicializaVentanaModal(divId) {
+    jQuery("#" + divId).draggable({handle: "#dragmodal"});
+    jQuery("#" + divId).keyup(function (event) {
+        if (event.which === 27)
         {
             removeDomId(divId);
         }
-    });    
+    });
 }
 function fu_eventoGridTabla(pIdSelector, pParamConf) {
     var idSelector = "#" + pIdSelector;
@@ -1544,94 +1556,101 @@ function fu_eventoGridTabla(pIdSelector, pParamConf) {
 }
 
 
-function fn_cambiaDependenciaLogin(){
+function fn_cambiaDependenciaLogin() {
 
     jQuery('#coUsuario').val(fu_getTextUpperCase("coUsuario"));
-    
+
     var pcoUsuario = jQuery('#coUsuario').val();
     var pcoEmp = jQuery('#cempCodemp').val();
 
     if (!!pcoUsuario && !!pcoEmp) {
-            var p = new Array();    
-            p[0] = "accion=goListaDependencias";	    
-            p[1] = "pcoUsuario=" + pcoUsuario;    
-            p[2] = "pcoEmp=" + pcoEmp;    
-            ajaxCall("/srDepAcceso.do",p.join("&"),function(data){
-                    if(data !== null){
-                        jQuery("body").append(data);
-                    }    
-                },
-            'text', false, false, "POST");       
+        var p = new Array();
+        p[0] = "accion=goListaDependencias";
+        p[1] = "pcoUsuario=" + pcoUsuario;
+        p[2] = "pcoEmp=" + pcoEmp;
+        ajaxCall("/srDepAcceso.do", p.join("&"), function (data) {
+            if (data !== null) {
+                jQuery("body").append(data);
+            }
+        },
+                'text', false, false, "POST");
     }
-    
+
 }
 
-function fn_cambiaDependencia(){
-            ajaxCall("/cambiaDep.do","",function(data){
-                    if(data !== null){
-                        jQuery("body").append(data);
-                    }    
-                },
-            'text', false, false, "POST");       
-    }
+function fn_cambiaDependencia() {
+    ajaxCall("/cambiaDep.do", "", function (data) {
+        if (data !== null) {
+            jQuery("body").append(data);
+        }
+    },
+            'text', false, false, "POST");
+}
 
-function fu_activaDependencia(pcoDep,pdeDep) {
-    try{cerrarConexion_wsocket();}catch(ex){}
-    var noForm ="#depForm";
+function fu_activaDependencia(pcoDep, pdeDep) {
+    try {
+        cerrarConexion_wsocket();
+    } catch (ex) {
+    }
+    var noForm = "#depForm";
     jQuery(noForm).find('#txtCoDep').val(pcoDep);
     jQuery(noForm).submit();
 }
 
-function fu_activaDependencia_dir(pcoDep,pdeDep) {
-    try{cerrarConexion_wsocket();}catch(ex){}
-    var noForm ="#depFormDir";
+function fu_activaDependencia_dir(pcoDep, pdeDep) {
+    try {
+        cerrarConexion_wsocket();
+    } catch (ex) {
+    }
+    var noForm = "#depFormDir";
     jQuery(noForm).find('#txtCoDep').val(pcoDep);
-    jQuery(noForm).submit();    
+    jQuery(noForm).submit();
 }
 
-function fn_mostrar_manual(){
-    
-    var windowTarget = "_blank" ;
+function fn_mostrar_manual() {
+
+    var windowTarget = "_blank";
     var path = '../Manual_SGD.pdf';
-    window.open(path,"location=no,hidden=no");  
+    window.open(path, "location=no,hidden=no");
     return false;
 }
 
 
-function cleanString (st)
+function cleanString(st)
 {
-        var ltr = ['[àáâãä]','[èéêë]','[ìíîï]','[òóôõö]','[ùúûü]','ñ','ç','[ýÿ]','\\s|\\W|_'];
-        var rpl = ['a','e','i','o','u','n','c','y',''];
-        var str = String(st.toLowerCase());
-        
-        for (var i = 0, c = ltr.length; i < c; i++)
-        {
-        	var rgx = new RegExp(ltr[i],'g');
-        	str = str.replace(rgx,rpl[i]);
-        };
-        
-        return str;
+    var ltr = ['[àáâãä]', '[èéêë]', '[ìíîï]', '[òóôõö]', '[ùúûü]', 'ñ', 'ç', '[ýÿ]', '\\s|\\W|_'];
+    var rpl = ['a', 'e', 'i', 'o', 'u', 'n', 'c', 'y', ''];
+    var str = String(st.toLowerCase());
+
+    for (var i = 0, c = ltr.length; i < c; i++)
+    {
+        var rgx = new RegExp(ltr[i], 'g');
+        str = str.replace(rgx, rpl[i]);
+    }
+    ;
+
+    return str;
 }
 
-function fn_abrirPdf(pUrl,pDoc){
-        var windowTarget = "_system" ;
-        var path = pUrl;
-        window.open(path,"location=yes,hidden=no");
-        return false;
-/*    
-    window.open(pUrl,'_blank','left=0px,top=0px,width=800,height=670');
+function fn_abrirPdf(pUrl, pDoc) {
+    var windowTarget = "_system";
+    var path = pUrl;
+    window.open(path, "location=yes,hidden=no");
     return false;
-    */
-    
+    /*    
+     window.open(pUrl,'_blank','left=0px,top=0px,width=800,height=670');
+     return false;
+     */
+
 }
 
-function fn_abrirPdf2(pUrl,pDoc){
-    var vpos = -1 
+function fn_abrirPdf2(pUrl, pDoc) {
+    var vpos = -1
     var noDoc = pDoc;
-    try{
-        vpos = pDoc.lastIndexOf('|'); 
-        noDoc = pDoc.substring(vpos+1);
-    }catch(ev){
+    try {
+        vpos = pDoc.lastIndexOf('|');
+        noDoc = pDoc.substring(vpos + 1);
+    } catch (ev) {
         noDoc = "documento.pdf";
     }
     //Usaremos un link para iniciar la descarga 
@@ -1641,19 +1660,19 @@ function fn_abrirPdf2(pUrl,pDoc){
     save.target = '_blank';
     //save.download = noDoc;
     //save.onclick = function(){window.open(pUrl,'_blank','left=0px,top=0px,width=800,height=670');return false;};
-    
-    var clickEvent = document.createEvent ("MouseEvent");    
-    clickEvent.initMouseEvent ("click", true, true, window, 1, 
-                                0, 0, 0, 0, 
-                                false, false, false, false, 
-                                0, null);
+
+    var clickEvent = document.createEvent("MouseEvent");
+    clickEvent.initMouseEvent("click", true, true, window, 1,
+            0, 0, 0, 0,
+            false, false, false, false,
+            0, null);
 
     //Simulamos un clic del usuario
     //no es necesario agregar el link al DOM.
     save.dispatchEvent(clickEvent);
     //Y liberamos recursos...
     (window.URL || window.webkitURL).revokeObjectURL(save.href);
-    
+
 }
 function getIcoEtiqueta(id) {
     try {
@@ -1668,46 +1687,46 @@ function getIcoEtiqueta(id) {
     }
 }
 function mostrarEtiquetas() {
-    $("input[name='icoEtiqueta']").each(function() {
+    $("input[name='icoEtiqueta']").each(function () {
         var id = $(this).val();
         $(this).parent().attr("class", getIcoEtiqueta(id));
     });
 }
-function setEtiquetasListaDoc(idTable,col) {
-    
-    $("#"+idTable+" tbody tr").each(function() {
-        var aux = $(this).find("td:eq("+col+")").text();
+function setEtiquetasListaDoc(idTable, col) {
+
+    $("#" + idTable + " tbody tr").each(function () {
+        var aux = $(this).find("td:eq(" + col + ")").text();
         var a = aux.split("_");
         var id = a[0];
         var label = a[1];
         var clase = getIcoEtiqueta(id);
         var ico = "<span class='" + clase + "'></span> ";
         if (parseInt(id) === 0) {
-            $(this).find("td:eq("+col+")").html(label);
+            $(this).find("td:eq(" + col + ")").html(label);
         } else {
-            $(this).find("td:eq("+col+")").html(ico + label);
+            $(this).find("td:eq(" + col + ")").html(ico + label);
         }
     });
 }
 
 
-function verificarClaveFuerte(inClaveFuerte){
-    if(inClaveFuerte==='EXP'||inClaveFuerte==='NF'||inClaveFuerte>0){
+function verificarClaveFuerte(inClaveFuerte) {
+    if (inClaveFuerte === 'EXP' || inClaveFuerte === 'NF' || inClaveFuerte > 0) {
         //jQuery('#myModal').modal();
-        var p = new Array();    
-        p[0] = "accion=msgCambioPwd";	    
-        p[1] = "tipoMsg="+inClaveFuerte;	    
-        ajaxCall("/srDepAcceso.do",p.join("&"),function(data){
-                if(data !== null){
-                    jQuery("body").append(data);
-                }    
-            },
-        'text', false, false, "POST");               
+        var p = new Array();
+        p[0] = "accion=msgCambioPwd";
+        p[1] = "tipoMsg=" + inClaveFuerte;
+        ajaxCall("/srDepAcceso.do", p.join("&"), function (data) {
+            if (data !== null) {
+                jQuery("body").append(data);
+            }
+        },
+                'text', false, false, "POST");
     }
 }
 
 
-function fn_PrecambiaPwd(){
+function fn_PrecambiaPwd() {
     removeDomId('windowAlertChangePwd');
     fn_cambiaPwd();
 }
@@ -1736,7 +1755,7 @@ function fn_password() {
 
 function fn_mostrar_req_so_old(hpLink) {
     //var auxUrl="OnpeTradoc:accion=VerifConf?browser=";
-    var auxUrl="Tramitedoc:accion=VerifConf?browser=";
+    var auxUrl = "Tramitedoc:accion=VerifConf?browser=";
     var auxBrowVersion = $.browser.version;
     var ie;
     if (!!$.browser.msie) {
@@ -1747,34 +1766,34 @@ function fn_mostrar_req_so_old(hpLink) {
         } else {
             ie = false;
         }
-    }    
+    }
     if (ie) {
         if (auxBrowVersion <= 9)
         {
             //$("#browser").append("IE version " + auxBrowVersion + "<span style='color:#FFAF6A' >, actualizar IE versión 10 o superior</span>").append($("#icoWarnig").clone()).append("<br/>(Recomendamos usar navegador Chrome)");
-            auxUrl=auxUrl+"IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
+            auxUrl = auxUrl + "IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
         } else {
             //$("#browser").append("IE version " + auxBrowVersion).append($("#icoOk").clone()).append("(Recomendamos usar navegador Chrome)");
-            auxUrl=auxUrl+"IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
+            auxUrl = auxUrl + "IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
         }
     } else {
         var auxNavName;
         if ($.browser.mozilla) {
             auxNavName = "Firefox";
             //$("#browser").append("Browser " + auxNavName + " ver. " + auxBrowVersion).append($("#icoOk").clone());
-            auxUrl=auxUrl+"Browser " + auxNavName + " ver. " + auxBrowVersion;
+            auxUrl = auxUrl + "Browser " + auxNavName + " ver. " + auxBrowVersion;
         } else {
             if ($.browser.chrome) {
                 auxNavName = "Chrome";
                 //$("#browser").append("Browser " + auxNavName + " ver. " + auxBrowVersion).append($("#icoOk").clone());
-                auxUrl=auxUrl+"Browser " + auxNavName + " ver. " + auxBrowVersion;
+                auxUrl = auxUrl + "Browser " + auxNavName + " ver. " + auxBrowVersion;
             } else {
                 //$("#browser").append("<span style='color:#FF4500' > Browser Desconocido ver. Instale Chrome</span>").append($("#icoError").clone());
-                auxUrl=auxUrl+"Browser Desconocido ver. Instale Chrome";
+                auxUrl = auxUrl + "Browser Desconocido ver. Instale Chrome";
             }
         }
     }
-    hpLink.setAttribute('href',auxUrl);
+    hpLink.setAttribute('href', auxUrl);
     return true;
 }
 
@@ -1784,27 +1803,28 @@ var _ws_url_req = null;
 var _ws_url_server_req = null;
 var _call_link_req = 0;
 
-function fn_close_ws_req(){
-    if(_ws_req!==null)
+function fn_close_ws_req() {
+    if (_ws_req !== null)
     {
-        try{
-        _ws_req.close();
-        }catch(e){}
-    }       
+        try {
+            _ws_req.close();
+        } catch (e) {
+        }
+    }
 }
 
-function fn_req_so_new(data){
-    if(data!==null){
-        if(data.error==="0"){
-            if (_ws_req.readyState===_ws_req.OPEN){
-                var msg = '{"message":' + null + ', "sender":"", "destination":"' + "APPCLIENT" + '" ,"accion":"'+"TERMINATE_APP"+'" ,"nrOperacion":"'+null+'"}';    
-                _ws_req.send(msg);              
+function fn_req_so_new(data) {
+    if (data !== null) {
+        if (data.error === "0") {
+            if (_ws_req.readyState === _ws_req.OPEN) {
+                var msg = '{"message":' + null + ', "sender":"", "destination":"' + "APPCLIENT" + '" ,"accion":"' + "TERMINATE_APP" + '" ,"nrOperacion":"' + null + '"}';
+                _ws_req.send(msg);
             }
         }/*else{
-            bootbox.alert("<h5>Por favor instale Tr&#225;mite Documentario.</h5>", function() {
-                bootbox.hideAll();
-            });             
-        }*/
+         bootbox.alert("<h5>Por favor instale Tr&#225;mite Documentario.</h5>", function() {
+         bootbox.hideAll();
+         });             
+         }*/
     }
 }
 
@@ -1845,36 +1865,36 @@ function fn_req_so_new(data){
 //    }     
 //}
 
-function fn_onMessageReceivedWS(evt){
+function fn_onMessageReceivedWS(evt) {
     var msg = JSON.parse(evt.data); // native API
-    fn_processMessageRecived(msg);    
+    fn_processMessageRecived(msg);
 }
 
-function fn_processMessageRecived(msg){
-   switch (msg.accion) 
-        {
-            case "APP_INSTALL":
-                _onpetradoc_install=1;
-                fn_req_so_new(msg);
-                break;
-            default:
-                fn_req_so_new(null);
-                break;
-        }
+function fn_processMessageRecived(msg) {
+    switch (msg.accion)
+    {
+        case "APP_INSTALL":
+            _onpetradoc_install = 1;
+            fn_req_so_new(msg);
+            break;
+        default:
+            fn_req_so_new(null);
+            break;
+    }
 }
 
 function fn_mostrar_req_so(hpLink) {
-    if(!_call_link_req){
+    if (!_call_link_req) {
         _call_link_req = 1;
         _onpetradoc_install = 0;
 
         var auxwsServLoc0 = _ws_url_server_req.substring(0, _ws_url_server_req.indexOf('://') + 3);
         var auxwsServLoc1 = _ws_url_server_req.substring(_ws_url_server_req.indexOf('://') + 3);
         auxwsServLoc1 = auxwsServLoc1.substring(auxwsServLoc1.indexOf('/'));
-        _ws_url_req = auxwsServLoc0+document.location.host+auxwsServLoc1;    
+        _ws_url_req = auxwsServLoc0 + document.location.host + auxwsServLoc1;
 
-	//var auxUrl="OnpeTradoc:accion=VerifConf?browser=";
-        var auxUrl="Tramitedoc:accion=VerifConf?browser=";
+        //var auxUrl="OnpeTradoc:accion=VerifConf?browser=";
+        var auxUrl = "Tramitedoc:accion=VerifConf?browser=";
         var auxBrowVersion = $.browser.version;
         var ie;
         if (!!$.browser.msie) {
@@ -1885,44 +1905,44 @@ function fn_mostrar_req_so(hpLink) {
             } else {
                 ie = false;
             }
-        }    
+        }
         if (ie) {
             if (auxBrowVersion <= 9)
             {
                 //$("#browser").append("IE version " + auxBrowVersion + "<span style='color:#FFAF6A' >, actualizar IE versión 10 o superior</span>").append($("#icoWarnig").clone()).append("<br/>(Recomendamos usar navegador Chrome)");
-                auxUrl=auxUrl+"IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
+                auxUrl = auxUrl + "IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
             } else {
                 //$("#browser").append("IE version " + auxBrowVersion).append($("#icoOk").clone()).append("(Recomendamos usar navegador Chrome)");
-                auxUrl=auxUrl+"IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
+                auxUrl = auxUrl + "IE version " + auxBrowVersion + " (Recomendamos usar navegador Chrome)";
             }
         } else {
             var auxNavName;
             if ($.browser.mozilla) {
                 auxNavName = "Firefox";
                 //$("#browser").append("Browser " + auxNavName + " ver. " + auxBrowVersion).append($("#icoOk").clone());
-                auxUrl=auxUrl+"Browser " + auxNavName + " ver. " + auxBrowVersion;
+                auxUrl = auxUrl + "Browser " + auxNavName + " ver. " + auxBrowVersion;
             } else {
                 if ($.browser.chrome) {
                     auxNavName = "Chrome";
                     //$("#browser").append("Browser " + auxNavName + " ver. " + auxBrowVersion).append($("#icoOk").clone());
-                    auxUrl=auxUrl+"Browser " + auxNavName + " ver. " + auxBrowVersion;
+                    auxUrl = auxUrl + "Browser " + auxNavName + " ver. " + auxBrowVersion;
                 } else {
                     //$("#browser").append("<span style='color:#FF4500' > Browser Desconocido ver. Instale Chrome</span>").append($("#icoError").clone());
-                    auxUrl=auxUrl+"Browser Desconocido ver. Instale Chrome";
+                    auxUrl = auxUrl + "Browser Desconocido ver. Instale Chrome";
                 }
             }
         }
-        _ws_url_req+= new Date().valueOf()+'/';
-        hpLink.setAttribute('href',auxUrl+'?ws='+_ws_url_req);    
+        _ws_url_req += new Date().valueOf() + '/';
+        hpLink.setAttribute('href', auxUrl + '?ws=' + _ws_url_req);
 
         var conex_ws = 0;
-        var waitToConexionWS = function() {
+        var waitToConexionWS = function () {
             hpLink.href = "javascript:void(0);";
-            if(!conex_ws){
-                conex_ws=1;
+            if (!conex_ws) {
+                conex_ws = 1;
                 var p = new Array();
                 p[0] = "accion=goVerRequisitos2";
-                ajaxCall("/srDepAcceso.do", p.join("&"), function(data) {
+                ajaxCall("/srDepAcceso.do", p.join("&"), function (data) {
                     if (data !== null) {
                         jQuery("body").append(data);
                     }
@@ -1932,61 +1952,61 @@ function fn_mostrar_req_so(hpLink) {
 
             clearInterval(timeConex);
         };
-        var timeConex = setInterval(waitToConexionWS, 1000*.25); //1/4 de segundo   
+        var timeConex = setInterval(waitToConexionWS, 1000 * .25); //1/4 de segundo   
 
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function ini_verReqSO(){
-    var elem = document.getElementById("myProgressBarReq"); 
+function ini_verReqSO() {
+    var elem = document.getElementById("myProgressBarReq");
 
     var width = 0;
     var time_re_call = 1000;//1 segundo
     var conex_ws = 0;
 
-    if(!conex_ws){
-        conex_ws=1;
-        _ws_req = new WebSocket(_ws_url_req +'BROWSER');
-        _ws_req.onmessage = function (evt){
+    if (!conex_ws) {
+        conex_ws = 1;
+        _ws_req = new WebSocket(_ws_url_req + 'BROWSER');
+        _ws_req.onmessage = function (evt) {
             fn_onMessageReceivedWS(evt);
         };
-    }                    
+    }
 
     //var send_ws = 0;
     //var ini = new Date();
-    var waitToResponseWS = function() {
-        if (_ws_req.readyState===_ws_req.OPEN){
-            if(/*!send_ws&&*/!_onpetradoc_install){
+    var waitToResponseWS = function () {
+        if (_ws_req.readyState === _ws_req.OPEN) {
+            if (/*!send_ws&&*/!_onpetradoc_install) {
                 //send_ws=1;
-                var msg = '{"message":' + null + ', "sender":"", "destination":"' + "APPCLIENT" + '" ,"accion":"'+"APP_INSTALL"+'" ,"nrOperacion":"'+null+'"}';
+                var msg = '{"message":' + null + ', "sender":"", "destination":"' + "APPCLIENT" + '" ,"accion":"' + "APP_INSTALL" + '" ,"nrOperacion":"' + null + '"}';
                 _ws_req.send(msg);
             }
         }
 
-        width=Math.round(width+7.3);
-        elem.style.width = width + '%'; 
+        width = Math.round(width + 7.3);
+        elem.style.width = width + '%';
         elem.innerHTML = width * 1 + '%';
-        elem.setAttribute('aria-valuenow', width * 1);                        
+        elem.setAttribute('aria-valuenow', width * 1);
 
         if (width >= 100) {
             //console.log('INI: '+ini+" FIN: "+ new Date());
             clearInterval(time);
             fn_close_ws_req();
-            if(!_onpetradoc_install){
+            if (!_onpetradoc_install) {
                 jQuery('#myDivProgress').hide();
                 jQuery('#myDivInstall').show();
-            }                             
+            }
         }
 
-        if(_onpetradoc_install){
+        if (_onpetradoc_install) {
             //console.log('INI: '+ini+" FIN: "+ new Date());
-            clearInterval(time);                
+            clearInterval(time);
             fn_close_ws_req();
             removeDomId('windowVerificaRequisitosSO');
-        }                        
+        }
     };
     var time = setInterval(waitToResponseWS, time_re_call);
 }                        

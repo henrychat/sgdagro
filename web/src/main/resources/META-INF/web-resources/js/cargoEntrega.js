@@ -1142,7 +1142,9 @@ function fn_imprimirCargoEntrega(){
         var p = new Array();
         p[0] = "accion=goExportarArchivoLista";
         p[1] = "pnuAnnGuia=" + pnuAnnGuia;    
-        p[2] = "pnuGuia=" + pnuGuia;   
+        p[2] = "pnuGuia=" + pnuGuia;
+        console.log(pnuAnnGuia +" y " +pnuGuia)
+        debugger
         ajaxCall("/srCargoEntrega.do", p.join("&"), function(data) {          
             if (data!==null) {
                 if(data.coRespuesta==="0"){
@@ -1159,6 +1161,8 @@ function fn_imprimirCargoEntrega(){
                         });
                     }
                 }else{
+                    debugger
+                    console.log("data.coRespuesta: "+data.coRespuesta)
                    bootbox.alert(data.deRespuesta);
                 }
             }else{

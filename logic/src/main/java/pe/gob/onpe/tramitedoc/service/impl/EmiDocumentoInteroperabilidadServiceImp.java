@@ -1327,7 +1327,7 @@ public class EmiDocumentoInteroperabilidadServiceImp
       throw e;
     } catch (Exception e) {
       e.printStackTrace();
-      throw new validarDatoException("ERROR EN TRANSACCION");
+      throw new validarDatoException("ERROR EN TRANSACCION 4" + e.getMessage());
     } 
     return vReturn;
   }

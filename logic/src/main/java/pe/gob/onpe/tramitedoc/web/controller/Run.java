@@ -21,8 +21,10 @@ public class Run {
         // TODO code application logic here
 //        
         try {
-            //System.out.println(Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A051ABF082B410FFB79036F15AC90B25F",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));    
-            //System.out.println(Utility.getInstancia().cifrar("C:\\tmp",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));    
+            System.out.println(Utility.getInstancia().descifrar("B9538719BA40F788C66CA9D0AF36C1D5",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));
+            System.out.println(Utility.getInstancia().cifrar("/home/administrador/glassfish/tmppcm",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));
+            System.out.println(Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A051ABF082B410FFB79036F15AC90B25F",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));
+            System.out.println(Utility.getInstancia().cifrar("C:\\tmp",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));
             System.out.println(Utility.getInstancia().cifrar("10424983883",ConstantesSec.SGD_SECRET_KEY_PROPERTIES));    
         } catch (Exception e) {
         }

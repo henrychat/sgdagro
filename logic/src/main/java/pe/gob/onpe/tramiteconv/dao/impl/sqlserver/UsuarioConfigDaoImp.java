@@ -52,7 +52,7 @@ public class UsuarioConfigDaoImp
         } catch (Exception e) {
             usuConfig = null;
             msg.setCoRespuesta("5001");
-            msg.setDeRespuesta("Error interno de BASE DE DATOS.");
+            msg.setDeRespuesta("Error interno de BASE DE DATOS." + coDep + cempCodemp+ e.getMessage());
             e.printStackTrace();
         }
 

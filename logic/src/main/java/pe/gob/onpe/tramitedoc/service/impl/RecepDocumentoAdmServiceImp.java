@@ -359,7 +359,7 @@ public class RecepDocumentoAdmServiceImp implements RecepDocumentoAdmService {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new validarDatoException("ERROR EN TRANSACCION");
+            throw new validarDatoException("ERROR EN TRANSACCION 2 " + e.getMessage());
         }
         return vReturn;
     }

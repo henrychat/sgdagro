@@ -518,6 +518,10 @@ function fn_rptaGetCiudadanoRemDocExtRec(data,noForm, tipo){
     if(data!==null){
         if(data.coRespuesta==="1"){
             var obj = data.ciudadanoBean;
+            console.log("abajo  data.ciudadanoBean")
+            console.log(obj.idDepartamento);
+            console.log("arriba  data.ciudadanoBean")
+            console.log(obj);
             if(!!obj){
             if(tipo === "1"){
                 jQuery('#'+noForm).find("#nuDni").val(obj.nuDoc);
@@ -759,6 +763,7 @@ function fn_setDestinotlbCiudadano(nombres, dni,idDepartamento, idProvincia, idD
         jQuery('#'+noForm).find("#nuDniAuxRes").val(dni);
         jQuery('#'+noForm).find("#deNuDniRes").val(nombres);
 
+        console.log("aqui fn_setDestinotlbCiudadano: " +idDepartamento);
         cargar_ubigeo(idDepartamento,idProvincia,idDistrito);
         jQuery('#'+noForm).find("#deDireccion").val(deDireccion);
         jQuery('#'+noForm).find("#deCorreo").val(deCorreo);

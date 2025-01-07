@@ -35,6 +35,7 @@ import pe.gob.onpe.tramitedoc.dao.EmiDocumentoPersonalDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 
 import org.apache.log4j.Logger;
+import pe.gob.onpe.tramitedoc.util.AleatorioCodVerificacion;
 
 @Repository("emiDocumentoPersonalDao")
 public class EmiDocumentoPersonalDaoImp
@@ -355,13 +356,17 @@ public class EmiDocumentoPersonalDaoImp
         sqlUpd.append("CO_TIP_DOC_ADM=?, ");
         sqlUpd.append("NU_DOC_EMI=?, ");
         sqlUpd.append("DE_DOC_SIG=?, ");
+        sqlUpd.append("COD_VER_EXT=?, ");
         sqlUpd.append("FE_USE_MOD=CURRENT_TIMESTAMP ");
         sqlUpd.append("where NU_ANN=? ");
         sqlUpd.append("AND NU_EMI=? ");
 
+        //WGC-20240506
+        documentoEmiBean.setCoVerExt(AleatorioCodVerificacion.generaCodVerificacion());
+
         try {
-            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getCoUseMod(), documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(), documentoEmiBean
-                .getCoTipDocAdm(), documentoEmiBean.getNuDocEmi(), documentoEmiBean.getDeDocSig(), documentoEmiBean.getNuAnn(), documentoEmiBean.getNuEmi()});
+            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getCoUseMod(), documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(),
+                documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getNuDocEmi(), documentoEmiBean.getDeDocSig(), documentoEmiBean.getCoVerExt(), documentoEmiBean.getNuAnn(), documentoEmiBean.getNuEmi()});
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
 
@@ -575,10 +580,35 @@ public class EmiDocumentoPersonalDaoImp
 
                 NuSecExp = documentoEmiBean.getNuSecExp().replace("'", "");
             }
+
+
+            //////////////////////////////////////////////////
+            Object[] params = new Object[]{
+                    documentoEmiBean.getNuAnn(), snuEmi, snuCorEmi, documentoEmiBean.getCoLocEmi(),
+                    documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getCoEmpEmi(),
+                    documentoEmiBean.getDeAsu(), documentoEmiBean.getNuDiaAte(), documentoEmiBean.getCoTipDocAdm(),
+                    documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getDeDocSig(), NuAnnExp, NuSecExp,
+                    documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod(), snuDoc, snuDocEmi
+            };
+
+
+            String formattedQuery = sqlUpd.toString();
+            for (int i = 0; i < params.length; i++) {
+                formattedQuery = formattedQuery.replaceFirst("\\?", params[i] != null ? "'" + params[i].toString() + "'" : "NULL");
+            }
+            System.out.println("Query ejecutado: " + formattedQuery);
+           //////////////////////////////////////////////////////
+
+
+
+
+
+
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getNuAnn(), snuEmi, snuCorEmi, documentoEmiBean
                 .getCoLocEmi(), documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean
                 .getDeAsu(), documentoEmiBean.getNuDiaAte(), documentoEmiBean.getCoTipDocAdm(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean
                 .getDeDocSig(), NuAnnExp, NuSecExp, documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod(), snuDoc, snuDocEmi});
+
 
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
@@ -586,8 +616,9 @@ public class EmiDocumentoPersonalDaoImp
             vReturn = "Numero de Documento Duplicado.";
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
         }
-
+        System.out.println(vReturn);
         return vReturn;
     }
 

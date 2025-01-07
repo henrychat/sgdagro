@@ -29,6 +29,7 @@ import pe.gob.onpe.tramitedoc.bean.ReferenciaEmiDocBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaRemitoBean;
 import pe.gob.onpe.tramitedoc.dao.EmiDocumentoPersonalDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
+import pe.gob.onpe.tramitedoc.util.AleatorioCodVerificacion;
 
 /**
  *
@@ -615,10 +616,10 @@ public class EmiDocumentoPersonalDaoImp extends SimpleJdbcDaoBase implements Emi
                 + "CO_USE_CRE,\n"
                 + "FE_USE_CRE,\n"
                 + "CO_USE_MOD,\n"
-                + "FE_USE_MOD,NU_DOC,NU_DOC_EMI)\n"
+                + "FE_USE_MOD,NU_DOC,NU_DOC_EMI,COD_VER_EXT)\n"
                 + "VALUES(?,?,?,?,?,?,?,'05',CURRENT_TIMESTAMP,'2',?,'5',?,'03',?,\n"
                 + "?,?,\n"
-                + "'0',?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,?,?)");
+                + "'0',?,CURRENT_TIMESTAMP,?,CURRENT_TIMESTAMP,?,?,?)");
 
         try {
             String snuEmi = this.jdbcTemplate.queryForObject(sqlQry.toString(), String.class);
@@ -634,11 +635,12 @@ public class EmiDocumentoPersonalDaoImp extends SimpleJdbcDaoBase implements Emi
             documentoEmiBean.setNuCorEmi(String.valueOf(snuCorEmi));
             documentoEmiBean.setNuDocEmi(snuDocEmi);
             documentoEmiBean.setNuDoc(String.valueOf(snuDoc));
+            documentoEmiBean.setCoVerExt(AleatorioCodVerificacion.generaCodVerificacion());
 
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoEmiBean.getNuAnn(), snuEmi, snuCorEmi,
                 documentoEmiBean.getCoLocEmi(), documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoEmpEmi(), documentoEmiBean.getCoEmpEmi(),
                 documentoEmiBean.getDeAsu(), Integer.parseInt(documentoEmiBean.getNuDiaAte()), documentoEmiBean.getCoTipDocAdm(), Integer.parseInt(documentoEmiBean.getCoEmpEmi()),
-                documentoEmiBean.getDeDocSig(), documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod(), snuDoc, snuDocEmi});
+                documentoEmiBean.getDeDocSig(), documentoEmiBean.getCoUseMod(), documentoEmiBean.getCoUseMod(), snuDoc, snuDocEmi, documentoEmiBean.getCoVerExt()});
 
             vReturn = "OK";
         } catch (DuplicateKeyException con) {

@@ -105,7 +105,7 @@ public class DocumentoObjetoInterController {
                 retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
 
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del documento");
+                retRespuesta.setRetval("Error en Obtener nombre del documento 1");
                 e.printStackTrace();
             }
 
@@ -156,7 +156,7 @@ public class DocumentoObjetoInterController {
                 }
                                 
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del documento");
+                retRespuesta.setRetval("Error en Obtener nombre del documento 2");
                 e.printStackTrace();
             }
 

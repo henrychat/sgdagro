@@ -39,6 +39,7 @@ public class SessionFilter implements Filter {
         hResponse.addHeader("Cache-Control","no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0");
         hResponse.addHeader("Vary", "Accept-Encoding");
         hResponse.addHeader("Expires", "0" );
+//        hResponse.addHeader("Access-Control-Allow-Origin", "*" );
         // hResponse.addHeader("content-type", "application/json; charset=utf-8");
         
         String uri = httpServletRequest.getRequestURI();

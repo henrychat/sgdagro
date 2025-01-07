@@ -179,7 +179,7 @@ public class CargoEntregaServiceImp
       throw e;
     } catch (Exception e) {
       e.printStackTrace();
-      throw new validarDatoException("ERROR EN TRANSACCION");
+      throw new validarDatoException("ERROR EN TRANSACCION 1" + e.getMessage());
     } 
     return vReturn;
   }
@@ -365,7 +365,7 @@ public class CargoEntregaServiceImp
   public ReporteBean getGenerarReporte(Map parametros, CargoEntregaBean cargo) throws Exception {
     ReporteBean objReporte = new ReporteBean();
     String eserror = "1";
-    String coRespuesta = "";
+    String coRespuesta = "0";
     String deRespuesta = "";
     String prutaReporte = "";
     String deNoDoc = "";
@@ -389,7 +389,7 @@ public class CargoEntregaServiceImp
       } 
       if (lista.size() == 0) {
         coRespuesta = "1";
-        deRespuesta = "No existe información para generar reporte.";
+        deRespuesta = "No existe informaciï¿½n para generar reporte.";
         throw new Exception(deRespuesta);
       } 
       

@@ -132,6 +132,7 @@ public class DatosPlantillaDaoImp
     }
 
     public List<PlantillaDocx> getLstPlantillasDocx(String pcoDep, String idPlantilla) {
+        System.out.println("plantilla: " + idPlantilla + " "+pcoDep);
          StringBuilder sql = new StringBuilder();
         List<PlantillaDocx> list = new ArrayList<PlantillaDocx>();
         sql.append("select \nco_dep, \nco_tipo_doc, \nbl_doc, \nnom_archivo \nfrom IDOSGD.TDTR_PLANTILLA_DOCX a  WITH(NOLOCK)\nwhere es_doc = '1' and \n ( ((select count(1) from IDOSGD.TDTR_PLANTILLA_DOCX  WITH(NOLOCK) where co_Dep=?  )>=1 and co_Dep=?)or ((select count(1) from IDOSGD.TDTR_PLANTILLA_DOCX WITH(NOLOCK) where co_Dep=?  )=0 and co_Dep='00000') ) and co_tipo_doc='" + idPlantilla + "' ");
@@ -162,8 +163,16 @@ public class DatosPlantillaDaoImp
 
                     try {
                         InputStream in = new ByteArrayInputStream(docObjBean.getObjPlantilla());
-                        IXDocReport template = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
-                        docObjBean.setTemplate(template);
+                        System.out.println("Object plantilla size: " + docObjBean.getObjPlantilla().length);
+
+                        try{
+                            IXDocReport template = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
+                            docObjBean.setTemplate(template);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
                     } catch (Exception e) {
                         docObjBean.setTemplate(null);
                     }

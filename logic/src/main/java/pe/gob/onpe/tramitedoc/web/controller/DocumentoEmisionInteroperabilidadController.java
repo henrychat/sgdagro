@@ -764,6 +764,8 @@ public class DocumentoEmisionInteroperabilidadController {
                  docObjBean.setTiCap(ServletUtility.getInstancia().loadRequestParameter(request, "tiCap"));
                  docObjBean.setNombreArchivo(ServletUtility.getInstancia().loadRequestParameter(request, "noDoc"));
                  docObjBean.setNumeroSecuencia(applicationProperties.getRutaTemporal()+"//"+vnuSec);
+                System.out.println("aqui esta supiesyamente");
+                System.out.println("aqui: "+docObjBean.getNumeroSecuencia());
                  docObjBean.setCoUseMod(usuario.getCoUsuario());
                  mensaje = emiDocumentoInterService.cargaDocEmi(docObjBean);
             }catch(Exception e){

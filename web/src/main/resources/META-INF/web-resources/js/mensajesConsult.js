@@ -1,6 +1,6 @@
 function fn_iniMensajes(){
-    jQuery('#buscarDocumentoCargaMsjBean').find('#esFiltroFecha').val("4");//ultimos 30 dias
-    jQuery('#buscarDocumentoCargaMsjBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 4});    
+    jQuery('#buscarDocumentoCargaMsjBean').find('#esFiltroFecha').val("1");//ultimos 30 dias se cambio 4 por 1
+    jQuery('#buscarDocumentoCargaMsjBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
    
     pnumFilaSelect=0;
     changeBusqMensajes("1");
@@ -282,7 +282,7 @@ function fu_eventoTablaMensajes() {
         $('#divflotante').html(text);
 
         var x = elemento.left;
-        var y = elemento.top + 24;
+        var y = elemento.top + 370;
         $("#divflotante").css({left: x, top: y});
 
         //document.getElementById('divflotante').style.top = elemento.top + 24;

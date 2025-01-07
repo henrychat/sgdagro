@@ -57,7 +57,7 @@
                                                 <div id="dlglogin">
                                                     <table class="padded-table10" width="100%" border="0" cellspacing="0">
                                                          <tr>
-                                                            <td colspan="2" align="center" id="titulo_servicios">Sistema de Gestión Documental - 2.1</td>
+                                                            <td colspan="2" align="center" id="titulo_servicios">Sistema de Gestión Documental</td>
                                                            </tr>
                                                            <tr></tr>
                                                            <tr>
@@ -173,9 +173,43 @@
                                 <!--<li><a href="#" onclick="fn_mostrar_req_so();"><span class="glyphicon glyphicon-wrench"><jsp:text/></span> Requisitos del Sistema</a></li>-->
                                 <li><a id="idTradocDesktop_req_so" href="javascript:void(0);" onclick="return fn_mostrar_req_so(this); return false;" target="_self"><span class="glyphicon glyphicon-wrench"><jsp:text/></span> Requisitos de Sistema</a></li>
                                 <!--<li><a href="${urlManual}" target="_blank" onclick="fn_mostrar_manual();"><span class="glyphicon glyphicon-question-sign"><jsp:text/></span> Manual de Ayuda</a></li>-->
-                                <li><a href="${urlManual}" target="_blank" ><span class="glyphicon glyphicon-question-sign"><jsp:text/></span> Manual de Ayuda</a></li>
+
+                                <li><a href="${staticResourcesURL}/images/INSTRUCTIVO DE USUARIO SGD.pdf" target="_blank" ><span class="glyphicon glyphicon-question-sign"><jsp:text/></span> Manual de Ayuda</a></li>
+
                                 <li><a href="#" onclick="fn_cambiaPwd();" ><span class="glyphicon glyphicon-lock"><jsp:text/></span> Cambiar Contraseña</a></li>
-                                <li><a href="${urlVideoTutorial}" target="_blank"><span class="glyphicon glyphicon-play-circle"><jsp:text/></span> Video Tutorial</a></li>
+                                <!-- <li><a href="${urlVideoTutorial}" target="_blank"><span class="glyphicon glyphicon-play-circle"><jsp:text/></span> Video Tutorial</a></li>-->
+
+                                <li>
+                                    <a href="javascript:void(0);" onclick="descargarInstaladores();">
+                                        <span class="glyphicon glyphicon-download-alt"></span>
+                                        <jsp:text>Instaladores</jsp:text>
+                                    </a>
+                                </li>
+
+                                <script>
+                                    function descargarInstaladores() {
+                                        // Ruta del archivo que deseas descargar
+                                        const filePath = "${staticResourcesURL}/images/instalador.zip";
+
+                                        // Verificar si la ruta es correcta
+                                        fetch(filePath)
+                                            .then(response => {
+                                                if (!response.ok) {
+                                                    throw new Error('Archivo no encontrado');
+                                                }
+                                                // Crear un enlace temporal para la descarga
+                                                const a = document.createElement('a');
+                                                a.href = filePath;
+                                                a.download = 'instalador.zip'; // Nombre del archivo que se descargará
+                                                document.body.appendChild(a);
+                                                a.click(); // Simular clic en el enlace
+                                                a.remove(); // Eliminar el enlace temporal
+                                            })
+                                            .catch(error => {
+                                                alert(error.message); // Mostrar un mensaje de error
+                                            });
+                                    }
+                                </script>
                             </ul> 
                         </td>
                     </tr>

@@ -5,6 +5,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+
+
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1073,12 +1076,14 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
 
         //EJHM
         documentoEmiBean.setEsDocEmi("0");
-//      if(documentoEmiBean.getTiEnvMsj().equals(Constantes.COD_NOTIFICACION_ELECTRONICA)) {
-//    	     String mensaje=	validaDestinatario( documentoEmiBean); 
+        //WGC
+//        if (documentoEmiBean.getTiEnvMsj().equals(Constantes.COD_NOTIFICACION_ELECTRONICA)) {
+//            documentoEmiBean.setTiEnvMsj("1");
+//            String mensaje = validaDestinatario(documentoEmiBean);
 //    	     if(!mensaje.equals("")) {
 //    	    	 throw new validarDatoException(mensaje);// mensaje;	 
 //    	     }
-//    }
+//        }
         if (!pasoEnvioMensajeria(documentoEmiBean, usuario)) {
             throw new validarDatoException(" Usuario de Sede Central no puede derivar documentos a mensajeria diferente a la Oficina de Trámite Documentario. ");
         }
@@ -1089,22 +1094,22 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
 
             vReturn = this.emiDocumentoAdmDao.updEstadoDocumentoEnvioNotificacion(documentoEmiBean);
             if (vReturn.equals("OK")) {
-                vReturn = this.audiMovDoc.audiEstadoDocumentoRemito(usuario, documentoEmiBean.getNuAnn(), documentoEmiBean.getNuEmi(), "0");
-                if (!vReturn.equals("OK")) {
-                    vReturn = "Error insertando Auditoria.";
-                }
+                    vReturn = this.audiMovDoc.audiEstadoDocumentoRemito(usuario, documentoEmiBean.getNuAnn(), documentoEmiBean.getNuEmi(), "0");
+                    if (!vReturn.equals("OK")) {
+                        vReturn = "Error insertando Auditoria.";
+                    }
             } else {
-                vReturn = "Error al Enviar el documento ea la mensajería" + vReturn;
+                vReturn = "Error al Enviar el documento a la mensajería" + vReturn;
             }
         } else {
             vReturn = "NO_OK";
-
         }
 
         return vReturn;
     }
 
     private String validarDestinatario(List<DestinatarioDocumentoEmiBean> lstDestinatario, String tipoDoc) throws Exception {
+        System.out.println("Validando Destinatario");
         if (lstDestinatario == null) {
             return null;
         }
@@ -1135,6 +1140,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
     public String grabaDocumentoEmiAdm(TrxDocumentoEmiBean trxDocumentoEmiBean, String pcrearExpediente, Usuario usuario) throws Exception {
         String vReturn = "NO_OK";
+        String henry="";
         try {
 
             String pnuAnn = trxDocumentoEmiBean.getNuAnn();
@@ -1149,6 +1155,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
             ArrayList<EmpleadoVoBoBean> lstEmpVoBo = trxDocumentoEmiBean.getLstEmpVoBo();
             DocumentoEmiBean documentoEmiBeanBD = null;
             if (pnuAnn != null && pnuEmi != null && !pnuAnn.equals("") && !pnuEmi.equals("")) {
+                henry="ENTRO 1 IF";
                 documentoEmiBeanBD = this.emiDocumentoAdmDao.getEstadoDocumento(pnuAnn, pnuEmi);
                 String mensaje = null;
                 //validacion de salida de documento
@@ -1219,7 +1226,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                         if ("INS".equals(sAccionBD)) {
                             vReturn = emiDocumentoAdmDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
                             if ("NO_OK".equals(vReturn)) {
-                                throw new validarDatoException("Error Agregando Destinatario");
+                                throw new validarDatoException("Error Agregando Destinatario1");
                             }
                             continue;
                         }
@@ -1257,9 +1264,11 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                     throw new validarDatoException("El Documento a cambiado de estado.");
                 }
             } else {
+                henry="ENTRO else";
                 if (documentoEmiBean != null) {
-
+                    henry="ENTRO else y 1if" + trxDocumentoEmiBean.getLstDestinatario() +"   "+trxDocumentoEmiBean.getDocumentoEmiBean().getCoTipDocAdm();
                     String mensaje = validarDestinatario(trxDocumentoEmiBean.getLstDestinatario(), trxDocumentoEmiBean.getDocumentoEmiBean().getCoTipDocAdm());
+                    henry=mensaje + "SKJDBDF";
                     if (mensaje != null) {
                         throw new validarDatoException(mensaje);
                     }
@@ -1289,6 +1298,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                         throw new validarDatoException("Error al Obtener Indicador de Numeracion");
                     }
                     if (vReturn.equals("1")) {
+                        henry="henry2";
                         vReturn = getNumeroDocSiguienteAdm(documentoEmiBean.getNuAnn(), documentoEmiBean.getCoDepEmi(), documentoEmiBean.getCoTipDocAdm());
                         if ("NO_OK".equals(vReturn)) {
                             throw new validarDatoException("Error al Obtener Numero de Documento.");
@@ -1297,6 +1307,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                         trxDocumentoEmiBean.setNuDocEmi(vReturn);
                         documentoEmiBean.setNuCorDoc("1");
                     } else {
+                        henry="henry3";
                         vReturn = this.emiDocumentoAdmDao.getNroCorrelativoDocumento(documentoEmiBean);
                         if ("NO_OK".equals(vReturn)) {
                             throw new validarDatoException("Error al Obtener Numero Correlativo de Documento.");
@@ -1319,6 +1330,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                     }
                 }
                 for (ReferenciaEmiDocBean ref : lstReferencia) {
+                    henry="1 for";
                     ref.setCoUseCre(pcoUserMod);
                     vReturn = this.emiDocumentoAdmDao.insReferenciaDocumentoEmi(pnuAnn, pnuEmi, ref);
                     if ("NO_OK".equals(vReturn)) {
@@ -1326,6 +1338,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                     }
                 }
                 for (DestinatarioDocumentoEmiBean dest : lstDestinatario) {
+                    henry="2 for";
                     dest.setCoUseCre(pcoUserMod);
                     vReturn = this.emiDocumentoAdmDao.insDestinatarioDocumentoEmi(pnuAnn, pnuEmi, dest);
                     if ("NO_OK".equals(vReturn)) {
@@ -1333,6 +1346,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                     }
                 }
                 for (EmpleadoVoBoBean emp : lstEmpVoBo) {
+                    henry="3 for";
                     vReturn = this.emiDocumentoAdmDao.insPersonalVoBo(pnuAnn, pnuEmi, emp.getCoDependencia(), emp.getCoEmpleado(), pcoUserMod);
                     if (!"OK".equals(vReturn)) {
                         throw new validarDatoException("Error Agregando Personal VB.");
@@ -1369,7 +1383,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new validarDatoException("ERROR EN TRANSACCION");
+            throw new validarDatoException("ERROR EN TRANSACCION 3" + e.getLocalizedMessage() + henry);
         }
         return vReturn;
     }
@@ -1748,5 +1762,4 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
 
         return retval.toString();
     }
-
 }

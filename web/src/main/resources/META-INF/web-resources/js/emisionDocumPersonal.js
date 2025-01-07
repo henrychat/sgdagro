@@ -1856,7 +1856,7 @@ function fn_cargaDocEmiPersonal() {
                             }
                         }, 'text', false, false, "POST");
                     } else {
-                        alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente.");
+                        alert_Danger("Repositorio: ", "Error al cargar documento WORD, intente nuevamente1.");
                     }
 
                 });

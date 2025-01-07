@@ -389,11 +389,17 @@ function fn_firmarDocDesktop(urlDoc, rutaDoc, tipoFirma) {
 }
 
 function desktopCargadoWS(datosPC) {
-    //alert(datosPC);
-
+    //alert(datosPC.rutaPrincipal);
+    console.log("desktopCargadoWS")
+    console.log(datosPC.rutaPrincipal)
     ajaxCall("/config.do?accion=goDatosPC", datosPC,function(data) {
+        console.log("abajo")
+        console.log(data)
+        console.log("arriba")
             if(!!data && data.retval){
+                console.log("ingresa if")
                 appletCargadoRutaDoc(decodeURI(datosPC.rutaPrincipal));
+                console.log(datosPC.rutaPrincipal)
                 $("#appletIco span").attr("class", "glyphicon glyphicon-ok-circle").css({color: '#5CB85C'});
                 appOnpeResponse="OK";
                 tipoEjecucionAppDesktop.value = tipoEjecucionAppDesktop.ejeAppDesktopModoNormal;
@@ -619,12 +625,20 @@ function fn_cargaDocDesktop(urlDoc, rutaDoc, callback) {
     var param = {rutaDoc: rutaDoc, verBloqueo: false};
     runOnDesktop(accionOnDesktopTramiteDoc.verificaSiExisteDoc, param, function(data){    
         retval = data;
+        console.log("esta es data 1 : "+data)
         if (retval === "SI") {
             var param = {urlDoc: urlDoc, rutaDoc: rutaDoc};
             runOnDesktop(accionOnDesktopTramiteDoc.cargarDocumento, param, function(data){
                 retval = data;
+                console.log("esta es data 2 : "+data.error)
                 if(retval.error==="0"){
-                  callback(retval.message);  
+                  callback(retval.message);
+                  console.log("retval1: "+retval)
+                  console.log("arriba 1 abajo 2")
+                  console.log("retval2: "+retval.message)
+                    console.log(retval.error)
+                    console.log(retval)
+                    console.log("fin")
                 }else{
                     bootbox.alert("<h5>"+retval.message+rutaDoc+"</h5>", function() {
                         bootbox.hideAll();
@@ -654,7 +668,12 @@ var isCallAppDesktop=false;
 $(function() {
     var waitToResponseApp = function() {
         if (ispageLoad) {
+            console.log(nroPestana)
+            console.log("arriba esta nroPersona")
+            console.log(isCallAppDesktop)
+            console.log(!isCallAppDesktop)
             if(!isCallAppDesktop&&nroPestana===0){
+                console.log("ingresate jajaja")
                 isCallAppDesktop=true;
                 try{
 		    //var url = 'OnpeTradoc:accion=TraDoc?ws='+wsServiceLocation + $.cookie('idChannel') + '/?urlBase='+urlBase+'?rutaPri='+rutaPri;

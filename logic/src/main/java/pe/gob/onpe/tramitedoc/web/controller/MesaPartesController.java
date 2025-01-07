@@ -446,6 +446,8 @@ public class MesaPartesController {
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         try {
             result = documentoExtRecepService.getCiudadano(pnuDoc, usuario.getCoUsuario());
+            System.out.println(result);
+            System.out.println("result: " + result);
         } catch (Exception e) {
             e.getMessage();
         }
@@ -1076,6 +1078,7 @@ public class MesaPartesController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=getProvincias", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<ProvinciaBean> getProvincias(@RequestParam("idDepartamento") String idDepartamento) {
+        System.out.println("idDepartamento: "+idDepartamento);
         List<ProvinciaBean> provincias = referencedData.listProvincia(idDepartamento);
         return provincias;
     }
@@ -1083,6 +1086,7 @@ public class MesaPartesController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=getDistrito", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<DistritoBean> getDistrito(@RequestParam("idDepartamento") String idDepartamento, @RequestParam("idProvincia") String idProvincia) {
+        System.out.println("idDepartamento: "+idDepartamento+ "     idProvincia: "+idProvincia);
         List<DistritoBean> distritos = referencedData.listDistrito(idDepartamento, idProvincia);
         return distritos;
     }

@@ -117,22 +117,20 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService {
                     PdfPKCS7 pk = iterator.next();
                     dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
                     if (dn.contains(pNuDni)) {
-                        if (dn.contains(pNuRucInstitucion)) {
-
+                        //WG 20230710 Se deshabilito para permitir firma con certificado no SERFOR
+//                        if (dn.contains(pNuRucInstitucion)) { 
                             vret = "OK";
-                        }
+//                        }
                     }
-
                 }
-
             } else {
-
                 vret = "";
             }
             if (!vret.equals("OK")) {
                 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:" + filePdf + "contenidopk:" + dn);
             }
 
+//            vret = "OK";  //WG27062023
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -194,18 +192,15 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService {
                     if (dn.contains(pNuDni)) {
                         vret = "OK";
                     }
-
                 }
-
             } else {
-
                 vret = "";
             }
 
             if (!vret.equals("OK")) {
                 Logger.getLogger(ValidarFirmaServiceImp.class.getName()).log(Level.INFO, "FileName:" + filePdf + "contenidopk:" + dn);
             }
-
+//            vret = "OK";  //WG27062023
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

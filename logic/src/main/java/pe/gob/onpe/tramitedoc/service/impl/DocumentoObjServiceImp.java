@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.axis.soap.SOAP11Constants;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +91,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     return docDatoBean;
   }
   public DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi,String codEmp) {
+    System.out.println("ingresas getDatosDoc");
 	    DocumentoDatoBean docDatoBean = null;
 	    try {
 	      docDatoBean = this.documentoObjDao.getDatosDoc(pnuAnn, pnuEmi);
@@ -293,6 +296,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
   
   public DocumentoVerBean getNombreGeneraDocx(String pnuAnn, String pnuEmi, String ptiOpe) {
+    System.out.println("Generando docx");
+
     DocumentoVerBean docVerBean = new DocumentoVerBean();
     
     docVerBean.setNuAnn(pnuAnn);
@@ -1578,7 +1583,10 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     } 
     
     if (docDatoBean != null) {
-    	
+      System.out.println("ingresa docDatoBean no es null");
+      System.out.println(docDatoBean);
+      System.out.println(docDatoBean.getCoDoc());
+      System.out.println(docDatoBean.getNuDoc());
     	  if (!docDatoBean.getCoEmpEmi().equals(usuarioConfig.getCempCodemp()))  {
     		  
     		  docVerBean.setDeMensaje("NO_OK");
@@ -1602,13 +1610,14 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     	  
       if ((docDatoBean.getTiEmi().equals("01") && docDatoBean.getEsDocEmi().equals("7") && ptiOpe.equals("5")) || 
     		  (docDatoBean.getTiEmi().equals("05") && docDatoBean.getEsDocEmi().equals("5") && ptiOpe.equals("5"))) {
-        
+        System.out.println("ingresa 1 if");
         String coTipDoc = docDatoBean.getCoDoc();
         String vformatoDoc = "NO_OK";
         if (coTipDoc.equals("232") || coTipDoc.equals("304")) {
           vformatoDoc = "OK";
           vin_pref = "N";
         } else {
+          System.out.println("ingresa 1 else");
           vformatoDoc = this.emiDocumentoAdmService.getVerificaPdfDoc(docDatoBean.getNuAnn(), docDatoBean.getNuEmi(), docDatoBean.getTiCap());
           
           String vin_firma = this.emiDocumentoAdmService.getInFirmaDocAdm(coTipDoc);
@@ -1620,6 +1629,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         } 
 
         if (vformatoDoc.equals("OK")) {
+          System.out.println("ingresa 2 if");
           docVerBean.setDeMensaje("OK");
           docVerBean.setInDoc(true);
           docVerBean.setNuSecFirma(docDatoBean.getNuSecFirma());
@@ -1629,18 +1639,22 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
             docVerBean.setInTipoFirma("N");
           }
           else if (usuarioConfig.getInFirma().equals("0")) {
+            System.out.println("ingresa 2 else if");
             String vinDoc = this.documentoObjDao.getInFirmaDoc(docDatoBean.getCoDepEmi(), docDatoBean.getCoDoc());
             docVerBean.setInTipoFirma(vinDoc);
           } else {
+            System.out.println("ingresa 2 else");
             docVerBean.setInTipoFirma("F");
           } 
 
 
           
           if (docDatoBean.getNumeroDoc() == null || docDatoBean.getNumeroDoc().length() == 0) {
-            
+            System.out.println("ingresa 3 if");
             if (docDatoBean.getTiEmi().equals("01")) {
+              System.out.println("ingresa 3 if y 1 if");
               String vnuDoc = this.emiDocumentoAdmService.getNumeroDocSiguienteAdm(docDatoBean.getNuAnn(), docDatoBean.getCoDepEmi(), docDatoBean.getCoDoc());
+              System.out.println(vnuDoc);
               docVerBean.setNumeroDoc(vnuDoc);
               docDatoBean.setNumeroDoc(vnuDoc);
             } else if (docDatoBean.getTiEmi().equals("05")) {
@@ -1649,10 +1663,12 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
               docDatoBean.setNumeroDoc(vnuDoc);
             } 
           } else {
+            System.out.println("ingresa 3 if y 1 else");
             
             docVerBean.setNumeroDoc(docDatoBean.getNumeroDoc());
           } 
         } else {
+          System.out.println("ingresa else del primer if");
           docVerBean.setDeMensaje(vformatoDoc);
           
 		  docVerBean.setDeMensaje("NO_OK");
@@ -1662,6 +1678,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         } 
       } 
     } else {
+      System.out.println("ingresa docDatoBean es null");
       //docVerBean.setDeMensaje("Error en datos del documento");
       docVerBean.setDeMensaje("NO_OK");
 	  docVerBean.setDetalleMensaje("Error en datos del documento al firmar");
@@ -1681,12 +1698,26 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         
         if (ptiOpe.equals("5")) {
 
-          
+          //PRUEBA HENRY
+/**
+          String hen = "R" + docDatoBean.getNuCorEmi() + "." + docDatoBean.getNuSecFirma();
+          String ry = generarFormatoSiglasFirma(docDatoBean.getTipoDoc(), docDatoBean.getNumeroDoc(), docDatoBean.getNuAnn(), this.applicationProperties.getSiglaInstitucion(), docDatoBean.getSiglasDoc());
+
+          String vnum = ry.replace("", "") + "$" + docDatoBean.getDeLugar() + "$" + docDatoBean.getFechaFirma().replace("-", "$");
+
+          String  nombrePrueba = "TEMP|" + hen + "$" + vnum + "$" + vin_pref + ".pdf";
+          String  firmaPrueba = "TEMP|" + hen + "$" + vnum + "$" + vin_pref;
+          System.out.println(nombrePrueba);
+          System.out.println("arriba nombreDoc");
+          System.out.println(firmaPrueba);
+
+
+          //FIN PRUEBA HENRY
+**/
           if (esEmisionAdm(docDatoBean.getTiEmi())) {
             docVerBean.setCargoEmpleado(getCargoEmpleado(docDatoBean.getCoDepEmi(), docDatoBean.getCoEmpEmi()));
           }
 
-          
           if (usuarioConfig.getSwFirma() != null && usuarioConfig.getSwFirma().equals("O")) {
             
             vnum_reg = "R" + docDatoBean.getNuCorEmi() + "." + docDatoBean.getNuSecFirma();
@@ -1696,7 +1727,6 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
             nombreDoc = "TEMP|" + vnum_reg + "$" + vnumDoc + "$" + vin_pref + ".pdf";
             nombreFirma = "TEMP|" + vnum_reg + "$" + vnumDoc + "$" + vin_pref;
-          
           }
 
         }
@@ -1745,7 +1775,9 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
       docVerBean.setUrlDocumento(urlDoc);
       docVerBean.setNoDocumento(nombreDoc);
       docVerBean.setNoFirma(nombreFirma);
-    } 
+    }
+
+    System.out.println("docVerBean.getDeMensaje: "+ docVerBean.getDeMensaje());
     return docVerBean; 
    }
 

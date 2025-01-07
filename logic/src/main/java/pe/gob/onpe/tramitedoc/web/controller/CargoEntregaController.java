@@ -363,10 +363,12 @@ public class CargoEntregaController
 	    cargo.setNuAnnGuia(pnuAnnGuia);
 	    cargo.setNuGuia(pnuGuia);
 	    cargo.setRutaReporteJasper(rutaReporte);
-	    
+
+        System.out.println("parametros: "+parametros);
+
 	    ReporteBean objReporteBean;
 		objReporteBean = this.cargoEntregaService.getGenerarReporte(parametros, cargo);
-		
+        System.out.println("ingreso a goExportarArchivoLista");
 	    if (bis != null) bis.close(); 
 	    
 	    retval = new StringBuilder();
