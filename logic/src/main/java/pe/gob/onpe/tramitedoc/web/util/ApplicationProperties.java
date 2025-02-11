@@ -79,7 +79,19 @@ public class ApplicationProperties {
   private String fileSizeMaxMP;
   
   private String filSizeMaxCargo;
-  
+
+  private String urlReniec;
+
+  private String urlSunat;
+
+  public String getUrlSunat() {
+    return this.properties.getProperty("URL_SUNAT");
+  }
+
+  public String getUrlReniec() {
+    return this.properties.getProperty("URL_RENIEC");
+  }
+
   public String getFileSizeMaxMP() {
     return this.properties.getProperty("FILE_SIZE_MAX_MP");
   }

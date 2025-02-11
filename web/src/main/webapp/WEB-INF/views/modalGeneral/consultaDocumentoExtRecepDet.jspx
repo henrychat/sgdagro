@@ -113,6 +113,7 @@
                                <td style="display:none">${lDestinatario.nuAnn}</td>
                                <td style="display:none">${lDestinatario.nuEmi}</td>                   
                                <td style="display:none">${lDestinatario.coTipDoc}</td>
+                               <td style="display:none">${lDestinatario.nuSecExp}</td>
                           </tr>
                        </c:forEach>
                   </tbody>

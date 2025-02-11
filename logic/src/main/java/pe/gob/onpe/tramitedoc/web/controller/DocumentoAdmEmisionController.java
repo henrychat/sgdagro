@@ -630,13 +630,16 @@ public class DocumentoAdmEmisionController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=goGrabaDocumentoEmi", produces = "text/plain; charset=utf-8")
     public @ResponseBody
     String goGrabaDocumentoEmi(@RequestBody TrxDocumentoEmiBean trxDocumentoEmiBean, HttpServletRequest request, Model model) {
+
         String mensaje = "NO_OK";
         String coRespuesta;
         String deRespuesta;
         String sCrearExpediente = ServletUtility.getInstancia().loadRequestParameter(request, "pcrearExpediente");//0 no crea, 1 crea
+        System.out.println("sCrearExpediente: "+sCrearExpediente);
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         trxDocumentoEmiBean.setCoUserMod(usuario.getCoUsuario());
         trxDocumentoEmiBean.setCempCodEmp(usuario.getCempCodemp());
+
         try {
 
             mensaje = emiDocumentoAdmService.grabaDocumentoEmiAdm(trxDocumentoEmiBean, sCrearExpediente, usuario);
@@ -702,6 +705,9 @@ public class DocumentoAdmEmisionController {
             model.addAttribute("lstDestintarioDocAdmEmi", map.get("lst1"));
             model.addAttribute("lstDestintarioProveedorDocAdmEmi", map.get("lst2"));
             model.addAttribute("lstDestintarioCiudadanoDocAdmEmi", map.get("lst3"));
+            System.out.println("map.get(\"lst3\")");
+            System.out.println(map.get("lst3"));
+            System.out.println("map.get(\"lst3\")");
             model.addAttribute("lstDestintarioOtroOrigenDocAdmEmi", map.get("lst4"));
             model.addAttribute("lstLocalRemitenteEmi", referencedData.getLstLocal());
             model.addAttribute("lstPrioridadDestEmi", referencedData.getLstPrioridadDestEmi());
@@ -788,6 +794,39 @@ public class DocumentoAdmEmisionController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=goBuscaCiudadano")
     public @ResponseBody
     String goBuscaCiudadano(HttpServletRequest request, Model model) {
+        StringBuilder retval = new StringBuilder();
+        String pnuDoc = ServletUtility.getInstancia().loadRequestParameter(request, "pnuDoc");
+        CiudadanoBean ciudadanoBean;
+
+        try {
+            ciudadanoBean = emiDocumentoAdmService.getCiudadano(pnuDoc);
+            if (ciudadanoBean != null) {
+                retval.append("{\"coRespuesta\":\"1\",\"ciudadano\":{")
+                        .append("\"nuDoc\":\"").append(ciudadanoBean.getNuDocumento()).append("\",")
+                        .append("\"nombre\":\"").append(ciudadanoBean.getNombre()).append("\",")
+                        .append("\"ubigeo\":\"").append(ciudadanoBean.getUbigeo()).append("\",")
+                        .append("\"ubdep\":\"").append(ciudadanoBean.getIdDepartamento()).append("\",")
+                        .append("\"ubprv\":\"").append(ciudadanoBean.getIdProvincia()).append("\",")
+                        .append("\"ubdis\":\"").append(ciudadanoBean.getIdDistrito()).append("\",")
+                        .append("\"dedomicil\":\"").append(ciudadanoBean.getDeDireccion()).append("\",")
+                        .append("\"deemail\":\"").append(ciudadanoBean.getDeCorreo()).append("\",")
+                        .append("\"detelefo\":\"").append(ciudadanoBean.getTelefono()).append("\"")
+                        .append("}}");
+            } else {
+                retval.append("{\"coRespuesta\":\"0\"}");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            retval.append("{\"coRespuesta\":\"0\"}");
+        }
+
+        return retval.toString();
+    }
+
+
+    /**   @RequestMapping(method = RequestMethod.POST, params = "accion=goBuscaCiudadano")
+    public @ResponseBody
+    String goBuscaCiudadano(HttpServletRequest request, Model model) {
         String vRespuesta;
         String coRespuesta;
         StringBuilder retval = new StringBuilder();
@@ -840,7 +879,7 @@ public class DocumentoAdmEmisionController {
 
         ciudadanoBean = new CiudadanoBean();
         return retval.toString();
-    }
+    }**/
 
     @RequestMapping(method = RequestMethod.POST, params = "accion=goBuscaDestOtroOrigenAgrega")
     public String goBuscaDestOtroOrigenAgrega(HttpServletRequest request, Model model) {
@@ -869,7 +908,7 @@ public class DocumentoAdmEmisionController {
     @RequestMapping(method = RequestMethod.POST, params = "accion=goBuscaDestProveedorAgrega")
     public String goBuscaDestProveedorAgrega(HttpServletRequest request, Model model) {
         String prazonSocial = ServletUtility.getInstancia().loadRequestParameter(request, "prazonSocial");
-        model.addAttribute("lsDestProveedor", emiDocumentoAdmService.getLstProveedoresAgrega(prazonSocial));
+        model.addAttribute("lsDestProveedor", emiDocumentoAdmService.getLstProveedoresAgregaUrl(prazonSocial));
         model.addAttribute("iniFuncionParm", "1");
         return "/modalGeneral/consultaDestProveedor";
     }

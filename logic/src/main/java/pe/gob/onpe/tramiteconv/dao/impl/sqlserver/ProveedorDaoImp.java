@@ -110,6 +110,7 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
   }
   
   public List<UbigeoBean> getUbigeoBusqList(UbigeoBean ubigeo) {
+
      StringBuilder sql = new StringBuilder();
     sql.append("select  ubdep, ");
     sql.append("        ubprv, ");
@@ -144,8 +145,10 @@ public class ProveedorDaoImp   extends SimpleJdbcDaoBase   implements ProveedorD
     }
     catch (EmptyResultDataAccessException e) {
       list = null;
+      System.out.println("EmptyResultDataAccessException");
     } catch (Exception e) {
       list = null;
+      System.out.println("Exception");
       e.printStackTrace();
     } 
     return list;

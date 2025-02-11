@@ -31,6 +31,26 @@ public class ProveedorBean extends BasePaginate{
     private String deDireccion;
     private String deCorreo;    
     private String telefono;
+    //HENRY
+    private String dniRepre;
+    private String nomRepre;
+
+
+    public String getDniRepre() {
+        return dniRepre;
+    }
+
+    public void setDniRepre(String dniRepre) {
+        this.dniRepre = dniRepre;
+    }
+
+    public String getNomRepre() {
+        return nomRepre;
+    }
+
+    public void setNomRepre(String nomRepre) {
+        this.nomRepre = nomRepre;
+    }
 
     public String getIdDepartamento() {
         return idDepartamento;
@@ -189,9 +209,30 @@ public class ProveedorBean extends BasePaginate{
         this.nuRuc = nuRuc;
         this.descripcion = descripcion;
     }
-    
-    
-    
-    
+
+
+    @Override
+    public String toString() {
+        return "ProveedorBean{" +
+                "nuRuc='" + nuRuc + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", dproFecins='" + dproFecins + '\'' +
+                ", cproDomicil='" + cproDomicil + '\'' +
+                ", cubiCoddep='" + cubiCoddep + '\'' +
+                ", cubiCodpro='" + cubiCodpro + '\'' +
+                ", cubiCoddis='" + cubiCoddis + '\'' +
+                ", noDep='" + noDep + '\'' +
+                ", noPrv='" + noPrv + '\'' +
+                ", noDis='" + noDis + '\'' +
+                ", cproTelefo='" + cproTelefo + '\'' +
+                ", cproEmail='" + cproEmail + '\'' +
+                ", idDepartamento='" + idDepartamento + '\'' +
+                ", idProvincia='" + idProvincia + '\'' +
+                ", idDistrito='" + idDistrito + '\'' +
+                ", deDireccion='" + deDireccion + '\'' +
+                ", deCorreo='" + deCorreo + '\'' +
+                ", telefono='" + telefono + '\'' +
+                '}';
+    }
 }
 

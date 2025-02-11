@@ -4,22 +4,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import pe.gob.onpe.tramitedoc.bean.CargoFuncionBean;
-import pe.gob.onpe.tramitedoc.bean.CiudadanoBean;
-import pe.gob.onpe.tramitedoc.bean.DatosInterBean;
-import pe.gob.onpe.tramitedoc.bean.DependenciaBean;
-import pe.gob.onpe.tramitedoc.bean.DestinatarioOtroOrigenBean;
-import pe.gob.onpe.tramitedoc.bean.EmpleadoBean;
-import pe.gob.onpe.tramitedoc.bean.EmpleadoVoBoBean;
-import pe.gob.onpe.tramitedoc.bean.ProveedorBean;
-import pe.gob.onpe.tramitedoc.bean.RemitenteBean;
-import pe.gob.onpe.tramitedoc.bean.SiElementoBean;
-import pe.gob.onpe.tramitedoc.bean.TablaMaestraBean;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+import pe.gob.onpe.tramitedoc.bean.*;
 import pe.gob.onpe.tramitedoc.dao.CommonQueryDao;
+import pe.gob.onpe.tramitedoc.dao.DatosPlantillaDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
@@ -27,6 +25,9 @@ import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 public class CommonQueryDaoImp
         extends SimpleJdbcDaoBase
         implements CommonQueryDao {
+
+    @Autowired
+    private DatosPlantillaDao datosPlantillaDao;
 
     public DependenciaBean getDependenciaxCoDependencia(String coDepen) {
          StringBuilder sql = new StringBuilder();
@@ -89,9 +90,92 @@ public class CommonQueryDaoImp
         return vReturn;
     }
 
+    ///HENRY
+    public List<ProveedorBean> getLstProveedoresUrl(String prazonSocial) {
+
+        String url = datosPlantillaDao.getParametros("URL_SUNAT_REST");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String uri = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("nroRuc", prazonSocial).build()
+                .toUriString();
+        List<ProveedorBean> list = new ArrayList<ProveedorBean>();
+
+
+        try {
+            if (prazonSocial.matches("^[a-zA-Z].*")) {
+                throw new EmptyResultDataAccessException("Input does not start with a letter", 1);
+            }
+
+            ResponseEntity<Map> response = restTemplate.getForEntity(uri, Map.class);
+
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {// Extraer los datos del JSON
+                Map<String, Object> body = response.getBody();
+                Map<String, Object> data = (Map<String, Object>) body.get("Data");
+
+                if (data != null) {
+                    ProveedorBean proveedor = new ProveedorBean();
+                    proveedor.setNuRuc((String) data.get("ddp_numruc"));
+                    proveedor.setDescripcion((String) data.get("ddp_nombre"));
+                    proveedor.setNoDep((String) data.get("desc_de"));
+                    proveedor.setNoPrv((String) data.get("desc_prov"));
+                    proveedor.setNoDis((String) data.get("desc_dist"));
+                    proveedor.setCproDomicil(data.get("desc_tipvia") + " " + data.get("ddp_nomvia") + " " +
+                            data.get("ddp_numer1") + " " + data.get("desc_tipzon") + " " + data.get("ddp_nomzon"));
+                    proveedor.setDeDireccion(data.get("desc_tipvia") + " " + data.get("ddp_nomvia") + " " +
+                            data.get("ddp_numer1") + " " + data.get("desc_tipzon") + " " + data.get("ddp_nomzon"));
+
+                    UbigeoBean ubigeo = new UbigeoBean();
+                    ubigeo.setNoDep(((String) data.get("desc_de")).trim());
+                    ubigeo.setNoPrv(((String) data.get("desc_prov")).trim());
+                    ubigeo.setNoDis(((String) data.get("desc_dist")).trim());
+
+
+                    List<UbigeoBean> ubigeoList = getUbigeoBusqList(ubigeo);
+
+                    if (ubigeoList != null && !ubigeoList.isEmpty()) {
+                        System.out.println("inhreso a ubigeoList != null && !ubigeoList.isEmpty()");
+                        UbigeoBean foundUbigeo = ubigeoList.get(0);
+                        proveedor.setCubiCoddep(foundUbigeo.getUbDep());
+                        proveedor.setCubiCodpro(foundUbigeo.getUbPrv());
+                        proveedor.setCubiCoddis(foundUbigeo.getUbDis());
+                        proveedor.setIdDepartamento(foundUbigeo.getUbDep());
+                        proveedor.setIdProvincia(foundUbigeo.getUbPrv());
+                        proveedor.setIdDistrito(foundUbigeo.getUbDis());
+
+                    } else {
+
+                        proveedor.setCubiCoddep("");
+                        proveedor.setCubiCodpro("");
+                        proveedor.setCubiCoddis("");
+                        proveedor.setIdDepartamento("");
+                        proveedor.setIdProvincia("");
+                        proveedor.setIdDistrito("");
+                    }
+
+                    list.add(proveedor);
+                    insProveedor(proveedor);
+                    return list;
+                }
+            }
+
+        } catch (EmptyResultDataAccessException e) {
+
+            list = getLstProveedores(prazonSocial);
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public List<ProveedorBean> getLstProveedores(String prazonSocial) {
+
         StringBuilder sql = new StringBuilder();
         prazonSocial = Utilidades.fn_getCleanTextLenGreathree(Utilidades.fn_getCleanTextExpReg(prazonSocial));
+
         String sqlContains = "";
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<ProveedorBean> list = new ArrayList<ProveedorBean>();
@@ -101,6 +185,7 @@ public class CommonQueryDaoImp
         try {
             if (prazonSocial != null && prazonSocial.trim().length() > 1) {
                 list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper) BeanPropertyRowMapper.newInstance(ProveedorBean.class));
+                System.out.println(list.get(0).toString());
             }
         } catch (EmptyResultDataAccessException e) {
             list = null;
@@ -110,6 +195,36 @@ public class CommonQueryDaoImp
         }
         return list;
     }
+
+
+    public String insProveedor(ProveedorBean proveedor) {
+        String vReturn = "NO_OK";
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert into IDOSGD.LG_PRO_PROVEEDOR ");
+        sql.append("(cpro_ruc, dpro_fecins ,cpro_razsoc, cpro_domicil, cubi_coddep, cubi_codpro, cubi_coddis , cpro_telefo,cpro_email,dni_repre,nom_repre) ");
+        sql.append("values (?,CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?) ");
+        try {
+            if (proveedor.getNuRuc().isEmpty()) {
+                String seq = "SELECT RIGHT(REPLICATE('0', 11) + CAST((ISNULL(MAX(CAST(CPRO_RUC AS BIGINT)), 0) + 1) AS VARCHAR), 11) FROM IDOSGD.LG_PRO_PROVEEDOR";
+                String keyCPRO_RUC = (String)this.jdbcTemplate.queryForObject(seq, String.class);
+                proveedor.setNuRuc(keyCPRO_RUC);
+            }
+
+            this.jdbcTemplate.update(sql.toString(), new Object[] { proveedor
+                    .getNuRuc(), proveedor.getDescripcion(), proveedor.getCproDomicil(), proveedor
+                    .getCubiCoddep(), proveedor.getCubiCodpro(), proveedor.getCubiCoddis(), proveedor.getCproTelefo(), proveedor.getCproEmail(),
+                    proveedor.getDniRepre(), proveedor.getNomRepre() });
+
+            vReturn = "OK";
+        } catch (DuplicateKeyException con) {
+            vReturn = "Nde RUC duplicado.";
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vReturn;
+    }
+
 
     public List<DestinatarioOtroOrigenBean> getLstOtrosOrigenes(String pdescripcion) {
         Map<String, Object> objectParam = new HashMap<String, Object>();
@@ -134,9 +249,188 @@ public class CommonQueryDaoImp
         return list;
     }
 
+
+    /////HENRY
     public CiudadanoBean getCiudadano(String pnuDoc) {
+
+        CiudadanoBean ciudadanoExistente = getCiudadanoSql(pnuDoc);
+        if (ciudadanoExistente != null) {
+            return ciudadanoExistente;
+        }
+
+        String url = datosPlantillaDao.getParametros("URL_RENIEC_REST");
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Construir la URL con el parámetro
+        String uri = UriComponentsBuilder.fromHttpUrl(url)
+                .queryParam("documento", pnuDoc).build()
+                .toUriString();
+
+        try {
+            // Realizar la solicitud al servicio
+            ResponseEntity<Map> response = restTemplate.getForEntity(uri, Map.class);
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                // Extraer los datos del JSON
+                Map<String, Object> body = response.getBody();
+                Map<String, Object> data = (Map<String, Object>) body.get("Data");
+
+                if (data != null) {
+
+                    CiudadanoBean ciudadanoBean = new CiudadanoBean();
+                    ciudadanoBean.setNuDocumento(pnuDoc);
+                    ciudadanoBean.setNombre(data.get("ApellidoPaterno") + " " + data.get("ApellidoMaterno") + " " + data.get("Nombres"));
+                    ciudadanoBean.setDeDireccion((String) data.get("Direccion"));
+                    ciudadanoBean.setUbigeo((String) data.get("Ubigeo"));
+
+                    // Procesar el Ubigeo
+                    String[] ubigeoParts = ((String) data.get("Ubigeo")).split("/");
+                    if (ubigeoParts.length == 3) {
+                        String departamento = ubigeoParts[0];
+                        String provincia = ubigeoParts[1];
+                        String distrito = ubigeoParts[2];
+
+                        // Crear el objeto UbigeoBean para la búsqueda
+                        UbigeoBean ubigeo = new UbigeoBean();
+                        ubigeo.setNoDep(departamento);
+                        ubigeo.setNoPrv(provincia);
+                        ubigeo.setNoDis(distrito);
+
+                        // Llamar al método getUbigeoBusqList
+                        List<UbigeoBean> ubigeoList = getUbigeoBusqList(ubigeo);
+                        System.out.println("ubigeoList ubigeoList ubigeoList");
+                        System.out.println(ubigeoList);
+                        if (ubigeoList != null && !ubigeoList.isEmpty()) {
+                            System.out.println("ingresa condicion");
+                            UbigeoBean foundUbigeo = ubigeoList.get(0);
+                            ciudadanoBean.setIdDepartamento(foundUbigeo.getUbDep());
+                            ciudadanoBean.setIdProvincia(foundUbigeo.getUbPrv());
+                            ciudadanoBean.setIdDistrito(foundUbigeo.getUbDis());
+                        } else {
+                            System.out.println(" no ingresa condicion");
+                            ciudadanoBean.setIdDepartamento("");
+                            ciudadanoBean.setIdProvincia("");
+                            ciudadanoBean.setIdDistrito("");
+                        }
+                    }
+
+                    ciudadanoBean.setDeCorreo("");
+                    ciudadanoBean.setTelefono("");
+
+
+                    CitizenBean citizenBean = new CitizenBean();
+                    citizenBean.setNuLem(pnuDoc);
+                    citizenBean.setUbDep(ciudadanoBean.getIdDepartamento());
+                    citizenBean.setUbPrv(ciudadanoBean.getIdProvincia());
+                    citizenBean.setUbDis(ciudadanoBean.getIdDistrito());
+                    citizenBean.setDeApp((String) data.get("ApellidoPaterno"));
+                    citizenBean.setDeApm((String) data.get("ApellidoMaterno"));
+                    citizenBean.setDeNom((String) data.get("Nombres"));
+                    citizenBean.setDeDomicil((String) data.get("Direccion"));
+
+
+                    insCiudadano(citizenBean);
+
+
+
+                    return ciudadanoBean;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al obtener datos desde el servicio: " + e.getMessage());
+            e.printStackTrace();
+
+        }
+
+        return null;
+    }
+
+    public String insCiudadano(CitizenBean ciudadano) {
+        String vReturn = "NO_OK";
+        StringBuilder sql = new StringBuilder();
+        String genCoProceso = "";
+
+        sql.append("insert into IDOSGD.TDTX_ANI_SIMIL ");
+        sql.append("(NULEM, UBDEP, UBPRV, UBDIS, DEAPP, DEAPM, DENOM, DEDOMICIL ) ");
+        sql.append("values (?,?,?,?,?, ?,? ,?) ");
+
+
+        try {
+            this.jdbcTemplate.update(sql.toString(), new Object[] { ciudadano
+                    .getNuLem(), ciudadano.getUbDep(), ciudadano.getUbPrv(), ciudadano.getUbDis(), ciudadano
+                    .getDeApp(), ciudadano.getDeApm(), ciudadano.getDeNom(), ciudadano.getDeDomicil() });
+
+
+            vReturn = "OK";
+        }
+        catch (DuplicateKeyException con) {
+            vReturn = "Nde documento duplicado.";
+            con.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vReturn;
+    }
+
+    public List<UbigeoBean> getUbigeoBusqList(UbigeoBean ubigeo) {
+        System.out.println("ubigeo.getNoDep");
+        System.out.println(ubigeo.getNoDep());
+        System.out.println(ubigeo.getNoPrv());
+        System.out.println(ubigeo.getNoDis());
+        StringBuilder sql = new StringBuilder();
+        sql.append("select  ubdep, ");
+        sql.append("        ubprv, ");
+        sql.append("        ubdis, ");
+        sql.append("        ubloc, ");
+        sql.append("        coreg, ");
+        sql.append("        LTRIM(RTRIM(nodep)) nodep, ");
+        sql.append("        LTRIM(RTRIM(noprv)) noprv,  ");
+        sql.append("        LTRIM(RTRIM(nodis)) nodis, ");
+        sql.append("        cpdis, ");
+        sql.append("        stubi, ");
+        sql.append("        stsob, ");
+        sql.append("        feres, ");
+        sql.append("        inubi, ");
+        sql.append("        ub_inei ");
+        sql.append("from IDOSGD.idtubias ");
+        sql.append("where ubdep like '%' + ? + '%' and ubprv like '%' + ? + '%' and ");
+        sql.append("ubdis like '%' + ? + '%' and nodep like '%' + ? + '%' and ");
+        sql.append("noprv like '%' + ? + '%' and nodis like '%' + ? + '%' and ");
+        sql.append("UBLOC = '00' and ");
+        sql.append("UBPRV <> '00' and ");
+        sql.append("UBDIS <> '00' and ");
+        sql.append("UBDEP <> ' ' ");
+
+        List<UbigeoBean> list = new ArrayList<UbigeoBean>();
+
+        try {
+            list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(UbigeoBean.class), new Object[] {
+                    ubigeo.getUbDep() != null ? ubigeo.getUbDep() : "",
+                    ubigeo.getUbPrv() != null ? ubigeo.getUbPrv() : "",
+                    ubigeo.getUbDis() != null ? ubigeo.getUbDis() : "",
+                    ubigeo.getNoDep() != null ? ubigeo.getNoDep() : "",
+                    ubigeo.getNoPrv() != null ? ubigeo.getNoPrv() : "",
+                    ubigeo.getNoDis() != null ? ubigeo.getNoDis() : ""
+            });
+            System.out.println("lista");
+            System.out.println(list);
+            System.out.println(list.get(0));
+            System.out.println("lista final");
+        }
+        catch (EmptyResultDataAccessException e) {
+            list = null;
+        } catch (Exception e) {
+            list = null;
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+    public CiudadanoBean getCiudadanoSql(String pnuDoc) {
          StringBuilder sql = new StringBuilder();
-        sql.append("select I.NULEM NU_DOCUMENTO,substring(RTRIM(I.DEAPP)+' '+RTRIM(I.DEAPM)+' '+RTRIM(I.DENOM),1,200) NOMBRE, \nISNULL(I.UBDEP,'') ID_DEPARTAMENTO, ISNULL(I.UBPRV,'') ID_PROVINCIA, ISNULL(I.UBDIS,'') ID_DISTRITO, ISNULL(I.DEDOMICIL,'') DE_DIRECCION, ISNULL(I.DEEMAIL,'') DE_CORREO,ISNULL(I.DETELEFO,'') TELEFONO \n,I.UBDEP, I.UBPRV,I.UBDIS,I.DEDOMICIL,I.DEEMAIL, I.DETELEFO ,  ltrim(UB.NODEP)+'/'+ltrim(UB.NOPRV)+'/'+ltrim(UB.NODIS) ubigeo \n from IDOSGD.IDTANIRS I LEFT JOIN IDOSGD.IDTUBIAS UB ON UB.UBDEP=I.UBDEP AND UB.UBPRV=I.UBPRV AND UB.UBDIS=I.UBDIS  \nwhere\nNULEM like ?+'%'\norder by 2");
+        sql.append("select I.NULEM NU_DOCUMENTO,substring(RTRIM(I.DEAPP)+' '+RTRIM(I.DEAPM)+' '+RTRIM(I.DENOM),1,200) NOMBRE, \nISNULL(I.UBDEP,'') ID_DEPARTAMENTO, ISNULL(I.UBPRV,'') ID_PROVINCIA, ISNULL(I.UBDIS,'') ID_DISTRITO, ISNULL(I.DEDOMICIL,'') DE_DIRECCION, ISNULL(I.DEEMAIL,'') DE_CORREO,ISNULL(I.DETELEFO,'') TELEFONO \n,I.UBDEP, I.UBPRV,I.UBDIS,I.DEDOMICIL,I.DEEMAIL, I.DETELEFO ,  LTRIM(RTRIM(UB.NODEP)) + '/' + LTRIM(RTRIM(UB.NOPRV)) + '/' + LTRIM(RTRIM(UB.NODIS)) ubigeo \n from IDOSGD.TDTX_ANI_SIMIL I LEFT JOIN IDOSGD.IDTUBIAS UB ON UB.UBDEP=I.UBDEP AND UB.UBPRV=I.UBPRV AND UB.UBDIS=I.UBDIS  \nwhere\nNULEM like ?+'%'\norder by 2");
 
         CiudadanoBean ciudadanoBean = new CiudadanoBean();
         try {
@@ -149,16 +443,112 @@ public class CommonQueryDaoImp
         return ciudadanoBean;
     }
 
+    public ProveedorBean getProveedorSql(String pnuRuc){
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT CPRO_RUC NU_RUC, CPRO_RAZSOC DESCRIPCION,CPRO_DOMICIL, CUBI_CODDEP, CUBI_CODPRO, CUBI_CODDIS, CUBI_CODDEP ID_DEPARTAMENTO,  CUBI_CODPRO ID_PROVINCIA, CUBI_CODDIS ID_DISTRITO, CPRO_DOMICIL DE_DIRECCION FROM IDOSGD.LG_PRO_PROVEEDOR WITH(NOLOCK)\nwhere CPRO_RUC=?");
+        ProveedorBean proveedorBean = new ProveedorBean();
+        try {
+            proveedorBean = (ProveedorBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(ProveedorBean.class), new Object[]{pnuRuc});
+
+        } catch (EmptyResultDataAccessException e) {
+            proveedorBean = null;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return proveedorBean;
+    }
+
     public ProveedorBean getProveedor(String pnuRuc) {
-         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT CPRO_RUC NU_RUC, CPRO_RAZSOC DESCRIPCION FROM IDOSGD.LG_PRO_PROVEEDOR WITH(NOLOCK)\nwhere CPRO_RUC=?");
+
+        ProveedorBean proveedorSql = getProveedorSql(pnuRuc);
+        if (proveedorSql != null) {
+            return proveedorSql;
+        }
+
 
         ProveedorBean proveedorBean = null;
         try {
-            proveedorBean = (ProveedorBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(ProveedorBean.class), new Object[]{pnuRuc});
-        } catch (EmptyResultDataAccessException e) {
+
+                String url = datosPlantillaDao.getParametros("URL_SUNAT_REST");
+                RestTemplate restTemplate = new RestTemplate();
+                String uri = UriComponentsBuilder.fromHttpUrl(url)
+                        .queryParam("nroRuc", pnuRuc).build()
+                        .toUriString();
+
+                ResponseEntity<Map> response = restTemplate.getForEntity(uri, Map.class);
+
+
+                if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                    Map<String, Object> body = response.getBody();
+                    Map<String, Object> data = (Map<String, Object>) body.get("Data");
+
+                    if (data != null) {
+                        ProveedorBean proveedor = new ProveedorBean();
+                        proveedor.setNuRuc((String) data.get("ddp_numruc"));
+                        proveedor.setDescripcion((String) data.get("ddp_nombre"));
+                        proveedor.setNoDep((String) data.get("desc_de"));
+                        proveedor.setNoPrv((String) data.get("desc_prov"));
+                        proveedor.setNoDis((String) data.get("desc_dist"));
+                        proveedor.setCproDomicil(data.get("desc_tipvia") + " " + data.get("ddp_nomvia") + " " +
+                                data.get("ddp_numer1") + " " + data.get("desc_tipzon") + " " + data.get("ddp_nomzon"));
+                        proveedor.setDeDireccion(data.get("desc_tipvia") + " " + data.get("ddp_nomvia") + " " +
+                                data.get("ddp_numer1") + " " + data.get("desc_tipzon") + " " + data.get("ddp_nomzon"));
+
+                        UbigeoBean ubigeo = new UbigeoBean();
+                        ubigeo.setNoDep(((String) data.get("desc_de")).trim());
+                        ubigeo.setNoPrv(((String) data.get("desc_prov")).trim());
+                        ubigeo.setNoDis(((String) data.get("desc_dist")).trim());
+
+
+                        List<UbigeoBean> ubigeoList = getUbigeoBusqList(ubigeo);
+
+                        if (ubigeoList != null && !ubigeoList.isEmpty()) {
+                            System.out.println("inhreso a ubigeoList != null && !ubigeoList.isEmpty()");
+                            UbigeoBean foundUbigeo = ubigeoList.get(0);
+                            proveedor.setCubiCoddep(foundUbigeo.getUbDep());
+                            proveedor.setCubiCodpro(foundUbigeo.getUbPrv());
+                            proveedor.setCubiCoddis(foundUbigeo.getUbDis());
+                            proveedor.setIdDepartamento(foundUbigeo.getUbDep());
+                            proveedor.setIdProvincia(foundUbigeo.getUbPrv());
+                            proveedor.setIdDistrito(foundUbigeo.getUbDis());
+
+                        } else {
+
+                            proveedor.setCubiCoddep("");
+                            proveedor.setCubiCodpro("");
+                            proveedor.setCubiCoddis("");
+                            proveedor.setIdDepartamento("");
+                            proveedor.setIdProvincia("");
+                            proveedor.setIdDistrito("");
+                        }
+
+                        String urlRepre = datosPlantillaDao.getParametros("URL_SUNAT_REST_REPRESE");
+                        String uriRepre = UriComponentsBuilder.fromHttpUrl(urlRepre)
+                                .queryParam("nroRuc", pnuRuc).build()
+                                .toUriString();
+                        RestTemplate restTemplateRepre = new RestTemplate();
+                        ResponseEntity<Map> responseRepre = restTemplateRepre.getForEntity(uriRepre, Map.class);
+                        if(responseRepre.getStatusCode() == HttpStatus.OK && responseRepre.getBody() != null){
+                            Map<String, Object> bodyRepre = responseRepre.getBody();
+                            Map<String, Object> dataRepre = (Map<String, Object>) bodyRepre.get("Data");
+                            String rsoNroDoc = (String) dataRepre.get("rso_nrodoc");
+                            if (rsoNroDoc != null) {
+                                proveedor.setDniRepre(rsoNroDoc);
+                                proveedor.setNomRepre((String) dataRepre.get("rso_nombre"));
+                            }
+                        }
+
+                        insProveedor(proveedor);
+                        proveedorBean = proveedor;
+                        return proveedorBean;
+                    }
+                }
+
+
+
+       /* } catch (EmptyResultDataAccessException e) {
             proveedorBean = null;
-        } catch (Exception e) {
+      */} catch (Exception e) {
             e.printStackTrace();
         }
         return proveedorBean;

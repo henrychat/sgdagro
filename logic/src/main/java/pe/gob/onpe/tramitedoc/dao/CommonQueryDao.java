@@ -32,6 +32,7 @@ public interface CommonQueryDao {
     String verificarExpedienteDuplicado(String pnuAnnExp, String pcoDepExp, String pcoGru, String pnuCorrExp);
     String verficarNumeroDuplicadoEmiDocExtRecep(String pnuAnn,String pcoDepEmi,String pnuCorEmi);
     List<ProveedorBean> getLstProveedores(String prazonSocial);
+    List<ProveedorBean> getLstProveedoresUrl (String prazonSocial);
     List<DestinatarioOtroOrigenBean> getLstOtrosOrigenes(String pdescripcion);
     CiudadanoBean getCiudadano(String pnuDoc);
     ProveedorBean getProveedor(String pnuRuc);

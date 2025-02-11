@@ -118,6 +118,7 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
             String pcempCodEmp = trxDocExternoRecepBean.getCempCodEmp();
             DocumentoExtRecepBean documentoExtRecepBean = trxDocExternoRecepBean.getDocumentoEmiBean();
             ExpedienteDocExtRecepBean expedienteBean = trxDocExternoRecepBean.getExpedienteEmiBean();
+
             RemitenteDocExtRecepBean remitenteBean = trxDocExternoRecepBean.getRemitenteEmiBean();
             ArrayList<ReferenciaDocExtRecepBean> lstReferencia = trxDocExternoRecepBean.getLstReferencia();
             ArrayList<DestinatarioDocumentoEmiBean> lstDestinatario = trxDocExternoRecepBean.getLstDestinatario();
@@ -213,10 +214,18 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
                 documentoExtRecepBean.setNuCorrExp(expedienteBean.getNuCorrExp());
                 documentoExtRecepBean.setNuExpediente(expedienteBean.getNuExpediente());
 
-                vReturn = this.mesaPartesDao.insExpedienteBean(expedienteBean);
-                if (!"OK".equals(vReturn)) {
-                    throw new validarDatoException("Error al Grabar Expediente.");
-                }
+
+
+
+            //    if (documentoExtRecepBean.getNuExpediente().isEmpty() || documentoExtRecepBean.getNuExpediente().equals("")){
+                    vReturn = this.mesaPartesDao.insExpedienteBean(expedienteBean);
+                    if (!"OK".equals(vReturn)) {
+                        throw new validarDatoException("Error al Grabar Expediente.");
+                    }
+              //  }
+
+
+
                 documentoExtRecepBean.setCoUseMod(pcoUserMod);
                 documentoExtRecepBean.setCoEsDocEmiMp("5");
                 vReturn = this.mesaPartesDao.getNroCorrelativoDocumento(documentoExtRecepBean.getNuAnn(), remitenteBean.getCoDepEmi(), remitenteBean.getTiEmi());
@@ -475,6 +484,7 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
         String coRespuesta = "0";
         StringBuilder retval = new StringBuilder();
         try {
+            String urlReniec = this.applicationProperties.getUrlReniec();
             ciudadanoBean = this.commonQueryDao.getCiudadano(pnuDoc);
             retval.append("{\"coRespuesta\":\"");
             if (ciudadanoBean != null) {

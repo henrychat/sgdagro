@@ -844,7 +844,7 @@ function fn_anexoDocumento()
 
 function fn_fileUploadMsj(reemplazarDoc) {
     $("#progress").show();
-    var pFileSizeMax = 25000000;
+    var pFileSizeMax = 31457280;
 //    var rutactx = $("#rutactx").attr("value");
     var rutactx = pRutaContexto + "/" + pAppVersion;
     var numFiles = 0;
@@ -926,7 +926,7 @@ function fn_anexoDocumentoArc(pAnn,pEmi,pDes)
 
 function fn_fileUploadMsjArc(reemplazarDoc,pAnn,pEmi,pDes) {
     $("#progress").show();
-    var pFileSizeMax = 25000000;
+    var pFileSizeMax = 31457280;
 //    var rutactx = $("#rutactx").attr("value");
     var rutactx = pRutaContexto + "/" + pAppVersion;
     var numFiles = 0;

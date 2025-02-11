@@ -144,7 +144,25 @@ public class UbigeoBean {
     public void setUbInei(String ubInei) {
         this.ubInei = ubInei;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "UbigeoBean{" +
+                "ubDep='" + ubDep + '\'' +
+                ", ubPrv='" + ubPrv + '\'' +
+                ", ubDis='" + ubDis + '\'' +
+                ", ubLoc='" + ubLoc + '\'' +
+                ", coReg='" + coReg + '\'' +
+                ", noDep='" + noDep + '\'' +
+                ", noPrv='" + noPrv + '\'' +
+                ", noDis='" + noDis + '\'' +
+                ", cpDis='" + cpDis + '\'' +
+                ", stUbi='" + stUbi + '\'' +
+                ", stSob='" + stSob + '\'' +
+                ", feRes='" + feRes + '\'' +
+                ", inUbi='" + inUbi + '\'' +
+                ", ubInei='" + ubInei + '\'' +
+                ", ambito='" + ambito + '\'' +
+                '}';
+    }
 }

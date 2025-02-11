@@ -538,6 +538,7 @@ public class MesaPartesDaoImp
                 .append("        A.NU_EMI, ")
                 .append("        A.CO_TIP_DOC_ADM CO_TIP_DOC, ")
                 .append("        B.NU_EXPEDIENTE, ")
+                .append("        B.NU_SEC_EXP, ")
                 .append("        CONVERT(VARCHAR(10), B.FE_EXP, 3) FE_EXP, ")
                 .append("        SUBSTRING(a.de_asu, 1, 59) de_asu, a.de_doc_sig ")
                 .append("FROM IDOSGD.TDTV_REMITOS A WITH (NOLOCK) ")
@@ -561,7 +562,7 @@ public class MesaPartesDaoImp
                 .append("AND B.ES_ESTADO='0'  ")
                 //.append("AND D.NU_DES='1' ")
                 .append(") d ")
-                .append(" order by 1 desc ");
+                .append(" order by 5 desc ");
         try {
             //WG20230410
 //      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(ReferenciaDocExtRecepBean.class), new Object[] { pnuAnn, pcoTiDoc, pcoDepEmi });

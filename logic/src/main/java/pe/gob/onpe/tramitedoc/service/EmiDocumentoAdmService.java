@@ -46,6 +46,7 @@ public interface EmiDocumentoAdmService {
 //    String grabaDocumentoEmi(TrxDocumentoEmiBean trxDocumentoEmiBean,String sCrearExpediente)throws Exception;
     CiudadanoBean getCiudadano(String pnuDoc);
     List<ProveedorBean> getLstProveedoresAgrega(String pRazonSocial);
+    List<ProveedorBean> getLstProveedoresAgregaUrl (String pRazonSocial);
     String getJsonAfterGrabaDocumentoEmi(String snuAnn,String snuEmi);
     String _getJsonAfterGrabaDocumentoEmi(String snuAnn, String snuEmi);
     DocumentoEmiBean getDocumentoEmiAdmNew(String sEstadoDocEmi, String codDependencia);

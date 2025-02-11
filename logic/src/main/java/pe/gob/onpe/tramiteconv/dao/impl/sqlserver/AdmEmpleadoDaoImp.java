@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -33,7 +35,9 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 @Repository("admEmpleadoDao")
 public class AdmEmpleadoDaoImp
   extends SimpleJdbcDaoBase   implements AdmEmpleadoDao {
-	
+
+  @Autowired
+  private CommonQueryDaoImp commonQueryDaoImp;
 	
   private String sql_base = "SELECT E.CEMP_CODEMP co_Empleado, E.CEMP_APEPAT ap_Paterno, E.CEMP_APEMAT ap_Materno,E.CEMP_DENOM nombres, E.CEMP_NU_DNI dni,E.CEMP_TIPSEX sexo, E.FEMP_FECNAC fecha_Nacimiento, E.CEMP_EMAIL email,E.CEMP_EST_EMP estado, E.CEMP_CO_DEPEND co_Dependencia, E.CEMP_CO_CARGO coCargo, IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA(E.CEMP_CO_DEPEND) de_Dependencia, IDOSGD.PK_SGD_DESCRIPCION_DE_CARGO(E.CEMP_CO_CARGO) de_Cargo,  U.COD_USER usuario,U.ES_USUARIO esUsuario,CASE U.ES_USUARIO WHEN 'A' THEN 'Activo' WHEN 'N' THEN 'Nuevo' WHEN 'B' THEN 'Bloq. x Otros' WHEN 'X' THEN 'Baja' WHEN 'M' THEN 'Migracion' WHEN 'I' THEN 'Bloq. x Intentos' ELSE 'Sin Usuario' END estadousuario, \n U.IN_AD inAD FROM IDOSGD.RHTM_PER_EMPLEADOS E   LEFT JOIN IDOSGD.SEG_USUARIOS1 U ON U.CEMP_CODEMP= E.CEMP_CODEMP ";
 

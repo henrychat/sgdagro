@@ -30,12 +30,19 @@ public class ConsultaProveedorDaoImp
 {
   @Autowired
   private ApplicationProperties applicationProperties;
+
+  @Autowired
+  private CommonQueryDaoImp commonQueryDaoImp;
   
   public ProcessResult<List<ProveedorBean>> getProveedoresBusqList(String busNroRuc, String busRazonSocial, FiltroPaginate paginate) {
      StringBuilder sql = new StringBuilder();
     String sqlContains = "";
     Map<String, Object> objectParam = new HashMap<String, Object>();
-    
+    ProcessResult<List<ProveedorBean>> Result = new ProcessResult();
+    List<ProveedorBean> list = new ArrayList<ProveedorBean>();
+
+
+    //HENRY
     sql.append("SELECT A.*,  ");
     sql.append("\t\t(SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_GET_DEPARTAMENTO](A.cubi_coddep)) no_dep, ");
     sql.append("\t\t(SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_FU_GET_PROVINCIA](A.cubi_coddep, A.cubi_codpro)) no_prv, ");
@@ -47,7 +54,7 @@ public class ConsultaProveedorDaoImp
     sql.append("\t\tcubi_coddep, ");
     sql.append("\t\tcubi_codpro, ");
     sql.append("\t\tcubi_coddis, ");
-    sql.append("\t\tcpro_telefo,cpro_email, ");
+    sql.append("\t\tcpro_telefo,cpro_email,dni_repre,nom_repre, ");
     sql.append("\t\tROW_NUMBER() OVER (ORDER BY cpro_ruc) AS fila, COUNT(cpro_ruc) OVER()  AS filasTotal  ");
     sql.append("\tfrom IDOSGD.LG_PRO_PROVEEDOR ");
     sql.append("\tWHERE LEN(cpro_ruc) = 11 ");
@@ -55,7 +62,7 @@ public class ConsultaProveedorDaoImp
     if (busNroRuc != null && busNroRuc.trim().length() > 0) {
       sql.append(" and cpro_ruc like '%'+:pbusNroRuc+'%' ");
       objectParam.put("pbusNroRuc", busNroRuc);
-    } 
+    }
     
     if (busRazonSocial != null && busRazonSocial.trim().length() > 0) {
   //    sql.append(" AND CONTAINS(cpro_razsoc, :pBusquedaTextual) ");
@@ -66,17 +73,26 @@ public class ConsultaProveedorDaoImp
     
     sql.append(") A ");
     sql.append("WHERE fila BETWEEN " + paginate.getPaginaDesde() + " AND " + paginate.getPaginaHasta() + " ");
-    ProcessResult<List<ProveedorBean>> Result = new ProcessResult();
-    List<ProveedorBean> list = new ArrayList<ProveedorBean>();
+
     
     try {
       if (sqlContains.length() > 0) {
         String cadena = (String)this.jdbcTemplate.queryForObject(sqlContains, String.class);
         objectParam.put("pBusquedaTextual", cadena);
-      } 
+      }
       list = this.namedParameterJdbcTemplate.query(sql.toString(), objectParam, (RowMapper)BeanPropertyRowMapper.newInstance(ProveedorBean.class));
-      Result.setResult(list);
-      Result.setIsSuccess(true);
+      if (list.size() > 0) {
+        Result.setResult(list);
+        Result.setIsSuccess(true);
+      }else {
+
+        ProveedorBean proveedorBean = new ProveedorBean();
+        proveedorBean=commonQueryDaoImp.getProveedor(busNroRuc);
+        list.add(proveedorBean);
+        Result.setResult(list);
+        Result.setIsSuccess(true);
+      }
+
     } catch (EmptyResultDataAccessException e) {
       Result.setIsSuccess(false);
       Result.setMessage(e.getMessage());

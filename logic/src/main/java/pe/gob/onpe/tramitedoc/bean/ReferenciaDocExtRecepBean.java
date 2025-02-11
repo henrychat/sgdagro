@@ -31,7 +31,17 @@ public class ReferenciaDocExtRecepBean {
     private String liNuDoc;
     private String deDepDes;    
     private String deProcedencia;
-    
+    //HENRY
+    private String nuSecExp;
+
+    public String getNuSecExp() {
+        return nuSecExp;
+    }
+
+    public void setNuSecExp(String nuSecExp) {
+        this.nuSecExp = nuSecExp;
+    }
+
     public ReferenciaDocExtRecepBean() {
     }
 

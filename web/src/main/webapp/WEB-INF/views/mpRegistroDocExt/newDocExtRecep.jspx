@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>Fecha:</td>
                                         <td>
-                                            <form:input path="feExp" style="text-align: center;width: 150px;" maxlength="16" onkeypress="return filtrarTeclado(event, false, public_enteros+'/:','feVence','',fn_validarFechaExpDocExt);" readonly="true"/>
+                                            <form:input path="feExp" style="text-align: center;width: 150px;" maxlength="14" onkeypress="return filtrarTeclado(event, false, public_enteros+'/:','feVence','',fn_validarFechaExpDocExt);" readonly="true"/>
                                         </td> 
                                          <td>Tupa:</td>
                                         <td>
@@ -79,7 +79,7 @@
                                         <td>
                                             <form:input path="nuExpediente" readonly="true" style="text-align: center;width: 150px;" maxlength="7" class="delUpperCase"/>
                                             <!--form:input path="nuExpediente" readonly="true" style="text-align: center" maxlength="20"/-->
-                                        </td>  
+                                        </td>
                                         <td>Tipo:</td>
                                         <td>
                                             <form:select path="coTipoExp" style="width:170px;" onchange="fn_changeTipoExp(this);">

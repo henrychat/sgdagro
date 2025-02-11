@@ -162,6 +162,11 @@ public class CommonQueryDaoImp extends SimpleJdbcDaoBase implements CommonQueryD
     }
 
     @Override
+    public List<ProveedorBean> getLstProveedoresUrl(String prazonSocial) {
+        return null;
+    }
+
+    @Override
     public List<DestinatarioOtroOrigenBean> getLstOtrosOrigenes(String pdescripcion) {
         StringBuilder sql = new StringBuilder();
         //pdescripcion=Utilidades.fn_getCleanTextLenGreathree(Utilidades.fn_getCleanTextExpReg(pdescripcion));        

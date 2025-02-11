@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,6 +28,8 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobCreator;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import pe.gob.onpe.autentica.model.Usuario;
 import pe.gob.onpe.libreria.util.Utility;
 import pe.gob.onpe.tramitedoc.bean.BuscarDocumentoEmiBean;
@@ -44,6 +49,7 @@ import pe.gob.onpe.tramitedoc.bean.ReferenciaEmiDocBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaRemitoBean;
 import pe.gob.onpe.tramitedoc.bean.RemitenteEmiBean;
 import pe.gob.onpe.tramitedoc.bean.TblRemitosBean;
+import pe.gob.onpe.tramitedoc.dao.DatosPlantillaDao;
 import pe.gob.onpe.tramitedoc.dao.EmiDocumentoAdmDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 import pe.gob.onpe.tramitedoc.util.AleatorioCodVerificacion;
@@ -53,6 +59,9 @@ import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 @Repository("emiDocumentoAdmDao")
 public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocumentoAdmDao {
+
+    @Autowired
+    private DatosPlantillaDao datosPlantillaDao;
 
     private SimpleJdbcCall spActualizaEstado;
     private SimpleJdbcCall spInsMesaVirtual;
@@ -895,8 +904,10 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         }
         return list;
     }
-
+    ////HENRY
     public List<DestinatarioDocumentoEmiBean> getLstDestintariotlbEmi(String pnuAnn, String pnuEmi) {
+
+
         StringBuilder sql = new StringBuilder();
         List<DestinatarioDocumentoEmiBean> list = new ArrayList<DestinatarioDocumentoEmiBean>();
         sql.append("select a.nu_ann, ");
@@ -963,7 +974,42 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append("order by 3 ");
 
         try {
+
             list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class), new Object[]{pnuAnn, pnuEmi});
+
+            if (list != null && !list.isEmpty() && list.get(0).getNuRuc() != null && !list.get(0).getNuRuc().isEmpty()){
+
+
+            String urlRepre = datosPlantillaDao.getParametros("URL_SUNAT_REST_REPRESE");
+
+            for (int i = 0; i < list.size(); i++) {
+
+
+                String uriRepre = UriComponentsBuilder.fromHttpUrl(urlRepre)
+                        .queryParam("nroRuc", list.get(i).getNuRuc()).build()
+                        .toUriString();
+
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<Map> responseRepre = restTemplate.getForEntity(uriRepre, Map.class);
+                if (responseRepre.getStatusCode() == HttpStatus.OK && responseRepre.getBody() != null) {
+                    Map<String, Object> bodyRepre = responseRepre.getBody();
+                    Map<String, Object> dataRepre = (Map<String, Object>) bodyRepre.get("Data");
+                    String rsoNroDoc = (String) dataRepre.get("rso_nrodoc");
+                    if (rsoNroDoc != null) {
+                        StringBuilder sqlUpd = new StringBuilder();
+                        sqlUpd.append("UPDATE IDOSGD.tdtv_remitos ");
+                        sqlUpd.append("SET REMI_NU_DNI_EMI = ? ");
+                        sqlUpd.append("WHERE nu_ann = ? ");
+                        sqlUpd.append("AND nu_emi = ?");
+                        this.jdbcTemplate.update(sqlUpd.toString(), ((String) dataRepre.get("rso_nrodoc")).trim(),pnuAnn,pnuEmi);
+                        list.get(i).setRemiNuDniEmi(((String) dataRepre.get("rso_nrodoc")).trim());
+                        list.get(i).setNombres(((String) dataRepre.get("rso_nombre")).trim());
+
+                    }
+                }
+            }
+            }
+
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {
@@ -1367,6 +1413,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
     }
 
     public String insExpedienteBean(ExpedienteBean expedienteBean) {
+        System.out.println("ingresa a insExpedienteBean");
         String vReturn = "NO_OK";
         StringBuilder sqlQry1 = new StringBuilder();
         sqlQry1.append("select RIGHT(REPLICATE('0', 7) + rtrim(ltrim(CAST((ISNULL(max(NU_CORR_EXP), 0) + 1) AS varchar))), 7) nuCorrExp, ");
@@ -1593,40 +1640,25 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
     public List<EmpleadoBean> getPersonalEditDocAdmEmision(String pcoDepEmi) {
         StringBuilder sql = new StringBuilder();
         List<EmpleadoBean> list = new ArrayList<EmpleadoBean>();
-        sql.append("SELECT e.cemp_apepat, ");
-        sql.append("\t   e.cemp_apemat, ");
-        sql.append("\t   e.cemp_denom, ");
-        sql.append("\t   e.CEMP_CODEMP ");
-        sql.append("FROM IDOSGD.RHTM_PER_EMPLEADOS e ");
-        sql.append("WHERE e.CEMP_EST_EMP = '1' ");
-        sql.append("AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA ");
-        sql.append("\t\t            from IDOSGD.rhTM_dependencia d ");
-        sql.append("\t\t \t    where d.CO_DEPENDENCIA =? ");
-        sql.append("\t\t\t    or CO_DEPEN_PADRE=?) ");
-        sql.append("\t\t\t    OR CO_DEPENDENCIA=? ) ");
-        sql.append("UNION ");
-        sql.append("SELECT  e.cemp_apepat, ");
-        sql.append("\t    e.cemp_apemat, ");
-        sql.append("\t    e.cemp_denom, ");
-        sql.append("\t    e.CEMP_CODEMP ");
-        sql.append("FROM IDOSGD.RHTM_PER_EMPLEADOS e ");
-        sql.append("WHERE e.CEMP_EST_EMP = '1' ");
-        sql.append("AND cemp_codemp ");
-        sql.append("in ( ");
-        sql.append("select co_emp ");
-        sql.append("from IDOSGD.tdtx_dependencia_empleado ");
-        sql.append("where co_dep=? ");
-        sql.append("and es_emp='0' ");
-        sql.append("UNION ");
-        sql.append("select CO_EMPLEADO ");
-        sql.append("from IDOSGD.rhtm_dependencia ");
-        sql.append("where co_dependencia=? ");
-        sql.append(") ");
-        sql.append("ORDER BY 1 ");
 
+        sql.append("SELECT e.cemp_apepat,e.cemp_apemat,e.cemp_denom, e.CEMP_CODEMP\n"
+                + "FROM IDOSGD.RHTM_PER_EMPLEADOS e\n"
+                + "WHERE e.CEMP_EST_EMP = '1'\n"
+                + "AND (CEMP_CO_DEPEND in (select CO_DEPENDENCIA from IDOSGD.rhTM_dependencia d where d.CO_DEPENDENCIA =? or CO_DEPEN_PADRE=?) \n"
+                + "OR CO_DEPENDENCIA=? )\n"
+                + "UNION\n"
+                + "SELECT e.cemp_apepat,e.cemp_apemat,e.cemp_denom, e.CEMP_CODEMP\n"
+                + "FROM IDOSGD.RHTM_PER_EMPLEADOS e\n"
+                + "WHERE e.CEMP_EST_EMP = '1'\n"
+                + "AND cemp_codemp \n"
+                + "in (\n"
+                + "select co_emp from IDOSGD.tdtx_dependencia_empleado  where co_dep=? and es_emp='0'\n"
+                + "union select CO_EMPLEADO from IDOSGD.rhtm_dependencia  where co_dependencia=?\n"
+                + " )\n"
+                + "ORDER BY 1");
         try {
-            list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(EmpleadoBean.class), new Object[]{pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi});
-        
+            list = this.jdbcTemplate.query(sql.toString(), BeanPropertyRowMapper.newInstance(EmpleadoBean.class),
+                    new Object[]{pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi, pcoDepEmi});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {

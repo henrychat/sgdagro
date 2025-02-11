@@ -680,6 +680,7 @@ function fn_agregarReferenciasEmi() {
     var count = 0;
     var posFila = parseInt($('#txtTblRefEmiFilaWhereButton').val());
     var filaIni = posFila;
+    console.log($('#tlbDocumentoRefEmi').html());
     $('#tlbDocumentoRefEmi .row_selected').each(function (i, obj) {
         var pnuAnn = $(this).find("td:eq(8)").text();
         var pnuEmi = $(this).find("td:eq(9)").text();
@@ -1079,6 +1080,7 @@ function fn_tblRefEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, es
  */
 function fn_tblDestEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, estadoActivo, colAccionBD, accionBD) {
     //var json = '[';
+    console.log(colMostrar)
     var otArr = [];
     var count = 0;
     $('#' + idTable + ' tr').each(function (i) {
@@ -1091,6 +1093,7 @@ function fn_tblDestEmihtml2json(idTable, iniFila, colMostrar, colEstadoActivo, e
                     for (var i = 0; i < colMostrar.length; i++) {
                         var auxArrColMostrar = colMostrar[i].split("=");
                         if (auxArrColMostrar[1] * 1 === index + 1) {
+
                             var campoBean = auxArrColMostrar[0];
                             var valCampoBean = "";
                             if (typeof ($(this).find('input[type=text]').val()) !== "undefined") {
@@ -1400,6 +1403,7 @@ function fn_beforeGrabarDocumEmiAdmin(vchangeEsDocEmi) {
 }
 
 function fn_grabaDocumEmiAdmin(sCrearExpediente) {
+    debugger;
     $('#documentoEmiBean').find('select').removeProp('disabled');
     var cadenaJson = fn_buildSendJsontoServerDocuEmi();
     //console.log(cadenaJson);
@@ -4630,9 +4634,10 @@ function fu_validaPersonaJuridaDetalle(idTabla, indexUbi, indexDir) {
     var vRetorna = "OK";
     var found = false;
     var vDatosOblDesJur = $("#DatosOblDesJur").val();/*interoperabilidad*/
-
+    console.log(idTabla,indexUbi,indexDir);
     $("#" + idTabla + " tbody tr").each(function (index, row) {
         if (index > 0 && !$(row).hasClass('oculto') && !found) {
+            debugger;
             var codigo = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(" + indexUbi + ")").find('input[id=txtCodigoUbigeoOtro]').val() + "";
             var direccion = $("#" + idTabla + " tbody tr:eq(" + index + ") td:eq(" + indexDir + ")").find('textarea').val() + "";
             if (codigo === "" || codigo === ",," || codigo === "null,null,null") {

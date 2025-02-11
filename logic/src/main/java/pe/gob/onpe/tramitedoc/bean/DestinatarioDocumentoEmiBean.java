@@ -533,8 +533,65 @@ public class DestinatarioDocumentoEmiBean {
     public void setNuAnex(String nuAnex) {
         this.nuAnex = nuAnex;
     }
-    
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "DestinatarioDocumentoEmiBean{" +
+                "coDependencia='" + coDependencia + '\'' +
+                ", deDependencia='" + deDependencia + '\'' +
+                ", coLocal='" + coLocal + '\'' +
+                ", deLocal='" + deLocal + '\'' +
+                ", coEmpleado='" + coEmpleado + '\'' +
+                ", deEmpleado='" + deEmpleado + '\'' +
+                ", coTramite='" + coTramite + '\'' +
+                ", deTramite='" + deTramite + '\'' +
+                ", coTramiteFirst='" + coTramiteFirst + '\'' +
+                ", deTramiteFirst='" + deTramiteFirst + '\'' +
+                ", coTramiteNext='" + coTramiteNext + '\'' +
+                ", deTramiteNext='" + deTramiteNext + '\'' +
+                ", deIndicaciones='" + deIndicaciones + '\'' +
+                ", coPrioridad='" + coPrioridad + '\'' +
+                ", nuAnn='" + nuAnn + '\'' +
+                ", nuEmi='" + nuEmi + '\'' +
+                ", nuDes='" + nuDes + '\'' +
+                ", nuRuc='" + nuRuc + '\'' +
+                ", deProveedor='" + deProveedor + '\'' +
+                ", nuDni='" + nuDni + '\'' +
+                ", deCiudadano='" + deCiudadano + '\'' +
+                ", coOtroOrigen='" + coOtroOrigen + '\'' +
+                ", deOtroOrigenFull='" + deOtroOrigenFull + '\'' +
+                ", deNombreOtroOrigen='" + deNombreOtroOrigen + '\'' +
+                ", deTipoDocOtroOrigen='" + deTipoDocOtroOrigen + '\'' +
+                ", nuDocOtroOrigen='" + nuDocOtroOrigen + '\'' +
+                ", coTipoDestino='" + coTipoDestino + '\'' +
+                ", accionBD='" + accionBD + '\'' +
+                ", coUseCre='" + coUseCre + '\'' +
+                ", coUseMod='" + coUseMod + '\'' +
+                ", envMesaPartes='" + envMesaPartes + '\'' +
+                ", cdirRemite='" + cdirRemite + '\'' +
+                ", cexpCorreoe='" + cexpCorreoe + '\'' +
+                ", cTelefono='" + cTelefono + '\'' +
+                ", ccodDpto='" + ccodDpto + '\'' +
+                ", ccodProv='" + ccodProv + '\'' +
+                ", ccodDist='" + ccodDist + '\'' +
+                ", remiTiEmi='" + remiTiEmi + '\'' +
+                ", remiNuDniEmi='" + remiNuDniEmi + '\'' +
+                ", remiCoOtrOriEmi='" + remiCoOtrOriEmi + '\'' +
+                ", ubigeo='" + ubigeo + '\'' +
+                ", nombres='" + nombres + '\'' +
+                ", deCargoFunDestMae='" + deCargoFunDestMae + '\'' +
+                ", nombreDestinatario='" + nombreDestinatario + '\'' +
+                ", direccionDestinatario='" + direccionDestinatario + '\'' +
+                ", entidadPrivadaDestinatario='" + entidadPrivadaDestinatario + '\'' +
+                ", cargo='" + cargo + '\'' +
+                ", deDepDestMae='" + deDepDestMae + '\'' +
+                ", cidCat='" + cidCat + '\'' +
+                ", deCat='" + deCat + '\'' +
+                ", deDepDes='" + deDepDes + '\'' +
+                ", deNomDes='" + deNomDes + '\'' +
+                ", deCarDes='" + deCarDes + '\'' +
+                ", nuFol='" + nuFol + '\'' +
+                ", nuAnex='" + nuAnex + '\'' +
+                '}';
+    }
 }

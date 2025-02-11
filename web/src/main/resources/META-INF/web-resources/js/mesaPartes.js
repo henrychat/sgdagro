@@ -975,6 +975,7 @@ function fn_changeTipoDocExtRecep(cmbTipoDoc){
 }
 
 function fu_grabarRecepDocExt(){
+    debugger;
     var noForm='documentoExtRecepBean';
     var esDocEmi=jQuery('#'+noForm).find("#coEsDocEmiMp").val();
     if(!!esDocEmi&&(esDocEmi==="5"||esDocEmi==="7")){
@@ -1037,7 +1038,10 @@ function fn_rptaRegistrarDocExt(dataJson,noForm,objSizeTabla){
     if(dataJson!==null){
         if(dataJson.coRespuesta==="1"){
             var objDocEmiBean=dataJson.documentoEmiBean;
+            console.log('ingresa obj');
+            console.log(objDocEmiBean);
             if(objDocEmiBean!==null&&!!objDocEmiBean){
+                console.log(objDocEmiBean)
                 jQuery('#envExpedienteEmiBean').val("0");
                 jQuery('#envDocumentoEmiBean').val("0");
                 jQuery('#envRemitenteEmiBean').val("0");                   
@@ -2024,15 +2028,17 @@ function fn_agregarReferencias(){
     var count = 0;
     var posFila = parseInt($('#txtTblRefEmiFilaWhereButton').val());
     var filaIni = posFila;
-     $('#tlbDocumentoRefEmi .row_selected').each(function(i, obj) {
+    console.log($('#tlbDocumentoRefEmi').html());
+    $('#tlbDocumentoRefEmi .row_selected').each(function(i, obj) {
          var pnuExpediente= $(this).find("td:eq(1)").text();
             var pfeExp= $(this).find("td:eq(3)").text();
             var pnuAnn= $(this).find("td:eq(7)").text();
             var pnuEmi= $(this).find("td:eq(8)").text();
             var pcoTipDocAdm= $(this).find("td:eq(9)").text();
+            var pnuSecExp= $(this).find("td:eq(10)").text();
         
         if(count===0){
-            fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm);            
+            fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm,pnuSecExp);
         }else{
 //            var maxNum='0';
 //            $('#tblRefEmiDocAdm tbody input[type="radio"]').each(function()  { 
@@ -2045,7 +2051,7 @@ function fn_agregarReferencias(){
 //            $objFilaReferencia.find('input[type=radio]').attr('name', 'group' + (parseInt(maxNum)+1));
             $("#tblRefEmiDocAdm tbody tr:eq("+(posFila-1)+")").after("<tr>"+$objFilaReferencia.html()+"</tr>"); 
             $('#txtTblRefEmiFilaWhereButton').val(posFila);            
-            fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm);
+            fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm,pnuSecExp);
         }
         count++; 
         posFila++;
@@ -2060,7 +2066,7 @@ function fn_agregarReferencias(){
            }
         });
 }
-function fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm) {
+function fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocAdm,pnuSecExp) {
     var pfila = jQuery('#txtTblRefEmiFilaWhereButton').val();
     var pcol = jQuery('#txtTblRefEmiColWhereButton').val();
     //verificar si ya esta referenciado el documento
@@ -2092,11 +2098,70 @@ function fu_setDatoDocumentoExtRef(pnuAnn,pnuEmi,pnuExpediente,pfeExp,pcoTipDocA
             $("#tblRefEmiDocAdm tbody tr:eq(" + pfila + ") td:eq(" + (pcol * 1 + 5) + ")").text("UPD");
         }
         fn_changeReferenciaCorrecta(pfila);
+        var pnuAnnExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuAnnExp').length === 0 ? "0NP3" : jQuery('#documentoEmiBean').find('#nuAnnExp').val());
+        var pnuSecExpBean = allTrim(jQuery('#documentoEmiBean').find('#nuSecExp').length === 0 ? "0NP3" : jQuery('#documentoEmiBean').find('#nuSecExp').val());
+//        if (pnuAnnExpBean === "" && pnuSecExpBean === "") {
+        if (pnuAnn !== "" && pnuSecExp !== "") {
+//                if (confirm('El documento pertenece al Expediente:\n'
+//                        + pnuExpediente + '\nAdicionar este documento?')) {
+//                    fun_agregarDocumentoAlExpediente(pnuAnnExp, pnuSecExp);
+//                }
+            bootbox.dialog({
+                message: " <h5>El documento pertenece al Expediente: <strong>" + pnuExpediente + "</strong> Adicionar este documento?</h5>",
+                buttons: {
+                    SI: {
+                        label: "SI",
+                        className: "btn-primary",
+                        callback: function () {
+                            fun_agregarDocumentoAlExpedienteExt(pnuAnn, pnuSecExp);
+                        }
+                    },
+                    NO: {
+                        label: "NO",
+                        className: "btn-default"
+                    }
+                }
+            });
+        }
     } else {
         removeDomId('windowConsultaDocumentoRefEmi');
        bootbox.alert("Documento ya se encuentra Referenciado.");
     }
     return false;
+}
+
+function fun_agregarDocumentoAlExpedienteExt(pnuAnnExp, pnuSecExp) {
+    var p = new Array();
+    p[0] = "accion=goObtenerExpedienteBean";
+    p[1] = "pnuAnnExp=" + pnuAnnExp;
+    p[2] = "pnuSecExp=" + pnuSecExp;
+    ajaxCall("/srDocumentoAdmEmision.do", p.join("&"), function (data) {
+        if (data !== null) {
+            if (data.coRespuesta === "1") {
+                jQuery('#documentoExtRecepBean').find('#nuAnnExp').val(data.nuAnnExp);
+                jQuery('#documentoExtRecepBean').find('#nuSecExp').val(data.nuSecExp);
+                jQuery('#documentoExtRecepBean').find('#nuExpediente').val(data.nuExpediente);
+                let fecha = new Date(data.feExp);
+
+                let fechaFormateada = fecha.toLocaleString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false
+                }).replace(',', '');
+                jQuery('#documentoExtRecepBean').find('#feExp').val(fechaFormateada);
+                jQuery('#documentoExtRecepBean').find('#feExpCorta').val(data.feExpCorta);
+                jQuery('#documentoExtRecepBean').find('#coProceso').val(data.coProceso);
+                jQuery('#documentoExtRecepBean').find('#deProceso').val(data.deProceso === "null" ? "" : data.deProceso);
+                fu_changeExpedienteEmiBean();
+                jQuery("#txtEsNuevoDocAdm").val("0");
+            } else {
+                alert_Danger("Expediente:", data.deRespuesta);
+            }
+        }
+    }, 'json', false, true, "POST");
 }
 
 function fn_validaDocumentoRefListaDocExt(pfila, pcol, pnuAnn, pnuEmi) {

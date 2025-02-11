@@ -86,8 +86,18 @@ base.Function = {
                 data: 'cproTelefo',
                 title: 'Telf.',
                 width: "5%",
-            }); 
-            
+            });
+            columns.push({
+                data: 'dniRepre',
+                title: 'Dni Repre.',
+                width: "5%",
+            });
+            columns.push({
+                data: 'nomRepre',
+                title: 'Nom Repre.',
+                width: "5%",
+            });
+         //HENRY
              
 
             base.Control.GrdResultado = new Gob.Pcm.UI.Web.Components.Grid({

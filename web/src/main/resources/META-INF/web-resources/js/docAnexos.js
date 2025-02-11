@@ -51,7 +51,7 @@ function fn_cargarArbolAnexos(pkEmiDoc, divTree, divResizable) {
 }
 function fn_fileUpload(reemplazarDoc) {
     $("#progress").show();
-    var pFileSizeMax = 25000000;
+    var pFileSizeMax = 31457280;
 //    var rutactx = $("#rutactx").attr("value");
     var rutactx = pRutaContexto + "/" + pAppVersion;
     var numFiles = 0;

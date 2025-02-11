@@ -46,7 +46,7 @@ import pe.gob.onpe.tramitedoc.service.AuditoriaMovimientoDocService;
 import pe.gob.onpe.tramitedoc.service.EmiDocumentoInteroperabilidadService;
 import pe.gob.onpe.tramitedoc.service.ValidarFirmaService;
 import pe.gob.onpe.tramitedoc.util.ArchivoTemporal;
-
+import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 
 
 @Service("emiDocumentoInteroperabilidadService")
@@ -81,6 +81,9 @@ public class EmiDocumentoInteroperabilidadServiceImp
   
   @Autowired
   private DocumentoVoBoDao docVoboDao;
+
+  @Autowired
+  private ApplicationProperties applicationProperties;
 
   
   public List<DocumentoEmiBean> getDocumentosBuscaEmiAdm(BuscarDocumentoEmiBean buscarDocumentoEmiBean) {
@@ -273,116 +276,11 @@ public class EmiDocumentoInteroperabilidadServiceImp
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   
   public CiudadanoBean getCiudadano(String pnuDoc) {
     CiudadanoBean ciudadanoBean = null;
     try {
+      String urlReniec = this.applicationProperties.getUrlReniec();
       ciudadanoBean = this.commonQueryDao.getCiudadano(pnuDoc);
     } catch (Exception ex) {
       ex.printStackTrace();

@@ -3,6 +3,7 @@ package pe.gob.onpe.tramitedoc.service.impl;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +61,7 @@ import pe.gob.onpe.tramitedoc.util.ArchivoTemporal;
 import pe.gob.onpe.tramitedoc.util.Constantes;
 import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 import pe.gob.onpe.tramitedoc.util.ProcessResult;
+import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 @Service("emiDocumentoAdmService")
@@ -105,6 +107,8 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
 
     @Autowired
     private PermisoService permisoService;
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     public List<DocumentoEmiBean> getDocumentosBuscaEmiAdm(BuscarDocumentoEmiBean buscarDocumentoEmiBean) {
         List<DocumentoEmiBean> list = null;
@@ -304,6 +308,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
     public CiudadanoBean getCiudadano(String pnuDoc) {
         CiudadanoBean ciudadanoBean = null;
         try {
+            String urlReniec = this.applicationProperties.getUrlReniec();
             ciudadanoBean = this.commonQueryDao.getCiudadano(pnuDoc);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -320,6 +325,24 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
         }
         return list;
     }
+
+    //HENRY
+    @Override
+    public List<ProveedorBean> getLstProveedoresAgregaUrl(String pRazonSocial) {
+            String urlSunat= this.applicationProperties.getUrlSunat();
+            List<ProveedorBean> list = null;
+            try {
+                list = this.commonQueryDao.getLstProveedoresUrl(pRazonSocial);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return list;
+
+    }
+
+
+
+
 
     public String getJsonAfterGrabaDocumentoEmi(String snuAnn, String snuEmi) {
         String retval = null;
@@ -1155,6 +1178,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
             ArrayList<EmpleadoVoBoBean> lstEmpVoBo = trxDocumentoEmiBean.getLstEmpVoBo();
             DocumentoEmiBean documentoEmiBeanBD = null;
             if (pnuAnn != null && pnuEmi != null && !pnuAnn.equals("") && !pnuEmi.equals("")) {
+                System.out.println("if grabar");
                 henry="ENTRO 1 IF";
                 documentoEmiBeanBD = this.emiDocumentoAdmDao.getEstadoDocumento(pnuAnn, pnuEmi);
                 String mensaje = null;
@@ -1264,6 +1288,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                     throw new validarDatoException("El Documento a cambiado de estado.");
                 }
             } else {
+                System.out.println("else grabar");
                 henry="ENTRO else";
                 if (documentoEmiBean != null) {
                     henry="ENTRO else y 1if" + trxDocumentoEmiBean.getLstDestinatario() +"   "+trxDocumentoEmiBean.getDocumentoEmiBean().getCoTipDocAdm();

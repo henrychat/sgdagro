@@ -126,8 +126,8 @@
     </bean>
   
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    	 <property name="maxUploadSize" value="51200000" />
-        <property name="maxInMemorySize" value="51200000" />
+    	 <property name="maxUploadSize" value="83886080" />
+        <property name="maxInMemorySize" value="83886080" />
 <!--         <property name="maxUploadSize" value="#{applicationProps['FILE_SIZE_MAX_MP']}" /> -->
 <!--         <property name="maxInMemorySize" value="#{applicationProps['FILE_SIZE_MAX_MP']}" /> -->
     </bean>
