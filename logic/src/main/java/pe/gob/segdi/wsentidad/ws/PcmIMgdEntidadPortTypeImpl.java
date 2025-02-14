@@ -1,5 +1,7 @@
 package pe.gob.segdi.wsentidad.ws;
 
+
+
 import java.util.List;
 import javax.jws.WebService;
 import javax.xml.ws.Service;
@@ -7,7 +9,7 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 
 @WebService
-public class PcmIMgdEntidadPortTypeImpl implements PcmIMgdEntidadPortType {
+public class PcmIMgdEntidadPortTypeImpl implements pe.gob.segdi.wsentidad.ws.PcmIMgdEntidadPortType {
 
     private String serviceUrl;
 

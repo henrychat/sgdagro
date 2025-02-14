@@ -536,7 +536,7 @@ public class MesaPartesDaoImp
         sql.append("SELECT  TOP 400 * from (")
                 .append("SELECT DISTINCT A.NU_ANN, ")
                 .append("        A.NU_EMI, ")
-                .append("        A.CO_TIP_DOC_ADM CO_TIP_DOC, ")
+                .append("        SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](A.co_tip_doc_adm), 1, 100) DE_TIP_DOC_ADM, ")
                 .append("        B.NU_EXPEDIENTE, ")
                 .append("        B.NU_SEC_EXP, ")
                 .append("        CONVERT(VARCHAR(10), B.FE_EXP, 3) FE_EXP, ")
@@ -562,7 +562,7 @@ public class MesaPartesDaoImp
                 .append("AND B.ES_ESTADO='0'  ")
                 //.append("AND D.NU_DES='1' ")
                 .append(") d ")
-                .append(" order by 5 desc ");
+                .append(" order by 1 desc ");
         try {
             //WG20230410
 //      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(ReferenciaDocExtRecepBean.class), new Object[] { pnuAnn, pcoTiDoc, pcoDepEmi });

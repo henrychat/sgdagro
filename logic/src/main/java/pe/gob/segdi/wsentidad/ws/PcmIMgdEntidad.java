@@ -1,6 +1,8 @@
 
 package pe.gob.segdi.wsentidad.ws;
 
+import pe.gob.segdi.pide.wsentidad.PcmIMgdEntidadPortType;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.namespace.QName;
