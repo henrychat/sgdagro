@@ -239,12 +239,38 @@ public class MesaPartesDaoImp
             String snuSecExp = (String) this.jdbcTemplate.queryForObject(sqlQry1.toString(), String.class, new Object[]{expedienteBean.getNuAnnExp()});
             expedienteBean.setNuSecExp(snuSecExp);
 
+/*            String queryConValores = String.format(
+                    "INSERT INTO IDOSGD.TDTC_EXPEDIENTE(\nnu_ann_exp,nu_sec_exp,fe_exp,fe_vence,co_proceso,de_detalle,co_dep_exp,co_gru,nu_corr_exp,nu_expediente,us_crea_audi,fe_crea_audi,us_modi_audi,fe_modi_audi,es_estado,ccod_tipo_exp,CCLAVE)\nVALUES(%s, %s, '%s', '%s', '%s', '%s', '%s', '3', '%s', '%s', '%s', CURRENT_TIMESTAMP, '%s', CURRENT_TIMESTAMP, '0', '%s', '%s')",
+                    expedienteBean.getNuAnnExp(),
+                    snuSecExp,
+                    expedienteBean.getFeExp(),
+                    feVence,
+                    expedienteBean.getCoProceso(),
+                    expedienteBean.getDeDetalle(),
+                    expedienteBean.getCoDepEmi(),
+                    expedienteBean.getNuCorrExp(),
+                    expedienteBean.getNuExpediente(),
+                    expedienteBean.getUsCreaAudi(),
+                    expedienteBean.getUsCreaAudi(),
+                    expedienteBean.getCoTipoExp(),
+                    clave
+            );
+
+            System.out.println("Query con valores reemplazados:");
+            System.out.println(queryConValores);*/
+
+
+
             this.jdbcTemplate.update(sqlIns.toString(), new Object[]{expedienteBean.getNuAnnExp(), snuSecExp, expedienteBean.getFeExp(), feVence, expedienteBean
                 .getCoProceso(), expedienteBean.getDeDetalle(), expedienteBean.getCoDepEmi(), expedienteBean
                 .getNuCorrExp(), expedienteBean.getNuExpediente(), expedienteBean.getUsCreaAudi(), expedienteBean
                 .getUsCreaAudi(), expedienteBean.getCoTipoExp(), clave});
+
+
+
             vReturn = "OK";
         } catch (DuplicateKeyException con) {
+            System.out.println(con);
             vReturn = "Numero de Expediente Duplicado.";
         } catch (Exception e) {
             e.printStackTrace();
@@ -398,8 +424,9 @@ public class MesaPartesDaoImp
             String snuEmi = String.format("%010d", new Object[]{Integer.valueOf(codigo)});
 
             documentoExtRecepBean.setNuEmi(snuEmi);
+            int nuCorr=Integer.parseInt(expedienteBean.getNuCorrExp());
 
-            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoExtRecepBean.getNuAnn(), snuEmi, expedienteBean.getNuCorrExp(), remitenteDocExtRecepBean
+            this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoExtRecepBean.getNuAnn(), snuEmi, nuCorr, remitenteDocExtRecepBean
                 .getCoLocEmi(), remitenteDocExtRecepBean.getCoDepEmi(), remitenteDocExtRecepBean.getCoEmpEmi(), remitenteDocExtRecepBean.getCoEmpRes(), remitenteDocExtRecepBean
                 .getTiEmi(), remitenteDocExtRecepBean.getNuDni(), remitenteDocExtRecepBean.getNuRuc(), coOtros, expedienteBean.getFeExp(), documentoExtRecepBean
                 .getDeAsu(), documentoExtRecepBean.getNuDiaAte(), documentoExtRecepBean.getCoTipDocAdm(), documentoExtRecepBean.getNuCorDoc(), documentoExtRecepBean.getDeDocSig(), expedienteBean
@@ -907,25 +934,22 @@ public class MesaPartesDaoImp
 
     public String getNumeroExpediente(ExpedienteDocExtRecepBean expedienteBean) {
         String vReturn = "NO_OK";
-        StringBuilder sqlQry1 = new StringBuilder();
-        sqlQry1.append("select\tRIGHT(REPLICATE('0', 7) + (RTRIM(LTRIM(CAST((ISNULL(MAX(NU_CORR_EXP), 0) + 1) AS VARCHAR)))), 7) nuCorrExp, ");
-        sqlQry1.append("\tSUBSTRING((SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_SIGLA_CORTA](?)), 1, 6) deSiglaCorta ");
-        sqlQry1.append("from IDOSGD.tdtc_expediente WITH (NOLOCK) ");
+        StringBuffer sqlQry1 = new StringBuffer();
+        sqlQry1.append("select	RIGHT(REPLICATE('0', 7) + (RTRIM(LTRIM(CAST((ISNULL(MAX(NU_CORR_EXP), 0) + 1) AS VARCHAR)))), 7) nuCorrExp ");
+        sqlQry1.append("from IDOSGD.tdtc_expediente ");
         sqlQry1.append("where nu_ann_exp = ? ");
         sqlQry1.append("and co_dep_exp = ? ");
         sqlQry1.append("and co_gru = '3' ");
 
-        try {
-            Map mapResult = this.jdbcTemplate.queryForMap(sqlQry1.toString(), new Object[]{expedienteBean.getCoDepEmi(), expedienteBean.getNuAnnExp(), expedienteBean.getCoDepEmi()});
-            String snuCorrExp = String.valueOf(mapResult.get("nuCorrExp"));
-            String sdeSiglaCorta = String.valueOf(mapResult.get("deSiglaCorta"));
-            expedienteBean.setNuCorrExp(snuCorrExp);
 
-            expedienteBean.setNuExpediente(expedienteBean.getNuAnnExp() + "-" + snuCorrExp);
-            vReturn = "OK";
+        try {
+            Map mapResult =  this.jdbcTemplate.queryForMap(sqlQry1.toString(), new Object[]{expedienteBean.getNuAnnExp(), expedienteBean.getCoDepEmi()});
+            vReturn=String.valueOf(mapResult.get("nuCorrExp"));
         } catch (Exception e) {
             e.printStackTrace();
+            vReturn = e.getMessage();
         }
+
         return vReturn;
     }
 

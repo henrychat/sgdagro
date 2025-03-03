@@ -1291,9 +1291,8 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                 System.out.println("else grabar");
                 henry="ENTRO else";
                 if (documentoEmiBean != null) {
-                    henry="ENTRO else y 1if" + trxDocumentoEmiBean.getLstDestinatario() +"   "+trxDocumentoEmiBean.getDocumentoEmiBean().getCoTipDocAdm();
                     String mensaje = validarDestinatario(trxDocumentoEmiBean.getLstDestinatario(), trxDocumentoEmiBean.getDocumentoEmiBean().getCoTipDocAdm());
-                    henry=mensaje + "SKJDBDF";
+
                     if (mensaje != null) {
                         throw new validarDatoException(mensaje);
                     }
@@ -1340,7 +1339,13 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                         documentoEmiBean.setNuCorDoc(vReturn);
                     }
 
+
+
                     vReturn = this.emiDocumentoAdmDao.insDocumentoEmiBean(documentoEmiBean, expedienteEmiBean, remitenteEmiBean);
+
+
+
+
                     if ("NO_OK".equals(vReturn)) {
                         throw new validarDatoException("Error al Grabar Documento");
                     }

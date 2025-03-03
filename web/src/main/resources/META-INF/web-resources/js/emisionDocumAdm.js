@@ -3701,6 +3701,7 @@ function fn_goGrabarDocumentoEmiAdm() {
 //    console.log(cadenaJson);
     var pcrearExpediente = "0";
     var pesnuevoDocEmiAdm = jQuery("#txtEsNuevoDocAdm").val();
+    console.log(pesnuevoDocEmiAdm+' pesnuevoDocEmiAdmpesnuevoDocEmiAdm')
     if (pesnuevoDocEmiAdm === "1" && jQuery("#nuAnnExp").val() === "" && jQuery("#nuSecExp").val() === "") {
         /*bootbox.dialog({
          message: " <h5>¿ Desea crear expediente para este documento ?</h5>",
@@ -3723,6 +3724,7 @@ function fn_goGrabarDocumentoEmiAdm() {
          }
          });   */
         var inCreaExpediente = jQuery("#inCreaExpediente").val();
+        console.log(inCreaExpediente+'inCreaExpedienteinCreaExpediente')
         if (inCreaExpediente === 'SI') {
             pcrearExpediente = "1";
             fn_submitGrabarDocumentoEmiAdm(cadenaJson, pcrearExpediente);

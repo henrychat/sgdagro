@@ -635,7 +635,7 @@ public class DocumentoAdmEmisionController {
         String coRespuesta;
         String deRespuesta;
         String sCrearExpediente = ServletUtility.getInstancia().loadRequestParameter(request, "pcrearExpediente");//0 no crea, 1 crea
-        System.out.println("sCrearExpediente: "+sCrearExpediente);
+        //System.out.println("sCrearExpediente: "+sCrearExpediente);
         Usuario usuario = Utilidades.getInstancia().loadUserFromSession(request);
         trxDocumentoEmiBean.setCoUserMod(usuario.getCoUsuario());
         trxDocumentoEmiBean.setCempCodEmp(usuario.getCempCodemp());

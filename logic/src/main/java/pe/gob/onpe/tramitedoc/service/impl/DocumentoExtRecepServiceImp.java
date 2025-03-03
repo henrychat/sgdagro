@@ -117,12 +117,16 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
             String pcoUserMod = trxDocExternoRecepBean.getCoUserMod();
             String pcempCodEmp = trxDocExternoRecepBean.getCempCodEmp();
             DocumentoExtRecepBean documentoExtRecepBean = trxDocExternoRecepBean.getDocumentoEmiBean();
+
+            //System.out.println(trxDocExternoRecepBean.getDocumentoEmiBean().getNuExpediente()+" trxDocExternoRecepBean.getDocumentoEmiBean().getNuExpediente()");
+
             ExpedienteDocExtRecepBean expedienteBean = trxDocExternoRecepBean.getExpedienteEmiBean();
 
             RemitenteDocExtRecepBean remitenteBean = trxDocExternoRecepBean.getRemitenteEmiBean();
             ArrayList<ReferenciaDocExtRecepBean> lstReferencia = trxDocExternoRecepBean.getLstReferencia();
             ArrayList<DestinatarioDocumentoEmiBean> lstDestinatario = trxDocExternoRecepBean.getLstDestinatario();
             if (pnuAnn != null && pnuEmi != null && !pnuAnn.equals("") && !pnuEmi.equals("")) {
+                System.out.println("ingresa upc");
                 trxDocExternoRecepBean.setAccionBD("UPD");
                 String pcoDepEmi = trxDocExternoRecepBean.getCoDependencia();
                 if (expedienteBean != null) {
@@ -197,10 +201,13 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
             } else {
                 trxDocExternoRecepBean.setAccionBD("INS");
                 expedienteBean.setUsCreaAudi(pcempCodEmp);
+
                 vReturn = Utility.getInstancia().getStringFechaFormat(expedienteBean.getFeExp(), "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy HH:mm");
                 if ("NO_OK".equals(vReturn)) {
                     throw new validarDatoException("Error fecha Expediente.");
                 }
+
+
                 expedienteBean.setFeExp(vReturn);
                 vReturn = Utility.getInstancia().getStringFechaFormat(expedienteBean.getFeVence(), "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy");
                 if ("NO_OK".equals(vReturn)) {
@@ -208,23 +215,28 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
                 }
                 expedienteBean.setFeVence(vReturn);
 
+
+                //HENRY
+
                 if (expedienteBean.getNuCorrExp() == null || expedienteBean.getNuCorrExp().equals("")) {
                     vReturn = this.mesaPartesDao.getNumeroExpediente(expedienteBean);
                 }
-                documentoExtRecepBean.setNuCorrExp(expedienteBean.getNuCorrExp());
+                expedienteBean.setNuCorrExp(vReturn);
+                documentoExtRecepBean.setNuCorrExp(vReturn);
                 documentoExtRecepBean.setNuExpediente(expedienteBean.getNuExpediente());
+                //System.out.println(expedienteBean.getNuSecExp()+" documentoExtRecepBean.getNuSecExp()");
+                //System.out.println(expedienteBean.getNuExpediente()+" getNuExpediente");
 
-
-
-
-            //    if (documentoExtRecepBean.getNuExpediente().isEmpty() || documentoExtRecepBean.getNuExpediente().equals("")){
+                if (expedienteBean.getNuExpediente() == null || expedienteBean.getNuExpediente().isEmpty() ){
+                    //System.out.println("ingual ingresa por aqui");
+                    expedienteBean.setNuExpediente(expedienteBean.getNuAnnExp()+"-"+vReturn);
+                    documentoExtRecepBean.setNuExpediente(expedienteBean.getNuExpediente());
+                    //System.out.println(expedienteBean.getNuExpediente()+" numero de expediente");
                     vReturn = this.mesaPartesDao.insExpedienteBean(expedienteBean);
                     if (!"OK".equals(vReturn)) {
-                        throw new validarDatoException("Error al Grabar Expediente.");
+                        throw new validarDatoException(vReturn);
                     }
-              //  }
-
-
+                }
 
                 documentoExtRecepBean.setCoUseMod(pcoUserMod);
                 documentoExtRecepBean.setCoEsDocEmiMp("5");
@@ -235,7 +247,14 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
                 documentoExtRecepBean.setNuCorDoc(vReturn);
                 documentoExtRecepBean.setNuSecExp(expedienteBean.getNuSecExp());
                 remitenteBean.setCoDep(usuario.getCoDep());
+
+
+
                 vReturn = this.mesaPartesDao.insDocumentoExtBean(documentoExtRecepBean, expedienteBean, remitenteBean);
+
+
+                //HENRY HASTA AQUI
+
                 if (!"OK".equals(vReturn)) {
                     throw new validarDatoException("Error al Grabar Documento.");
                 }
@@ -282,6 +301,7 @@ public class DocumentoExtRecepServiceImp implements DocumentoExtRecepService {
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
             throw new validarDatoException("ERROR EN TRANSACCION.");
         }
         return vReturn;
