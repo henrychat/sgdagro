@@ -806,7 +806,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         //sql.append("select  (REF.nu_ann_ref+REF.nu_emi_ref) as nurem from IDOSGD.TDTR_REFERENCIA REF WITH (NOLOCK) where (REF.nu_ann+REF.nu_emi) in \n(select (R.nu_ann+R.nu_emi) as nurem \nfrom IDOSGD.TDTV_REMITOS R WITH (NOLOCK) \nINNER JOIN IDOSGD.TDTV_DESTINOS D WITH (NOLOCK) ON d.nu_ann = r.nu_ann AND d.nu_emi = r.nu_emi \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN RR WITH (NOLOCK) ON rr.nu_ann=r.nu_ann AND rr.nu_emi = r.nu_emi \nwhere\nr.es_eli = '0'\nAND d.es_eli = '0'\nAND r.nu_ann = ?\n ");
         sql.append("select REF.PK_REF_EMI as nurem from IDOSGD.TDTR_REFERENCIA REF WITH (NOLOCK) where REF.PK_REF_EMI in \n(select (R.nu_ann+R.nu_emi) as nurem \nfrom IDOSGD.TDTV_REMITOS R WITH (NOLOCK) \nINNER JOIN IDOSGD.TDTV_DESTINOS D WITH (NOLOCK) ON d.nu_ann = r.nu_ann AND d.nu_emi = r.nu_emi \nINNER JOIN IDOSGD.TDTX_REMITOS_RESUMEN RR WITH (NOLOCK) ON rr.nu_ann=r.nu_ann AND rr.nu_emi = r.nu_emi \nwhere\nr.es_eli = '0'\nAND d.es_eli = '0'\nAND r.nu_ann = ?\n ");
-        sql.append(" AND r.es_doc_emi NOT IN ('5', '9', '7') and d.es_doc_rec <> '0'  and d.co_dep_des = ?  ");
+        sql.append(" AND r.es_doc_emi NOT IN ('5', '9', '7') and d.es_doc_rec <> '0'  and d.co_dep_des = ?  and r.co_tip_doc_adm = ? ");
 
         if (pnuDoc != null && pnuDoc.trim().length() > 0) {
             pnuDoc = Utility.getInstancia().rellenaCerosIzquierda(pnuDoc, 6);
@@ -852,15 +852,12 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append(") A ");
         sql.append("WHERE ROWNUM < 102 ");
         sql.append("order by FE_REC_DOC desc ");
-        System.out.println("pcoDepen: " + pcoDepen);
-        System.out.println("pannio: " + pannio);
-        System.out.println("ptiDoc: " + ptiDoc);
-        System.out.println("pnuDoc: " + pnuDoc);
+
         logger.info(sql.toString());
 
         try {
             //vReturn = (String)this.jdbcTemplate.queryForObject(sql.toString(), String.class, new Object[] { pnuAnn, pcoDepEmi, pcoDoc });
-            list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoBean.class), new Object[]{pannio, pcoDepen, pcoDepen, ptiDoc, pannio, pannio, pcoDepen});
+            list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoBean.class), new Object[]{pannio, pcoDepen, pcoDepen, ptiDoc, pannio, pannio, pcoDepen, ptiDoc});
         } catch (EmptyResultDataAccessException e) {
             list = null;
         } catch (Exception e) {

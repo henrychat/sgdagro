@@ -1,6 +1,6 @@
 function fn_inicializaBusqDocsVoBo(){
     var noForm='#buscarDocumentoVoBoBean';
-    jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 9}); // 5 año       
+    jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1}); // 5 año
     jQuery(noForm).find('#nuDoc').change(function() {
         $(this).val(replicate($(this).val(), 6));
     });
