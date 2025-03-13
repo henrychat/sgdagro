@@ -203,7 +203,7 @@ public class DocumentoXmlServiceImp
         DocumentoObjBean docObjBean = null;
 
         long startTime = System.currentTimeMillis();
-        System.out.println(pnuAnn+"   "+pnuEmi);
+        //System.out.println(pnuAnn+"   "+pnuEmi);
         DatosPlantillaDoc datosPlantilla = datosParaPlantilla(pnuAnn, pnuEmi);
 
         PlantillaDocx plantillaDocx = Plantillas.getInstancia().getPlantilla(datosPlantilla.getCoTipoDoc(), datosPlantilla.getCoDepEmi());

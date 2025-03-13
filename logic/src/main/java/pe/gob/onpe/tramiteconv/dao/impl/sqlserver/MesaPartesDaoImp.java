@@ -560,7 +560,7 @@ public class MesaPartesDaoImp
         StringBuilder sql = new StringBuilder();
         List<ReferenciaDocExtRecepBean> list = new ArrayList<ReferenciaDocExtRecepBean>();
 
-        sql.append("SELECT  TOP 400 * from (")
+        sql.append("SELECT  TOP 100 * from (")
                 .append("SELECT DISTINCT A.NU_ANN, ")
                 .append("        A.NU_EMI, ")
                 .append("        SUBSTRING([IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](A.co_tip_doc_adm), 1, 100) DE_TIP_DOC_ADM, ")
@@ -589,7 +589,7 @@ public class MesaPartesDaoImp
                 .append("AND B.ES_ESTADO='0'  ")
                 //.append("AND D.NU_DES='1' ")
                 .append(") d ")
-                .append(" order by 1 desc ");
+                .append(" order by 5 desc ");
         try {
             //WG20230410
 //      list = this.jdbcTemplate.query(sql.toString(), (RowMapper)BeanPropertyRowMapper.newInstance(ReferenciaDocExtRecepBean.class), new Object[] { pnuAnn, pcoTiDoc, pcoDepEmi });

@@ -645,7 +645,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         sql.append("SELECT A.* ");
         sql.append("FROM ( ");
-        sql.append("select E.*, ROW_NUMBER() OVER (ORDER BY E.fe_emi) AS ROWNUM ");
+        sql.append("select E.*, ROW_NUMBER() OVER (ORDER BY E.fe_emi desc) AS ROWNUM ");
         sql.append("from( ");
         sql.append("select ");
         sql.append("RE.fe_emi, ");
@@ -714,7 +714,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         sql.append(") E ");
         sql.append(")AS A ");
-        sql.append(" WHERE ROWNUM < 600 "); // por lo mientras
+        sql.append(" WHERE ROWNUM < 100 "); // por lo mientras
         sql.append(" ORDER BY A.fe_emi DESC ");
 
         try {
@@ -737,7 +737,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append("SELECT A.* ");
         sql.append("FROM ( ");
 
-        sql.append("select E.*, ROW_NUMBER() OVER (ORDER BY E.FE_REC_DOC) AS ROWNUM ");
+        sql.append("select E.*, ROW_NUMBER() OVER (ORDER BY E.FE_REC_DOC desc) AS ROWNUM ");
         sql.append("from( ");
         sql.append("select ");
         sql.append("r.FE_EMI, d.FE_REC_DOC, ");
@@ -850,8 +850,8 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append(" ) E ");
 
         sql.append(") A ");
-        sql.append("WHERE ROWNUM < 202 ");
-        sql.append("order by FE_EMI,FE_REC_DOC desc ");
+        sql.append("WHERE ROWNUM < 102 ");
+        sql.append("order by FE_REC_DOC desc ");
         System.out.println("pcoDepen: " + pcoDepen);
         System.out.println("pannio: " + pannio);
         System.out.println("ptiDoc: " + ptiDoc);
@@ -2670,7 +2670,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         sql.append("\t) E ");
 
         sql.append(") A ");
-        sql.append("WHERE ROWNUM < 401 ");
+        sql.append("WHERE ROWNUM < 101 ");
         sql.append("order by 1 desc ");
 
         System.out.println(sql);
