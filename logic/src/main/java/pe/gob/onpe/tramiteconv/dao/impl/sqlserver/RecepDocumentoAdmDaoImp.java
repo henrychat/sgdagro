@@ -44,7 +44,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
 
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
         sql.append("SET LANGUAGE Español ");
-        sql.append("SELECT TOP 500 X.*,");
+        sql.append("SELECT TOP 100 X.*,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP(X.NU_ANN, X.NU_EMI) DE_ORI_EMI,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(X.ES_DOC_REC,'TDTV_DESTINOS') DE_ES_DOC_DES,");

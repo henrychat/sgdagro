@@ -24,7 +24,7 @@ function fn_inicializaRecepDocAdm(sCoAnnio){
             }
         }
     });*/
-    jQuery('#buscarDocumentoRecepBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});  // reemplaza 5 por año
+    jQuery('#buscarDocumentoRecepBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});  // reemplaza 5 por año
     jQuery('#buscarDocumentoRecepBean').find('#sNumDocRef').change(function() {
         $(this).val(replicate($(this).val(), 6));
     });

@@ -1,6 +1,6 @@
 function fn_iniDocExtRecep(){
     jQuery('#buscarDocumentoExtRecepBean').find('#esFiltroFecha').val("1");//hoy
-    jQuery('#buscarDocumentoExtRecepBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+    jQuery('#buscarDocumentoExtRecepBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
     //Se comenta para que la caja de texto no genere el autocompletado con cero
 //    jQuery('#buscarDocumentoExtRecepBean').find('#busNumDoc').change(function() {
 //        $(this).val(replicate($(this).val(), 6));
@@ -207,7 +207,7 @@ function fu_cleanBusDocExtRecep(tipo) {
         jQuery(noForm).find("#esIncluyeFiltro1").prop('checked',false);
         jQuery(noForm).find("#esIncluyeFiltro1").attr('checked',false);
     //} else if(tipo==="0"){
-        jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+        jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
         jQuery(noForm).find("#esFiltroFecha").val("1");//hoy
         jQuery(noForm).find("#coAnnio").val(jQuery("#txtAnnioActual").val());
         jQuery(noForm).find("#coEstadoDoc option[value=5]").prop("selected", "selected");        

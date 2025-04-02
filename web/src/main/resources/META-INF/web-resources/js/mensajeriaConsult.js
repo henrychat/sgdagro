@@ -30,7 +30,7 @@ function fu_cleanBusDocMensajeria(tipo) {
         $(noForm).find("#esIncluyeFiltro1").prop('checked',false);
         $(noForm).find("#esIncluyeFiltro1").attr('checked',false);
     } else if(tipo==="0"){
-        $(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+        $(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
         $(noForm).find("#esFiltroFecha").val("1");//hoy
         $(noForm).find("#coAnnio").val(jQuery("#txtAnnioActual").val());
         $(noForm).find("#coEstadoDoc option[value=0]").prop("selected", "selected");        

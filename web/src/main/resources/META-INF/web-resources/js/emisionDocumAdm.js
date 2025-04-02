@@ -4885,7 +4885,7 @@ function fn_inicializaDocAdmEmi(sCoAnnio) {
      }
      }
      });*/
-    jQuery('#buscarDocumentoEmiBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    // reemplaza 5 por año
+    jQuery('#buscarDocumentoEmiBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});    // reemplaza 5 por año
     jQuery('#buscarDocumentoEmiBean').find('#sNumDocRef').change(function () {
         $(this).val(replicate($(this).val(), 6));
     });

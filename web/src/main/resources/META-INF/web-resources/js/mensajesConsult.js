@@ -1,6 +1,6 @@
 function fn_iniMensajes(){
     jQuery('#buscarDocumentoCargaMsjBean').find('#esFiltroFecha').val("1");//ultimos 30 dias se cambio 4 por 1
-    jQuery('#buscarDocumentoCargaMsjBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+    jQuery('#buscarDocumentoCargaMsjBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
    
     pnumFilaSelect=0;
     changeBusqMensajes("1");

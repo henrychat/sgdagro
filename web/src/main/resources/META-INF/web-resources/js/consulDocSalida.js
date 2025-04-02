@@ -1,7 +1,7 @@
 function fn_iniConsulDocExt(){
   var noForm='#buscarDocumentoExtConsulBean';  
   jQuery(noForm).find('#esFiltroFecha').val("1");//hoy
-  jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+  jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
 
   pnumFilaSelect=0;
   changeTipoBusqRecepDocExtConsul("0",noForm);  
@@ -455,7 +455,7 @@ function fu_cleanDocExtConsul(tipo){
     } else if(tipo==="0"){
         jQuery(noForm).find("#esFiltroFecha").val("1");//hoy
         jQuery(noForm).find("#coAnnio").val(jQuery("#txtAnnioActual").val());
-        jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});
+        jQuery(noForm).find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
         jQuery(noForm).find("#estadoDoc option[value=]").prop("selected", "selected");
         jQuery(noForm).find("#coTipoRemite option[value=]").prop("selected", "selected");
         jQuery(noForm).find("#tipoDoc option[value=]").prop("selected", "selected");

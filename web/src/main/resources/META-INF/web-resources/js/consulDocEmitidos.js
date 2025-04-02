@@ -24,7 +24,7 @@ function fn_inicializaConsulEmiDoc(sCoAnnio,fechaActual){
             }
         }
     });*/
-    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});    
+    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
     jQuery('#buscarDocumentoEmiConsulBean').find('#busNumDocRef').change(function() {
         $(this).val(replicate($(this).val(), 6));
     });
@@ -643,7 +643,7 @@ function fu_cleanEmiDocAdmConsul(tipo) {
         jQuery("#coAnnio").val(jQuery("#txtAnnioActual").val());
         //jQuery('#buscarDocumentoEmiConsulBean').find('#coAnnio').parent('td').find('#fechaFiltro').attr('fini',fechaActual);
         //jQuery('#buscarDocumentoEmiConsulBean').find('#coAnnio').parent('td').find('#fechaFiltro').attr('ffin',fechaActual);
-        jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});
+        jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
     }
 }
 

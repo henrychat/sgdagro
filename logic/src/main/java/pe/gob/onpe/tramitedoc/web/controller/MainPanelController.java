@@ -41,7 +41,7 @@ public class MainPanelController {
       nameImgPortada = "default.jpg";
     }
     
-    List<SiElementoBean> lstImPortadaOrigen = this.referencedData.grpElementoList("BANNER_INICIO");
+    /*List<SiElementoBean> lstImPortadaOrigen = this.referencedData.grpElementoList("BANNER_INICIO");
     List<SiElementoBean> lstImPortada = new ArrayList<SiElementoBean>();
     
     for (int i = 0; i < lstImPortadaOrigen.size(); i++) {
@@ -51,10 +51,10 @@ public class MainPanelController {
       oSiElementoBean.setCeleDesele(Base64.getEncoder().encodeToString(oSiElementoBean.getArchivo()));
       lstImPortada.add(oSiElementoBean);
     } 
-    model.addAttribute("lstImPortada", lstImPortada);
+    model.addAttribute("lstImPortada", lstImPortada);*/
     SiElementoBean oSiElementoBean = null;
-    lstImPortadaOrigen = null;
-    lstImPortada = null;
+    //lstImPortadaOrigen = null;
+    //lstImPortada = null;
     model.addAttribute("imgId", nameImgPortada);
     return "mainpanel";
   }
