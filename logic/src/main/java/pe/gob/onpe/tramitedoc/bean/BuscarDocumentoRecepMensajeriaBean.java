@@ -321,4 +321,42 @@ public class BuscarDocumentoRecepMensajeriaBean {
     public void setBusDesti(String busDesti) {
         this.busDesti = busDesti;
     }
+
+    @Override
+    public String toString() {
+        return "BuscarDocumentoRecepMensajeriaBean{" +
+                "coGrupo='" + coGrupo + '\'' +
+                ", coDependencia='" + coDependencia + '\'' +
+                ", coEmpleado='" + coEmpleado + '\'' +
+                ", tiAcceso='" + tiAcceso + '\'' +
+                ", esIncluyeFiltro=" + esIncluyeFiltro +
+                ", coAnnio='" + coAnnio + '\'' +
+                ", coAnnioEnvio='" + coAnnioEnvio + '\'' +
+                ", coEstadoDoc='" + coEstadoDoc + '\'' +
+                ", coTipoDoc='" + coTipoDoc + '\'' +
+                ", coTipoEmisor='" + coTipoEmisor + '\'' +
+                ", coRemitente='" + coRemitente + '\'' +
+                ", coDepDestino='" + coDepDestino + '\'' +
+                ", esFiltroFecha='" + esFiltroFecha + '\'' +
+                ", feEmiIni='" + feEmiIni + '\'' +
+                ", feEmiFin='" + feEmiFin + '\'' +
+                ", coLocal='" + coLocal + '\'' +
+                ", inCambioEst='" + inCambioEst + '\'' +
+                ", coLocEmi='" + coLocEmi + '\'' +
+                ", coDepEmi='" + coDepEmi + '\'' +
+                ", coDepOriRec='" + coDepOriRec + '\'' +
+                ", inMesaPartes='" + inMesaPartes + '\'' +
+                ", tipoBusqueda='" + tipoBusqueda + '\'' +
+                ", busNumDoc='" + busNumDoc + '\'' +
+                ", busAsunto='" + busAsunto + '\'' +
+                ", busNumExpediente='" + busNumExpediente + '\'' +
+                ", busDesti='" + busDesti + '\'' +
+                ", FormatoReporte='" + FormatoReporte + '\'' +
+                ", RutaReporteJasper='" + RutaReporteJasper + '\'' +
+                ", coDependenciaBusca='" + coDependenciaBusca + '\'' +
+                ", esFiltroFechaEnvMsj='" + esFiltroFechaEnvMsj + '\'' +
+                ", feEmiIniEnvMSJ='" + feEmiIniEnvMSJ + '\'' +
+                ", feEmiFinEnvMSJ='" + feEmiFinEnvMSJ + '\'' +
+                '}';
+    }
 }

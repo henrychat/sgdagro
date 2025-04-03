@@ -812,8 +812,8 @@ public class EmiDocumentoInteroperabilidadDaoImp
         DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
         if (inInsert) {
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA,W_BL_DOC,W_DE_RUTA_ORIGEN)\nVALUES(?,?,?,?,'0',TO_CHAR(getdate(),'YYYYMMDD'),?,?)");
-
+            sql.append("INSERT INTO tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,?,'0',TO_CHAR(getdate(),'YYYYMMDD'))");
+            System.out.println("aqui es la insersion");
             try {
                 this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
                     protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
@@ -821,8 +821,8 @@ public class EmiDocumentoInteroperabilidadDaoImp
                         ps.setString(2, docObjBean.getNuEmi());
                         lobCreator.setBlobAsBytes(ps, 3, docObjBean.getDocumento());
                         ps.setString(4, docObjBean.getNombreArchivo());
-                        lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
-                        ps.setString(6, docObjBean.getNombreArchivo());
+                        //lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
+                        //ps.setString(6, docObjBean.getNombreArchivo());
                     }
                 });
                 vReturn = "OK";

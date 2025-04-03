@@ -77,7 +77,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();
         sql.append("SET LANGUAGE Español ");
-        sql.append("SELECT TOP 600 X.*, "); //por lo mientras
+        sql.append("SELECT TOP 200 X.*, "); //por lo mientras
         sql.append(" (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_EMI_REF](X.NU_ANN, X.NU_EMI)) DE_EMI_REF, ");
         sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" CASE X.NU_CANDES ");
@@ -1567,7 +1567,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
         if (inInsert) {
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA,W_BL_DOC,W_DE_RUTA_ORIGEN)\nVALUES(?,?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)),?,?)");
+            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)))");
 
             try {
                 this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
@@ -1576,8 +1576,8 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                         ps.setString(2, docObjBean.getNuEmi());
                         lobCreator.setBlobAsBytes(ps, 3, docObjBean.getDocumento());
                         ps.setString(4, docObjBean.getNombreArchivo());
-                        lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
-                        ps.setString(6, docObjBean.getNombreArchivo());
+                        //lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
+                        //ps.setString(6, docObjBean.getNombreArchivo());
                     }
                 });
                 vReturn = "OK";
@@ -2838,7 +2838,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
     public String insMesaVitual(DatosInterBean datosInter) {
         String vReturn = "NO_OK";
-
+        //HENRY MensajeriaDaoImpHenry
         this.spInsMesaVirtual = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[INS_MESA_VIRTUAL] ").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[]{"P_COUSEMOD", "P_DEPDES", "P_NOMDES", "P_CARDES", "P_NUANN", "P_NUEMI"}).declareParameters(new SqlParameter[]{new SqlParameter("P_COUSEMOD", 12), new SqlParameter("P_DEPDES", 12), new SqlParameter("P_NOMDES", 12), new SqlParameter("P_CARDES", 12), new SqlParameter("P_NUANN", 12), new SqlParameter("P_NUEMI", 12)});
 
         MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("P_COUSEMOD", datosInter.getCoUseMod()).addValue("P_DEPDES", datosInter.getDeDepDes()).addValue("P_NOMDES", datosInter.getDeNomDes()).addValue("P_CARDES", datosInter.getDeCarDes()).addValue("P_NUANN", datosInter.getNuAnn()).addValue("P_NUEMI", datosInter.getNuEmi());

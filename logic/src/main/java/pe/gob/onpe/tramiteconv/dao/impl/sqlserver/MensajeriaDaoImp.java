@@ -34,12 +34,16 @@ public class MensajeriaDaoImp
     private static Logger logger = Logger.getLogger("MensajeriaDaoImp");
 
     public List<DocumentoRecepMensajeriaBean> getDocumentoRecepMensajeria(BuscarDocumentoRecepMensajeriaBean buscarDocumentoRecepMensajeriaBean) {
+
+        System.out.println(buscarDocumentoRecepMensajeriaBean.toString());
+
+
         boolean bBusqFiltro = false;
         boolean bBusqDep = false;
         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
         //WITH NOLOCK
-        sql.append("SELECT TOP 500 ROW_NUMBER() OVER(ORDER BY  NU_ANN,NU_EMI DESC )   fila, NU_ANN,NU_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,   ");
+        sql.append("SELECT TOP 200 ROW_NUMBER() OVER(ORDER BY  NU_ANN,NU_EMI DESC )   fila, NU_ANN,NU_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,   ");
         // sql.append(" SELECT  ROW_NUMBER() OVER(ORDER BY  NU_ANN,NU_EMI DESC )   fila, NU_ANN,NU_EMI, IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" FE_EMI_CORTA,TOTAL_DESTINO,TOTAL_ENVIADO,TOTAL_PENDIENTE,  IDOSGD.PK_SGD_DESCRIPCION_DE_DEPENDENCIA (X.CO_DEP_EMI) DE_DEPENDENCIA, DE_ASU,     ");
         sql.append(" CASE  X.TI_EMI WHEN '01' THEN  X.NU_DOC_EMI + '-' + X.NU_ANN + '/' + X.DE_DOC_SIG      ");
@@ -160,6 +164,8 @@ public class MensajeriaDaoImp
             list = null;
             e.printStackTrace();
         }
+        //MensajeriaDaoImpHenry
+        //System.out.println(list + " es la ");
         return list;
     }
 
