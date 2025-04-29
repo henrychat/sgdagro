@@ -1,5 +1,8 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -55,6 +58,7 @@ import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
 import pe.gob.onpe.tramitedoc.util.AleatorioCodVerificacion;
 import pe.gob.onpe.tramitedoc.util.FiltroPaginate;
 import pe.gob.onpe.tramitedoc.util.ProcessResult;
+import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 @Repository("emiDocumentoAdmDao")
@@ -62,6 +66,9 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
     @Autowired
     private DatosPlantillaDao datosPlantillaDao;
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     private SimpleJdbcCall spActualizaEstado;
     private SimpleJdbcCall spInsMesaVirtual;
@@ -1547,7 +1554,9 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         return list;
     }
 
+    //HENRY CARGAR
     public String updDocumentoObj(final DocumentoObjBean docObjBean) {
+        System.out.println("pasa por aqui "+ docObjBean.getNombreArchivo());
         String vReturn = "NO_OK";
         boolean inInsert = false;
 
@@ -1566,18 +1575,56 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
         if (inInsert) {
+            //System.out.println("proyecto supeustamente");
+
+           // String nombreArchivo = docObjBean.getNombreArchivo();
+
+            String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+            String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+            String nombreArchivo = docObjBean.getNombreArchivo();
+
+            String rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+            File directorio = new File(baseRuta + "/" + subRuta);
+            if (!directorio.exists()) {
+                directorio.mkdirs(); // crea toda la estructura intermedia
+            }
+
+
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(rutaDestino);
+                fos.write(docObjBean.getDocumento());
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,BL_DOC,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)))");
+            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)))");
 
             try {
                 this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
                     protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
                         ps.setString(1, docObjBean.getNuAnn());
                         ps.setString(2, docObjBean.getNuEmi());
-                        lobCreator.setBlobAsBytes(ps, 3, docObjBean.getDocumento());
-                        ps.setString(4, docObjBean.getNombreArchivo());
+                       // lobCreator.setBlobAsBytes(ps, 3, docObjBean.getDocumento());
+                        ps.setString(3, docObjBean.getNombreArchivo());
                         //lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
                         //ps.setString(6, docObjBean.getNombreArchivo());
+
+
                     }
                 });
                 vReturn = "OK";
@@ -1585,32 +1632,58 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                 e.printStackTrace();
             }
         } else {
-
+            //System.out.println("despacho supeustamente");
             StringBuilder sql1 = new StringBuilder();
             StringBuilder sql2 = new StringBuilder();
-            if (docObjBean.getNombreArchivo().toUpperCase().indexOf(".DOCX") >= 0) {
 
-                sql1.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET W_BL_DOC = ?, W_DE_RUTA_ORIGEN = ? \nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
+            String rutaDestino;
+            String nombreArchivo = docObjBean.getNombreArchivo();
+            if (nombreArchivo.substring(0,1).equals("/")) {
+                rutaDestino = nombreArchivo;
+            }else {
 
-                this.jdbcTemplate.execute(sql1.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
-                    protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
-                        lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
-                        ps.setString(2, docObjBean.getNombreArchivo());
-                        ps.setString(3, docObjBean.getNuAnn());
-                        ps.setString(4, docObjBean.getNuEmi());
-                    }
-                });
+
+                String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+                nombreArchivo = docObjBean.getNombreArchivo();
+
+                rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+                File directorio = new File(baseRuta + "/" + subRuta);
+                if (!directorio.exists()) {
+                    directorio.mkdirs(); // crea toda la estructura intermedia
+                }
+
+
             }
 
-            sql2.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET BL_DOC = ?, DE_RUTA_ORIGEN = ?, FEULA=(SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)) \nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(rutaDestino);
+                fos.write(docObjBean.getDocumento());
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+            sql2.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET DE_RUTA_ORIGEN = ?, FEULA=(SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)) \nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
 
             try {
                 this.jdbcTemplate.execute(sql2.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
                     protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
-                        lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
-                        ps.setString(2, docObjBean.getNombreArchivo());
-                        ps.setString(3, docObjBean.getNuAnn());
-                        ps.setString(4, docObjBean.getNuEmi());
+                        //lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
+                        ps.setString(1, docObjBean.getNombreArchivo());
+                        ps.setString(2, docObjBean.getNuAnn());
+                        ps.setString(3, docObjBean.getNuEmi());
                     }
                 });
                 vReturn = "OK";

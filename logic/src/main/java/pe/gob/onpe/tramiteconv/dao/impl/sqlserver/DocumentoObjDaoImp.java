@@ -1,15 +1,13 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.axis.message.SAXOutputter;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -31,9 +29,14 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobCreator;
 import org.springframework.jdbc.support.lob.LobHandler;
 import pe.gob.onpe.tramitedoc.util.Constantes;
+import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
+import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 @Repository("documentoObjDao")
 public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoObjDao {
+
+    @Autowired
+    private ApplicationProperties applicationProperties;
 
     private static Logger logger = Logger.getLogger("SGDDocumentoObjDaoImp");
 
@@ -86,6 +89,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
     }
 
     public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto) {
+        System.out.println("1");
         StringBuilder sql = new StringBuilder();
         String result = null;
         sql.append("insert into IDOSGD.TDTV_ANEXOS \n (NU_ANN,NU_EMI,NU_ANE,DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC)\n SELECT '" + pNuAnnDocProyecto + "','" + pnuEmiDocProyecto + "',(SELECT COUNT(T.NU_ANE)+1 FROM IDOSGD.TDTV_ANEXOS T WITH (NOLOCK) where nu_emi='" + pnuEmiDocProyecto + "' and nu_ann='" + pNuAnnDocProyecto + "'),DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE,\n  FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC\n  FROM IDOSGD.TDTV_ANEXOS WITH (NOLOCK) \n  where nu_emi='" + pnuEmi + "' and nu_ann='" + pnuAnn + "' and nu_ane='" + pnuAnexo + "'");
@@ -102,7 +106,8 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         return result;
     }
 
-    public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto, final String codUsu) {
+    public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto, final String codUsu) throws IOException {
+        //System.out.println("2");
         String vReturn = "NO_OK";
 
         StringBuilder sqlQry1 = new StringBuilder();
@@ -119,15 +124,64 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
             docAnexo.setNuAne("1");
         }
 
-        final InputStream archivoAnexo = new ByteArrayInputStream(docAnexo.getBlDoc());
-        final int size = (docAnexo.getBlDoc()).length;
-        int maxUploadSize = 10000000;
+        byte[] bais;
+        if (docAnexo.getBlDoc() == null) {
+            DocumentoObjBean documentoObjBean= leerDocumentoAnexo(docAnexo.getNuAnn(),pnuEmi,docAnexo.getNuAne());
+            bais = documentoObjBean.getDocumento();
+        }else {
+            bais = docAnexo.getBlDoc();
+        }
 
+        final InputStream archivoAnexo = new ByteArrayInputStream(bais);
+
+        //final int size = (docAnexo.getBlDoc()).length;
+        //int maxUploadSize = 10000000;
+
+        //HENRY CAMBIO EN BL_DOC
         StringBuilder sqlIns = new StringBuilder();
         // sqlIns.append("insert into IDOSGD.TDTV_ANEXOS  (NU_ANN,NU_EMI,NU_ANE,DE_DET,BL_DOC,DE_RUT_ORI,DE_RUT_DES,CO_TIP_DOC,CO_USE_CRE, FE_USE_CRE,CO_USE_MOD,FE_USE_MOD,FEULA,REQ_FIRMA,NU_DES,TI_PUBLIC)");
-        sqlIns.append("insert into IDOSGD.tdtv_anexos(nu_ann,nu_emi,nu_ane,de_det,de_rut_ori,co_use_cre,fe_use_cre,co_use_mod,fe_use_mod,feula, nu_des, bl_doc ) values(?,?,?,?,?,?,GETDATE(),?,null,CONVERT(VARCHAR(20),GETDATE(),112),?,?)");
+        sqlIns.append("insert into IDOSGD.tdtv_anexos(nu_ann,nu_emi,nu_ane,de_det,de_rut_ori,co_use_cre,fe_use_cre,co_use_mod,fe_use_mod,feula, nu_des ) values(?,?,?,?,?,?,GETDATE(),?,null,CONVERT(VARCHAR(20),GETDATE(),112),?)");
 
         DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
+
+
+        String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
+
+
+        String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+        String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
+        //nombreArchivo = docObjBean.getNombreArchivo();
+
+        String rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+        File directorio = new File(baseRuta + "/" + subRuta);
+        if (!directorio.exists()) {
+            directorio.mkdirs(); // crea toda la estructura intermedia
+        }
+
+
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(rutaDestino);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+
+            while ((bytesRead = archivoAnexo.read(buffer)) != -1) {
+                fos.write(buffer, bytesRead == -1 ? 0 : 0, bytesRead);
+            }
+
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) fos.close();
+                if (archivoAnexo != null) archivoAnexo.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             this.jdbcTemplate.execute(sqlIns.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
@@ -140,7 +194,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                     ps.setString(6, docAnexo.getCoUseCre());
                     ps.setString(7, codUsu);
                     ps.setString(8, docAnexo.getNuDes());
-                    lobCreator.setBlobAsBinaryStream(ps, 9, archivoAnexo, size);
+                    //lobCreator.setBlobAsBinaryStream(ps, 9, archivoAnexo, size);
                 }
             });
             vReturn = "S";
@@ -153,25 +207,93 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
     }
 
-    public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen ,\n bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
-
+    public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) throws IOException {
+        //System.out.println(" este si pasa");
         DocumentoObjBean docObjBean = new DocumentoObjBean();
+        StringBuilder sql1 = new StringBuilder();
+        sql1.append("SELECT \n")
+                .append("  CASE \n")
+                .append("    WHEN EXISTS ( \n")
+                .append("      SELECT 1 \n")
+                .append("      FROM IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n")
+                .append("      WHERE nu_ann = ? AND nu_emi = ? AND bl_doc IS NOT NULL \n")
+                .append("    ) THEN 1 ELSE 0 \n")
+                .append("  END AS tieneArchivo");
+
 
         try {
-            docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+            int retorno;
+            retorno = this.jdbcTemplate.queryForInt(sql1.toString(), pnuAnn, pnuEmi);
+
+            if (retorno == 0) {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
+
+                //HENRY CARGA EMITIDOS
+                DocumentoObjBean documentoObjBean=getNombreArchivo(pnuAnn,pnuEmi,ptiCap);
+                String rutaDestino;
+                if (documentoObjBean.getNombreArchivo().substring(0,1).equals("/")) {
+                    //System.out.println("aqui es la nota");
+                    rutaDestino = documentoObjBean.getNombreArchivo();
+                }else {
+
+                    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                    String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+
+
+                    rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+                    System.out.println(rutaDestino+" este es la ruta rutaDestino");
+                    File directorio = new File(baseRuta + "/" + subRuta);
+                    if (!directorio.exists()) {
+                        directorio.mkdirs(); // crea toda la estructura intermedia
+                    }
+
+                }
+
+                byte[] docuemnto= leerArchivo(rutaDestino);
+
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+
+                    docObjBean.setDocumento(docuemnto);
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
+                    logger.error(mensaje, e);
+                }
+
+            } else {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen, \n bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
+                    logger.error(mensaje, e);
+                }
+            }
+
         } catch (EmptyResultDataAccessException e) {
-            docObjBean = null;
-        } catch (Exception e) {
+        docObjBean = null;
+        }catch (Exception e) {
             StringBuilder mensaje = new StringBuilder();
             mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
             logger.error(mensaje, e);
         }
 
+
         return docObjBean;
     }
 
+    //NO SÉ CUANDO SE USA
     public List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi) {
         StringBuilder sql = new StringBuilder();
         sql.append("select nu_ann,nu_emi,nu_ane,de_rut_ori nombre_Archivo,bl_doc documento from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ? and nu_emi = ? ");
@@ -180,6 +302,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
         try {
             docObjBean = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoObjBean.class), new Object[]{pnuAnn, pnuEmi});
+
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {
@@ -191,24 +314,110 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         return docObjBean;
     }
 
-    public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select \nnu_ann, \nnu_emi, \nw_de_ruta_origen de_ruta_origen ,\nw_bl_doc bl_doc \nfrom IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
-
+    public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) throws IOException {
+       // System.out.println("aca tmb pasa");
         DocumentoObjBean docObjBean = new DocumentoObjBean();
+        StringBuilder sql1 = new StringBuilder();
+        sql1.append("SELECT \n")
+                .append("  CASE \n")
+                .append("    WHEN EXISTS ( \n")
+                .append("      SELECT 1 \n")
+                .append("      FROM IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n")
+                .append("      WHERE nu_ann = ? AND nu_emi = ? AND bl_doc IS NOT NULL \n")
+                .append("    ) THEN 1 ELSE 0 \n")
+                .append("  END AS tieneArchivo");
 
         try {
-            docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+            int retorno;
+            retorno = this.jdbcTemplate.queryForInt(sql1.toString(), pnuAnn, pnuEmi);
+
+            if (retorno == 0) {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
+
+
+                DocumentoObjBean documentoObjBean=getNombreArchivo(pnuAnn,pnuEmi,ptiCap);
+
+
+                String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+
+                String  rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+
+                File directorio = new File(baseRuta + "/" + subRuta);
+                if (!directorio.exists()) {
+                    directorio.mkdirs(); // crea toda la estructura intermedia
+                }
+
+
+
+
+                byte[] docuemnto= leerArchivo(rutaDestino);
+
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+
+                    docObjBean.setDocumento(docuemnto);
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
+                    logger.error(mensaje, e);
+                }
+
+            } else {
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen, \nw_bl_doc bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
+                    logger.error(mensaje, e);
+                }
+            }
+
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
-        } catch (Exception e) {
+        }catch (Exception e) {
             StringBuilder mensaje = new StringBuilder();
             mensaje.append("DocBlob:" + pnuAnn + "." + pnuEmi + "." + ptiCap);
             logger.error(mensaje, e);
         }
 
+
         return docObjBean;
     }
+
+
+    public byte[] leerArchivo(String rutaArchivo) throws IOException {
+        File archivo = new File(rutaArchivo);
+        FileInputStream fis = null;
+        byte[] contenido = null;
+
+        try {
+            fis = new FileInputStream(archivo);
+            contenido = new byte[(int) archivo.length()];
+            fis.read(contenido);
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return contenido;
+    }
+
 
     private class DocumentoRowMapper
             implements ParameterizedRowMapper<DocumentoObjBean> {
@@ -225,38 +434,52 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         public DocumentoObjBean mapRow(ResultSet rs, int i) throws SQLException {
             int size = 0;
             try {
-                Blob documento = rs.getBlob("bl_doc");
-                if (documento != null) {
 
-                    this.docObjBean.setNuAnn(rs.getString("nu_ann"));
-                    this.docObjBean.setNuEmi(rs.getString("nu_emi"));
-                    this.docObjBean.setNombreArchivo(rs.getString("de_ruta_origen"));
-                    InputStream blobStream = null;
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    try {
-                        int bytesRead;
-                        blobStream = documento.getBinaryStream();
-                        byte[] buffer = new byte[Constantes.BUFFER_SIZE];
-
-                        do {
-                            bytesRead = blobStream.read(buffer);
-                            if (bytesRead <= 0) {
-                                continue;
-                            }
-                            baos.write(buffer, 0, bytesRead);
-                        } while (bytesRead > -1);
-                        baos.flush();
-                        this.docObjBean.setDocumento(baos.toByteArray());
-                    } finally {
-                        if (blobStream != null) {
-                            blobStream.close();
-                        }
-                        if (baos != null) {
-                            baos.close();
-                        }
+                ResultSetMetaData metaData = rs.getMetaData();
+                boolean tieneBlob = false;
+                for (int j = 1; j <= metaData.getColumnCount(); j++) {
+                    if ("bl_doc".equalsIgnoreCase(metaData.getColumnName(j))) {
+                        tieneBlob = true;
+                        break;
                     }
                 }
-                documento.free();
+                if (tieneBlob){
+                    Blob documento = rs.getBlob("bl_doc");
+                    if (documento != null) {
+
+                        this.docObjBean.setNuAnn(rs.getString("nu_ann"));
+                        this.docObjBean.setNuEmi(rs.getString("nu_emi"));
+                        this.docObjBean.setNombreArchivo(rs.getString("de_ruta_origen"));
+                        InputStream blobStream = null;
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        try {
+                            int bytesRead;
+                            blobStream = documento.getBinaryStream();
+                            byte[] buffer = new byte[Constantes.BUFFER_SIZE];
+
+                            do {
+                                bytesRead = blobStream.read(buffer);
+                                if (bytesRead <= 0) {
+                                    continue;
+                                }
+                                baos.write(buffer, 0, bytesRead);
+                            } while (bytesRead > -1);
+                            baos.flush();
+                            this.docObjBean.setDocumento(baos.toByteArray());
+                        } finally {
+                            if (blobStream != null) {
+                                blobStream.close();
+                            }
+                            if (baos != null) {
+                                baos.close();
+                            }
+                        }
+                    }
+                    documento.free();
+                }
+
+
+
             } catch (Exception e) {
                 StringBuilder mensaje = new StringBuilder();
                 mensaje.append("LeerBlob:" + this.docObjBean.getNuAnn() + "." + this.docObjBean.getNuEmi());
@@ -267,10 +490,12 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         }
     }
 
+
     public DocumentoObjBean getNombreArchivoAnexo(String pnuAnn, String pnuEmi, String pnuAnexo) {
         StringBuilder sql = new StringBuilder();
         sql.append("\tselect \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori nombre_Archivo,\n COALESCE(LEN(bl_doc),0) nu_Tamano\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?\nand nu_ane = ?");
-
+        System.out.println("ingreso para ver si es null");
+        System.out.println(pnuAnn + " " + pnuEmi + " " + pnuAnexo);
         DocumentoObjBean docObjBean = new DocumentoObjBean();
 
         try {
@@ -299,21 +524,86 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         return docObjBean;
     }
 
-    public DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) {
-        StringBuilder sql = new StringBuilder();
-        sql.append(" select \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori de_ruta_origen,\n bl_doc\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \n where nu_ann = ?\n and nu_emi = ?\n and nu_ane = ?");
+    public DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) throws IOException {
 
         DocumentoObjBean docObjBean = new DocumentoObjBean();
+        StringBuilder sql1 = new StringBuilder();
+        sql1.append("SELECT CASE \n")
+                .append("  WHEN EXISTS ( \n")
+                .append("    SELECT 1 \n")
+                .append("    FROM IDOSGD.TDTV_ANEXOS WITH (NOLOCK) \n")
+                .append("    WHERE NU_ANN = ? AND NU_EMI = ? AND BL_DOC IS NOT NULL AND NU_ANE = ? \n")
+                .append("  ) THEN 1 ELSE 0 \n")
+                .append("END AS tieneArchivo");
 
         try {
-            docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi, pnuAne});
+            int retorno;
+            retorno = this.jdbcTemplate.queryForInt(sql1.toString(), pnuAnn, pnuEmi, pnuAne);
+
+            if (retorno == 0){
+
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori de_ruta_origen\n from IDOSGD.tdtv_anexos WITH (NOLOCK) \n where nu_ann = ?\n and nu_emi = ?\n and nu_ane = ?");
+
+
+                DocumentoObjBean documentoObjBean=getNombreArchivoAnexo(pnuAnn,pnuEmi,pnuAne);
+                //System.out.println(documentoObjBean.getNombreArchivo()+" es nombre_Archivo");
+
+
+                String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
+                //nombreArchivo = docObjBean.getNombreArchivo();
+
+                String rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+
+                File directorio = new File(baseRuta + "/" + subRuta);
+                if (!directorio.exists()) {
+                    directorio.mkdirs(); // crea toda la estructura intermedia
+                }
+
+
+
+                byte[] docuemnto= leerArchivo(rutaDestino);
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi, pnuAne});
+                    docObjBean.setDocumento(docuemnto);
+
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("Anexo:" + pnuAnn + "." + pnuEmi + "." + pnuAne);
+                    logger.error(mensaje, e);
+                }
+            }else {
+
+                StringBuilder sql = new StringBuilder();
+                sql.append(" select \n nu_ann,\n nu_emi,\n nu_ane,\n de_rut_ori de_ruta_origen,\n bl_doc \n from IDOSGD.tdtv_anexos WITH (NOLOCK) \n where nu_ann = ?\n and nu_emi = ?\n and nu_ane = ?");
+
+
+                try {
+                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi, pnuAne});
+
+
+                } catch (EmptyResultDataAccessException e) {
+                    docObjBean = null;
+                } catch (Exception e) {
+                    StringBuilder mensaje = new StringBuilder();
+                    mensaje.append("Anexo:" + pnuAnn + "." + pnuEmi + "." + pnuAne);
+                    logger.error(mensaje, e);
+                }
+            }
+
         } catch (EmptyResultDataAccessException e) {
-            docObjBean = null;
-        } catch (Exception e) {
+        docObjBean = null;
+         }catch (Exception e) {
             StringBuilder mensaje = new StringBuilder();
             mensaje.append("Anexo:" + pnuAnn + "." + pnuEmi + "." + pnuAne);
             logger.error(mensaje, e);
         }
+
+
 
         return docObjBean;
     }

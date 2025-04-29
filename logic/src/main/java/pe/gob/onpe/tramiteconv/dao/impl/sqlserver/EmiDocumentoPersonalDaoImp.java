@@ -667,6 +667,7 @@ public class EmiDocumentoPersonalDaoImp
     }
 
     public String updDocumentoObj(final DocumentoObjBean docObjBean) {
+        System.out.println("paso por aqui");
         String vReturn = "NO_OK";
         boolean inInsert = false;
 

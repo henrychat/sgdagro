@@ -12,7 +12,7 @@ public interface Constantes {
     public static int TI_IDENTIFICACION = 0;
 
     public static final int BUFFER_SIZE = 8192;
-    public static final int MAX_SIZE_UPLOAD = 25000000;
+    public static final int MAX_SIZE_UPLOAD = 30000000;
 
     public static String PAGE_NUMBER = "pg";
     public static int ROWS_X_PAGE = 4;

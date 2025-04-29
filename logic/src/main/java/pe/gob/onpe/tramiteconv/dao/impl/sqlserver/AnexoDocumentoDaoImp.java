@@ -1,5 +1,8 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -26,12 +30,16 @@ import pe.gob.onpe.tramitedoc.bean.DocumentoObjBean;
 import pe.gob.onpe.tramitedoc.bean.ReferenciaBean;
 import pe.gob.onpe.tramitedoc.dao.AnexoDocumentoDao;
 import pe.gob.onpe.tramitedoc.dao.SimpleJdbcDaoBase;
+import pe.gob.onpe.tramitedoc.web.util.ApplicationProperties;
 import pe.gob.onpe.tramitedoc.web.util.Utilidades;
 
 
 @Repository("anexoDocumentoDao")
 public class AnexoDocumentoDaoImp   extends SimpleJdbcDaoBase   implements AnexoDocumentoDao
 {
+
+  @Autowired
+  private ApplicationProperties applicationProperties;
 
   private SimpleJdbcCall spdataSource;
   private static Logger logger = Logger.getLogger("AnexoDocumentoDaoImp");
@@ -238,10 +246,46 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
      StringBuilder sql = new StringBuilder();
     sql.append("update IDOSGD.tdtv_anexos set ti_public=?,nu_ann=?,nu_emi=?, nu_ane=?, de_det=?, de_rut_ori=?, co_use_cre=?, ");
     sql.append(" fe_use_cre=CURRENT_TIMESTAMP, co_use_mod=?, fe_use_mod=CURRENT_TIMESTAMP, ");
-    sql.append(" feula=convert(varchar, GETDATE(), 103), bl_doc=? where  nu_ann=? and nu_emi=? and nu_ane=? ");
+    sql.append(" feula=convert(varchar, GETDATE(), 103) where  nu_ann=? and nu_emi=? and nu_ane=? ");
 
 
     DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
+
+
+    String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
+
+    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+    String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
+    //nombreArchivo = docObjBean.getNombreArchivo();
+
+    String rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+    File directorio = new File(baseRuta + "/" + subRuta);
+    if (!directorio.exists()) {
+      directorio.mkdirs(); // crea toda la estructura intermedia
+    }
+
+    FileOutputStream fos = null;
+    try {
+      fos = new FileOutputStream(rutaDestino);
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+
+      while ((bytesRead = archivoAnexo.read(buffer)) != -1) {
+        fos.write(buffer, bytesRead == -1 ? 0 : 0, bytesRead);
+      }
+
+      fos.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (fos != null) fos.close();
+        if (archivoAnexo != null) archivoAnexo.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
     
     try {
       this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback)new AbstractLobCreatingPreparedStatementCallback((LobHandler)defaultLobHandler)
@@ -252,14 +296,14 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
               ps.setString(2, docAnexo.getNuAnn());
               ps.setString(3, docAnexo.getNuEmi());
               ps.setString(4, docAnexo.getNuAne());
-              ps.setString(5, docAnexo.getDeDet());
-              ps.setString(6, docAnexo.getDeRutOri());
+              ps.setString(5, Utilidades.fn_getCleanFileName(docAnexo.getDeDet()));
+              ps.setString(6, Utilidades.fn_getCleanFileName(docAnexo.getDeRutOri()));
               ps.setString(7, docAnexo.getCoUseCre());
               ps.setString(8, docAnexo.getCoUseMod());
-              lobCreator.setBlobAsBinaryStream(ps, 9, archivoAnexo, size);
-              ps.setString(10, docAnexo.getNuAnn());
-              ps.setString(11, docAnexo.getNuEmi());
-              ps.setString(12, docAnexo.getNuAne());
+              //lobCreator.setBlobAsBinaryStream(ps, 9, archivoAnexo, size);
+              ps.setString(9, docAnexo.getNuAnn());
+              ps.setString(10, docAnexo.getNuEmi());
+              ps.setString(11, docAnexo.getNuAne());
             }
           });
       vReturn = "OK";
@@ -322,14 +366,51 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
+  // HENRY CARGAR
 public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStream archivoAnexo, final int size) {
     String vReturn = "NO_OK";
     
      StringBuilder sql = new StringBuilder();
-    sql.append("insert into IDOSGD.tdtv_anexos( nu_ann, nu_emi, nu_ane, de_det, de_rut_ori, co_use_cre, fe_use_cre, co_use_mod, fe_use_mod, feula,  bl_doc,ti_public  ) values(?,?,?,?,?,?,GETDATE(),?,GETDATE(),IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'yyyymmdd'),?,'1')");
+    sql.append("insert into IDOSGD.tdtv_anexos( nu_ann, nu_emi, nu_ane, de_det, de_rut_ori, co_use_cre, fe_use_cre, co_use_mod, fe_use_mod, feula,  ti_public  ) values(?,?,?,?,?,?,GETDATE(),?,GETDATE(),IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'yyyymmdd'),'1')");
 
 
     DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
+
+    String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
+
+
+    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+    String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
+    //nombreArchivo = docObjBean.getNombreArchivo();
+
+    String rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+    File directorio = new File(baseRuta + "/" + subRuta);
+    if (!directorio.exists()) {
+      directorio.mkdirs(); // crea toda la estructura intermedia
+    }
+
+    FileOutputStream fos = null;
+    try {
+      fos = new FileOutputStream(rutaDestino);
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+
+      while ((bytesRead = archivoAnexo.read(buffer)) != -1) {
+        fos.write(buffer, bytesRead == -1 ? 0 : 0, bytesRead);
+      }
+
+      fos.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (fos != null) fos.close();
+        if (archivoAnexo != null) archivoAnexo.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
     
     try {
       this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback)new AbstractLobCreatingPreparedStatementCallback((LobHandler)defaultLobHandler)
@@ -343,7 +424,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
               ps.setString(5, Utilidades.fn_getCleanFileName(docAnexo.getDeRutOri()));
               ps.setString(6, docAnexo.getCoUseCre());
               ps.setString(7, docAnexo.getCoUseMod());
-              lobCreator.setBlobAsBinaryStream(ps, 8, archivoAnexo, size);
+              //lobCreator.setBlobAsBinaryStream(ps, 8, archivoAnexo, size);
             }
           });
       vReturn = "OK";

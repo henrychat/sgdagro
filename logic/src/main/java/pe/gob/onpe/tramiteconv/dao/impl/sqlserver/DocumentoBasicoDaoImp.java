@@ -113,9 +113,10 @@ public class DocumentoBasicoDaoImp
         return list;
     }
 
+    //HENRY CAMBIO ALGUNAS PARTES SI BL_DOC IS NOT NULL DENTRO DEL QUERY
     public String verificaCargaDoc(String pnuAnn, String pnuEmi) {
          StringBuilder sql = new StringBuilder();
-        sql.append("select \nA.NU_EMI \nFROM IDOSGD.TDTV_ARCHIVO_DOC A WITH(NOLOCK) \nwhere A.nu_ann = ? \nand A.nu_emi = ? \nand BL_DOC is not null ");
+        sql.append("select \nA.NU_EMI \nFROM IDOSGD.TDTV_ARCHIVO_DOC A WITH(NOLOCK) \nwhere A.nu_ann = ? \nand A.nu_emi = ? ");
 
         List<DocumentoAnexoBean> list = new ArrayList<DocumentoAnexoBean>();
 

@@ -263,6 +263,7 @@ public class DocumentoSrvlt extends HttpServlet {
   }
   
   private void creaDocx(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    System.out.println("crea doxc desde cero");
     String pnuAnn = request.getParameter("nuAnn");
     String pnuEmi = request.getParameter("nuEmi");
     if (pnuAnn != null && pnuEmi != null && !pnuAnn.equals("") && !pnuEmi.equals("")) {

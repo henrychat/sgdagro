@@ -84,6 +84,8 @@ public class ApplicationProperties {
 
   private String urlSunat;
 
+  private String rutaTemporal2;
+
   public String getUrlSunat() {
     return this.properties.getProperty("URL_SUNAT");
   }
@@ -179,6 +181,16 @@ public class ApplicationProperties {
     } catch (Exception e) {
       e.printStackTrace();
     } 
+    return retval;
+  }
+
+  public String getRutaTemporal2() {
+    String retval = "";
+    try {
+      retval = Utility.getInstancia().descifrar(this.properties.getProperty("ruta_temporal2"), "SgDPropertiesSecretPasswor");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     return retval;
   }
   

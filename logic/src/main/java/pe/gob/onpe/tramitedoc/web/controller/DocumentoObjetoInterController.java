@@ -198,7 +198,7 @@ public class DocumentoObjetoInterController {
                 retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
                 
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del Anexo");
+                retRespuesta.setRetval("Error en Obtener nombre del Anexo3");
                 e.printStackTrace();
             }
             try {

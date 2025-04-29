@@ -4,6 +4,7 @@
  */
 package pe.gob.onpe.tramitedoc.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import pe.gob.onpe.autentica.model.Usuario;
@@ -20,8 +21,8 @@ import pe.gob.onpe.tramitedoc.bean.UsuarioConfigBean;
  */
 public interface DocumentoObjService {
     DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi);
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap);
-    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) throws IOException;
+    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) throws IOException;
     DocumentoObjBean leerActaNotificacion(String pnuAnn, String pnuEmi, String pnuDes, String pnuActa);
     List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi);
     DocumentoObjBean getNombreArchivo(String pnuAnn, String pnuEmi, String ptiCap);
@@ -30,7 +31,7 @@ public interface DocumentoObjService {
     DocumentoVerBean getNombreGeneraDocx(String pnuAnn, String pnuEmi,String ptiOpe);
 
     DocumentoObjBean getNombreArchivoAnexo(String pnuAnn, String pnuEmi, String pnuAnexo);
-    String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo,String pNuAnnDocProyecto, String pnuEmiDocProyecto, String codUsuMod);
+    String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo,String pNuAnnDocProyecto, String pnuEmiDocProyecto, String codUsuMod) throws IOException;
     DocumentoVerBean getNombreDocAnexo(String pnuAnn, String pnuEmi,String pnuAnexo);
     DocumentoVerBean getNombreDocAnexoArchivado(String pnuAnn, String pnuEmi,String pnuDes);
     DocumentoVerBean getNombreCargaDoc(String pnuAnn, String pnuEmi,String ptiOpe);
@@ -47,7 +48,7 @@ public interface DocumentoObjService {
     
      DocumentoVerBean getNombreFirmaDocReporte(String pnuAnn, String pnuEmi, String ptiOpe, UsuarioConfigBean usuarioConfig, String rutaReporteBase)  throws Exception;
     
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) throws IOException;
     
     
     ReporteBean getGenerarReporte(String formato, String rutaReporteBase, Map<String, Object> parametros, String archivoServer, String nuAnn, String nuEmi) throws Exception;

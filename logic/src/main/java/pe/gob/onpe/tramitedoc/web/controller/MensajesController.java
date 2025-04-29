@@ -446,7 +446,7 @@ public class MensajesController {
         retRespuesta.setNoDoc(docVerBean.getNoDocumento());
         retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
       } catch (Exception e) {
-        retRespuesta.setRetval("Error en Obtener nombre del Anexo");
+        retRespuesta.setRetval("Error en Obtener nombre del Anexo2");
         e.printStackTrace();
       } 
       try {

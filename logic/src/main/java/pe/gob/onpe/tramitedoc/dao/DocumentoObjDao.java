@@ -4,6 +4,7 @@
  */
 package pe.gob.onpe.tramitedoc.dao;
 
+import java.io.IOException;
 import java.util.List;
 import pe.gob.onpe.tramitedoc.bean.DocumentoDatoBean;
 import pe.gob.onpe.tramitedoc.bean.DocumentoNotificacionBean;
@@ -21,8 +22,8 @@ public interface DocumentoObjDao {
     DocumentoObjBean getNombreArchivoAnexo(String pnuAnn, String pnuEmi, String pnuAnexo);
     String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo,String pNuAnnDocProyecto, String pnuEmiDocProyecto);
     DocumentoObjBean getNombreArchivoAnexoArchivado(String pnuAnn, String pnuEmi, String pnuDes);
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap);
-    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) throws IOException;
+    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) throws IOException;
     DocumentoObjBean leerActaNotificacion(String pnuAnn, String pnuEmi, String pnuDes, String pnuActa);
     List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi);
     String getInFirmaDoc(String pcoDep,String pcoTipoDoc);
@@ -33,6 +34,6 @@ public interface DocumentoObjDao {
     List<DocumentoDatoBean> CargarSubReporte1(String pnuAnn, String pnuEmi);
     List<DocumentoDatoBean> CargarSubReporte2(String pnuAnn, String pnuEmi);
     public List<DocumentoNotificacionBean> CargarReporteNotificacion(String pnuAnn, String pnuEmi, String tiOpe);
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord);
-     String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto,final String codUsu);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) throws IOException;
+     String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto,final String codUsu) throws IOException;
 }

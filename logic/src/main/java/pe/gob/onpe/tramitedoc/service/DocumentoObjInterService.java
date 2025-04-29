@@ -4,6 +4,7 @@
  */
 package pe.gob.onpe.tramitedoc.service;
 
+import java.io.IOException;
 import java.util.Map;
 
 import pe.gob.onpe.autentica.model.Usuario;
@@ -19,8 +20,8 @@ import pe.gob.onpe.tramitedoc.bean.UsuarioConfigBean;
  */
 public interface DocumentoObjInterService {
     DocumentoDatoBean getDatosDoc(String pnuAnn, String pnuEmi);
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap);
-    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) throws IOException;
+    DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) throws IOException;
     DocumentoObjBean getNombreArchivo(String pnuAnn, String pnuEmi, String ptiCap);
     DocumentoVerBean getNombreDoc(String pnuAnn, String pnuEmi,String ptiOpe,Usuario usuario);
     DocumentoVerBean getNombreGeneraDocx(String pnuAnn, String pnuEmi,String ptiOpe);
@@ -40,6 +41,6 @@ public interface DocumentoObjInterService {
     DocumentoVerBean getNombreDocEmiReporte(String pnuAnn, String pnuEmi,String ptiOpe, Usuario usuario, String rutaReporteBase);
     DocumentoVerBean getNombreFirmaDocReporte(String pnuAnn, String pnuEmi,String ptiOpe,UsuarioConfigBean usuarioConfig, String rutaBase);
     
-    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord);
+    DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) throws IOException;
     public ReporteBean getGenerarReporte(String formato, String rutaReporteBase, Map<String, Object> parametros, String archivoServer, String nuAnn, String nuEmi) throws Exception;
 }

@@ -809,6 +809,7 @@ public class EmiDocumentoAdmServiceImp implements EmiDocumentoAdmService {
                         docObjBean.setNuAnn(documentoEmiBean.getNuAnn());
                         docObjBean.setNuEmi(documentoEmiBean.getNuEmi());
                         docObjBean.setTiCap(ticap);
+                        //EDITAR AHORA
                         docObjBean.setNombreArchivo(nuSecFirma);
                         docObjBean.setNumeroSecuencia(nuSecFirma);
                         docObjBean.setCoUseMod(documentoEmiBean.getCoUseMod());

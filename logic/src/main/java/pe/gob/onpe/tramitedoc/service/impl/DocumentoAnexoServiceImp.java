@@ -37,7 +37,8 @@ public class DocumentoAnexoServiceImp
     String vReturn = "NO_OK";
     try {
       DocumentoObjBean docObjBean = this.documentoObjService.getNombreArchivoAnexo(pnuAnn, pnuEmi, pnuAne);
-      if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+      if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+      ) {
         docObjBean.setCoUseMod(coUsuario);
         docObjBean.setNumeroSecuencia(pnuSecFirma);
         vReturn = this.validarFirmaService.getValidaCertificadoEmp(docObjBean.getNumeroSecuencia(), dniUsu, nroRucInstitucion);
@@ -62,7 +63,7 @@ public class DocumentoAnexoServiceImp
           } 
         } 
       } else {
-        throw new validarDatoException("Error cargando documento Firmado.");
+        throw new validarDatoException("Error cargando documento Firmado1.");
       } 
     } catch (validarDatoException e) {
       throw e;

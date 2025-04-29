@@ -116,7 +116,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
 
   
-  public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) {
+  public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap) throws IOException {
     DocumentoObjBean docObjBean = null;
     docObjBean = this.documentoObjDao.leerDocumento(pnuAnn, pnuEmi, ptiCap);
     
@@ -134,7 +134,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
 
   
-  public DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) {
+  public DocumentoObjBean leerDocumentoAnexo(String pnuAnn, String pnuEmi, String pnuAne) throws IOException {
     DocumentoObjBean docObjBean = null;
     docObjBean = this.documentoObjDao.leerDocumentoAnexo(pnuAnn, pnuEmi, pnuAne);
     return docObjBean;
@@ -178,14 +178,15 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
     if (docDatoBean != null) {
       docObjBean = getNombreArchivo(pnuAnn, pnuEmi, docDatoBean.getTiCap());
-      if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+      if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+      ) {
         docVerBean.setInDoc(true);
         docVerBean.setDeMensaje("OK");
         
         this.auditoriaMovimientoDocDao.audiVisualizaDocumento(docObjBean, usuario);
       } else {
         docVerBean.setInDoc(false);
-        docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio");
+        docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio1");
       } 
     } 
     
@@ -193,17 +194,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
       
       String nombreDoc, urlDoc = "documento?accion=abrirDoc&nuAnn=" + docDatoBean.getNuAnn() + "&nuEmi=" + docDatoBean.getNuEmi() + "&tiCap=" + docDatoBean.getTiCap() + "&nroView=" + LsAleatorioViewDoc.getInstancia().add();
-
-
-
-
-
-
-
-
-
-
-
+      System.out.println(urlDoc+" urldocuemnto");
 
       
       if (docDatoBean.getTiEmi().equals("01")) {
@@ -250,14 +241,15 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     docDatoBean = getDatosDoc(pnuAnn, pnuEmi);
     if (docDatoBean != null) {
       docObjBean = getNombreArchivo(pnuAnn, pnuEmi, docDatoBean.getTiCap());
-      if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+      if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+      ) {
         docVerBean.setInDoc(true);
         docVerBean.setDeMensaje("OK");
       }
       else {
         
         docVerBean.setInDoc(false);
-        docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio");
+        docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio3");
       } 
     } 
     
@@ -267,17 +259,6 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
       String nombreDoc, urlDoc = "documento?accion=abrirDoc&nuAnn=" + docDatoBean.getNuAnn() + "&nuEmi=" + docDatoBean.getNuEmi() + "&tiCap=" + docDatoBean.getTiCap() + "&nroView=" + LsAleatorioViewDoc.getInstancia().add();
 
 
-
-
-
-
-
-
-
-
-
-
-      
       if (docDatoBean.getTiEmi().equals("01")) {
 
         
@@ -360,7 +341,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
   }
 //usuario.getCoUsuario()
   @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
-  public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto, String codUsuMod) {
+  public String CopiarAnexo(String pnuAnn, String pnuEmi, String pnuAnexo, String pNuAnnDocProyecto, String pnuEmiDocProyecto, String codUsuMod) throws IOException {
     String result = "";
     result = this.documentoObjDao.CopiarAnexo(pnuAnn, pnuEmi, pnuAnexo, pNuAnnDocProyecto, pnuEmiDocProyecto,codUsuMod);
     
@@ -380,7 +361,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     DocumentoObjBean docObjBean = null;
     
     docObjBean = getNombreArchivoAnexo(pnuAnn, pnuEmi, pnuAnexo);
-    if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+    if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+    ) {
       docVerBean.setInDoc(true);
     }
     
@@ -413,7 +395,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     DocumentoObjBean docObjBean = null;
     
     docObjBean = getNombreArchivoAnexo(pnuAnn, pnuEmi, pnuDes);
-    if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+    if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+    ) {
       docVerBean.setInDoc(true);
     }
     
@@ -772,7 +755,9 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         } 
       } else {
         docObjBean = getNombreArchivo(pnuAnn, pnuEmi, docDatoBean.getTiCap());
-        if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+        if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+        )
+        {
           docVerBean.setInDoc(true);
           docVerBean.setDeMensaje("OK");
           
@@ -780,7 +765,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         } else {
           
           docVerBean.setInDoc(false);
-          docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio");
+          docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio2");
         } 
       } 
     } 
@@ -1126,7 +1111,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         bswFirmaOnpe = false;
       } else {
         docObjBean = getNombreArchivoAnexo(pnuAnn, pnuEmi, pnuAnexo);
-        if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+        if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+        ) {
           docVerBean.setInDoc(true);
         }
       } 
@@ -1257,7 +1243,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
     String vReturn = "NO_OK";
     try {
       DocumentoObjBean docObjBean = getNombreArchivoAnexo(pnuAnn, pnuEmi, pnuAne);
-      if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+      if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+      ) {
         docObjBean.setCoUseMod(coUsuario);
         docObjBean.setNumeroSecuencia(pnuSecFirma);
         vReturn = cargaDocAnexoFirmado(docObjBean);
@@ -1273,7 +1260,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
           } 
         } 
       } else {
-        throw new validarDatoException("Error cargando documento Firmado.");
+        throw new validarDatoException("Error cargando documento Firmado3.");
       } 
     } catch (validarDatoException e) {
       throw e;
@@ -1362,7 +1349,8 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
       } else {
         
         docObjBean = getNombreArchivo(pnuAnn, pnuEmi, docDatoBean.getTiCap());
-        if (docObjBean != null && docObjBean.getNuTamano() > 0) {
+        if (docObjBean != null //&& docObjBean.getNuTamano() > 0
+        ) {
           docVerBean.setInDoc(true);
           docVerBean.setDeMensaje("OK");
           
@@ -1373,7 +1361,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
         } else {
           
           docVerBean.setInDoc(false);
-          docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio");
+          docVerBean.setDeMensaje("Documento no se encuentra cargado en Repositorio4");
         } 
       } 
     } 
@@ -1783,7 +1771,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
 
   
-  public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) {
+  public DocumentoObjBean leerDocumento(String pnuAnn, String pnuEmi, String ptiCap, String pAbreWord) throws IOException {
     DocumentoObjBean docObjBean = null;
     docObjBean = this.documentoObjDao.leerDocumento(pnuAnn, pnuEmi, ptiCap, pAbreWord);
     

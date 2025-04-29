@@ -256,7 +256,7 @@ public class DocumentoObjetoController {
                     return retval;
                 }
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del Anexo");
+                retRespuesta.setRetval("Error en Obtener nombre del Anexo1");
                 e.printStackTrace();
             }
             try {
@@ -297,7 +297,7 @@ public class DocumentoObjetoController {
                 }
 
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del Anexo");
+                retRespuesta.setRetval("Error en Obtener nombre del Anexo4");
                 e.printStackTrace();
             }
             try {
@@ -337,7 +337,7 @@ public class DocumentoObjetoController {
                 retRespuesta.setNoDoc(docVerBean.getNoDocumento());
                 retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
             } catch (Exception e) {
-                retRespuesta.setRetval("Error en Obtener nombre del Anexo");
+                retRespuesta.setRetval("Error en Obtener nombre del Anexo5");
                 e.printStackTrace();
             }
             try {
@@ -1683,7 +1683,7 @@ public class DocumentoObjetoController {
                 retRespuesta.setNuEmi(docVerBean.getNuEmi());
 
                 if (pAbreWord.equals("SI")) {
-                    System.out.println(docVerBean.getNombreDocumentoWord());
+                    System.out.println(docVerBean.getNombreDocumentoWord() + " nombre de doc");
                     retRespuesta.setNoDoc(docVerBean.getNombreDocumentoWord());
                 } else {
                     retRespuesta.setNoDoc(docVerBean.getNoDocumento());
