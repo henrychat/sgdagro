@@ -247,7 +247,8 @@ public class DocumentoXmlServiceImp
                         
                     context.put("DEPENDENCIA_EMITE",  WordUtils.capitalizeFully(depEmite));
                     context.put("DEPENDENCIA_DESTINO", datosPlantilla.getDeDepDestMae());
-                    context.put("CARGO_EMP_EMITE", WordUtils.capitalizeFully(datosPlantilla.getDeCargoFunEmiMae()));
+                    //context.put("CARGO_EMP_EMITE", WordUtils.capitalizeFully(datosPlantilla.getDeCargoFunEmiMae()));
+                    context.put("CARGO_EMP_EMITE", datosPlantilla.getDeCargoFunEmiMae());
                     context.put("CARGO_EMP_DESTINO", datosPlantilla.getDeCargoFunDestMae());
                     context.put("NOMBRE_DESTINATARIO", (datosPlantilla.getNombreDestinatario() == null) ? "" : datosPlantilla.getNombreDestinatario());
                     context.put("DIRECCION_DESTINATARIO", (datosPlantilla.getDireccionDestinatario() == null) ? "" : datosPlantilla.getDireccionDestinatario());
