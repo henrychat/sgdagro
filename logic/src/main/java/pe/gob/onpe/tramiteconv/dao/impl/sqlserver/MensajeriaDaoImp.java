@@ -36,8 +36,6 @@ public class MensajeriaDaoImp
     public List<DocumentoRecepMensajeriaBean> getDocumentoRecepMensajeria(BuscarDocumentoRecepMensajeriaBean buscarDocumentoRecepMensajeriaBean) {
 
         System.out.println(buscarDocumentoRecepMensajeriaBean.toString());
-
-
         boolean bBusqFiltro = false;
         boolean bBusqDep = false;
         StringBuilder sql = new StringBuilder();
@@ -224,6 +222,7 @@ public class MensajeriaDaoImp
     }
 
     public String insMensajeriaDocumento(DocumentoRecepMensajeriaBean documentoMensajeria) {
+        System.out.println("ingresa insMensajeriaDocumento");
         String vReturn = "NO_OK";
         StringBuilder sqlIns = new StringBuilder();
         StringBuilder sqlQry2 = new StringBuilder();

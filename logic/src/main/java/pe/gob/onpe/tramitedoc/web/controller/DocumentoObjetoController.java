@@ -193,10 +193,12 @@ public class DocumentoObjetoController {
 
                 if (documentoObjBean != null) {
 
-                    retRespuesta.setTieneWord((documentoObjBean.getwNombreArchivo() != null && documentoObjBean.getwNombreArchivo().length() > 0) ? "SI" : "NO");
+                    //retRespuesta.setTieneWord((documentoObjBean.getwNombreArchivo() != null && documentoObjBean.getwNombreArchivo().length() > 0) ? "SI" : "NO");
+                    retRespuesta.setTieneWord((documentoObjBean.getNombreArchivo() != null && documentoObjBean.getNombreArchivo().length() > 0) ? "SI" : "NO");
                 } else {
 
                     retRespuesta.setTieneWord("NO");
+                   // System.out.println("tiene word: "+retRespuesta.getTieneWord());
                 }
 
             } catch (Exception e) {
@@ -544,14 +546,16 @@ public class DocumentoObjetoController {
 
         if (datosInter != null) {
             if (datosInter.getNuRucDes().length() > 0 && !datosInter.getNuRucDes().equals("0")) {
-
+                System.out.println("ingresa datosInter");
                 WsEntidadInter wSEntidad = new WsEntidadInter();
                 try {
+                    System.out.println("ingresa this.datosPlantillaDao.getParametros");
                     vResult = wSEntidad.getInter(datosInter.getNuRucDes(), this.datosPlantillaDao.getParametros("URL_ENTIDADES_INTER"));
                     vDeDepDes = datosInter.getDeDepDes();
                     vDeNomDes = datosInter.getDeNomDes();
                     vDeCarDes = datosInter.getDeCarDes();
                 } catch (Exception e) {
+                    System.out.println("ingresa ExceptionExceptionException this.datosPlantillaDao.getParametros");
                     vResult = e.getMessage();
                 }
             }
@@ -1682,9 +1686,18 @@ public class DocumentoObjetoController {
                 retRespuesta.setNuAnn(docVerBean.getNuAnn());
                 retRespuesta.setNuEmi(docVerBean.getNuEmi());
 
+                //HENRY
                 if (pAbreWord.equals("SI")) {
-                    System.out.println(docVerBean.getNombreDocumentoWord() + " nombre de doc");
-                    retRespuesta.setNoDoc(docVerBean.getNombreDocumentoWord());
+
+                    String nombreOriginal = docVerBean.getNombreDocumentoWord();
+                    String nuevoNombre;
+
+                    if (nombreOriginal != null && nombreOriginal.toLowerCase().endsWith(".pdf")) {
+                        nuevoNombre = nombreOriginal.substring(0, nombreOriginal.length() - 4) + ".docx";
+                    } else {
+                        nuevoNombre = nombreOriginal; // mantener el nombre original si no termina en .pdf
+                    }
+                    retRespuesta.setNoDoc(nuevoNombre);
                 } else {
                     retRespuesta.setNoDoc(docVerBean.getNoDocumento());
                 }

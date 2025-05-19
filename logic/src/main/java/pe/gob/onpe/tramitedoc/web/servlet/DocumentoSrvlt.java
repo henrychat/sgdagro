@@ -63,6 +63,7 @@ public class DocumentoSrvlt extends HttpServlet {
   }
   
   private void loadDocumento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    System.out.println("loadDocumento");
     String pnuAnn = request.getParameter("nuAnn");
     String pnuEmi = request.getParameter("nuEmi");
     String ptiCap = request.getParameter("tiCap");

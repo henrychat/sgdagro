@@ -337,12 +337,21 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
 
                 DocumentoObjBean documentoObjBean=getNombreArchivo(pnuAnn,pnuEmi,ptiCap);
+                String nombreOriginal = documentoObjBean.getNombreArchivo();
+                String nuevoNombre;
+
+                if (nombreOriginal != null && nombreOriginal.toLowerCase().endsWith(".pdf")) {
+                    nuevoNombre = nombreOriginal.substring(0, nombreOriginal.length() - 4) + ".docx";
+                } else {
+                    nuevoNombre = nombreOriginal; // mantener el nombre original si no termina en .pdf
+                }
+                System.out.println("nombre nuevo: "+nuevoNombre);
 
 
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
-                String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+                String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
 
-                String  rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+                String  rutaDestino = baseRuta + "/" + subRuta + "/" + nuevoNombre;
 
                 File directorio = new File(baseRuta + "/" + subRuta);
                 if (!directorio.exists()) {

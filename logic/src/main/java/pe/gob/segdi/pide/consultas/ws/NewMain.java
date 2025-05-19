@@ -36,7 +36,7 @@ public class NewMain {
         String pass4=Utility.getInstancia().descifrar("101E9029B29F56FD26C57E65535E0A9E",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
         System.out.println("pass2==>"+pass4);
         
-        String pass5=Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A8FDD1F2327E8A8D1BF8ED6D0349B13EC",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
+        String pass5=Utility.getInstancia().descifrar("A55D5F0D0A10239AF879C06C5D52F0788073ADC913F505050D2B8454D9628B82",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
         System.out.println("passRUC==>"+pass5);
         String pass6=Utility.getInstancia().descifrar("804DF95D88D19DA7C7EAC09F5C9DF5F3",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
         System.out.println("pass2==>"+pass6);

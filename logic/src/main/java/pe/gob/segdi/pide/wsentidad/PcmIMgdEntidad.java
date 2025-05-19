@@ -18,19 +18,19 @@ import javax.xml.ws.WebServiceFeature;
  *
  * @author mvaldera
  */
-@WebServiceClient(name = "PcmIMgdEntidad", targetNamespace = "http://ws.wsentidad.segdi.gob.pe/", wsdlLocation = "https://ws3.pide.gob.pe/services/PcmIMgdEntidad?wsdl")
+@WebServiceClient(name = "PcmIMgdEntidad", targetNamespace = "http://ws.wsiotramite.segdi.gob.pe/", wsdlLocation = "http://lpsoportesgd:8080/wsiotramite/Tramite?wsdl")
 public class PcmIMgdEntidad  extends Service
 {
 
     private final static URL PCMIMGDENTIDAD_WSDL_LOCATION;
     private final static WebServiceException PCMIMGDENTIDAD_EXCEPTION;
-    private final static QName PCMIMGDENTIDAD_QNAME = new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidad");
+    private final static QName PCMIMGDENTIDAD_QNAME = new QName("http://ws.wsiotramite.segdi.gob.pe/", "Tramite");
 
     static {
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("https://ws3.pide.gob.pe/services/PcmIMgdEntidad?wsdl");
+            url = new URL("http://lpsoportesgd:8080/wsiotramite/Tramite?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -69,7 +69,7 @@ public class PcmIMgdEntidad  extends Service
      */
     @WebEndpoint(name = "PcmIMgdEntidadHttpsSoap11Endpoint")
     public PcmIMgdEntidadPortType getPcmIMgdEntidadHttpsSoap11Endpoint() {
-        return super.getPort(new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidadHttpsSoap11Endpoint"), PcmIMgdEntidadPortType.class);
+        return super.getPort(new QName("http://ws.wsiotramite.segdi.gob.pe/", "TramitePort"), PcmIMgdEntidadPortType.class);
     }
 
     /**
@@ -81,7 +81,7 @@ public class PcmIMgdEntidad  extends Service
      */
     @WebEndpoint(name = "PcmIMgdEntidadHttpsSoap11Endpoint")
     public PcmIMgdEntidadPortType getPcmIMgdEntidadHttpsSoap11Endpoint(WebServiceFeature... features) {
-        return super.getPort(new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidadHttpsSoap11Endpoint"), PcmIMgdEntidadPortType.class, features);
+        return super.getPort(new QName("http://ws.wsiotramite.segdi.gob.pe/", "TramitePort"), PcmIMgdEntidadPortType.class, features);
     }
 
     private static URL __getWsdlLocation() {
