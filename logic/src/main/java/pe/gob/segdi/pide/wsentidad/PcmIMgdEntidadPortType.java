@@ -22,25 +22,25 @@ import pe.gob.segdi.wsentidad.ws.ObjectFactory;
  */
 @WebService(name = "PcmIMgdEntidadPortType", targetNamespace = "http://ws.wsentidad.segdi.gob.pe/")
 @XmlSeeAlso({
-    ObjectFactory.class
+        ObjectFactory.class
 })
 public interface PcmIMgdEntidadPortType {
 
 
     /**
-     * 
+     *
      * @param sidcatent
      * @return
      *     returns java.util.List<pe.gob.segdi.wsentidad.ws.EntidadBean>
      */
 
-    
+
     @WebMethod(action = "validarEntidad")
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "validarEntidad", targetNamespace = "http://ws.wsentidad.segdi.gob.pe/", className = "pe.gob.segdi.pide.wsentidad.validarEntidad")
     @ResponseWrapper(localName = "validarEntidadResponse", targetNamespace = "http://ws.wsentidad.segdi.gob.pe/", className = "pe.gob.segdi.pide.wsentidad.validarEntidadResponse")
     public String validarEntidad(
-        @WebParam(name = "vrucent", targetNamespace = "")
-        String rucent);
+            @WebParam(name = "vrucent", targetNamespace = "")
+            String rucent);
 
 }

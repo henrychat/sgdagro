@@ -18,19 +18,19 @@ import javax.xml.ws.WebServiceFeature;
  *
  * @author mvaldera
  */
-@WebServiceClient(name = "PcmIMgdEntidad", targetNamespace = "http://ws.wsiotramite.segdi.gob.pe/", wsdlLocation = "http://lpsoportesgd:8080/wsiotramite/Tramite?wsdl")
+@WebServiceClient(name = "PcmIMgdEntidad", targetNamespace = "http://ws.wsentidad.segdi.gob.pe/", wsdlLocation = "https://ws3.pide.gob.pe/services/PcmIMgdEntidad?wsdl")
 public class PcmIMgdEntidad  extends Service
 {
 
     private final static URL PCMIMGDENTIDAD_WSDL_LOCATION;
     private final static WebServiceException PCMIMGDENTIDAD_EXCEPTION;
-    private final static QName PCMIMGDENTIDAD_QNAME = new QName("http://ws.wsiotramite.segdi.gob.pe/", "Tramite");
+    private final static QName PCMIMGDENTIDAD_QNAME = new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidad");
 
     static {
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://lpsoportesgd:8080/wsiotramite/Tramite?wsdl");
+            url = new URL("https://ws3.pide.gob.pe/services/PcmIMgdEntidad?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -63,17 +63,17 @@ public class PcmIMgdEntidad  extends Service
     }
 
     /**
-     * 
+     *
      * @return
      *     returns PcmIMgdEntidadPortType
      */
     @WebEndpoint(name = "PcmIMgdEntidadHttpsSoap11Endpoint")
     public PcmIMgdEntidadPortType getPcmIMgdEntidadHttpsSoap11Endpoint() {
-        return super.getPort(new QName("http://ws.wsiotramite.segdi.gob.pe/", "TramitePort"), PcmIMgdEntidadPortType.class);
+        return super.getPort(new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidadHttpsSoap11Endpoint"), PcmIMgdEntidadPortType.class);
     }
 
     /**
-     * 
+     *
      * @param features
      *     A list of {@link javax.xml.ws.WebServiceFeature} to configure on the proxy.  Supported features not in the <code>features</code> parameter will have their default values.
      * @return
@@ -81,7 +81,7 @@ public class PcmIMgdEntidad  extends Service
      */
     @WebEndpoint(name = "PcmIMgdEntidadHttpsSoap11Endpoint")
     public PcmIMgdEntidadPortType getPcmIMgdEntidadHttpsSoap11Endpoint(WebServiceFeature... features) {
-        return super.getPort(new QName("http://ws.wsiotramite.segdi.gob.pe/", "TramitePort"), PcmIMgdEntidadPortType.class, features);
+        return super.getPort(new QName("http://ws.wsentidad.segdi.gob.pe/", "PcmIMgdEntidadHttpsSoap11Endpoint"), PcmIMgdEntidadPortType.class, features);
     }
 
     private static URL __getWsdlLocation() {
