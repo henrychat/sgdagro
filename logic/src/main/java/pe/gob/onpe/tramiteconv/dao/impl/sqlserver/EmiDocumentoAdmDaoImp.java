@@ -1,6 +1,7 @@
 package pe.gob.onpe.tramiteconv.dao.impl.sqlserver;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -2909,21 +2910,113 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         return Integer.parseInt(vReturn);
     }
 
+    //HENRY INS MESA DE PARTES
     public String insMesaVitual(DatosInterBean datosInter) {
         String vReturn = "NO_OK";
-        //HENRY MensajeriaDaoImpHenry
+
+        StringBuilder sql1 = new StringBuilder();
+        sql1.append("SELECT \n")
+                .append("  CASE \n")
+                .append("    WHEN EXISTS ( \n")
+                .append("      SELECT 1 \n")
+                .append("      FROM IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n")
+                .append("      WHERE nu_ann = ? AND nu_emi = ? AND bl_doc IS NOT NULL \n")
+                .append("    ) THEN 1 ELSE 0 \n")
+                .append("  END AS tieneArchivo");
+
+        StringBuilder sql2 = new StringBuilder();
+        sql2.append("UPDATE \n")
+                .append("  IDOSGD.tdtv_archivo_doc SET\n")
+                .append("  bl_doc = ? \n")
+                .append("  WHERE nu_ann = ? AND nu_emi = ? \n");
+
+
         this.spInsMesaVirtual = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[INS_MESA_VIRTUAL] ").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[]{"P_COUSEMOD", "P_DEPDES", "P_NOMDES", "P_CARDES", "P_NUANN", "P_NUEMI"}).declareParameters(new SqlParameter[]{new SqlParameter("P_COUSEMOD", 12), new SqlParameter("P_DEPDES", 12), new SqlParameter("P_NOMDES", 12), new SqlParameter("P_CARDES", 12), new SqlParameter("P_NUANN", 12), new SqlParameter("P_NUEMI", 12)});
 
         MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("P_COUSEMOD", datosInter.getCoUseMod()).addValue("P_DEPDES", datosInter.getDeDepDes()).addValue("P_NOMDES", datosInter.getDeNomDes()).addValue("P_CARDES", datosInter.getDeCarDes()).addValue("P_NUANN", datosInter.getNuAnn()).addValue("P_NUEMI", datosInter.getNuEmi());
+
         try {
-            this.spInsMesaVirtual.execute((SqlParameterSource) mapSqlParameterSource);
-            vReturn = "OK";
+            int retorno;
+            retorno = this.jdbcTemplate.queryForInt(sql1.toString(), datosInter.getNuAnn(), datosInter.getNuEmi());
+            if (retorno==0){
+
+
+                DocumentoObjBean documentoObjBean=getNombreArchivo(datosInter.getNuAnn(), datosInter.getNuEmi());
+                String rutaDestino;
+                if (documentoObjBean.getNombreArchivo().substring(0,1).equals("/")) {
+                    //System.out.println("aqui es la nota");
+                    rutaDestino = documentoObjBean.getNombreArchivo();
+                }else {
+
+                    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                    String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+
+
+                    rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+                    File directorio = new File(baseRuta + "/" + subRuta);
+                    if (!directorio.exists()) {
+                        directorio.mkdirs(); // crea toda la estructura intermedia
+                    }
+
+                }
+
+                byte[] docuemnto= leerArchivo(rutaDestino);
+
+                this.jdbcTemplate.update(sql2.toString(), new Object[] { docuemnto,datosInter.getNuAnn(), datosInter.getNuEmi() });
+                this.spInsMesaVirtual.execute((SqlParameterSource) mapSqlParameterSource);
+                vReturn = "OK";
+
+            }else {
+
+                this.spInsMesaVirtual.execute((SqlParameterSource) mapSqlParameterSource);
+                vReturn = "OK";
+            }
+
+
         } catch (Exception ex) {
 
             ex.printStackTrace();
         }
 
         return vReturn;
+    }
+
+    public DocumentoObjBean getNombreArchivo(String pnuAnn, String pnuEmi) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen nombre_Archivo,\n COALESCE(len(bl_doc),0) nu_Tamano,\nw_de_ruta_origen w_Nombre_Archivo,\nCOALESCE(len(w_bl_doc),0) w_Nu_Tamano \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \n where nu_ann = ?\nand nu_emi = ?");
+
+        DocumentoObjBean docObjBean = new DocumentoObjBean();
+
+        try {
+            docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoObjBean.class), new Object[]{pnuAnn, pnuEmi});
+        } catch (EmptyResultDataAccessException e) {
+            docObjBean = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return docObjBean;
+    }
+
+    public byte[] leerArchivo(String rutaArchivo) throws IOException {
+        File archivo = new File(rutaArchivo);
+        FileInputStream fis = null;
+        byte[] contenido = null;
+
+        try {
+            fis = new FileInputStream(archivo);
+            contenido = new byte[(int) archivo.length()];
+            fis.read(contenido);
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return contenido;
     }
 
     public List<DestinatarioDocumentoEmiBean> getLstDestExternoGrupo(String pcoGrupo, String pTiDes) {

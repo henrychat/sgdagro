@@ -546,11 +546,11 @@ public class DocumentoObjetoController {
 
         if (datosInter != null) {
             if (datosInter.getNuRucDes().length() > 0 && !datosInter.getNuRucDes().equals("0")) {
-                System.out.println("ingresa datosInter");
                 WsEntidadInter wSEntidad = new WsEntidadInter();
                 try {
-                    System.out.println("ingresa this.datosPlantillaDao.getParametros");
+
                     vResult = wSEntidad.getInter(datosInter.getNuRucDes(), this.datosPlantillaDao.getParametros("URL_ENTIDADES_INTER"));
+                    //vResult = "S";
                     vDeDepDes = datosInter.getDeDepDes();
                     vDeNomDes = datosInter.getDeNomDes();
                     vDeCarDes = datosInter.getDeCarDes();
