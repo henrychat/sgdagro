@@ -194,7 +194,7 @@ public class DocumentoObjServiceImp   implements DocumentoObjService
 
       
       String nombreDoc, urlDoc = "documento?accion=abrirDoc&nuAnn=" + docDatoBean.getNuAnn() + "&nuEmi=" + docDatoBean.getNuEmi() + "&tiCap=" + docDatoBean.getTiCap() + "&nroView=" + LsAleatorioViewDoc.getInstancia().add();
-      System.out.println(urlDoc+" urldocuemnto");
+      //System.out.println(urlDoc+" urldocuemnto");
 
       
       if (docDatoBean.getTiEmi().equals("01")) {

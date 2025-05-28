@@ -233,7 +233,7 @@ public class ConsultaRecepDocDaoImp
         Map<String, Object> objectParam = new HashMap<String, Object>();
         List<DocumentoRecepConsulBean> list = new ArrayList<DocumentoRecepConsulBean>();
 
-        sql.append("SELECT TOP 400 A.*");// por lo mientras
+        sql.append("SELECT TOP 50 A.*");// por lo mientras
         sql.append(" FROM ( ");
         sql.append("SELECT DISTINCT A.NU_ANN,A.NU_EMI,B.NU_DES,B.NU_COR_DES,CONVERT(VARCHAR(10),A.FE_EMI,103) FE_EMI_CORTA,A.FE_EMI,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (A.NU_ANN, A.NU_EMI) DE_ORI_EMI,");

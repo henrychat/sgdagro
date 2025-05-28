@@ -22,7 +22,7 @@ function fn_inicializaConsulRecepDoc(sCoAnnio,fechaActual){
             }
         }
     });*/
-    jQuery('#buscarDocumentoRecepConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
+    jQuery('#buscarDocumentoRecepConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});
     jQuery('#buscarDocumentoRecepConsulBean').find('#busNumDocRef').change(function() {
         $(this).val(replicate($(this).val(), 6));
     });

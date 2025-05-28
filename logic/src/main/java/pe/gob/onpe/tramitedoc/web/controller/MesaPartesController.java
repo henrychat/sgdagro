@@ -172,7 +172,7 @@ public class MesaPartesController {
                 documentoExtRecepBean.setNuAnnExp(nuAnn);
                 documentoExtRecepBean.setNuDiaAte("0");
                 documentoExtRecepBean.setInNumeroMp(usuarioConfigBean.getInNumeroMp());
-                System.out.println(documentoExtRecepBean.getNuExpediente()+" : documentoExtRecepBean.getNuExpedienteeeeeeeeeee");
+                //System.out.println(documentoExtRecepBean.getNuExpediente()+" : documentoExtRecepBean.getNuExpedienteeeeeeeeeee");
 
                 model.addAttribute("lstTupaExp", referencedData.getTupaExpListNew());
                 model.addAttribute("lstAnnio", referencedData.getAnnioList());

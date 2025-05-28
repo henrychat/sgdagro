@@ -63,7 +63,7 @@ public class DocumentoSrvlt extends HttpServlet {
   }
   
   private void loadDocumento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    System.out.println("loadDocumento");
+    //System.out.println("loadDocumento");
     String pnuAnn = request.getParameter("nuAnn");
     String pnuEmi = request.getParameter("nuEmi");
     String ptiCap = request.getParameter("tiCap");
@@ -264,7 +264,7 @@ public class DocumentoSrvlt extends HttpServlet {
   }
   
   private void creaDocx(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    System.out.println("crea doxc desde cero");
+    //System.out.println("crea doxc desde cero");
     String pnuAnn = request.getParameter("nuAnn");
     String pnuEmi = request.getParameter("nuEmi");
     if (pnuAnn != null && pnuEmi != null && !pnuAnn.equals("") && !pnuEmi.equals("")) {

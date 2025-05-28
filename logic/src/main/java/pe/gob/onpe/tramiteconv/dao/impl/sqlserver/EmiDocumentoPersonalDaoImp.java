@@ -596,7 +596,7 @@ public class EmiDocumentoPersonalDaoImp
             for (int i = 0; i < params.length; i++) {
                 formattedQuery = formattedQuery.replaceFirst("\\?", params[i] != null ? "'" + params[i].toString() + "'" : "NULL");
             }
-            System.out.println("Query ejecutado: " + formattedQuery);
+            //System.out.println("Query ejecutado: " + formattedQuery);
            //////////////////////////////////////////////////////
 
 

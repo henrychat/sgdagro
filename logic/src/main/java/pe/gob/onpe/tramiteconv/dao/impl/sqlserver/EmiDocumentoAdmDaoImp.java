@@ -234,7 +234,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
         ProcessResult<List<DocumentoBean>> Result = new ProcessResult();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
         sql.append("SET LANGUAGE Español ");
-        sql.append("SELECT TOP 400 X.*, "); //por lo mientras
+        sql.append("SELECT TOP 50 X.*, "); //por lo mientras
         sql.append(" (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_EMI_REF](X.NU_ANN, X.NU_EMI)) DE_EMI_REF, ");
         sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" CASE X.NU_CANDES ");
@@ -1183,7 +1183,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                 formattedQuery = formattedQuery.replaceFirst("\\?", param != null ? "'" + param.toString() + "'" : "NULL");
             }
 
-            System.out.println("Query ejecutado: " + formattedQuery);
+            //System.out.println("Query ejecutado: " + formattedQuery);
 
             ////////////////////////////////////////
 
@@ -1557,7 +1557,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
     //HENRY CARGAR
     public String updDocumentoObj(final DocumentoObjBean docObjBean) {
-        System.out.println("pasa por aqui "+ docObjBean.getNombreArchivo());
+        //System.out.println("pasa por aqui "+ docObjBean.getNombreArchivo());
         String vReturn = "NO_OK";
         boolean inInsert = false;
 
@@ -1613,7 +1613,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
 
             StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)))");
+            sql.append("INSERT INTO IDOSGD.tdtv_archivo_doc (NU_ANN,NU_EMI,DE_RUTA_ORIGEN,W_DE_RUTA_ORIGEN,ES_FIRMA,FEULA)\nVALUES(?,?,?,?,'0', (SELECT CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)))");
 
             try {
                 this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback) new AbstractLobCreatingPreparedStatementCallback((LobHandler) defaultLobHandler) {
@@ -1622,6 +1622,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                         ps.setString(2, docObjBean.getNuEmi());
                        // lobCreator.setBlobAsBytes(ps, 3, docObjBean.getDocumento());
                         ps.setString(3, docObjBean.getNombreArchivo());
+                        ps.setString(4, docObjBean.getNombreArchivo());
                         //lobCreator.setBlobAsBytes(ps, 5, docObjBean.getDocumento());
                         //ps.setString(6, docObjBean.getNombreArchivo());
 

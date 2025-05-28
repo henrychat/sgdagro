@@ -368,7 +368,7 @@ public class CargoEntregaController
 
 	    ReporteBean objReporteBean;
 		objReporteBean = this.cargoEntregaService.getGenerarReporte(parametros, cargo);
-        System.out.println("ingreso a goExportarArchivoLista");
+        //System.out.println("ingreso a goExportarArchivoLista");
 	    if (bis != null) bis.close(); 
 	    
 	    retval = new StringBuilder();

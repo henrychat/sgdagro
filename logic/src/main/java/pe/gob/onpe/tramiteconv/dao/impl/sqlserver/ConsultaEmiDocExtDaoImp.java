@@ -29,7 +29,7 @@ public class ConsultaEmiDocExtDaoImp
 
         List<DocumentoExtConsulBean> list = new ArrayList<DocumentoExtConsulBean>();
 
-        sql.append(" SELECT TOP 400 X.*,"); // por lo mientras
+        sql.append(" SELECT TOP 50 X.*,"); // por lo mientras
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (X.NU_ANN, X.NU_EMI) DE_ORI_EMI,");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");
         sql.append(" (CASE WHEN X.NU_CANDES=1 THEN (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP (X.NU_ANN, X.NU_EMI))");

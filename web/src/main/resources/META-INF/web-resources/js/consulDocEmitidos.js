@@ -24,7 +24,7 @@ function fn_inicializaConsulEmiDoc(sCoAnnio,fechaActual){
             }
         }
     });*/
-    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 3});
+    jQuery('#buscarDocumentoEmiConsulBean').find("#fechaFiltro").showDatePicker({defaultOpcionSelected: 1});
     jQuery('#buscarDocumentoEmiConsulBean').find('#busNumDocRef').change(function() {
         $(this).val(replicate($(this).val(), 6));
     });
