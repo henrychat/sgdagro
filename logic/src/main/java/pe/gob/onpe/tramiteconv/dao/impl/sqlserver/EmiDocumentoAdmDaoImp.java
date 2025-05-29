@@ -1579,7 +1579,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
             //System.out.println("proyecto supeustamente");
 
            // String nombreArchivo = docObjBean.getNombreArchivo();
-
+            //6HENRY
             String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
             String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
             String nombreArchivo = docObjBean.getNombreArchivo();
@@ -1644,7 +1644,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                 rutaDestino = nombreArchivo;
             }else {
 
-
+                //8HENRY
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
                 String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
                 nombreArchivo = docObjBean.getNombreArchivo();
@@ -2948,7 +2948,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                     //System.out.println("aqui es la nota");
                     rutaDestino = documentoObjBean.getNombreArchivo();
                 }else {
-
+                    //7HENRY
                     String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
                     String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
 

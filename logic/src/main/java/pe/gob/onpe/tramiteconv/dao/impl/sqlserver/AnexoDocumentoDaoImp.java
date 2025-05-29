@@ -253,7 +253,7 @@ public String updArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
 
     String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
-
+    //3HENRY
     String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
     String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
     //nombreArchivo = docObjBean.getNombreArchivo();
@@ -378,7 +378,7 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
 
     String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
 
-
+    //5HENRY
     String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
     String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
     //nombreArchivo = docObjBean.getNombreArchivo();

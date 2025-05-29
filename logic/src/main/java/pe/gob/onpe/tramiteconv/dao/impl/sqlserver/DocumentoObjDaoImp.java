@@ -147,7 +147,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
         String nombreArchivo = Utilidades.fn_getCleanFileName(docAnexo.getDeDet());
 
-
+        //2HENRY
         String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
         String subRuta = docAnexo.getNuAnn() + "/" + docAnexo.getNuEmi(); // ejemplo: 2025/0000006429
         //nombreArchivo = docObjBean.getNombreArchivo();
@@ -236,7 +236,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                     //System.out.println("aqui es la nota");
                     rutaDestino = documentoObjBean.getNombreArchivo();
                 }else {
-
+                    //1HENRY
                     String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
                     String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
 
@@ -347,7 +347,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 }
                 //System.out.println("nombre nuevo: "+nuevoNombre);
 
-
+                //9HENRY
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
                 String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
 
@@ -558,7 +558,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 DocumentoObjBean documentoObjBean=getNombreArchivoAnexo(pnuAnn,pnuEmi,pnuAne);
                 //System.out.println(documentoObjBean.getNombreArchivo()+" es nombre_Archivo");
 
-
+                //4HENRY
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
                 String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
                 //nombreArchivo = docObjBean.getNombreArchivo();

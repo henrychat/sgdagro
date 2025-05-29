@@ -28,8 +28,8 @@ public class ConsultaRecepDocDaoImp
 
         List<DocumentoRecepConsulBean> list = new ArrayList<DocumentoRecepConsulBean>();
 
-        sql.append("SELECT Z.* FROM ( ");
-        sql.append(" SELECT X.*, ");
+        sql.append("SELECT TOP 50 Z.* FROM ( ");
+        sql.append(" SELECT TOP 50 X.*, ");
         sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (X.NU_ANN, X.NU_EMI) DE_ORI_EMI, ");
         sql.append("( ");
         sql.append(" CASE WHEN X.TI_DES = '01' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.CO_EMP_DES) ");

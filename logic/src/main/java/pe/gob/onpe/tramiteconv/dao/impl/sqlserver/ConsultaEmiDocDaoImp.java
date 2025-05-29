@@ -171,8 +171,8 @@ public class ConsultaEmiDocDaoImp extends SimpleJdbcDaoBase implements ConsultaE
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
         List<DocumentoEmiConsulBean> list = new ArrayList<DocumentoEmiConsulBean>();
-        sql.append("SELECT  Z.* FROM ( ");
-        sql.append(" SELECT  X.*, ");
+        sql.append("SELECT TOP 50 Z.* FROM ( ");
+        sql.append(" SELECT TOP 50 X.*, ");
         sql.append(" (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_DE_EMI_REF(X.NU_ANN, X.NU_EMI)) DE_EMI_REF, ");
         sql.append("  IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" (CASE WHEN X.NU_CANDES = 1 THEN (SELECT RETORNO FROM IDOSGD.PK_SGD_DESCRIPCION_TI_DES_EMP(X.NU_ANN, X.NU_EMI)) ");
