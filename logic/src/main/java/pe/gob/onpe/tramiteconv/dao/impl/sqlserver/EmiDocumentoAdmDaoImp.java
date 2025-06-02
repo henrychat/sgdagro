@@ -2932,6 +2932,24 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                 .append("  WHERE nu_ann = ? AND nu_emi = ? \n");
 
 
+        StringBuilder sql3 = new StringBuilder();
+        sql3.append("SELECT CASE \n")
+                .append("         WHEN BL_DOC IS NULL THEN '0' \n")
+                .append("         ELSE '1' \n")
+                .append("       END AS ESTADO_ARCHIVO, \n")
+                .append("       DE_DET \n")
+                .append("FROM IDOSGD.TDTV_ANEXOS \n")
+                .append("WHERE NU_EMI = ? \n");
+
+
+        StringBuilder sql4 = new StringBuilder();
+        sql4.append("UPDATE \n")
+                .append("  IDOSGD.TDTV_ANEXOS SET\n")
+                .append("  bl_doc = ? \n")
+                .append("  WHERE nu_ann = ? AND nu_emi = ? \n")
+                .append("  AND de_det = ? \n");
+
+
         this.spInsMesaVirtual = (new SimpleJdbcCall(this.dataSource)).withProcedureName("[IDOSGD].[INS_MESA_VIRTUAL] ").withoutProcedureColumnMetaDataAccess().useInParameterNames(new String[]{"P_COUSEMOD", "P_DEPDES", "P_NOMDES", "P_CARDES", "P_NUANN", "P_NUEMI"}).declareParameters(new SqlParameter[]{new SqlParameter("P_COUSEMOD", 12), new SqlParameter("P_DEPDES", 12), new SqlParameter("P_NOMDES", 12), new SqlParameter("P_CARDES", 12), new SqlParameter("P_NUANN", 12), new SqlParameter("P_NUEMI", 12)});
 
         MapSqlParameterSource mapSqlParameterSource = (new MapSqlParameterSource()).addValue("P_COUSEMOD", datosInter.getCoUseMod()).addValue("P_DEPDES", datosInter.getDeDepDes()).addValue("P_NOMDES", datosInter.getDeNomDes()).addValue("P_CARDES", datosInter.getDeCarDes()).addValue("P_NUANN", datosInter.getNuAnn()).addValue("P_NUEMI", datosInter.getNuEmi());
@@ -2954,20 +2972,46 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
 
                     rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
-                    File directorio = new File(baseRuta + "/" + subRuta);
+                    /*File directorio = new File(baseRuta + "/" + subRuta);
                     if (!directorio.exists()) {
                         directorio.mkdirs(); // crea toda la estructura intermedia
-                    }
+                    }*/
 
                 }
 
                 byte[] docuemnto= leerArchivo(rutaDestino);
+
+                List<Map<String, Object>> lista = jdbcTemplate.queryForList(sql3.toString(), datosInter.getNuEmi());
+                if (!lista.isEmpty()){
+                    for (int i=0; i<lista.size(); i++){
+                        if (lista.get(i).get("ESTADO_ARCHIVO").equals("0")){
+                            String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                            String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+                            String rutaDestino2 = baseRuta + "/" + subRuta + "/" + lista.get(i).get("DE_DET");
+                            byte[] docuemnto1= leerArchivo(rutaDestino2);
+                            this.jdbcTemplate.update(sql4.toString(), new Object[] {docuemnto1,datosInter.getNuAnn(), datosInter.getNuEmi(), lista.get(i).get("DE_DET")});
+                        }
+                    }
+                }
 
                 this.jdbcTemplate.update(sql2.toString(), new Object[] { docuemnto,datosInter.getNuAnn(), datosInter.getNuEmi() });
                 this.spInsMesaVirtual.execute((SqlParameterSource) mapSqlParameterSource);
                 vReturn = "OK";
 
             }else {
+
+                List<Map<String, Object>> lista = jdbcTemplate.queryForList(sql3.toString(), datosInter.getNuEmi());
+                if (!lista.isEmpty()){
+                    for (int i=0; i<lista.size(); i++){
+                        if (lista.get(i).get("ESTADO_ARCHIVO").equals("0")){
+                            String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                            String subRuta = datosInter.getNuAnn() + "/" + datosInter.getNuEmi(); // ejemplo: 2025/0000006429
+                            String rutaDestino3 = baseRuta + "/" + subRuta + "/" + lista.get(i).get("DE_DET");
+                            byte[] docuemnto1= leerArchivo(rutaDestino3);
+                            this.jdbcTemplate.update(sql4.toString(), new Object[] {docuemnto1,datosInter.getNuAnn(), datosInter.getNuEmi(), lista.get(i).get("DE_DET")});
+                        }
+                    }
+                }
 
                 this.spInsMesaVirtual.execute((SqlParameterSource) mapSqlParameterSource);
                 vReturn = "OK";
