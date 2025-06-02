@@ -345,7 +345,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 } else {
                     nuevoNombre = nombreOriginal; // mantener el nombre original si no termina en .pdf
                 }
-                //System.out.println("nombre nuevo: "+nuevoNombre);
+                System.out.println("nombre nuevo: "+nuevoNombre);
 
                 //9HENRY
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
