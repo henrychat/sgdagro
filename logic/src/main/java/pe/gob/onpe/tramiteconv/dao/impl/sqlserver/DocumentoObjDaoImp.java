@@ -233,8 +233,14 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 DocumentoObjBean documentoObjBean=getNombreArchivo(pnuAnn,pnuEmi,ptiCap);
                 String rutaDestino;
                 if (documentoObjBean.getNombreArchivo().substring(0,1).equals("/")) {
-                    //System.out.println("aqui es la nota");
-                    rutaDestino = documentoObjBean.getNombreArchivo();
+                    if (documentoObjBean.getwNombreArchivo().toLowerCase().endsWith(".docx")) {
+                        documentoObjBean.setNombreArchivo(documentoObjBean.getwNombreArchivo().substring(0, documentoObjBean.getwNombreArchivo().length() - 4)+"pdf");
+                    }
+                    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                    String subRuta = documentoObjBean.getNuAnn() + "/" + documentoObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+
+                    rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+
                 }else {
                     //1HENRY
                     String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
@@ -332,10 +338,8 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
             retorno = this.jdbcTemplate.queryForInt(sql1.toString(), pnuAnn, pnuEmi);
 
             if (retorno == 0) {
-                StringBuilder sql = new StringBuilder();
-                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
-
-
+                //StringBuilder sql = new StringBuilder();
+                //sql.append(" select \n nu_ann, \n nu_emi, \n w_de_ruta_origen de_ruta_origen \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
                 DocumentoObjBean documentoObjBean=getNombreArchivo(pnuAnn,pnuEmi,ptiCap);
                 String nombreOriginal = documentoObjBean.getwNombreArchivo();
                 String nuevoNombre;
@@ -345,7 +349,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
                 } else {
                     nuevoNombre = nombreOriginal; // mantener el nombre original si no termina en .pdf
                 }
-                System.out.println("nombre nuevo: "+nuevoNombre);
+                //System.out.println("nombre nuevo: "+nuevoNombre);
 
                 //9HENRY
                 String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
@@ -353,20 +357,12 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
                 String  rutaDestino = baseRuta + "/" + subRuta + "/" + nuevoNombre;
 
-                File directorio = new File(baseRuta + "/" + subRuta);
-                if (!directorio.exists()) {
-                    directorio.mkdirs(); // crea toda la estructura intermedia
-                }
-
-
-
-
                 byte[] docuemnto= leerArchivo(rutaDestino);
 
 
                 try {
-                    docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
-
+                    //docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
+                    docObjBean.setNombreArchivo(nuevoNombre);
                     docObjBean.setDocumento(docuemnto);
                 } catch (EmptyResultDataAccessException e) {
                     docObjBean = null;
@@ -378,7 +374,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
             } else {
                 StringBuilder sql = new StringBuilder();
-                sql.append(" select \n nu_ann, \n nu_emi, \n de_ruta_origen, \nw_bl_doc bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
+                sql.append(" select \n nu_ann, \n nu_emi, \n w_de_ruta_origen de_ruta_origen, \nw_bl_doc bl_doc \n from IDOSGD.tdtv_archivo_doc WITH (NOLOCK) \nwhere nu_ann = ?\nand nu_emi = ?");
 
                 try {
                     docObjBean = (DocumentoObjBean) this.jdbcTemplate.queryForObject(sql.toString(), (RowMapper) new DocumentoRowMapper(docObjBean), new Object[]{pnuAnn, pnuEmi});
