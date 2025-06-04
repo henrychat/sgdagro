@@ -1688,12 +1688,13 @@ public class DocumentoObjetoController {
 
                 //HENRY
                 if (pAbreWord.equals("SI")) {
-
-                    String nombreOriginal = docVerBean.getNombreDocumentoWord();
+                    //System.out.println("ingresa abre word");
+                    String nombreOriginal = docVerBean.getNoDocumento();
                     String nuevoNombre;
 
                     if (nombreOriginal != null && nombreOriginal.toLowerCase().endsWith(".pdf")) {
                         nuevoNombre = nombreOriginal.substring(0, nombreOriginal.length() - 4) + ".docx";
+                       // System.out.println("nuevoNombre : " + nuevoNombre);
                     } else {
                         nuevoNombre = nombreOriginal; // mantener el nombre original si no termina en .pdf
                     }
@@ -1701,7 +1702,7 @@ public class DocumentoObjetoController {
                 } else {
                     retRespuesta.setNoDoc(docVerBean.getNoDocumento());
                 }
-
+                //System.out.println(" nombre finbal: " + retRespuesta.getNoDoc());
                 retRespuesta.setNoFirma(docVerBean.getNoFirma());
                 retRespuesta.setNoUrl(docVerBean.getUrlDocumento());
             } catch (Exception e) {

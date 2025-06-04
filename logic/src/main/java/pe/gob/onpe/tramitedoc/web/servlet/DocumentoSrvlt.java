@@ -100,7 +100,7 @@ public class DocumentoSrvlt extends HttpServlet {
           response.setHeader("Content-Disposition", "inline; filename=\"" + docObjBean.getNombreArchivo() + "\"");
           response.setHeader("Pragma", "no-cache");
           response.setHeader("Expires", "0");
-          response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+          response.setHeader("Cache-Control", "no-cache");
           response.setContentLength((docObjBean.getDocumento()).length);
           ServletOutputStream ouputStream = null;
           ouputStream = response.getOutputStream();
