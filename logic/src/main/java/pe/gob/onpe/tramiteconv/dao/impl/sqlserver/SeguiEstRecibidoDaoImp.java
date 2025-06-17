@@ -35,7 +35,7 @@ public class SeguiEstRecibidoDaoImp
     String sqlContains = "";
     List<DocumentoSeguiEstRecibidoBean> list = new ArrayList<DocumentoSeguiEstRecibidoBean>();
     sql.append("SET LANGUAGE Español ");
-    sql.append("SELECT TOP 300 X.*,");
+    sql.append("SELECT TOP 100 X.*,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP (X.NU_ANN, X.NU_EMI) DE_ORI_EMI,");
     sql.append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO (X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
     sql.append(" (CASE WHEN X.TI_DES='01' THEN IDOSGD.PK_SGD_DESCRIPCION_DE_NOM_EMP (X.CO_EMP_DES) ");

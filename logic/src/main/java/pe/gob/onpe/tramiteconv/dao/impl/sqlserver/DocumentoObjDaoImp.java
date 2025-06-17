@@ -309,6 +309,16 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         try {
             docObjBean = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DocumentoObjBean.class), new Object[]{pnuAnn, pnuEmi});
 
+            for (DocumentoObjBean d : docObjBean) {
+                String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+                String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
+                //nombreArchivo = docObjBean.getNombreArchivo();
+                String rutaDestino = baseRuta + "/" + subRuta + "/" + d.getNombreArchivo();
+                byte[] docuemnto= leerArchivo(rutaDestino);
+                d.setDocumento(docuemnto);
+
+            }
+
         } catch (EmptyResultDataAccessException e) {
             docObjBean = null;
         } catch (Exception e) {

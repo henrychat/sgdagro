@@ -136,8 +136,8 @@ public class DocumentoSrvlt extends HttpServlet {
         String cabFile = request.getHeader("fileName");
         fileName = pnuAnn + pnuEmi + pnuSec + cabFile.substring(cabFile.lastIndexOf('.'));
         String rutaFile = this.applicationProperties.getRutaTemporal();
-        System.out.println("aqui: " + rutaFile);
-        System.out.println(rutaFile);
+        //System.out.println("aqui: " + rutaFile);
+        //System.out.println(rutaFile);
         File saveFile = new File(rutaFile + "//" + fileName);
         servletInputStream = request.getInputStream();
         outputStream = new FileOutputStream(saveFile);

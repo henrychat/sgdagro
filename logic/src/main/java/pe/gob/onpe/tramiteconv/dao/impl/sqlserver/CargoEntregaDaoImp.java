@@ -86,7 +86,7 @@ public class CargoEntregaDaoImp
          StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
 
-        sql.append("SELECT TOP 300 A.* FROM"); // por lo mientras
+        sql.append("SELECT TOP 100 A.* FROM"); // por lo mientras
         sql.append("(");
         sql.append(" SELECT A.NU_ANN,A.NU_EMI,B.NU_DES,A.NU_COR_EMI,IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP(A.NU_ANN, A.NU_EMI) DE_ORI_EMI,");
         sql.append(" CONVERT(VARCHAR(10), A.FE_EMI, 103) FE_EMI_CORTA,IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(A.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM,");

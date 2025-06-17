@@ -40,7 +40,7 @@ public class MesaPartesDaoImp
         String sqlContains = "";
         StringBuilder sql = new StringBuilder();
         Map<String, Object> objectParam = new HashMap<String, Object>();
-        sql.append(" SELECT TOP 300  X.*, "); // por lo mientras
+        sql.append(" SELECT TOP 100  X.*, "); // por lo mientras
         sql.append("        [IDOSGD].[PK_SGD_DESCRIPCION_TI_DESTINO](X.TI_EMI) DE_TI_EMI, ");
 
         sql.append("    [IDOSGD].PK_SGD_DESCRIPCION_TI_EMI_EMP(X.NU_ANN, X.NU_EMI) DE_ORI_EMI_MP,");
