@@ -126,8 +126,24 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
 
         byte[] bais;
         if (docAnexo.getBlDoc() == null) {
-            DocumentoObjBean documentoObjBean= leerDocumentoAnexo(docAnexo.getNuAnn(),pnuEmi,docAnexo.getNuAne());
-            bais = documentoObjBean.getDocumento();
+//            DocumentoObjBean documentoObjBean= leerDocumentoAnexo(docAnexo.getNuAnn(),pnuEmi,docAnexo.getNuAne());
+//            bais = documentoObjBean.getDocumento();
+
+
+            DocumentoObjBean documentoObjBean=getNombreArchivoAnexo(pnuAnn,pnuEmi,pnuAnexo);
+            System.out.println(documentoObjBean.getNombreArchivo()+" es nombre_Archivo");
+
+            //4HENRY
+            String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+            String subRuta = pnuAnn + "/" + pnuEmi; // ejemplo: 2025/0000006429
+            //nombreArchivo = docObjBean.getNombreArchivo();
+
+            String rutaDestino = baseRuta + "/" + subRuta + "/" + documentoObjBean.getNombreArchivo();
+
+
+            bais= leerArchivo(rutaDestino);
+
+
         }else {
             bais = docAnexo.getBlDoc();
         }

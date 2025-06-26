@@ -134,7 +134,8 @@ public class DocumentoXmlServiceImp
                                 deDestino2 = deDestino2 + ((datoDestino.getNombreDestinatario() == null) ? "" : datoDestino.getNombreDestinatario()) + "\n" + ((datoDestino.getCargo() == null) ? "" : datoDestino.getCargo()) + "\n" + ((datoDestino.getEntidadPrivadaDestinatario() == null) ? "" : datoDestino.getEntidadPrivadaDestinatario()) + "\n" + datoDestino.getDireccionDestinatario();
                             } else if (datoDestino.getCoTipoDestino().equals("01")) {
 
-                                deDestino2 = deDestino2 + datoDestino.getDeEmpleado() + "\n" + datoDestino.getDeCargoFunDestMae() + "\n" + datoDestino.getDeDepDestMae();
+                             //   deDestino2 = deDestino2 + datoDestino.getDeEmpleado() + "\n" + datoDestino.getDeCargoFunDestMae() + "\n" + datoDestino.getDeDepDestMae();
+                                deDestino2 = deDestino2 + datoDestino.getDeEmpleado() + "\n" + datoDestino.getDeCargoFunDestMae();
                             } else {
 
                                 deDestino2 = deDestino2 + datoDestino.getDeEmpleado() + "\n";

@@ -85,7 +85,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
         List<DocumentoEmiBean> list = new ArrayList<DocumentoEmiBean>();
         sql.append("SET LANGUAGE Español ");
-        sql.append("SELECT TOP 200 X.*, "); //por lo mientras
+        sql.append("SELECT TOP 100 X.*, "); //por lo mientras
         sql.append(" (SELECT RETORNO FROM [IDOSGD].[PK_SGD_DESCRIPCION_DE_EMI_REF](X.NU_ANN, X.NU_EMI)) DE_EMI_REF, ");
         sql.append(" [IDOSGD].[PK_SGD_DESCRIPCION_DE_DOCUMENTO](X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ");
         sql.append(" CASE X.NU_CANDES ");
@@ -982,6 +982,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
 
             list = this.jdbcTemplate.query(sql.toString(), (RowMapper) BeanPropertyRowMapper.newInstance(DestinatarioDocumentoEmiBean.class), new Object[]{pnuAnn, pnuEmi});
 
+            //SOLO CUANDO HAY PIDE
             if (list != null && !list.isEmpty() && list.get(0).getNuRuc() != null && !list.get(0).getNuRuc().isEmpty()){
 
 
