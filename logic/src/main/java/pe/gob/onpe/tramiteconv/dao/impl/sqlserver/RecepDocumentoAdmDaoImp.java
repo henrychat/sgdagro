@@ -185,7 +185,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
         ProcessResult<List<DocumentoBean>> Result = new ProcessResult();
         List<DocumentoBean> list = new ArrayList<DocumentoBean>();
         sql.append("SET LANGUAGE Español ")
-                .append("SELECT TOP 50 X.*,")
+                .append("SELECT  X.*,")
                 .append(" IDOSGD.PK_SGD_DESCRIPCION_TI_EMI_EMP(X.NU_ANN, X.NU_EMI) DE_ORI_EMI,")
                 .append(" IDOSGD.PK_SGD_DESCRIPCION_DE_DOCUMENTO(X.CO_TIP_DOC_ADM) DE_TIP_DOC_ADM, ")
                 .append(" IDOSGD.PK_SGD_DESCRIPCION_ESTADOS(X.ES_DOC_REC,'TDTV_DESTINOS') DE_ES_DOC_DES,")
@@ -196,7 +196,7 @@ public class RecepDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements RecepD
                 .append(" DE_EMP_DES , GETDATE() feExp")
                 .append(" ")
                 .append(" FROM ( ")
-                .append(" SELECT A.NU_ANN,A.NU_EMI,A.TI_CAP,A.TI_EMI,ISNULL(CAST(B.NU_COR_DES AS VARCHAR(20)),'') as NU_COR_DES, ")
+                .append(" SELECT TOP 200 A.NU_ANN,A.NU_EMI,A.TI_CAP,A.TI_EMI,ISNULL(CAST(B.NU_COR_DES AS VARCHAR(20)),'') as NU_COR_DES, ")
                 .append(" CONVERT(varchar(20), A.FE_EMI, 103)  FE_EMI_CORTA,CONVERT(varchar(20), A.FE_EMI, 131)  FE_EMI,")
                 .append(" A.CO_TIP_DOC_ADM , C.NU_DOC,")
                 .append(" B.TI_DES,B.CO_EMP_DES,B.NU_RUC_DES,B.NU_DNI_DES, B.CO_OTR_ORI_DES,")

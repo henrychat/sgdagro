@@ -545,19 +545,51 @@ public String insArchivoAnexo(final DocumentoAnexoBean docAnexo, final InputStre
     
     DefaultLobHandler defaultLobHandler = new DefaultLobHandler();
      StringBuilder sql = new StringBuilder();
-    sql.append("UPDATE IDOSGD.TDTV_ANEXOS SET BL_DOC=?, CO_USE_MOD=?, FE_USE_MOD=GETDATE(), FEULA=IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYYMMDD'), REQ_FIRMA='0' WHERE NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
+//    sql.append("UPDATE IDOSGD.TDTV_ANEXOS SET BL_DOC=?, CO_USE_MOD=?, FE_USE_MOD=GETDATE(), FEULA=IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYYMMDD'), REQ_FIRMA='0' WHERE NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
+      sql.append("UPDATE IDOSGD.TDTV_ANEXOS SET CO_USE_MOD=?, FE_USE_MOD=GETDATE(), FEULA=IDOSGD.PK_SGD_DESCRIPCION_FORMAT(GETDATE(),'YYYYMMDD'), REQ_FIRMA='0' WHERE NU_ANN=? AND NU_EMI=? AND NU_ANE=?");
 
-    
+
+    String nombreArchivo = Utilidades.fn_getCleanFileName(docObjBean.getNombreArchivo());
+
+    //5HENRY
+    String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
+    String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
+    //nombreArchivo = docObjBean.getNombreArchivo();
+
+    String rutaDestino = baseRuta + "/" + subRuta + "/" + nombreArchivo;
+
+    File directorio = new File(baseRuta + "/" + subRuta);
+    if (!directorio.exists()) {
+      directorio.mkdirs(); // crea toda la estructura intermedia
+    }
+
+    FileOutputStream fos = null;
+    try {
+      fos = new FileOutputStream(rutaDestino);
+      byte[] datos = docObjBean.getDocumento();  // esto es byte[]
+      fos.write(datos);  // escribe directamente
+      fos.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (fos != null) fos.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+
     try {
       this.jdbcTemplate.execute(sql.toString(), (PreparedStatementCallback)new AbstractLobCreatingPreparedStatementCallback((LobHandler)defaultLobHandler)
           {
             protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException
             {
-              lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
-              ps.setString(2, docObjBean.getCoUseMod());
-              ps.setString(3, docObjBean.getNuAnn());
-              ps.setString(4, docObjBean.getNuEmi());
-              ps.setString(5, docObjBean.getNuAne());
+              //lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
+              ps.setString(1, docObjBean.getCoUseMod());
+              ps.setString(2, docObjBean.getNuAnn());
+              ps.setString(3, docObjBean.getNuEmi());
+              ps.setString(4, docObjBean.getNuAne());
             }
           });
       vReturn = "OK";
