@@ -409,7 +409,7 @@ public class MesaPartesDaoImp
         String vReturn = "NO_OK";
         StringBuilder sqlUpd = new StringBuilder();
 
-        sqlUpd.append("INSERT INTO IDOSGD.tdtv_remitos(\nNU_ANN,\nNU_EMI,\nNU_COR_EMI,\nCO_LOC_EMI,\nCO_DEP_EMI,\nCO_EMP_EMI,\nCO_EMP_RES, \nTI_EMI,\nNU_DNI_EMI,\nNU_RUC_EMI,\nCO_OTR_ORI_EMI,\nFE_EMI,\nCO_GRU,\nDE_ASU, \nES_DOC_EMI, \nNU_DIA_ATE, \nCO_TIP_DOC_ADM, \nNU_COR_DOC, \nDE_DOC_SIG, \nNU_ANN_EXP, \nNU_SEC_EXP, \nNU_DET_EXP, \nNU_FOLIOS, \nES_ELI,\nCO_USE_CRE,\nFE_USE_CRE,\nCO_USE_MOD,\nCO_DEP,\nFE_USE_MOD,\nCDIR_REMITE,\nAUT_CORREOE,\nCEXP_CORREOE,\nCTELEFONO,\nCCOD_DPTO,\nCCOD_PROV,\nCCOD_DIST,\nREMI_TI_EMI,\nREMI_NU_DNI_EMI,\nREMI_CO_OTR_ORI_EMI,\nREMI_CARGO,\nCCOD_ORIGING,\nCNUM_DNIMSG,\nCOBS_DOCUMENTO,\nCDOC_DESTRAM,\nCONG_CO_OTR_ORI,\nIND_TIPOCONG,\nIND_TIPOCONGINV,\nIND_REITCONGINV,\nNRO_SOBREAUT,\nAN_SOBREAUT,\nCIND_SENSIBLE)\nVALUES(?,?,?,?,?,?,?,?,?,?,?,(SELECT CONVERT(DATETIME, ?, 103)),'3',?,'5',?,?,?,?,?,?,'1',?,'0',?,CURRENT_TIMESTAMP,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        sqlUpd.append("INSERT INTO IDOSGD.tdtv_remitos(\nNU_ANN,\nNU_EMI,\nNU_COR_EMI,\nCO_LOC_EMI,\nCO_DEP_EMI,\nCO_EMP_EMI,\nCO_EMP_RES, \nTI_EMI,\nNU_DNI_EMI,\nNU_RUC_EMI,\nCO_OTR_ORI_EMI,\nFE_EMI,\nCO_GRU,\nDE_ASU, \nES_DOC_EMI, \nNU_DIA_ATE, \nCO_TIP_DOC_ADM, \nNU_COR_DOC, \nDE_DOC_SIG, \nNU_ANN_EXP, \nNU_SEC_EXP, \nNU_DET_EXP, \nNU_FOLIOS, \nES_ELI,\nCO_USE_CRE,\nFE_USE_CRE,\nCO_USE_MOD,\nCO_DEP,\nFE_USE_MOD,\nCDIR_REMITE,\nAUT_CORREOE,\nCEXP_CORREOE,\nCTELEFONO,\nCCOD_DPTO,\nCCOD_PROV,\nCCOD_DIST,\nREMI_TI_EMI,\nREMI_NU_DNI_EMI,\nREMI_CO_OTR_ORI_EMI,\nREMI_CARGO,\nCCOD_ORIGING,\nCNUM_DNIMSG,\nCOBS_DOCUMENTO,\nCDOC_DESTRAM,\nCONG_CO_OTR_ORI,\nIND_TIPOCONG,\nIND_TIPOCONGINV,\nIND_REITCONGINV,\nNRO_SOBREAUT,\nAN_SOBREAUT,\nCIND_SENSIBLE)\nVALUES(?,?,?,?,?,?,?,?,?,?,?,GETDATE(),'3',?,'5',?,?,?,?,?,?,'1',?,'0',?,CURRENT_TIMESTAMP,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         try {
             String coOtros = remitenteDocExtRecepBean.getCoOtros();
@@ -428,7 +428,7 @@ public class MesaPartesDaoImp
 
             this.jdbcTemplate.update(sqlUpd.toString(), new Object[]{documentoExtRecepBean.getNuAnn(), snuEmi, nuCorr, remitenteDocExtRecepBean
                 .getCoLocEmi(), remitenteDocExtRecepBean.getCoDepEmi(), remitenteDocExtRecepBean.getCoEmpEmi(), remitenteDocExtRecepBean.getCoEmpRes(), remitenteDocExtRecepBean
-                .getTiEmi(), remitenteDocExtRecepBean.getNuDni(), remitenteDocExtRecepBean.getNuRuc(), coOtros, expedienteBean.getFeExp(), documentoExtRecepBean
+                .getTiEmi(), remitenteDocExtRecepBean.getNuDni(), remitenteDocExtRecepBean.getNuRuc(), coOtros, documentoExtRecepBean
                 .getDeAsu(), documentoExtRecepBean.getNuDiaAte(), documentoExtRecepBean.getCoTipDocAdm(), documentoExtRecepBean.getNuCorDoc(), documentoExtRecepBean.getDeDocSig(), expedienteBean
                 .getNuAnnExp(), expedienteBean.getNuSecExp(), documentoExtRecepBean.getNuFolios(), documentoExtRecepBean.getCoUseMod(), documentoExtRecepBean.getCoUseMod(), remitenteDocExtRecepBean.getCoDep(), remitenteDocExtRecepBean
                 .getDeDireccion(), remitenteDocExtRecepBean.getNotificado(), remitenteDocExtRecepBean.getDeCorreo(), remitenteDocExtRecepBean.getTelefono(), remitenteDocExtRecepBean
