@@ -1773,7 +1773,7 @@ public class DocumentoObjetoController {
                 retval.append("\",\"noDoc\":\"");
                 //MIDAGRI-SERFOR-CD SERFOR
 
-                docSession.setNoDocumento(docSession.getNoDocumento() !=null? docSession.getNoDocumento().replace("MIDAGRI-SERFOR-CD SERFOR", "MIDAGRI-CD SERFOR") : docSession.getNoDocumento());
+                docSession.setNoDocumento(docSession.getNoDocumento() !=null? docSession.getNoDocumento().replace("MIDAGRI-AGROIDEAS-CD AGROIDEAS", "MIDAGRI-CD AGROIDEAS") : docSession.getNoDocumento());
                 //docSession.setNoDocumento(docSession.getNoDocumento().replace("MIDAGRI-SERFOR-CD SERFOR", "MIDAGRI-CD SERFOR"));
                 //docSession.setNoDocumento("TEMP|2024000000103607986446.pdf");
                 retval.append(docSession.getNoDocumento());

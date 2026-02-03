@@ -30,7 +30,7 @@ public class NewMain {
         System.out.println("pass2==>"+pass2);  */
         
        // String pass3=Utility.getInstancia().cifrar("20603965451",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
-        String pass3=Utility.getInstancia().cifrar("/mnt/imagen_remoto/produccion",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
+        String pass3=Utility.getInstancia().cifrar("/mnt/Data_SGD",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
         System.out.println("passGet==>"+pass3);
 
         String pass4=Utility.getInstancia().descifrar("101E9029B29F56FD26C57E65535E0A9E",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
@@ -38,7 +38,7 @@ public class NewMain {
         
         String pass5=Utility.getInstancia().descifrar("A55D5F0D0A10239AF879C06C5D52F078C69AAA5B5B629A95AD4098E7D77C130B",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
         System.out.println("passRUC==>"+pass5);
-        String pass6=Utility.getInstancia().descifrar("EB14B9E0DC5EFED443825043E465F3A4B050B88D9BC44B164832A56A9D4BEC0C",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
+        String pass6=Utility.getInstancia().descifrar("B1EBCF1F3C59F66A36E2AAC08352451A",ConstantesSec.SGD_SECRET_KEY_PASSWORD);
         System.out.println("pass2==>"+pass6);
     //     String pass5=Utility.getInstancia().descifrar("10F2852051B7BABD69D6D1C876EE9C6A051ABF082B410FFB79036F15AC90B25F",ConstantesSec.SGD_SECRET_KEY_PROPERTIES);
      //   System.out.println("pass3==>"+pass5);

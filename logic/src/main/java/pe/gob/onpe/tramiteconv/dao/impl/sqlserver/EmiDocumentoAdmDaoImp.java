@@ -1685,6 +1685,7 @@ public class EmiDocumentoAdmDaoImp extends SimpleJdbcDaoBase implements EmiDocum
                     protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
                         //lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
                         ps.setString(1, docObjBean.getNombreArchivo());
+                        //ps.setString(2, docObjBean.getNombreArchivo());
                         ps.setString(2, docObjBean.getNuAnn());
                         ps.setString(3, docObjBean.getNuEmi());
                     }

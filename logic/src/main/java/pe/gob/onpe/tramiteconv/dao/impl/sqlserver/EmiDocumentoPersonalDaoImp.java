@@ -744,7 +744,7 @@ public class EmiDocumentoPersonalDaoImp
 
             StringBuilder sql = new StringBuilder();
             //sql.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET BL_DOC = ?, DE_RUTA_ORIGEN = ?, FEULA=CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)\nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
-            sql.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET DE_RUTA_ORIGEN = ?, FEULA=CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)\nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
+            sql.append("UPDATE IDOSGD.TDTV_ARCHIVO_DOC SET DE_RUTA_ORIGEN = ? , FEULA=CONVERT(VARCHAR(10), CURRENT_TIMESTAMP, 112)\nWHERE NU_ANN = ? \nAND NU_EMI = ? ");
 
             String baseRuta = this.applicationProperties.getRutaTemporal2(); // ejemplo: /glassfish/tmppcm
             String subRuta = docObjBean.getNuAnn() + "/" + docObjBean.getNuEmi(); // ejemplo: 2025/0000006429
@@ -776,6 +776,7 @@ public class EmiDocumentoPersonalDaoImp
                     protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
                         //lobCreator.setBlobAsBytes(ps, 1, docObjBean.getDocumento());
                         ps.setString(1, docObjBean.getNombreArchivo());
+                        //ps.setString(2, docObjBean.getNombreArchivo());
                         ps.setString(2, docObjBean.getNuAnn());
                         ps.setString(3, docObjBean.getNuEmi());
                     }

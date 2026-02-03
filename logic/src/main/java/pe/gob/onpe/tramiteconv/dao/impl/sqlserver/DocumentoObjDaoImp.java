@@ -315,7 +315,7 @@ public class DocumentoObjDaoImp extends SimpleJdbcDaoBase implements DocumentoOb
         return docObjBean;
     }
 
-    //NO SÉ CUANDO SE USA
+    //NO SÉ CUANDO SE USA - PARECE EL .ZIP
     public List<DocumentoObjBean> leerDocumentoAnexo(String pnuAnn, String pnuEmi) {
         StringBuilder sql = new StringBuilder();
         sql.append("select nu_ann,nu_emi,nu_ane,de_rut_ori nombre_Archivo,bl_doc documento from IDOSGD.tdtv_anexos WITH (NOLOCK) where nu_ann = ? and nu_emi = ? ");
