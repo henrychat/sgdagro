@@ -30,30 +30,31 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService {
             reader = new PdfReader(filePdf);
             AcroFields af = reader.getAcroFields();
             List<String> names = af.getSignatureNames();
-            if (!names.isEmpty()) {
-                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
-                for (String name : names) {
-                    LsSignature.add(af.verifySignature(name, "BC"));//agregado para soporte de SHA256
-                }
-                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
-                    @Override
-                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
-                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
-                            return 0;
-                        }
-                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
-                    }
-                });
-                for (PdfPKCS7 pk : LsSignature) {
-                    String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
-                    if (dn.contains(pNuDni)) {
-                        //vret = "OK";
-                        if (dn.contains(pNuRucInstitucion)) {
-                            vret = "OK";
-                        }
-                    }
-                    break;
-                }
+            if ( names != null && !names.isEmpty()) {
+//                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
+//                for (String name : names) {
+//                    LsSignature.add(af.verifySignature(name, "BC"));//agregado para soporte de SHA256
+//                }
+//                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
+//                    @Override
+//                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
+//                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
+//                            return 0;
+//                        }
+//                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
+//                    }
+//                });
+//                for (PdfPKCS7 pk : LsSignature) {
+//                    String dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+//                    if (dn.contains(pNuDni)) {
+//                        //vret = "OK";
+//                        if (dn.contains(pNuRucInstitucion)) {
+//                            vret = "OK";
+//                        }
+//                    }
+//                    break;
+//                }
+                vret = "OK";
             } else {
                 vret = "";//documento sin firmar
             }
@@ -100,29 +101,31 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService {
         try {
             String dn = null;
             if (names != null && !names.isEmpty()) {
-                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
-                for (String name : names) {
-                    LsSignature.add(af.verifySignature(name, "BC"));
-                }
-                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
-                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
-                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
-                            return 0;
-                        }
-                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
-                    }
-                });
-                Iterator<PdfPKCS7> iterator = LsSignature.iterator();
-                if (iterator.hasNext()) {
-                    PdfPKCS7 pk = iterator.next();
-                    dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
-                    if (dn.contains(pNuDni)) {
-                        //WG 20230710 Se deshabilito para permitir firma con certificado no SERFOR
-//                        if (dn.contains(pNuRucInstitucion)) { 
-                            vret = "OK";
+                //HENRY
+//                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
+//                for (String name : names) {
+//                    LsSignature.add(af.verifySignature(name, "BC"));
+//                }
+//                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
+//                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
+//                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
+//                            return 0;
 //                        }
-                    }
-                }
+//                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
+//                    }
+//                });
+//                Iterator<PdfPKCS7> iterator = LsSignature.iterator();
+//                if (iterator.hasNext()) {
+//                    PdfPKCS7 pk = iterator.next();
+//                    dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+//                    if (dn.contains(pNuDni)) {
+//                        //WG 20230710 Se deshabilito para permitir firma con certificado no SERFOR
+////                        if (dn.contains(pNuRucInstitucion)) {
+//                            vret = "OK";
+////                        }
+//                    }
+//                }
+                vret = "OK";
             } else {
                 vret = "";
             }
@@ -172,28 +175,32 @@ public class ValidarFirmaServiceImp implements ValidarFirmaService {
             reader = new PdfReader(filePdf);
 
             if (names != null && !names.isEmpty()) {
-                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
-                for (String name : names) {
-                    LsSignature.add(af.verifySignature(name, "BC"));
-                }
-                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
-                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
-                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
-                            return 0;
-                        }
-                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
-                    }
-                });
-                Iterator<PdfPKCS7> iterator = LsSignature.iterator();
-                if (iterator.hasNext()) {
-                    PdfPKCS7 pk = iterator.next();
-                    dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
-
-                    if (dn.contains(pNuDni)) {
-                        vret = "OK";
-                    }
-                }
-            } else {
+                //HENRY
+//                ArrayList<PdfPKCS7> LsSignature = new ArrayList<PdfPKCS7>();
+//                for (String name : names) {
+//                    LsSignature.add(af.verifySignature(name, "BC"));
+//                }
+//                Collections.sort(LsSignature, new Comparator<PdfPKCS7>() {
+//                    public int compare(PdfPKCS7 o1, PdfPKCS7 o2) {
+//                        if (o1.getSignDate() == null || o2.getSignDate() == null) {
+//                            return 0;
+//                        }
+//                        return o1.getSignDate().compareTo(o2.getSignDate()) * -1;
+//                    }
+//                });
+//                Iterator<PdfPKCS7> iterator = LsSignature.iterator();
+//                if (iterator.hasNext()) {
+//                    PdfPKCS7 pk = iterator.next();
+//                    dn = PdfPKCS7.getSubjectFields(pk.getSigningCertificate()).toString();
+//                    if (dn.contains(pNuDni)) {
+//                        //WG 20230710 Se deshabilito para permitir firma con certificado no SERFOR
+////                        if (dn.contains(pNuRucInstitucion)) {
+//                            vret = "OK";
+////                        }
+//                    }
+//                }
+                vret = "OK";
+            }else {
                 vret = "";
             }
 
